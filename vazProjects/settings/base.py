@@ -154,15 +154,3 @@ AUTH_PASSWORD_VALIDATORS = [
 	{ 'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator', },
 	{ 'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', },
 ]
-
-
-# Cache
-########################################
-CACHES = {
-	'default':
-	{
-		'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-		'TIMEOUT': 365 * 24 * 60 * 60,	# 1 year.
-	},
-}
-CACHE_MIDDLEWARE_SECONDS = CACHES['default']['TIMEOUT']

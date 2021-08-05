@@ -14,7 +14,6 @@ from .secrets import *
 # General
 ########################################
 ENVIRONMENT = 'production'
-DEBUG = False
 
 
 # Static and media files
@@ -52,5 +51,12 @@ INSTALLED_APPS += [
 
 # Cache
 ########################################
-CACHES['default']['BACKEND'] = 'django.core.cache.backends.memcached.PyLibMCCache'
-CACHES['default']['LOCATION'] = '[::1]:11211'
+CACHES = {
+	'default':
+	{
+		'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
+		'TIMEOUT': 365 * 24 * 60 * 60,	# 1 year.
+		'LOCATION': '[::1]:11211',
+	},
+}
+CACHE_MIDDLEWARE_SECONDS = CACHES['default']['TIMEOUT']

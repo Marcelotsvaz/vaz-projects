@@ -30,3 +30,15 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'deployment/media'
+
+
+# Cache
+########################################
+CACHES = {
+	'default':
+	{
+		'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+		'TIMEOUT': 10,
+	},
+}
+CACHE_MIDDLEWARE_SECONDS = CACHES['default']['TIMEOUT']
