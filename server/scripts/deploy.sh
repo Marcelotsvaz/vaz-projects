@@ -30,7 +30,7 @@ if [[ ${2} = 'uploadFiles' ]]; then
 	hg archive - -t tgz -X '**/static/**' | aws s3 cp - s3://${bucket}/${environment}/source.tar.gz
 
 	# Upload static files.
-	lessc --math=parens-division --source-map					\
+	lessc --source-map											\
 		vazProjects/siteApp/static/siteApp/css/src/siteApp.less	\
 		deployment/static/siteApp/css/siteApp.css
 	vazProjects/manage.py collectstatic --ignore */src/* --no-input
