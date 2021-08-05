@@ -1,0 +1,46 @@
+{
+	"InstanceType": "t3a.small",
+	"EbsOptimized": true,
+	"IamInstanceProfile": { "Name": "vazProjectsRole" },
+	"SubnetId": "subnet-02c1fb736b17e50cb",
+	"SecurityGroupIds": [ "sg-0b489d022fefb9a99" ],
+	"BlockDeviceMappings":
+	[
+		{
+			"DeviceName": "/dev/xvda",
+			"Ebs":
+			{
+				"VolumeSize": 5,
+				"DeleteOnTermination": true
+			}
+		}
+	],
+	"InstanceMarketOptions":
+	{
+		"MarketType": "spot",
+		"SpotOptions":
+		{
+			"SpotInstanceType": "persistent",
+			"InstanceInterruptionBehavior": "stop"
+		}
+	},
+	"TagSpecifications":
+	[
+		{
+			"ResourceType": "instance",
+			"Tags":
+			[
+				{ "Key": "Name",			"Value": "VAZ Projects Server" },
+				{ "Key": "Project",			"Value": "VAZ Projects" }
+			]
+		},
+		{
+			"ResourceType": "volume",
+			"Tags":
+			[
+				{ "Key": "Name",		"Value": "VAZ Projects Server Root" },
+				{ "Key": "Project",		"Value": "VAZ Projects" }
+			]
+		}
+	]
+}

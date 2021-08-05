@@ -1,0 +1,18 @@
+<div class="imageGallery {{ cssClass }}">
+	{% for userImage in userImages %}
+		<a href="{{ userImage.image_large.url }}">
+			<img src="{{ userImage.image_small.url }}" alt="{{ userImage.alt }}">
+		</a>
+		
+		<div>
+			<figure>
+				<img src="{{ userImage.image_large.url }}" alt="{{ userImage.alt }}" loading="lazy">
+				<figcaption>
+					<p>{{ userImage.alt }}</p>
+					{% if userImage.attribution %}<p>{% trans 'Crédito: ' %}{{ userImage.attribution }}</p>{% endif %}
+				</figcaption>
+				<button>{% trans 'Fechar' %}</button>
+			</figure>
+		</div>
+	{% endfor %}
+</div>

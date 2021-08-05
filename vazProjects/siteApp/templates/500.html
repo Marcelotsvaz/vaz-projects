@@ -1,0 +1,15 @@
+{% extends "siteApp/base.html" %}
+
+
+{% block contentSectionClasses %}errorContentSection{% endblock %}
+
+
+{% block contentSection %}
+<h1>{% trans 'Erro 500 - Erro interno do servidor' %}</h1>
+
+{% blocktrans %}
+<p>
+	Ocorreu um erro ao processar seu pedido.
+</p>
+{% endblocktrans %}
+{% endblock %}

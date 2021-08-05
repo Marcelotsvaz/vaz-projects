@@ -1,0 +1,15 @@
+{% extends "siteApp/base.html" %}
+
+
+{% block contentSectionClasses %}errorContentSection{% endblock %}
+
+
+{% block contentSection %}
+<h1>{% trans 'Erro 400 - Requisição inválida' %}</h1>
+
+{% blocktrans %}
+<p>
+	Seu pedido é inválido.
+</p>
+{% endblocktrans %}
+{% endblock %}

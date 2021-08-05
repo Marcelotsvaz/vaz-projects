@@ -1,0 +1,15 @@
+{% extends "siteApp/base.html" %}
+
+
+{% block contentSectionClasses %}errorContentSection{% endblock %}
+
+
+{% block contentSection %}
+<h1>{% trans 'Erro 403 - Proibido' %}</h1>
+
+{% blocktrans %}
+<p>
+	Você não tem permissão para accessar essa página.
+</p>
+{% endblocktrans %}
+{% endblock %}

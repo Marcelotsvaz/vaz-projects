@@ -1,0 +1,24 @@
+#
+# VAZ Projects
+#
+#
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+[Unit]
+Description = NGINX
+After = network-online.target
+
+
+[Service]
+Type = forking
+PIDFile = /run/nginx.pid
+
+ExecStart = /usr/bin/nginx -c /home/utl/server/config/nginx.conf
+ExecStop = /usr/bin/nginx -c /home/utl/server/config/nginx.conf -s stop
+ExecReload = /usr/bin/nginx -c /home/utl/server/config/nginx.conf -s reload
+
+
+[Install]
+WantedBy = multi-user.target

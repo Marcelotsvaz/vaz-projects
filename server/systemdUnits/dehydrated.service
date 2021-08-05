@@ -1,0 +1,19 @@
+#
+# VAZ Projects
+#
+#
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+[Unit]
+Description = Dehydrated
+
+[Service]
+Type = oneshot
+User = utl
+Group = utl
+
+EnvironmentFile = /root/init/environment.sh
+ExecStart = /home/utl/server/config/tls/dehydrated.sh
+ExecStartPost = +systemctl reload nginx

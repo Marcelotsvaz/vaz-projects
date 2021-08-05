@@ -1,0 +1,56 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Deploy",
+			"type": "shell",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"command": "server/scripts/deploy.sh",
+			"args": [
+				"${input:environment}",
+				"${input:task}",
+			],
+			"problemMatcher": [],
+		},
+	],
+	"inputs": [
+		{
+			"id": "environment",
+			"type": "pickString",
+			"description": "Select the target environment",
+			"default": "staging",
+			"options": [
+				{
+					"label": "Staging",
+					"value": "staging"
+				},
+				{
+					"label": "Production",
+					"value": "production"
+				},
+			]
+		},
+		{
+			"id": "task",
+			"type": "pickString",
+			"description": "Select the operation",
+			"default": "",
+			"options": [
+				{
+					"label": "Upload Files",
+					"value": "uploadFiles"
+				},
+				{
+					"label": "Launch Instance",
+					"value": "launchInstance"
+				},
+				{
+					"label": "Terminate Instance",
+					"value": "terminateInstance"
+				},
+			],
+		},
+	]
+}

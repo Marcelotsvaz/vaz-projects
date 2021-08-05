@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /admin/
+{% if settings.ENVIRONMENT != 'production' %}Disallow: /{% endif %}
+
+Sitemap: https://{{ settings.ALLOWED_HOSTS.0 }}/sitemap.xml

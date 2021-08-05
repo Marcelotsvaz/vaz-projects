@@ -1,0 +1,15 @@
+{% extends "siteApp/base.html" %}
+
+
+{% block contentSectionClasses %}errorContentSection{% endblock %}
+
+
+{% block contentSection %}
+<h1>{% trans 'Erro 404 - Não encontrado' %}</h1>
+
+{% blocktrans %}
+<p>
+	A página requisitada não pôde ser encontrada.
+</p>
+{% endblocktrans %}
+{% endblock %}

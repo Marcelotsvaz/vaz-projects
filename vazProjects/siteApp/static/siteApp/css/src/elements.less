@@ -1,0 +1,60 @@
+//
+// VAZ Projects
+//
+//
+// Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+*, h1	// Override normalize.css h1 margin.
+{
+	margin: 0px;
+	box-sizing: border-box;
+	padding: 0px;
+}
+
+
+body
+{
+	overflow-y: scroll;
+	
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+
+h1 { font-size: 3rem; }
+h2 { font-size: 1.75rem; }
+h3 { font-size: 1.25rem; }
+h4 { font-size: 1rem; }
+
+
+p { margin: 15px 0px; }
+
+
+a
+{
+	text-decoration: underline;
+	color: inherit;
+}
+
+
+ol, ul
+{
+	padding-left: 28px;
+	
+	> li
+	{
+		// Set 10px space between items.
+		
+		margin-top: 10px;
+		
+		// In nested lists add margin to list instead of item to avoid conflicting with the next rule.
+		> ol, ul { margin-top: 10px; }
+		
+		&:first-child { margin-top: 0px; }
+		
+		&::marker, > p:first-child { font-weight: bold; }
+	}
+	
+	> li > p { margin: 0px }
+}

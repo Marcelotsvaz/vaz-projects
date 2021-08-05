@@ -1,0 +1,18 @@
+#
+# VAZ Projects
+#
+#
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+[Unit]
+Description = Backup Timer
+Requires = network-online.target
+After = network-online.target
+
+[Timer]
+OnCalendar = daily
+
+[Install]
+WantedBy = timers.target

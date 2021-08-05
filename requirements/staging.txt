@@ -1,0 +1,3 @@
+-r development.txt
+-r production.txt
+ptvsd==4.3.2

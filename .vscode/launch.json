@@ -1,0 +1,53 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Launch Development Server",
+			"type": "python",
+			"request": "launch",
+			"django": true,
+			"subProcess": true,
+			"justMyCode": false,
+			"envFile": "${workspaceFolder}/server/scripts/development.sh",
+			"program": "${workspaceFolder}/vazProjects/manage.py",
+			"args": [
+				"runserver",
+				"0.0.0.0:8000",
+			],
+		},
+		{
+			"name": "Attach to Staging Server",
+			"type": "python",
+			"request": "attach",
+			"django": true,
+			"justMyCode": false,
+			"host": "127.0.0.1",
+			"port": 5678,
+		},
+		{
+			"name": "Launch Management Command",
+			"type": "python",
+			"request": "launch",
+			"django": true,
+			"subProcess": true,
+			"justMyCode": false,
+			"envFile": "${workspaceFolder}/server/scripts/development.sh",
+			"program": "${workspaceFolder}/vazProjects/manage.py",
+			"args": [
+				"${input:command}",
+			],
+		},
+	],
+	"inputs": [
+		{
+			"id": "command",
+			"type": "pickString",
+			"description": "Select a management command",
+			"options": [
+				"updateslugs",
+				"updatefilenames",
+				"deleteorphanated",
+			]
+		},
+	]
+}

@@ -1,0 +1,19 @@
+#
+# VAZ Projects
+#
+#
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+[Unit]
+Description = Dehydrated Timer
+Requires = network-online.target
+After = network-online.target
+
+[Timer]
+OnCalendar = monthly
+RandomizedDelaySec = 1h
+
+[Install]
+WantedBy = timers.target

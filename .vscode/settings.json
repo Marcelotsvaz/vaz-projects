@@ -1,0 +1,4 @@
+{
+	"python.pythonPath": "deployment/env/bin/python",
+	// "terminal.integrated.shellArgs.linux": ["-c", "set -a; source '${workspaceFolder}/server/scripts/development.sh'; set +a; bash"],
+}

@@ -1,0 +1,22 @@
+#
+# VAZ Projects
+#
+#
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+[Unit]
+Description = Memcached
+After = network-online.target
+
+
+[Service]
+Type = simple
+User = memcached
+
+ExecStart = /usr/bin/memcached -l ::1 -m 128
+
+
+[Install]
+WantedBy = multi-user.target
