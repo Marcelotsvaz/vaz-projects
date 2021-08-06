@@ -16,7 +16,23 @@ def home( httpRequest ):
 	Home view.
 	'''
 	
-	return render( httpRequest, 'siteApp/home.html', {} )
+	return render( httpRequest, 'siteApp/home.html' )
+
+
+def professional( httpRequest ):
+	'''
+	Professional view.
+	'''
+	
+	return render( httpRequest, 'siteApp/professional.html' )
+
+
+def about_me( httpRequest ):
+	'''
+	About me view.
+	'''
+	
+	return render( httpRequest, 'siteApp/about_me.html' )
 
 
 def sitemap( httpRequest ):

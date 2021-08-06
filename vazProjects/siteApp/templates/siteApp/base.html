@@ -32,12 +32,12 @@
 		</header>
 		
 		<nav class="menu">
-			<a href="{% url 'siteApp:home' %}">{% trans 'Home' noop %}</a>
+			<a href="{% url 'siteApp:home' %}">{% trans 'Home' %}</a>
 			<a href="{% url 'projectsApp:projects' %}">{% trans 'Projects' %}</a>
 			<a href="{% url 'siteApp:home' %}">{% trans 'Blog' %}</a>
 			<a href="{% url 'siteApp:home' %}">{% trans 'Store' %}</a>
-			<a href="{% url 'siteApp:home' %}">{% trans 'Work' %}</a>
-			<a href="{% url 'siteApp:home' %}">{% trans 'About me' %}</a>
+			<a href="{% url 'siteApp:professional' %}">{% trans 'Professional' %}</a>
+			<a href="{% url 'siteApp:about_me' %}">{% trans 'About me' %}</a>
 		</nav>
 		
 		<div class="banner" style="background-image: url( {% block bannerImage %}'{% static 'siteApp/images/banner.jpg' %}'{% endblock %} );">
