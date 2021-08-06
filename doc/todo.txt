@@ -1,4 +1,5 @@
 Website:
+	Implement optional banner and sidebar
 
 Django:
 	Cache busting

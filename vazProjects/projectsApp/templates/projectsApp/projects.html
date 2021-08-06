@@ -1,0 +1,18 @@
+{% extends "siteApp/base.html" %}
+
+
+{% block pageName %}projects{% endblock %}
+
+
+{% block title %}{% trans 'Projects' %} | {{ block.super }}{% endblock %}
+
+
+{% block content %}
+	<h2>{% trans 'Hello' %}</h2>
+	
+	<ul>
+		{% for project in projects %}
+		<li><a href="{{ project.get_absolute_url }}">{{ project.name }}</a></li>
+		{% endfor %}
+	</ul>
+{% endblock %}

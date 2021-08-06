@@ -102,6 +102,7 @@ INSTALLED_APPS = [
 	'django.contrib.staticfiles',
 	'commonApp.apps.commonAppConfig',
 	'siteApp.apps.siteAppConfig',
+	'projectsApp.apps.projectsAppConfig',
 	'django_cleanup.apps.CleanupConfig',
 ]
 
