@@ -25,28 +25,34 @@
 	</head>
 	
 	<body class="{% block pageName %}{% endblock %}">
-		<header class="mainHeader">
-			<div class="header">
-				<a class="logo" href="{% url 'siteApp:home' %}">
-					<img src="{% static 'siteApp/images/logo.svg' %}" alt="{% trans 'Logo.' %}">
-				</a>
-			</div>
-			
-			<div class="menu">
-				<a class="logoSmall" href="{% url 'siteApp:home' %}">
-					<img src="{% static 'siteApp/images/logo2.svg' %}" alt="{% trans 'Logo.' %}">
-				</a>
-				<a href="{% url 'siteApp:home' %}">{% trans 'Home' noop %}</a>
-				<a href="{% url 'siteApp:home' %}">{% trans 'Home' noop %}</a>
-				<a href="{% url 'siteApp:home' %}">{% trans 'Home' noop %}</a>
-			</div>
+		<header class="header">
+			<a class="logo" href="{% url 'siteApp:home' %}">
+				<img src="{% static 'siteApp/images/logo.svg' %}" alt="{% trans 'Logo.' %}">
+			</a>
 		</header>
 		
-		<main class="contentSection">
-			{% block contentSection %}{% endblock %}
+		<nav class="menu">
+			<a href="{% url 'siteApp:home' %}">{% trans 'Home' noop %}</a>
+			<a href="{% url 'siteApp:home' %}">{% trans 'Projects' %}</a>
+			<a href="{% url 'siteApp:home' %}">{% trans 'Blog' %}</a>
+			<a href="{% url 'siteApp:home' %}">{% trans 'Store' %}</a>
+			<a href="{% url 'siteApp:home' %}">{% trans 'Work' %}</a>
+			<a href="{% url 'siteApp:home' %}">{% trans 'About me' %}</a>
+		</nav>
+		
+		<div class="banner" style="background-image: url( {% block bannerImage %}'{% static 'siteApp/images/banner.jpg' %}'{% endblock %} );">
+			{% block banner %}{% endblock %}
+		</div>
+		
+		<main class="content">
+			{% block content %}{% endblock %}
 		</main>
 		
-		<footer class="mainFooter">
+		<nav class="sidebar">
+			{% block sidebar %}{% endblock %}
+		</nav>
+		
+		<footer class="footer">
 			<p>
 				{% trans 'Footer text.' %}<br>
 			</p>

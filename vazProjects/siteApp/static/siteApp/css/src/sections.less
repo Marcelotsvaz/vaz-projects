@@ -6,20 +6,114 @@
 
 
 
-.mainHeader
+html, body { min-height: 100vh; }
+
+
+
+body
 {
+	display: grid;
+	grid:
+    					"...	header	header	..."	auto
+    					"...	menu	menu	..."	auto
+    					"...	banner	banner	..."	300px
+    					"...	content	sidebar	..."	1fr
+    					"...	footer	footer	..."	auto
+		/ [all-start]	1fr		1000px	200px	1fr				[all-end];
 	
+	background-color: @headerBackgroundColor;
+	
+	color: @headerTextColor;
 }
 
 
-.contentSection
+
+header.header
 {
+	grid-area: header;
 	
+	padding: 25px;
+	
+	font-weight: 800;
 }
 
 
-.mainFooter
+
+nav.menu
 {
+	grid-area: menu;
+	
+	display: flex;
+	
+	> a
+	{
+		padding: 10px 20px;
+		
+		line-height: 20px;
+		font-weight: bold;
+		text-align: center;
+		text-transform: uppercase;
+		// text-decoration: none;
+		white-space: nowrap;
+		
+		// &:hover { text-decoration: underline; }
+	}
+}
+
+
+
+.banner
+{
+	grid-row: banner;
+	grid-column: all;
+	
+	background-position: center;
+	background-size: cover;
+}
+
+
+
+// Use pseudo-element for main.content background.
+body::before
+{
+	grid-row: content;
+	grid-column: all;
+	
+	content: "";
+	
+	background-color: @contentBackgroundColor;
+}
+
+
+
+main.content
+{
+	grid-area: content;
+	
+	padding: 25px 50px;
+	
+	color: @contentTextColor;
+}
+
+
+
+nav.sidebar
+{
+	grid-area: sidebar;
+	
+	padding: 25px;
+	
+	color: @contentTextColor;
+}
+
+
+
+footer.footer
+{
+	grid-area: footer;
+	
+	padding: 25px;
+	
 	text-align: center;
 	
 	> hr
@@ -28,6 +122,6 @@
 		border: none;
 		height: 1px;
 		
-		background-image: linear-gradient( to right, hsla( 0, 0, 0, 0 ), hsla( 0, 0, 0, 1 ) 25% 75%, hsla( 0, 0, 0, 0 ) );
+		background-image: linear-gradient( to right, hsla( 0, 0, 0, 0 ), @headerTextColor 25% 75%, hsla( 0, 0, 0, 0 ) );
 	}
 }

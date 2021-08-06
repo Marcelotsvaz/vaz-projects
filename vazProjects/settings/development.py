@@ -38,7 +38,7 @@ CACHES = {
 	'default':
 	{
 		'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-		'TIMEOUT': 10,
+		'TIMEOUT': 1,
 	},
 }
 CACHE_MIDDLEWARE_SECONDS = CACHES['default']['TIMEOUT']
