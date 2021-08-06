@@ -53,7 +53,7 @@ class ProjectAdmin( admin.ModelAdmin ):
 	
 	# Edit page options.
 	fieldsets = (
-		( _('Basic description'), basicDescriptionFields ),
-		( _('Detailed description'), detailedDescriptionFields ),
+		( _('basic description'), basicDescriptionFields ),
+		( _('detailed description'), detailedDescriptionFields ),
 	)
 	prepopulated_fields = { 'slug': ( 'name', ) }

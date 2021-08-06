@@ -70,8 +70,7 @@ class UserImage( models.Model ):
 	'''
 	
 	class Meta:
-		verbose_name = _('imagem de usuário')
-		verbose_name_plural = _('imagens de usuário')
+		verbose_name = _('user image')
 		
 		constraints = [
 			UniqueConstraint( fields = [ 'identifier', 'content_type', 'object_id' ], name = 'uniqueForObject' ),
@@ -83,11 +82,11 @@ class UserImage( models.Model ):
 	object_id		= PositiveIntegerField()
 	content_object	= GenericForeignKey( for_concrete_model = False )
 	
-	identifier		= SlugField(	_('identificador'), max_length = 100 )
-	alt				= CharField(	_('descrição'), max_length = 250, blank = True )
-	attribution		= CharField(	_('atribuição'), max_length = 250, blank = True )
-	notes			= CharField(	_('notas'), max_length = 250, blank = True )
-	image_original	= ImageField(	_('imagem'), upload_to = getUploadFolder( '{}-original', method = 'identifier' ) )
+	identifier		= SlugField(	_('identifier'), max_length = 100 )
+	alt				= CharField(	_('description'), max_length = 250, blank = True )
+	attribution		= CharField(	_('attribution'), max_length = 250, blank = True )
+	notes			= CharField(	_('notes'), max_length = 250, blank = True )
+	image_original	= ImageField(	_('image'), upload_to = getUploadFolder( '{}-original', method = 'identifier' ) )
 	image_small		= ImageSpecField(
 		source = 'image_original',
 		processors = [ ResizeToFit( 250 ) ],

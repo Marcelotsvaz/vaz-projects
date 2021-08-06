@@ -38,10 +38,11 @@ USE_TZ = True
 
 USE_THOUSAND_SEPARATOR = True
 
-LANGUAGE_CODE = 'pt-br'
-LANGUAGES = (	#( 'en', _('Inglês') ),
-				( 'pt-br', _('Português Brasileiro') ),
-			)
+LANGUAGE_CODE = 'en'
+LANGUAGES = (
+	( 'en', _('English') ),
+	( 'pt-br', _('Brazilian Portuguese') ),
+)
 TIME_ZONE = 'America/Sao_Paulo'
 
 

@@ -13,4 +13,4 @@ from django.utils.translation import gettext_lazy as _
 
 class siteAppConfig( AppConfig ):
 	name = 'siteApp'
-	verbose_name = _('Site')
+	verbose_name = _('site')

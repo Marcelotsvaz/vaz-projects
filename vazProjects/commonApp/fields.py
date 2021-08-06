@@ -32,7 +32,7 @@ class DateListField( models.Field ):
 		self,
 		*args,
 		separator = ' ',
-		help_text = _('Datas no formato ISO separadas por espaço. Ex.: "2020-12-20 2020-12-21"'),
+		help_text = _('ISO formatted dates separated by space. Ex.: "2020-12-20 2020-12-21"'),
 		**kargs ):
 		
 		self.separator = separator

@@ -42,7 +42,7 @@ class Project( models.Model ):
 	# 	Category,
 	# 	on_delete = models.PROTECT,
 	# 	related_name = 'packages',
-	# 	verbose_name = _('categoria')
+	# 	verbose_name = _('category')
 	# )
 	# banner_original		= ImageField(		_('banner'), blank = True, upload_to = getUploadFolder( 'banner-original' ) )
 	# thumbnail_original	= ImageField(		_('thumbnail'), blank = True, upload_to = getUploadFolder( 'thumbnail-original' ) )

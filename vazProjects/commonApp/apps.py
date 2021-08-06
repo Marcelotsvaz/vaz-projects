@@ -16,7 +16,7 @@ from .signals import clearCache
 
 class commonAppConfig( AppConfig ):
 	name = 'commonApp'
-	verbose_name = _('Comum')
+	verbose_name = _('common')
 	
 	def ready( self ):
 		for Model in apps.get_models():
