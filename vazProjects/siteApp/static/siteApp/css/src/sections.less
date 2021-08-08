@@ -34,7 +34,12 @@ header.header
 	
 	padding: 25px;
 	
-	font-weight: 800;
+	> a
+	{
+		text-decoration: none;
+		
+		> h1 { line-height: 50px; }
+	}
 }
 
 
@@ -53,10 +58,10 @@ nav.menu
 		font-weight: bold;
 		text-align: center;
 		text-transform: uppercase;
-		// text-decoration: none;
+		text-decoration: none;
 		white-space: nowrap;
 		
-		// &:hover { text-decoration: underline; }
+		&:hover { text-decoration: underline; }
 	}
 }
 
