@@ -12,14 +12,17 @@ html, body { min-height: 100vh; }
 
 body
 {
+	--width: 1200px;
+	--margin: calc( ( 100% - var(--width) ) / 2 );
+	
 	display: grid;
 	grid:
-    					"...	header	header	..."	auto
-    					"...	menu	menu	..."	auto
-    					"...	banner	banner	..."	300px
-    					"...	content	sidebar	..."	1fr
-    					"...	footer	footer	..."	auto
-		/ [all-start]	1fr		1000px	200px	1fr				[all-end];
+						"...			header	header	..."			auto
+						"...			menu	menu	..."			auto
+						"...			banner	banner	..."			auto
+						"...			content	sidebar	..."			1fr
+						"...			footer	footer	..."			auto
+		/ [all-start]	var(--margin)	1fr		auto	var(--margin)			[all-end];
 	
 	background-color: @headerBackgroundColor;
 	
@@ -69,8 +72,9 @@ nav.menu
 
 .banner
 {
-	grid-row: banner;
-	grid-column: all;
+	grid-area: banner / all;
+	
+	height: 300px;
 	
 	background-position: center;
 	background-size: cover;
@@ -106,6 +110,7 @@ nav.sidebar
 {
 	grid-area: sidebar;
 	
+	width: 200px;
 	padding: 25px;
 	
 	color: @contentTextColor;
