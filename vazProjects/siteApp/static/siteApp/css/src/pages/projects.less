@@ -1,0 +1,50 @@
+//
+// VAZ Projects
+//
+//
+// Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+.projects
+{
+	.sidebar { display: none; }
+	
+	ul
+	{
+		> li
+		{
+			display: grid;
+			grid:
+					"thumbnail	title		title"			auto
+					"thumbnail	description	description"	1fr
+					"thumbnail	date		comments"		auto
+				/	auto		1fr			auto;
+			gap: 10px;
+			
+			> img
+			{
+				grid-area: thumbnail;
+				
+				border: 1px solid black;
+				width: 200px;
+				height: 125px;
+			}
+			
+			> h2
+			{
+				grid-area: title;
+			}
+			
+			> p
+			{
+				grid-area: description;
+			}
+			
+			> span
+			{
+				font-size: smaller;
+			}
+		}
+	}
+}

@@ -1,5 +1,7 @@
 Website:
-	Implement optional banner and sidebar
+	Natural key
+	Single page projects
+	
 
 Django:
 	Cache busting

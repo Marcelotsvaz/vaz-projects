@@ -9,7 +9,22 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-from .models import Project
+from .models import Project, Category
+
+
+
+@admin.register( Category )
+class CategoryAdmin( admin.ModelAdmin ):
+	'''
+	Category admin page.
+	'''
+	
+	# List display options.
+	list_display = ( 'name', )
+	
+	
+	# Edit page options.
+	prepopulated_fields = { 'slug': ( 'name', ) }
 
 
 
@@ -21,26 +36,26 @@ class ProjectAdmin( admin.ModelAdmin ):
 	
 	# List display options.
 	list_display = (
-		# 'category',
+		'category',
 		'name',
-		# 'highlight',
+		'highlight',
 		'published',
 	)
 	list_display_links = ( 'name', )
-	# list_filter = ( 'category', 'partner', 'highlight', 'published' )
+	list_filter = ( 'category', 'highlight', 'published' )
 	
 	
 	# Fieldsets.
 	basicDescriptionFields = {
 		'fields': (
 			( 'name', 'slug' ),
-			# 'category',
-			# 'banner_original',
-			# 'thumbnail_original',
+			'category',
+			'banner_original',
+			'thumbnail_original',
 			'short_description',
-			# 'notes',
+			'notes',
 			'published',
-			# 'highlight',
+			'highlight',
 		)
 	}
 	

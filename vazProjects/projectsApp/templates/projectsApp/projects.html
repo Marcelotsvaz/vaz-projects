@@ -8,11 +8,18 @@
 
 
 {% block content %}
-	<h2>{% trans 'Hello' %}</h2>
-	
 	<ul>
 		{% for project in projects %}
-		<li><a href="{{ project.get_absolute_url }}">{{ project.name }}</a></li>
+			<li>
+				<img src="{{ project.thumbnail.url }}" alt="{% blocktrans with projectName=project.name %}{{ projectName }} thumbnail.{% endblocktrans %}"/>
+
+				<h2><a href="{{ project.get_absolute_url }}">{{ project.name }}</a></h2>
+
+				<p>{{ project.short_description }}</p>
+
+				<span>{% trans 'Last update:' %} {{ project.publishDate.date }}</span>
+				<span><a href="{{ project.get_absolute_url }}">8 {% trans 'comments' %}</a></span>
+			</li>
 		{% endfor %}
 	</ul>
 {% endblock %}
