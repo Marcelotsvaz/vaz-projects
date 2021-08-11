@@ -1,8 +1,10 @@
 {% extends "siteApp/base.html" %}
-{% load default_file_url %}
+
 
 
 {% block pageName %}professional{% endblock %}
+{% block title %}{% trans 'Professional' %} | {{ block.super }}{% endblock %}
+
 
 
 {% block content %}

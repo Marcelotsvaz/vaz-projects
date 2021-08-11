@@ -17,11 +17,12 @@ body
 	
 	display: grid;
 	grid:
-						"...			header	header	..."			auto
-						"...			menu	menu	..."			auto
-						"...			banner	banner	..."			auto
-						"...			content	sidebar	..."			1fr
-						"...			footer	footer	..."			auto
+						"...			header			header			..."			auto
+						"...			menu			menu			..."			auto
+						"...			banner			banner			..."			auto
+						"...			bannerHeader	bannerHeader	..."			auto
+						"...			content			sidebar			..."			1fr
+						"...			footer			footer			..."			auto
 		/ [all-start]	var(--margin)	1fr		auto	var(--margin)			[all-end];
 	
 	background-color: @headerBackgroundColor;
@@ -31,23 +32,23 @@ body
 
 
 
-header.header
+.header
 {
 	grid-area: header;
 	
 	padding: 25px;
 	
-	> a
+	> h1
 	{
-		text-decoration: none;
+		line-height: 50px;
 		
-		> h1 { line-height: 50px; }
+		> a { text-decoration: none; }
 	}
 }
 
 
 
-nav.menu
+.menu
 {
 	grid-area: menu;
 	
@@ -72,12 +73,39 @@ nav.menu
 
 .banner
 {
-	grid-area: banner / all;
+	display: contents;
 	
-	height: 300px;
+	> img
+	{
+		grid-area: banner / all / bannerHeader;
+		
+		z-index: -1;
+		
+		object-fit: cover;
+		
+		width: 100%;
+		height: 400px;
+	}
 	
-	background-position: center;
-	background-size: cover;
+	// Use pseudo-element for banner header background.
+	&::before
+	{
+		grid-area: bannerHeader / all;
+		
+		content: "";
+		
+		background-color: hsla( 0, 0, 0, 0.5 );
+	}
+	
+	> h1
+	{
+		grid-area: bannerHeader;
+		
+		height: 100px;
+		padding: 25px 50px;
+		
+		color: hsl( 0, 0, 95% );
+	}
 }
 
 
@@ -95,7 +123,7 @@ body::before
 
 
 
-main.content
+.content
 {
 	grid-area: content;
 	
@@ -106,7 +134,7 @@ main.content
 
 
 
-nav.sidebar
+.sidebar
 {
 	grid-area: sidebar;
 	
@@ -118,7 +146,7 @@ nav.sidebar
 
 
 
-footer.footer
+.footer
 {
 	grid-area: footer;
 	

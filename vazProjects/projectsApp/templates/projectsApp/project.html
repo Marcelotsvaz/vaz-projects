@@ -1,13 +1,14 @@
 {% extends "siteApp/base.html" %}
 
 
+
 {% block pageName %}project{% endblock %}
-
-
 {% block title %}{{ project.name }} | {{ block.super }}{% endblock %}
+
+{% block bannerTitle %}{{ project.name }}{% endblock %}
+
 
 
 {% block content %}
-	<h2>{{ project.name }}</h2>
 	{{ project.description }}
 {% endblock %}

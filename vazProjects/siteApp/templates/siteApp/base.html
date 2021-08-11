@@ -16,6 +16,7 @@
 		
 		{% comment %} Preload {% endcomment %}
 		<link rel="preload" href="{% static 'siteApp/images/logo.svg' %}" as="image">
+		{% block bannerImagePreload %}{% endblock %}
 		
 		{% comment %} Meta {% endcomment %}
 		<title>{% block title %}{% trans 'VAZ Projects' %}{% endblock %}</title>
@@ -26,9 +27,9 @@
 	
 	<body class="{% block pageName %}{% endblock %}">
 		<header class="header">
-			<a class="logo" href="{% url 'siteApp:home' %}">
-				<h1>VAZ Projects</h1>
-			</a>
+			<h1>
+				<a class="logo" href="{% url 'siteApp:home' %}">VAZ Projects</a>
+			</h1>
 		</header>
 		
 		<nav class="menu">
@@ -40,9 +41,10 @@
 			<a href="{% url 'siteApp:about_me' %}">{% trans 'About me' %}</a>
 		</nav>
 		
-		<div class="banner" style="background-image: url( {% block bannerImage %}'{% static 'siteApp/images/banner.jpg' %}'{% endblock %} );">
-			{% block banner %}{% endblock %}
-		</div>
+		<header class="banner">
+			<img src="{% block bannerImage %}{% endblock %}" alt="{% trans 'Banner image.' %}">
+			<h1>{% block bannerTitle %}{% endblock %}</h1>
+		</header>
 		
 		<main class="content">
 			{% block content %}{% endblock %}

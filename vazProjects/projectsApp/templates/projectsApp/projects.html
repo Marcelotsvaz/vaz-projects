@@ -1,10 +1,14 @@
 {% extends "siteApp/base.html" %}
 
 
+
 {% block pageName %}projects{% endblock %}
-
-
 {% block title %}{% trans 'Projects' %} | {{ block.super }}{% endblock %}
+
+{% block bannerTitle %}{% trans 'Projects' %}{% endblock %}
+{% block bannerImage %}{% static 'projectsApp/images/banner.jpg' %}{% endblock %}
+{% block bannerImagePreload %}<link rel="preload" href="{% static 'projectsApp/banner.jpg' %}" as="image">{% endblock %}
+
 
 
 {% block content %}
