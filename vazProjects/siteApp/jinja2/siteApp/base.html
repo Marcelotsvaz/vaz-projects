@@ -16,7 +16,9 @@
 		
 		{# Preload #}
 		<link rel="preload" href="{{ static( 'siteApp/images/logo.svg' ) }}" as="image">
-		{% block bannerImagePreload %}{% endblock %}
+		{% if self.bannerImage() %}
+			<link rel="preload" href="{{ self.bannerImage() }}" as="image">
+		{% endif %}
 		
 		{# Meta #}
 		<title>{% block title %}{{ _('VAZ Projects') }}{% endblock %}</title>
@@ -36,23 +38,27 @@
 			<a href="{{ url( 'siteApp:home' ) }}">{{ _('Home') }}</a>
 			<a href="{{ url( 'projectsApp:projects' ) }}">{{ _('Projects') }}</a>
 			<a href="{{ url( 'siteApp:home' ) }}">{{ _('Blog') }}</a>
-			{# <a href="{{ url( 'siteApp:home' ) }}">{{ _('Store') }}</a>
-			<a href="{{ url( 'siteApp:professional' ) }}">{{ _('Professional') }}</a> #}
+			<a href="{{ url( 'siteApp:home' ) }}">{{ _('Store') }}</a>
+			<a href="{{ url( 'siteApp:professional' ) }}">{{ _('Professional') }}</a>
 			<a href="{{ url( 'siteApp:about_me' ) }}">{{ _('About me') }}</a>
 		</nav>
 		
-		<header class="banner">
-			<img src="{% block bannerImage %}{% endblock %}" alt="{{ _('Banner image.') }}">
-			<h1>{% block bannerTitle %}{% endblock %}</h1>
-		</header>
+		{% if self.bannerTitle() %}
+			<header class="banner">
+				<img src="{% block bannerImage %}{% endblock %}" alt="{{ _('Banner image.') }}">
+				<h1>{% block bannerTitle %}{% endblock %}</h1>
+			</header>
+		{% endif %}
 		
 		<main class="content">
 			{% block content required %}{% endblock %}
 		</main>
 		
-		<nav class="sidebar">
-			{% block sidebar %}{% endblock %}
-		</nav>
+		{% if self.sidebar() %}
+			<nav class="sidebar">
+				{% block sidebar %}{% endblock %}
+			</nav>
+		{% endif %}
 		
 		<footer class="footer">
 			<p>
