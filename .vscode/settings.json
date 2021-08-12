@@ -1,4 +1,20 @@
 {
 	"python.pythonPath": "deployment/env/bin/python",
-	// "terminal.integrated.shellArgs.linux": ["-c", "set -a; source '${workspaceFolder}/server/scripts/development.sh'; set +a; bash"],
+	
+	"terminal.integrated.profiles.linux": {
+		"bash": {
+			"path": "bash",
+			"args": ["-c", "set -a; source '${workspaceFolder}/server/scripts/development.sh'; set +a; bash"],
+		},
+	},
+	
+	"runOnSave.commands": [
+		{
+			// Match less files.
+			"match": "\\.less$",
+			"command": "server/scripts/less.sh",
+			"runIn": "backend",
+			"finishStatusMessage": "LESS compiled"
+		},
+	]
 }
