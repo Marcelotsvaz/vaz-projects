@@ -15,14 +15,14 @@
 	<ul>
 		{% for project in projects %}
 			<li>
-				<img src="{{ project.thumbnail.url }}" alt="{% trans with projectName=project.name %}{{ projectName }} thumbnail.{% endtrans %}"/>
-
-				<h2><a href="{{ project.get_absolute_url }}">{{ project.name }}</a></h2>
-
+				<img src="{{ project.thumbnail.url }}" alt="{{ _('{0} thumbnail.').format( project.name ) }}"/>
+				
+				<h2><a href="{{ project.get_absolute_url() }}">{{ project.name }}</a></h2>
+				
 				<p>{{ project.short_description }}</p>
-
-				<span>{{ _('Last update:') }} {{ project.publishDate.date }}</span>
-				<span><a href="{{ project.get_absolute_url }}">8 {{ _('comments') }}</a></span>
+				
+				<span>{{ _('Last update:') }} {{ project.publishDate.date() }}</span>
+				<span><a href="{{ project.get_absolute_url() }}">8 {{ _('comments') }}</a></span>
 			</li>
 		{% endfor %}
 	</ul>
