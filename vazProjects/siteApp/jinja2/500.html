@@ -1,15 +1,17 @@
 {% extends "siteApp/base.html" %}
 
 
-{% block contentSectionClasses %}errorContentSection{% endblock %}
+
+{% block pageName %}error{% endblock %}
+{% block title %}{{ _('500 Internal Server Error') }} | {{ super() }}{% endblock %}
+
+{% block bannerTitle %}{{ _('500 Internal Server Error') }}{% endblock %}
+{% block bannerImage %}{{ static( 'siteApp/images/error/banner.jpg' ) }}{% endblock %}
 
 
-{% block contentSection %}
-<h1>{{ _('Erro 500 - Erro interno do servidor') }}</h1>
 
-{% trans %}
+{% block content %}
 <p>
-	Ocorreu um erro ao processar seu pedido.
+	{{ _('There is a problem with the server.') }}'
 </p>
-{% endtrans %}
 {% endblock %}

@@ -1,15 +1,17 @@
 {% extends "siteApp/base.html" %}
 
 
-{% block contentSectionClasses %}errorContentSection{% endblock %}
+
+{% block pageName %}error{% endblock %}
+{% block title %}{{ _('404 Not Found') }} | {{ super() }}{% endblock %}
+
+{% block bannerTitle %}{{ _('404 Not Found') }}{% endblock %}
+{% block bannerImage %}{{ static( 'siteApp/images/error/banner.jpg' ) }}{% endblock %}
 
 
-{% block contentSection %}
-<h1>{{ _('Erro 404 - Não encontrado') }}</h1>
 
-{% trans %}
+{% block content %}
 <p>
-	A página requisitada não pôde ser encontrada.
+	{{ _('The requested page was not found.') }}
 </p>
-{% endtrans %}
 {% endblock %}

@@ -1,15 +1,17 @@
 {% extends "siteApp/base.html" %}
 
 
-{% block contentSectionClasses %}errorContentSection{% endblock %}
+
+{% block pageName %}error{% endblock %}
+{% block title %}{{ _('403 Forbidden') }} | {{ super() }}{% endblock %}
+
+{% block bannerTitle %}{{ _('403 Forbidden') }}{% endblock %}
+{% block bannerImage %}{{ static( 'siteApp/images/error/banner.jpg' ) }}{% endblock %}
 
 
-{% block contentSection %}
-<h1>{{ _('Erro 403 - Proibido') }}</h1>
 
-{% trans %}
+{% block content %}
 <p>
-	Você não tem permissão para accessar essa página.
+	{{ _('You not allowed to access this page.') }}'
 </p>
-{% endtrans %}
 {% endblock %}

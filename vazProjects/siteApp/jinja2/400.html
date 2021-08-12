@@ -1,15 +1,17 @@
 {% extends "siteApp/base.html" %}
 
 
-{% block contentSectionClasses %}errorContentSection{% endblock %}
+
+{% block pageName %}error{% endblock %}
+{% block title %}{{ _('400 Bad Request') }} | {{ super() }}{% endblock %}
+
+{% block bannerTitle %}{{ _('400 Bad Request') }}{% endblock %}
+{% block bannerImage %}{{ static( 'siteApp/images/error/banner.jpg' ) }}{% endblock %}
 
 
-{% block contentSection %}
-<h1>{{ _('Erro 400 - Requisição inválida') }}</h1>
 
-{% trans %}
+{% block content %}
 <p>
-	Seu pedido é inválido.
+	{{ _('Your request is invalid.') }}'
 </p>
-{% endtrans %}
 {% endblock %}

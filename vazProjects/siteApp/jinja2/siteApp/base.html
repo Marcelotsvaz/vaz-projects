@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="{{ request.LANGUAGE_CODE }}">
+<html lang="">
 	<head>
 		{# CSS #}
 		<link rel="stylesheet" href="{{ static( 'commonApp/css/normalize-8.0.1.css' ) }}"/>
@@ -25,7 +25,7 @@
 		<meta name="viewport" content="width=1100 viewport-fit=cover">
 	</head>
 	
-	<body class="{% block pageName %}{% endblock %}">
+	<body class="{% block pageName required %}{% endblock %}">
 		<header class="header">
 			<h1>
 				<a class="logo" href="{{ url( 'siteApp:home' ) }}">VAZ Projects</a>
@@ -36,8 +36,8 @@
 			<a href="{{ url( 'siteApp:home' ) }}">{{ _('Home') }}</a>
 			<a href="{{ url( 'projectsApp:projects' ) }}">{{ _('Projects') }}</a>
 			<a href="{{ url( 'siteApp:home' ) }}">{{ _('Blog') }}</a>
-			<a href="{{ url( 'siteApp:home' ) }}">{{ _('Store') }}</a>
-			<a href="{{ url( 'siteApp:professional' ) }}">{{ _('Professional') }}</a>
+			{# <a href="{{ url( 'siteApp:home' ) }}">{{ _('Store') }}</a>
+			<a href="{{ url( 'siteApp:professional' ) }}">{{ _('Professional') }}</a> #}
 			<a href="{{ url( 'siteApp:about_me' ) }}">{{ _('About me') }}</a>
 		</nav>
 		
@@ -47,7 +47,7 @@
 		</header>
 		
 		<main class="content">
-			{% block content %}{% endblock %}
+			{% block content required %}{% endblock %}
 		</main>
 		
 		<nav class="sidebar">
