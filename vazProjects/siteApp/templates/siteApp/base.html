@@ -2,47 +2,47 @@
 
 <html lang="{{ request.LANGUAGE_CODE }}">
 	<head>
-		{% comment %} CSS {% endcomment %}
-		<link rel="stylesheet" href="{% static 'commonApp/css/normalize-8.0.1.css' %}"/>
-		<link rel="stylesheet" href="{% static 'siteApp/css/siteApp.css' %}"/>
+		{# CSS #}
+		<link rel="stylesheet" href="{{ static( 'commonApp/css/normalize-8.0.1.css' ) }}"/>
+		<link rel="stylesheet" href="{{ static( 'siteApp/css/siteApp.css' ) }}"/>
 		
-		{% comment %} Javascript {% endcomment %}
-		<script src="{% static 'commonApp/javascript/jquery-3.5.1.min.js' %}"></script>
-		<script src="{% static 'siteApp/javascript/siteApp.js' %}"></script>
+		{# Javascript #}
+		<script src="{{ static( 'commonApp/javascript/jquery-3.5.1.min.js' ) }}"></script>
+		<script src="{{ static( 'siteApp/javascript/siteApp.js' ) }}"></script>
 		
-		{% comment %} Favicon {% endcomment %}
-		<link rel="icon" href="{% static 'siteApp/images/favicon.png' %}"/>
-		<link rel="apple-touch-icon" href="{% static 'siteApp/images/favicon.png' %}"/>
+		{# Favicon #}
+		<link rel="icon" href="{{ static( 'siteApp/images/favicon.png' ) }}"/>
+		<link rel="apple-touch-icon" href="{{ static( 'siteApp/images/favicon.png' ) }}"/>
 		
-		{% comment %} Preload {% endcomment %}
-		<link rel="preload" href="{% static 'siteApp/images/logo.svg' %}" as="image">
+		{# Preload #}
+		<link rel="preload" href="{{ static( 'siteApp/images/logo.svg' ) }}" as="image">
 		{% block bannerImagePreload %}{% endblock %}
 		
-		{% comment %} Meta {% endcomment %}
-		<title>{% block title %}{% trans 'VAZ Projects' %}{% endblock %}</title>
+		{# Meta #}
+		<title>{% block title %}{{ _('VAZ Projects') }}{% endblock %}</title>
 		<meta charset="UTF-8"/>
-		<meta name="description" content="{% trans 'TODO: Meta description.' %}">
+		<meta name="description" content="{{ _('TODO: Meta description.') }}">
 		<meta name="viewport" content="width=1100 viewport-fit=cover">
 	</head>
 	
 	<body class="{% block pageName %}{% endblock %}">
 		<header class="header">
 			<h1>
-				<a class="logo" href="{% url 'siteApp:home' %}">VAZ Projects</a>
+				<a class="logo" href="{{ url( 'siteApp:home' ) }}">VAZ Projects</a>
 			</h1>
 		</header>
 		
 		<nav class="menu">
-			<a href="{% url 'siteApp:home' %}">{% trans 'Home' %}</a>
-			<a href="{% url 'projectsApp:projects' %}">{% trans 'Projects' %}</a>
-			<a href="{% url 'siteApp:home' %}">{% trans 'Blog' %}</a>
-			<a href="{% url 'siteApp:home' %}">{% trans 'Store' %}</a>
-			<a href="{% url 'siteApp:professional' %}">{% trans 'Professional' %}</a>
-			<a href="{% url 'siteApp:about_me' %}">{% trans 'About me' %}</a>
+			<a href="{{ url( 'siteApp:home' ) }}">{{ _('Home') }}</a>
+			<a href="{{ url( 'projectsApp:projects' ) }}">{{ _('Projects') }}</a>
+			<a href="{{ url( 'siteApp:home' ) }}">{{ _('Blog') }}</a>
+			<a href="{{ url( 'siteApp:home' ) }}">{{ _('Store') }}</a>
+			<a href="{{ url( 'siteApp:professional' ) }}">{{ _('Professional') }}</a>
+			<a href="{{ url( 'siteApp:about_me' ) }}">{{ _('About me') }}</a>
 		</nav>
 		
 		<header class="banner">
-			<img src="{% block bannerImage %}{% endblock %}" alt="{% trans 'Banner image.' %}">
+			<img src="{% block bannerImage %}{% endblock %}" alt="{{ _('Banner image.') }}">
 			<h1>{% block bannerTitle %}{% endblock %}</h1>
 		</header>
 		
@@ -56,12 +56,12 @@
 		
 		<footer class="footer">
 			<p>
-				{% trans 'Footer text.' %}<br>
+				{{ _('Footer text.') }}<br>
 			</p>
 			
 			<hr>
 			
-			<p>{% trans 'VAZ Projects' %}</p>
+			<p>{{ _('VAZ Projects') }}</p>
 		</footer>
 	</body>
 </html>

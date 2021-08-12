@@ -9,9 +9,9 @@
 				<img src="{{ userImage.image_large.url }}" alt="{{ userImage.alt }}" loading="lazy">
 				<figcaption>
 					<p>{{ userImage.alt }}</p>
-					{% if userImage.attribution %}<p>{% trans 'Crédito: ' %}{{ userImage.attribution }}</p>{% endif %}
+					{% if userImage.attribution %}<p>{{ _('Crédito: ') }}{{ userImage.attribution }}</p>{% endif %}
 				</figcaption>
-				<button>{% trans 'Fechar' %}</button>
+				<button>{{ _('Fechar') }}</button>
 			</figure>
 		</div>
 	{% endfor %}

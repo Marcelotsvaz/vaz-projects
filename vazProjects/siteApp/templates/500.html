@@ -5,11 +5,11 @@
 
 
 {% block contentSection %}
-<h1>{% trans 'Erro 500 - Erro interno do servidor' %}</h1>
+<h1>{{ _('Erro 500 - Erro interno do servidor') }}</h1>
 
-{% blocktrans %}
+{% trans %}
 <p>
 	Ocorreu um erro ao processar seu pedido.
 </p>
-{% endblocktrans %}
+{% endtrans %}
 {% endblock %}

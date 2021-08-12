@@ -3,10 +3,10 @@
 
 
 {% block pageName %}about_me{% endblock %}
-{% block title %}{% trans 'About Me' %} | {{ block.super }}{% endblock %}
+{% block title %}{{ _('About Me') }} | {{ super() }}{% endblock %}
 
 
 
 {% block content %}
-	<h1>{% trans 'About Me' %}</h1>
+	<h1>{{ _('About Me') }}</h1>
 {% endblock %}

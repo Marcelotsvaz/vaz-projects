@@ -3,10 +3,10 @@
 
 
 {% block pageName %}professional{% endblock %}
-{% block title %}{% trans 'Professional' %} | {{ block.super }}{% endblock %}
+{% block title %}{{ _('Professional') }} | {{ super() }}{% endblock %}
 
 
 
 {% block content %}
-	<h2>{% trans 'Professional' %}</h2>
+	<h2>{{ _('Professional') }}</h2>
 {% endblock %}

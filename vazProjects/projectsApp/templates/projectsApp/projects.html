@@ -3,11 +3,11 @@
 
 
 {% block pageName %}projects{% endblock %}
-{% block title %}{% trans 'Projects' %} | {{ block.super }}{% endblock %}
+{% block title %}{{ _('Projects') }} | {{ super() }}{% endblock %}
 
-{% block bannerTitle %}{% trans 'Projects' %}{% endblock %}
-{% block bannerImage %}{% static 'projectsApp/images/banner.jpg' %}{% endblock %}
-{% block bannerImagePreload %}<link rel="preload" href="{% static 'projectsApp/banner.jpg' %}" as="image">{% endblock %}
+{% block bannerTitle %}{{ _('Projects') }}{% endblock %}
+{% block bannerImage %}{{ static( 'projectsApp/images/banner.jpg' ) }}{% endblock %}
+{% block bannerImagePreload %}<link rel="preload" href="{{ static( 'projectsApp/banner.jpg' ) }}" as="image">{% endblock %}
 
 
 
@@ -15,14 +15,14 @@
 	<ul>
 		{% for project in projects %}
 			<li>
-				<img src="{{ project.thumbnail.url }}" alt="{% blocktrans with projectName=project.name %}{{ projectName }} thumbnail.{% endblocktrans %}"/>
+				<img src="{{ project.thumbnail.url }}" alt="{% trans with projectName=project.name %}{{ projectName }} thumbnail.{% endtrans %}"/>
 
 				<h2><a href="{{ project.get_absolute_url }}">{{ project.name }}</a></h2>
 
 				<p>{{ project.short_description }}</p>
 
-				<span>{% trans 'Last update:' %} {{ project.publishDate.date }}</span>
-				<span><a href="{{ project.get_absolute_url }}">8 {% trans 'comments' %}</a></span>
+				<span>{{ _('Last update:') }} {{ project.publishDate.date }}</span>
+				<span><a href="{{ project.get_absolute_url }}">8 {{ _('comments') }}</a></span>
 			</li>
 		{% endfor %}
 	</ul>

@@ -3,7 +3,7 @@
 
 
 {% block pageName %}project{% endblock %}
-{% block title %}{{ project.name }} | {{ block.super }}{% endblock %}
+{% block title %}{{ project.name }} | {{ super() }}{% endblock %}
 
 {% block bannerTitle %}{{ project.name }}{% endblock %}
 

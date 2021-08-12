@@ -5,11 +5,11 @@
 
 
 {% block contentSection %}
-<h1>{% trans 'Erro 400 - Requisição inválida' %}</h1>
+<h1>{{ _('Erro 400 - Requisição inválida') }}</h1>
 
-{% blocktrans %}
+{% trans %}
 <p>
 	Seu pedido é inválido.
 </p>
-{% endblocktrans %}
+{% endtrans %}
 {% endblock %}

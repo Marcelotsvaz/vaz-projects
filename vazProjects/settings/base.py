@@ -129,6 +129,13 @@ MIDDLEWARE = [
 ########################################
 TEMPLATES = [
 	{
+		'BACKEND': 'django.template.backends.jinja2.Jinja2',
+		'APP_DIRS': True,
+		'OPTIONS': {
+			'environment': 'jinjaEnv.environment',
+		},
+	},
+	{
 		'BACKEND': 'django.template.backends.django.DjangoTemplates',
 		'APP_DIRS': True,
 		'OPTIONS': {
@@ -137,12 +144,7 @@ TEMPLATES = [
 				'django.template.context_processors.request',
 				'django.contrib.auth.context_processors.auth',
 				'django.contrib.messages.context_processors.messages',
-				'commonApp.context_processors.settings',
 			],
-			'builtins': [
-				'django.templatetags.static',
-				'django.templatetags.i18n',
-			]
 		},
 	},
 ]

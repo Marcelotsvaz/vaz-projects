@@ -5,7 +5,6 @@ Website:
 
 Django:
 	Cache busting
-	Use Jinja2
 	Change comments {#}
 
 Server:

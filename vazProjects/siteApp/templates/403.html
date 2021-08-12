@@ -5,11 +5,11 @@
 
 
 {% block contentSection %}
-<h1>{% trans 'Erro 403 - Proibido' %}</h1>
+<h1>{{ _('Erro 403 - Proibido') }}</h1>
 
-{% blocktrans %}
+{% trans %}
 <p>
 	Você não tem permissão para accessar essa página.
 </p>
-{% endblocktrans %}
+{% endtrans %}
 {% endblock %}
