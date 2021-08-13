@@ -17,13 +17,13 @@ body
 	
 	display: grid;
 	grid:
-						"...			header			header			..."			auto
-						"...			menu			menu			..."			auto
-						"...			banner			banner			..."			auto
-						"...			bannerHeader	bannerHeader	..."			auto
-						"...			content			sidebar			..."			1fr
-						"...			footer			footer			..."			auto
-		/ [all-start]	var(--margin)	1fr		auto	var(--margin)			[all-end];
+	"...			header			header			..."			auto
+	"...			menu			menu			..."			auto
+	"...			banner			banner			..."			auto
+	"...			bannerHeader	bannerHeader	..."			auto
+	"...			content			sidebar			..."			1fr
+	"...			footer			footer			..."			auto
+	/ [all-start]	var(--margin)	1fr		auto	var(--margin)			[all-end];
 	
 	background-color: @headerBackgroundColor;
 	
@@ -153,6 +153,13 @@ body::before
 	padding: 25px;
 	
 	text-align: center;
+	
+	> p:first-of-type
+	{
+		font-weight: bold;
+		
+		img { vertical-align: middle; }
+	}
 	
 	> hr
 	{
