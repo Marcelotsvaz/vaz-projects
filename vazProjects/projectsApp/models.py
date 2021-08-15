@@ -15,6 +15,7 @@ from django.db.models import (
 	DateTimeField, ImageField,
 	ForeignKey,
 	UniqueConstraint,
+	Max,
 )
 from django.urls import reverse
 from django.conf import settings
@@ -34,16 +35,16 @@ class Category( models.Model ):
 	Project category.
 	'''
 	
-	class Meta:
-		verbose_name = _('category')
-		verbose_name_plural = _('categories')
-		ordering = ( 'order', 'name' )
-	
-	
 	# Fields.
 	slug	= SlugField(	_('slug'), max_length = 100, unique = True )
 	name	= CharField(	_('name'), max_length = 100 )
 	order	= IntegerField(	_('order'), default = 0 )
+	
+	
+	class Meta:
+		verbose_name = _('category')
+		verbose_name_plural = _('categories')
+		ordering = ( 'order', 'name' )
 	
 	
 	# Methods.
@@ -57,12 +58,7 @@ class Project( models.Model ):
 	Project.
 	'''
 	
-	class Meta:
-		verbose_name = _('project')
-		ordering = ( 'category', 'name' )
-	
-	
-	# Basic description fields.
+	# Fields.
 	slug				= SlugField(		_('slug'), max_length = 100, unique = True )
 	name				= CharField(		_('name'), max_length = 100 )
 	category			= ForeignKey(
@@ -72,29 +68,33 @@ class Project( models.Model ):
 		verbose_name = _('category'),
 	)
 	banner_original		= ImageField(		_('banner'), upload_to = getUploadFolder( 'banner-original' ) )
-	thumbnail_original	= ImageField(		_('thumbnail'), upload_to = getUploadFolder( 'thumbnail-original' ) )
 	banner				= ImageSpecField(
 		source = 'banner_original',
 		processors = [ ResizeToFill( 2000, 750 ) ],
 		format = 'JPEG',
 		options = settings.IMAGE_OPTIONS['JPEG'],
 	)
+	thumbnail_original	= ImageField(		_('thumbnail'), upload_to = getUploadFolder( 'thumbnail-original' ) )
 	thumbnail			= ImageSpecField(
 		source = 'thumbnail_original',
 		processors = [ ResizeToFill( 300, 300 ) ],
 		format = 'JPEG',
 		options = settings.IMAGE_OPTIONS['JPEG'],
 	)
-	short_description	= TextField(		_('short description') )
-	notes				= TextField(		_('notes'), blank = True )
-	published			= BooleanField(		_('published'), default = False )
-	publishDate			= DateTimeField(	_('publish date'), default = timezone.now )
-	singlePage			= BooleanField(		_('single page'), default = False )
-	highlight			= BooleanField(		_('highlight'), default = False )
-	
-	
-	# Detailed description fields.
 	description			= TextField(		_('description') )
+	content				= MarkdownField(	_('content') )
+	single_page			= BooleanField(		_('single page'), default = False )
+	draft				= BooleanField(		_('draft'), default = True )
+	highlight			= BooleanField(		_('highlight'), default = False )
+	posted				= DateTimeField(	_('posted'), default = timezone.now )
+	base_last_edited	= DateTimeField(	_('base last edited'), default = timezone.now )
+	notes				= TextField(		_('notes'), blank = True )
+	
+	
+	class Meta:
+		verbose_name = _('project')
+		verbose_name_plural = _('projects')
+		ordering = ( 'category', 'name' )
 	
 	
 	# Methods.
@@ -103,6 +103,13 @@ class Project( models.Model ):
 	
 	def get_absolute_url( self ):
 		return reverse( 'projectsApp:project', kwargs = { 'project_slug': self.slug } )
+	
+	@property
+	def last_edited( self ):
+		if self.single_page:
+			return self.base_last_edited
+		else:
+			return max( self.base_last_edited, self.pages.aggregate( last_edited = Max( 'last_edited' ) )['last_edited'] )
 
 
 
@@ -111,39 +118,59 @@ class Page( models.Model ):
 	Project page.
 	'''
 	
-	class Meta:
-		verbose_name = _('project page')
-		ordering = ( 'page_number', 'project' )
-		
-		constraints = [
-			UniqueConstraint( fields = [ 'page_number', 'project' ], name = 'uniqueForProject' ),
-		]
-	
-	
 	# Fields.
-	project		= ForeignKey(
-		Project, related_name = 'pages',
+	project				= ForeignKey(
+		Project,
 		on_delete = models.CASCADE,
+		related_name = 'pages',
 		verbose_name = _('project')
 	)
-	page_number	= PositiveIntegerField(	_('page number') )
-	type		= CharField(			_('type'), max_length = 100, blank = True )
-	name		= CharField(			_('name'), max_length = 100 )
-	description	= TextField(			_('description') )
-	content		= MarkdownField(		_('content') )
+	number				= PositiveIntegerField(	_('page number') )
+	type				= CharField(			_('type'), max_length = 100, blank = True )
+	name				= CharField(			_('name'), max_length = 100 )
+	banner_original		= ImageField(			_('banner'), upload_to = getUploadFolder( 'banner-original' ) )
+	banner				= ImageSpecField(
+		source = 'banner_original',
+		processors = [ ResizeToFill( 2000, 750 ) ],
+		format = 'JPEG',
+		options = settings.IMAGE_OPTIONS['JPEG'],
+	)
+	thumbnail_original	= ImageField(			_('thumbnail'), upload_to = getUploadFolder( 'thumbnail-original' ) )
+	thumbnail			= ImageSpecField(
+		source = 'thumbnail_original',
+		processors = [ ResizeToFill( 300, 300 ) ],
+		format = 'JPEG',
+		options = settings.IMAGE_OPTIONS['JPEG'],
+	)
+	description			= TextField(			_('description') )
+	content				= MarkdownField(		_('content') )
+	draft				= BooleanField(			_('draft'), default = True )
+	posted				= DateTimeField(		_('posted'), default = timezone.now )
+	last_edited			= DateTimeField(		_('last edited'), default = timezone.now )
+	
+	
+	class Meta:
+		verbose_name = _('project page')
+		verbose_name_plural = _('project pages')
+		ordering = ( 'project', 'number' )
+		
+		constraints = [
+			UniqueConstraint( fields = [ 'project', 'number' ], name = 'uniqueForProject' ),
+		]
 	
 	
 	# Methods.
 	def __str__( self ):
-		return self.fullName()
+		return f'<{self.project}> {self.full_name}'
 	
-	# def get_absolute_url( self ):
-	# 	return reverse( 'siteApp:package', kwargs = { 'package_slug': self.slug } )	# TODO: Use package URL with hashbang.
+	def get_absolute_url( self ):
+		return reverse( 'projectsApp:project', kwargs = { 'project_slug': self.project.slug, 'page_number': self.number } )
 	
-	def publish( self ):
-		self.draft = False
-		self.publishDate = timezone.now()
-		self.save()
+	@property
+	def full_name( self ):
+		return ( self.type or _('Part {0}: {1}') ).format( self.number, self.name )
 	
-	def fullName( self ):
-		return ( self.type or 'Part {0}: {1}' ).format( self.number, self.name )
+	# def publish( self ):
+	# 	self.draft = False
+	# 	self.posted = timezone.now()
+	# 	self.save()

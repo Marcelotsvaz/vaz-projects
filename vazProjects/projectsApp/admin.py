@@ -7,9 +7,9 @@
 
 
 from django.contrib import admin
-from django.utils.translation import gettext_lazy as _
+from jet.admin import CompactInline
 
-from .models import Project, Category
+from .models import Category, Project, Page
 
 
 
@@ -20,11 +20,64 @@ class CategoryAdmin( admin.ModelAdmin ):
 	'''
 	
 	# List display options.
-	list_display = ( 'name', )
+	list_display = (
+		'name',
+	)
+	
+	
+	# Fieldsets.
+	main = {
+		'fields': (
+			( 'name', 'slug' ),
+			'order',
+		)
+	}
 	
 	
 	# Edit page options.
+	fieldsets = (
+		( None, main ),
+	)
 	prepopulated_fields = { 'slug': ( 'name', ) }
+
+
+
+class PageInLine( CompactInline ):
+	'''
+	Page inline.
+	'''
+	
+	model = Page
+	extra = 0
+	
+	
+	# Fieldsets.
+	main = {
+		'fields': (
+			( 'number', 'type' ),
+			'name',
+			'content',
+		)
+	}
+	
+	metadata = {
+		'fields': (
+			'banner_original',
+			'thumbnail_original',
+			'description',
+			'draft',
+			'posted',
+			'last_edited',
+		)
+	}
+	
+	
+	# Edit page options.
+	fieldsets = (
+		( None, main ),
+		( 'Metadata', metadata ),
+	)
+	# readonly_fields = ( 'publishDate', )
 
 
 
@@ -38,37 +91,35 @@ class ProjectAdmin( admin.ModelAdmin ):
 	list_display = (
 		'category',
 		'name',
+		'draft',
 		'highlight',
-		'published',
 	)
 	list_display_links = ( 'name', )
-	list_filter = ( 'category', 'highlight', 'published' )
+	list_filter = ( 'category', 'draft', 'highlight' )
 	
 	
 	# Fieldsets.
-	basicDescriptionFields = {
+	main = {
 		'fields': (
 			( 'name', 'slug' ),
 			'category',
 			'banner_original',
 			'thumbnail_original',
-			'short_description',
-			'notes',
-			'published',
-			'highlight',
-		)
-	}
-	
-	detailedDescriptionFields = {
-		'fields': (
 			'description',
+			'content',
+			'single_page',
+			'draft',
+			'highlight',
+			'posted',
+			'base_last_edited',
+			'notes',
 		)
 	}
 	
 	
 	# Edit page options.
 	fieldsets = (
-		( _('basic description'), basicDescriptionFields ),
-		( _('detailed description'), detailedDescriptionFields ),
+		( None, main ),
 	)
 	prepopulated_fields = { 'slug': ( 'name', ) }
+	inlines = [ PageInLine ]

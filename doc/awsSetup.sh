@@ -122,7 +122,7 @@ Settings:
 	Alternate domain name (CNAME): static-files.staging.vazprojects.com
 	# After certificate.
 	Custom SSL certificate: static-files.staging.vazprojects.com
-	Standard logging: 
+	Standard logging:
 		Bucket: vaz-projects-logs
 		Prefix: staging/cloudfront/
 	Description: VAZ Projects Staging Distribuition
@@ -165,7 +165,7 @@ Settings:
 	Alternate domain name (CNAME): static-files.vazprojects.com
 	# After certificate.
 	Custom SSL certificate: static-files.vazprojects.com
-	Standard logging: 
+	Standard logging:
 		Bucket: vaz-projects-logs
 		Prefix: production/cloudfront/
 	Description: VAZ Projects Distribuition

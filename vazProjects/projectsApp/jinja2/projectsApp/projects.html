@@ -18,10 +18,10 @@
 				
 				<h2><a href="{{ project.get_absolute_url() }}">{{ project.name }}</a></h2>
 				
-				<p>{{ project.short_description }}</p>
+				<p>{{ project.description }}</p>
 				
-				<span>{{ _('Last update:') }} {{ project.publishDate.date() }}</span>
-				<span><a href="{{ project.get_absolute_url() }}">8 {{ _('comments') }}</a></span>
+				<span>{{ _('Last update: {0}').format( project.last_edited.date() ) }}</span>
+				<span><a href="{{ project.get_absolute_url() }}">{{ _('{0} comments').format( 15 ) }}</a></span>
 			</li>
 		{% endfor %}
 	</ul>

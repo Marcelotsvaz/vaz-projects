@@ -8,7 +8,7 @@
 
 from django.shortcuts import render, get_object_or_404
 
-from .models import Project
+from .models import Project, Page
 
 
 
@@ -17,16 +17,21 @@ def projects( httpRequest ):
 	Projects view.
 	'''
 	
-	projects = Project.objects.filter( published = True )
+	projects = Project.objects.filter( draft = False )
 	
-	return render( httpRequest, 'projectsApp/projects.html', { 'projects': projects} )
+	return render( httpRequest, 'projectsApp/projects.html', { 'projects': projects } )
 
 
-def project( httpRequest, project_slug ):
+def project( httpRequest, project_slug, page_number = None ):
 	'''
 	Project view.
 	'''
 	
-	project = get_object_or_404( Project, slug = project_slug, published = True )
+	project = get_object_or_404( Project, slug = project_slug, draft = False )
 	
-	return render( httpRequest, 'projectsApp/project.html', { 'project': project } )
+	if page_number:
+		page = get_object_or_404( Page, project = project, number = page_number )
+	else:
+		page = None
+	
+	return render( httpRequest, 'projectsApp/project.html', { 'project': project, 'currentPage': page } )

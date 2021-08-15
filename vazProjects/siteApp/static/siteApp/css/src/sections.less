@@ -150,10 +150,16 @@ body::before
 {
 	grid-area: sidebar;
 	
-	width: 200px;
+	width: 250px;
 	padding: 25px;
 	
 	color: @contentTextColor;
+	
+	> h3
+	{
+		margin-bottom: 10px;
+		border-bottom: 3px solid @contentTextColor;
+	}
 }
 
 

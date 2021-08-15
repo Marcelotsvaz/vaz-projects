@@ -1,7 +1,13 @@
 Website:
 	Natural key
-	Single page projects
-	
+	Update project datetime fields and implement publish
+	Datetime format
+	Automatic single page project
+	Project custom manager
+	Add image support to projects
+	Project comments
+	Strong?
+	Common App renderd property, settings
 
 Django:
 	Cache busting
