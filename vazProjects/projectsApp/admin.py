@@ -107,7 +107,6 @@ class ProjectAdmin( admin.ModelAdmin ):
 			'thumbnail_original',
 			'description',
 			'content',
-			'single_page',
 			'draft',
 			'highlight',
 			'posted',

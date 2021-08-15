@@ -2,7 +2,6 @@ Website:
 	Natural key
 	Update project datetime fields and implement publish
 	Datetime format
-	Automatic single page project
 	Project custom manager
 	Add image support to projects
 	Project comments

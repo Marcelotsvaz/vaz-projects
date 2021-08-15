@@ -83,7 +83,6 @@ class Project( models.Model ):
 	)
 	description			= TextField(		_('description') )
 	content				= MarkdownField(	_('content') )
-	single_page			= BooleanField(		_('single page'), default = False )
 	draft				= BooleanField(		_('draft'), default = True )
 	highlight			= BooleanField(		_('highlight'), default = False )
 	posted				= DateTimeField(	_('posted'), default = timezone.now )
@@ -103,6 +102,10 @@ class Project( models.Model ):
 	
 	def get_absolute_url( self ):
 		return reverse( 'projectsApp:project', kwargs = { 'project_slug': self.slug } )
+	
+	@property
+	def single_page( self ):
+		return self.pages.count() == 0
 	
 	@property
 	def last_edited( self ):
