@@ -114,7 +114,7 @@ class MarkdownField( TextField ):
 	TextField rendered with Markdown.
 	'''
 	
-	def _FIELD_rendered( self, field ):
+	def _render_FIELD( self, field ):
 		'''
 		Return a rendered version of the MarkdownField.
 		'''
@@ -143,4 +143,4 @@ class MarkdownField( TextField ):
 		
 		super().contribute_to_class( cls, name, private_only )
 		
-		setattr( cls, f'{name}_rendered', partialmethod( MarkdownField._FIELD_rendered, field = self ) )
+		setattr( cls, f'render_{name}', partialmethod( MarkdownField._render_FIELD, field = self ) )

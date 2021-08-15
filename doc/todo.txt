@@ -6,8 +6,7 @@ Website:
 	Project custom manager
 	Add image support to projects
 	Project comments
-	Strong?
-	Common App renderd property, settings
+	Common App settings
 
 Django:
 	Cache busting
