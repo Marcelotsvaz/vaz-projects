@@ -2,8 +2,8 @@
 	"InstanceType": "t3a.small",
 	"EbsOptimized": true,
 	"IamInstanceProfile": { "Name": "vazProjectsRole" },
-	"SubnetId": "subnet-02c1fb736b17e50cb",
-	"SecurityGroupIds": [ "sg-0b489d022fefb9a99" ],
+	"SubnetId": "subnet-0894058c2c5843be6",
+	"SecurityGroupIds": [ "sg-0b2c71d503e9e9baf" ],
 	"BlockDeviceMappings":
 	[
 		{
