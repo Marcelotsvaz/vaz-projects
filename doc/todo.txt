@@ -5,7 +5,6 @@ Website:
 	Project custom manager
 	Add image support to projects
 	Project comments
-	Common App settings
 
 Django:
 	Cache busting

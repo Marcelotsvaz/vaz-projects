@@ -9,13 +9,14 @@
 from datetime import date
 from functools import partialmethod
 
+from markdown_it import MarkdownIt
+
 from django.db import models
 from django.forms import Textarea, ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import normalize_newlines
 
-from markdown_it import MarkdownIt
-
+from . import settings
 from .markdown_it_extensions import linkAttributes, imageGalleryPlugin
 
 
@@ -121,13 +122,7 @@ class MarkdownField( TextField ):
 		
 		renderer = MarkdownIt( 'zero' )
 		
-		renderer.enable( [
-			'heading',
-			'list',
-			'emphasis',
-			'newline',
-			'link'
-		] )
+		renderer.enable( settings.MARKDOWN_FEATURES )
 		renderer.options['breaks'] = True
 		
 		renderer.use( imageGalleryPlugin, instance = self )
