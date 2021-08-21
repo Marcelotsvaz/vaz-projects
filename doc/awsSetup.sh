@@ -132,8 +132,6 @@ vaz-projects > Permissions > Cross-origin resource sharing (CORS)
 	}
 ]
 
-TODO: vaz-projects > Management > Lifecycle rules
-
 
 
 # Create Cloudfront distribuition.
