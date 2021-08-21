@@ -23,4 +23,4 @@ fi
 
 # Backup
 #-------------------------------------------------------------------------------
-aws s3 cp /home/${user}/deployment/utl.sqlite3 s3://${bucket}/${environment}/deployment/ --no-progress
+aws s3 cp /home/${user}/deployment/vazProjects.sqlite3 s3://${bucket}/${environment}/deployment/ --no-progress
