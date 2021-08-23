@@ -12,6 +12,18 @@ from .models import Category, Project, Page
 
 
 
+def createProject():
+	category = Category.objects.create()
+	
+	return Project.objects.create( category = category )
+
+
+def createPages( project, number ):
+	for index in range( 1, number + 1 ):
+		Page.objects.create( project = project, number = index )
+
+
+
 class ProjectModelTests( TestCase ):
 	
 	def testSinglePageWithZeroPages( self ):
@@ -19,13 +31,7 @@ class ProjectModelTests( TestCase ):
 		single_page should return True if the project has no pages.
 		'''
 		
-		category = Category()
-		category.save()
-		
-		project = Project(
-			category = category,
-		)
-		project.save()
+		project = createProject()
 		
 		self.assertIs( project.single_page, True )
 	
@@ -35,19 +41,8 @@ class ProjectModelTests( TestCase ):
 		single_page should return False if the project has one or more pages.
 		'''
 		
-		category = Category()
-		category.save()
-		
-		project = Project(
-			category = category,
-		)
-		project.save()
-		
-		page = Page(
-			project = project,
-			number = 1,
-		)
-		page.save()
+		project = createProject()
+		createPages( project, 1 )
 		
 		self.assertIs( project.single_page, False )
 	
@@ -57,13 +52,7 @@ class ProjectModelTests( TestCase ):
 		last_edited should return base_last_edited if the project has zero pages.
 		'''
 		
-		category = Category()
-		category.save()
-		
-		project = Project(
-			category = category,
-		)
-		project.save()
+		project = createProject()
 		
 		self.assertEqual( project.last_edited, project.base_last_edited )
 	
@@ -73,20 +62,8 @@ class ProjectModelTests( TestCase ):
 		last_edited should return page.last_edited of the last edited page if the project has one or more pages.
 		'''
 		
-		category = Category()
-		category.save()
-		
-		project = Project(
-			category = category,
-		)
-		project.save()
-		
-		for index in range( 1, 11 ):
-			page = Page(
-				project = project,
-				number = index,
-			)
-			page.save()
+		project = createProject()
+		createPages( project, 10 )
 		
 		# Not last edited yet.
 		lastEditPage = Page.objects.all()[4]
@@ -102,20 +79,8 @@ class ProjectModelTests( TestCase ):
 		last_edited should return base_last_edited if the project was edited after the pages.
 		'''
 		
-		category = Category()
-		category.save()
-		
-		project = Project(
-			category = category,
-		)
-		project.save()
-		
-		for index in range( 1, 11 ):
-			page = Page(
-				project = project,
-				number = index,
-			)
-			page.save()
+		project = createProject()
+		createPages( project, 10 )
 		
 		# Not last edited yet.
 		self.assertNotEqual( project.last_edited, project.base_last_edited )
