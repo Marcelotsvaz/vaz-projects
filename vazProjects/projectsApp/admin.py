@@ -77,7 +77,7 @@ class PageInLine( CompactInline ):
 		( None, main ),
 		( 'Metadata', metadata ),
 	)
-	# readonly_fields = ( 'publishDate', )
+	readonly_fields = ( 'last_edited', )
 
 
 
@@ -121,4 +121,5 @@ class ProjectAdmin( admin.ModelAdmin ):
 		( None, main ),
 	)
 	prepopulated_fields = { 'slug': ( 'name', ) }
+	readonly_fields = ( 'base_last_edited', )
 	inlines = [ PageInLine ]

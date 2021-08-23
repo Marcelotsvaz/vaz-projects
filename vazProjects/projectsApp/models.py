@@ -86,7 +86,7 @@ class Project( models.Model ):
 	draft				= BooleanField(		_('draft'), default = True )
 	highlight			= BooleanField(		_('highlight'), default = False )
 	posted				= DateTimeField(	_('posted'), default = timezone.now )
-	base_last_edited	= DateTimeField(	_('base last edited'), default = timezone.now )
+	base_last_edited	= DateTimeField(	_('base last edited'), auto_now = True  )
 	notes				= TextField(		_('notes'), blank = True )
 	
 	
@@ -149,7 +149,7 @@ class Page( models.Model ):
 	content				= MarkdownField(		_('content') )
 	draft				= BooleanField(			_('draft'), default = True )
 	posted				= DateTimeField(		_('posted'), default = timezone.now )
-	last_edited			= DateTimeField(		_('last edited'), default = timezone.now )
+	last_edited			= DateTimeField(		_('last edited'), auto_now = True )
 	
 	
 	class Meta:
