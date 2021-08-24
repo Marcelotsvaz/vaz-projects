@@ -6,20 +6,23 @@
 
 
 
+from django.views.generic import ListView
 from django.shortcuts import render, get_object_or_404
 
 from .models import Project, Page
 
 
 
-def projects( httpRequest ):
+class Projects( ListView ):
 	'''
 	Projects view.
 	'''
 	
-	projects = Project.objects.filter( draft = False )
+	template_name = 'projectsApp/projects.html'
+	context_object_name = 'projects'
 	
-	return render( httpRequest, 'projectsApp/projects.html', { 'projects': projects } )
+	def get_queryset(self):
+		return Project.objects.filter( draft = False )
 
 
 def project( httpRequest, project_slug, page_number = None ):

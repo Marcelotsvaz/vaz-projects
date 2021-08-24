@@ -6,47 +6,53 @@
 
 
 
-from django.shortcuts import render
+from django.views.generic import TemplateView
 from django.urls import reverse
 
 
 
-def home( httpRequest ):
+class Home( TemplateView ):
 	'''
 	Home view.
 	'''
 	
-	return render( httpRequest, 'siteApp/home.html' )
+	template_name = 'siteApp/home.html'
 
 
-def professional( httpRequest ):
+class Professional( TemplateView ):
 	'''
 	Professional view.
 	'''
 	
-	return render( httpRequest, 'siteApp/professional.html' )
+	template_name = 'siteApp/professional.html'
 
 
-def about_me( httpRequest ):
+class About_me( TemplateView ):
 	'''
 	About me view.
 	'''
 	
-	return render( httpRequest, 'siteApp/about_me.html' )
+	template_name = 'siteApp/about_me.html'
 
 
-def sitemap( httpRequest ):
+class Sitemap( TemplateView ):
 	'''
 	sitemap.xml.
 	'''
 	
-	urls = []
+	template_name = 'siteApp/sitemap.xml'
+	content_type = 'text/xml'
 	
-	views = [
-		'siteApp:home',
-	]
-	
-	for view in views:
-		urls.append( httpRequest.build_absolute_uri( reverse( view ) ) )
-	
-	return render( httpRequest, 'siteApp/sitemap.xml', { 'urls': urls }, content_type = 'text/xml' )
+	def get_context_data( self, **kwargs ):
+		context = super().get_context_data( **kwargs )
+		
+		context['urls'] = []
+		
+		views = [
+			'siteApp:home',
+		]
+		
+		for view in views:
+			context['urls'].append( self.request.build_absolute_uri( reverse( view ) ) )
+		
+		return context
