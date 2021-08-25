@@ -25,6 +25,8 @@ echo ${sshKey} > ~marcelotsvaz/.ssh/authorized_keys
 
 useradd -rm -s /usr/bin/nologin ${user}
 
+echo '::1 memcached' >> /etc/hosts	# TODO: Remove this.
+
 cd /home/${user}/
 
 aws s3 cp s3://${bucket}/${environment}/source.tar.gz - | sudo -u ${user} tar -xz --strip-components 1

@@ -1,0 +1,24 @@
+#
+# VAZ Projects
+#
+#
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+test:
+    image: python
+    
+    services:
+        - memcached
+    
+    script:
+        - set -a; source 'server/scripts/staging.sh'; set +a
+        - apt-get update && apt-get install -y libmemcached-dev
+        - mkdir deployment
+        - echo "SECRET_KEY = '"${DJANGO_SECRET_KEY}"'" > deployment/secrets.py
+        - pip install -r requirements/staging.txt
+        - vazProjects/manage.py test projectsApp
+
+# TODO: Use secrets template.
+# TODO: Test all apps.
