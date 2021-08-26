@@ -5,7 +5,10 @@
 			"label": "Deploy",
 			"type": "shell",
 			"options": {
-				"cwd": "${workspaceFolder}"
+				"cwd": "${workspaceFolder}",
+				"shell": {
+					"args": [],
+				}
 			},
 			"command": "server/scripts/deploy.sh",
 			"args": [
