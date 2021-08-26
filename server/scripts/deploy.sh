@@ -7,21 +7,14 @@
 
 
 
+# Activate Python virtual env.
 source 'deployment/env/bin/activate'
 
-
+# Export variables, abort on error end echo commands.
+set -aex
 
 # Load environment variables.
-if [[ ${1} = 'staging' ]]; then
-	environment='staging'
-elif [[ ${1} = 'production' ]]; then
-	environment='production'
-else
-	ERROR
-fi
-set -a
-source "server/scripts/${environment}.sh"
-set +a
+source "server/scripts/${1}.sh"
 
 
 
@@ -31,11 +24,11 @@ if [[ ${2} = 'uploadFiles' ]]; then
 	tar -f - --wildcards --delete '**/static/**' |	\
 	zstd -c |										\
 	aws s3 cp - s3://${bucket}/${environment}/source.tar.zst
-
+	
 	# Upload static files.
 	server/scripts/less.sh
 	vazProjects/manage.py collectstatic --ignore */src/* --no-input
-
+	
 	# Invalidade static files cache.
 	aws cloudfront create-invalidation --distribution-id ${cloudfrontId} --paths '/*'
 	
@@ -61,7 +54,7 @@ elif [[ ${2} = 'terminateInstance' ]]; then
 		--query 'Reservations[*].Instances[*].SpotInstanceRequestId'	\
 		--output text)
 	aws ec2 cancel-spot-instance-requests --spot-instance-request-ids ${requestIds}
-
+	
 	# Cancel spot instance.
 	instanceIds=$(aws ec2 describe-instances				\
 		--filter "Name=tag:Name, Values=${instanceName}"	\
@@ -69,5 +62,5 @@ elif [[ ${2} = 'terminateInstance' ]]; then
 		--output text)
 	aws ec2 terminate-instances --instance-ids ${instanceIds}
 else
-	ERROR
+	exit -1
 fi

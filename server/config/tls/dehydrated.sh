@@ -7,6 +7,9 @@
 
 
 
+# Abort on error.
+set -e
+
 cd /home/${user}/deployment/tls
 config=/home/${user}/server/config/tls/dehydrated.conf
 
