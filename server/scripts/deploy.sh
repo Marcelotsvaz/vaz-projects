@@ -27,12 +27,13 @@ set +a
 
 if [[ ${2} = 'uploadFiles' ]]; then
 	# Source upload.
-	hg archive - -t tgz -X '**/static/**' | aws s3 cp - s3://${bucket}/${environment}/source.tar.gz
+	git archive master |							\
+	tar -f - --wildcards --delete '**/static/**' |	\
+	zstd -c |										\
+	aws s3 cp - s3://${bucket}/${environment}/source.tar.zst
 
 	# Upload static files.
-	lessc --source-map											\
-		vazProjects/siteApp/static/siteApp/css/src/siteApp.less	\
-		deployment/static/siteApp/css/siteApp.css
+	server/scripts/less.sh
 	vazProjects/manage.py collectstatic --ignore */src/* --no-input
 
 	# Invalidade static files cache.
