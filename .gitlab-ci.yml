@@ -48,6 +48,7 @@ test:
         - pip install -r requirements/staging.txt
         - coverage run vazProjects/manage.py test vazProjects
         - coverage xml
+        - coverage report
     
     artifacts:
         reports:
