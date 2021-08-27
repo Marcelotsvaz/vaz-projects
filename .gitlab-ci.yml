@@ -46,7 +46,12 @@ test:
         - mkdir deployment
         - echo "SECRET_KEY = '"${DJANGO_SECRET_KEY}"'" > deployment/secrets.py
         - pip install -r requirements/staging.txt
-        - vazProjects/manage.py test projectsApp
+        - coverage run vazProjects/manage.py test vazProjects
+        - coverage xml
+    
+    artifacts:
+        reports:
+            cobertura: deployment/coverage.xml
 
 
 launchInstance:
@@ -82,4 +87,3 @@ terminateInstance:
 
 # TODO: Upload files.
 # TODO: Use secrets template.
-# TODO: Test all apps.

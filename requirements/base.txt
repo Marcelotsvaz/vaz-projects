@@ -1,4 +1,5 @@
 boto3==1.18.28
+coverage==5.5
 Django==3.2.6
 django-3-jet==1.0.8
 django-cleanup==5.2.0

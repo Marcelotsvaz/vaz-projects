@@ -1,0 +1,18 @@
+#
+# VAZ Projects
+#
+#
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+[run]
+data_file = deployment/.coverage
+source = vazProjects
+
+[report]
+skip_covered = True
+show_missing = True
+
+[xml]
+output = deployment/coverage.xml
