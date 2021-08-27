@@ -14,7 +14,6 @@ echo 'Starting Instance Configuration Script...'
 # Script Setup
 ########################################
 set -e	# Abort on error.
-export AWS_DEFAULT_REGION=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone | sed 's/[a-z]$//')
 
 
 

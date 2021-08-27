@@ -7,7 +7,7 @@
 
 
 
-# Activate Python virtual env.
+# Activate Python virtual env, if there is one.
 source 'deployment/env/bin/activate'
 
 # Export variables, abort on error end echo commands.

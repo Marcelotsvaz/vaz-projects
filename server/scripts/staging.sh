@@ -8,9 +8,12 @@
 
 # System
 environment='staging'
-instanceName='VAZ Projects Staging Server'
-sshKey='ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH7gGmj7aRlkjoPKKM35M+dG6gMkgD9IEZl2UVp6JYPs VAZ Projects SSH Key'
 user='utl'
+sshKey='ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH7gGmj7aRlkjoPKKM35M+dG6gMkgD9IEZl2UVp6JYPs VAZ Projects SSH Key'
+
+# AWS
+AWS_DEFAULT_REGION='sa-east-1'
+instanceName='VAZ Projects Staging Server'
 
 # Network
 hostname='staging.vazprojects.com'

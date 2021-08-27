@@ -72,6 +72,7 @@ terminateInstance:
     
     rules:
         - when: manual
+          allow_failure: true
     
     script:
         - apt-get install -yq --no-install-recommends awscli
