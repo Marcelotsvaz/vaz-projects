@@ -6,19 +6,79 @@
 
 
 
+stages:
+    - test
+    - deploy
+
+
+variables:
+    PIP_CACHE_DIR: ${CI_PROJECT_DIR}/.cache/pip
+
+
+default:
+    image: python:3.9.6-bullseye
+    
+    cache:
+        paths:
+            - .cache/pip/
+    
+    before_script:
+        - set -a; source server/scripts/staging.sh; set +a
+        - apt-get update
+
+
+
+# 
+# Jobs.
+#-----------------------------------------------------------------------------------------------------------------------
 test:
-    image: python
+    stage: test
+    
+    environment:
+        name: staging
+        action: prepare
     
     services:
-        - memcached
+        - memcached:1.6.10-buster
     
     script:
-        - set -a; source 'server/scripts/staging.sh'; set +a
-        - apt-get update && apt-get install -y libmemcached-dev
+        - apt-get install -yq libmemcached-dev
         - mkdir deployment
         - echo "SECRET_KEY = '"${DJANGO_SECRET_KEY}"'" > deployment/secrets.py
         - pip install -r requirements/staging.txt
         - vazProjects/manage.py test projectsApp
 
+
+launchInstance:
+    stage: deploy
+    
+    environment:
+        name: staging
+        action: start
+        on_stop: terminateInstance
+    
+    script:
+        - apt-get install -yq --no-install-recommends awscli
+        - server/scripts/deploy.sh staging terminateInstance
+        - server/scripts/deploy.sh staging launchInstance
+
+
+terminateInstance:
+    stage: deploy
+    
+    environment:
+        name: staging
+        action: stop
+    
+    rules:
+        - when: manual
+    
+    script:
+        - apt-get install -yq --no-install-recommends awscli
+        - server/scripts/deploy.sh staging terminateInstance
+
+
+
+# TODO: Upload files.
 # TODO: Use secrets template.
 # TODO: Test all apps.

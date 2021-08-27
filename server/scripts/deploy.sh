@@ -53,14 +53,18 @@ elif [[ ${2} = 'terminateInstance' ]]; then
 		--filter "Name=tag:Name, Values=${instanceName}"				\
 		--query 'Reservations[*].Instances[*].SpotInstanceRequestId'	\
 		--output text)
-	aws ec2 cancel-spot-instance-requests --spot-instance-request-ids ${requestIds}
+	if [[ ${requestIds} ]]; then
+		aws ec2 cancel-spot-instance-requests --spot-instance-request-ids ${requestIds}
+	fi
 	
 	# Cancel spot instance.
 	instanceIds=$(aws ec2 describe-instances				\
 		--filter "Name=tag:Name, Values=${instanceName}"	\
 		--query 'Reservations[*].Instances[*].InstanceId'	\
 		--output text)
-	aws ec2 terminate-instances --instance-ids ${instanceIds}
+	if [[ ${instanceIds} ]]; then
+		aws ec2 terminate-instances --instance-ids ${instanceIds}
+	fi
 else
 	exit -1
 fi
