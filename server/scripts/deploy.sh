@@ -51,6 +51,7 @@ elif [[ ${2} = 'terminateInstance' ]]; then
 	# Cancel spot instance request.
 	requestIds=$(aws ec2 describe-instances								\
 		--filter "Name=tag:Name, Values=${instanceName}"				\
+		'Name=instance-state-name, Values=running'						\
 		--query 'Reservations[*].Instances[*].SpotInstanceRequestId'	\
 		--output text)
 	if [[ ${requestIds} ]]; then
@@ -60,6 +61,7 @@ elif [[ ${2} = 'terminateInstance' ]]; then
 	# Cancel spot instance.
 	instanceIds=$(aws ec2 describe-instances				\
 		--filter "Name=tag:Name, Values=${instanceName}"	\
+		'Name=instance-state-name, Values=running'			\
 		--query 'Reservations[*].Instances[*].InstanceId'	\
 		--output text)
 	if [[ ${instanceIds} ]]; then
