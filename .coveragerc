@@ -11,6 +11,7 @@ data_file = deployment/.coverage
 source = vazProjects
 
 [report]
+precision = 2
 skip_covered = True
 show_missing = True
 

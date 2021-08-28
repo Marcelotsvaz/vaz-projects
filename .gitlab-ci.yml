@@ -47,8 +47,8 @@ test:
         - echo "SECRET_KEY = '"${DJANGO_SECRET_KEY}"'" > deployment/secrets.py
         - pip install -r requirements/staging.txt
         - coverage run vazProjects/manage.py test vazProjects
-        - coverage xml
         - coverage report
+        - coverage xml
     
     artifacts:
         reports:
