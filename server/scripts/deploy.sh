@@ -20,7 +20,7 @@ source "server/scripts/${1}.sh"
 
 if [[ ${2} = 'uploadFiles' ]]; then
 	# Source upload.
-	git archive master |							\
+	git archive HEAD |								\
 	tar -f - --wildcards --delete '**/static/**' |	\
 	gzip |											\
 	aws s3 cp - s3://${bucket}/${environment}/source.tar.gz
