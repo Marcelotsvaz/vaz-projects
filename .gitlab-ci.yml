@@ -44,9 +44,9 @@ test:
     script:
         - apt-get install --yes --no-install-recommends --quiet libmemcached-dev
         - pip install -r requirements/staging.txt
-        - mkdir deployment && cp ${DJANGO_SECRETS_FILE} deployment/secrets.py
+        - mkdir deployment; cp ${DJANGO_SECRETS_FILE} deployment/secrets.py
         - coverage run vazProjects/manage.py test vazProjects
-        - coverage report && coverage xml
+        - coverage report; coverage xml
     
     artifacts:
         reports:
@@ -65,7 +65,7 @@ launchInstance:
         - apt-get install --yes --no-install-recommends --quiet libmemcached-dev npm awscli
         - npm install --global less
         - pip install -r requirements/staging.txt
-        - mkdir deployment && cp ${DJANGO_SECRETS_FILE} deployment/secrets.py
+        - mkdir deployment; cp ${DJANGO_SECRETS_FILE} deployment/secrets.py
         - server/scripts/deploy.sh staging terminateInstance
         - server/scripts/deploy.sh staging uploadFiles
         - server/scripts/deploy.sh staging launchInstance
