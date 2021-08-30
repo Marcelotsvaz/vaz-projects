@@ -14,8 +14,7 @@ from . import views
 app_name = 'siteApp'
 
 urlpatterns = [
-	path( '',				views.Home.as_view(),			name = 'home' ),
-	path( 'professional',	views.Professional.as_view(),	name = 'professional' ),
-	path( 'about-me',		views.About_me.as_view(),		name = 'about_me' ),
-	path( 'sitemap.xml',	views.Sitemap.as_view(),		name = 'sitemap' ),
+	path( '',				views.Home.as_view(),		name = 'home' ),
+	path( 'about-me',		views.About_me.as_view(),	name = 'about_me' ),
+	path( 'sitemap.xml',	views.Sitemap.as_view(),	name = 'sitemap' ),
 ]

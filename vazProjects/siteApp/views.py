@@ -19,14 +19,6 @@ class Home( TemplateView ):
 	template_name = 'siteApp/home.html'
 
 
-class Professional( TemplateView ):
-	'''
-	Professional view.
-	'''
-	
-	template_name = 'siteApp/professional.html'
-
-
 class About_me( TemplateView ):
 	'''
 	About me view.
