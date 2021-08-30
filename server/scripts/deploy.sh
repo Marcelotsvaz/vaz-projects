@@ -22,8 +22,8 @@ if [[ ${2} = 'uploadFiles' ]]; then
 	# Source upload.
 	git archive master |							\
 	tar -f - --wildcards --delete '**/static/**' |	\
-	zstd -c |										\
-	aws s3 cp - s3://${bucket}/${environment}/source.tar.zst
+	gzip |											\
+	aws s3 cp - s3://${bucket}/${environment}/source.tar.gz
 	
 	# Upload static files.
 	server/scripts/less.sh
