@@ -42,7 +42,7 @@ test:
         - memcached:1.6.10-buster
     
     script:
-        - apt-get install -yq libmemcached-dev
+        - apt-get install --yes --no-install-recommends --quiet libmemcached-dev
         - mkdir deployment
         - cp ${DJANGO_SECRETS_FILE} deployment/secrets.py
         - pip install -r requirements/staging.txt
@@ -64,7 +64,7 @@ launchInstance:
         on_stop: terminateInstance
     
     script:
-        - apt-get install -yq --no-install-recommends awscli
+        - apt-get install --yes --no-install-recommends --quiet awscli
         - server/scripts/deploy.sh staging terminateInstance
         - server/scripts/deploy.sh staging launchInstance
 
@@ -81,5 +81,5 @@ terminateInstance:
           allow_failure: true
     
     script:
-        - apt-get install -yq --no-install-recommends awscli
+        - apt-get install --yes --no-install-recommends --quiet awscli
         - server/scripts/deploy.sh staging terminateInstance
