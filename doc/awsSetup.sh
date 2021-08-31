@@ -235,72 +235,61 @@ Tags:
 Name: vazProjectsStagingRole
 
 Policies:
-s3WriteAccess:
+	Name: vazProjectsStagingRolePolicy
 {
 	"Version": "2012-10-17",
-	"Statement": [
+	"Statement":
+	[
 		{
-			"Sid": "S3ListBucket",
+			"Sid": "s3ListBuckets",
 			"Effect": "Allow",
-			"Action": [
-				"s3:ListBucket"
-			],
-			"Resource": [
+			"Action": [ "s3:ListBucket" ],
+			"Resource":
+			[
 				"arn:aws:s3:::vaz-projects",
 				"arn:aws:s3:::vaz-projects-logs"
 			]
 		},
+		
 		{
-			"Sid": "S3WriteAccess",
+			"Sid": "s3WriteToBucket",
 			"Effect": "Allow",
-			"Action": [
+			"Action":
+			[
 				"s3:GetObject",
 				"s3:GetObjectAcl",
 				"s3:PutObject",
 				"s3:PutObjectAcl",
 				"s3:DeleteObject"
 			],
-			"Resource": [
+			"Resource":
+			[
 				"arn:aws:s3:::vaz-projects/staging/*",
 				"arn:aws:s3:::vaz-projects-logs/staging/*"
 			]
-		}
-	]
-}
-
-route53ChangeRecordSets:
-{
-	"Version": "2012-10-17",
-	"Statement": [
+		},
+		
 		{
-			"Sid": "Route53ChangeRecordSets",
+			"Sid": "route53ChangeRecordSets",
 			"Effect": "Allow",
-			"Action": [
+			"Action":
+			[
 				"route53:ChangeResourceRecordSets",
 				"route53:GetChange"
 			],
-			"Resource": [
+			"Resource":
+			[
 				"arn:aws:route53:::hostedzone/ZWFCO3AYVXVEU",
 				"arn:aws:route53:::change/*"
 			]
-		}
-	]
-}
-
-# After certificates.
-acmImportCertificate
-{
-	"Version": "2012-10-17",
-	"Statement": [
+		},
+		
+		# After certificates.
 		{
-			"Sid": "ACMImportCertificate",
+			"Sid": "acmImportCertificate",
 			"Effect": "Allow",
-			"Action": [
-				"acm:ImportCertificate"
-			],
-			"Resource": [
-				"arn:aws:acm:us-east-1:983585628015:certificate/5fb0c8c9-790c-4bf2-8916-363f4be21463"
-			]
+			"Action": [ "acm:ImportCertificate" ],
+			"Resource": [ "arn:aws:acm:us-east-1:983585628015:certificate/5fb0c8c9-790c-4bf2-8916-363f4be21463" ]
 		}
 	]
 }
@@ -313,72 +302,98 @@ Tags:
 Name: vazProjectsRole
 
 Policies:
-s3WriteAccess:
+	Name: vazProjectsRolePolicy
 {
 	"Version": "2012-10-17",
-	"Statement": [
+	"Statement":
+	[
 		{
-			"Sid": "S3ListBucket",
+			"Sid": "ec2Access",
 			"Effect": "Allow",
-			"Action": [
-				"s3:ListBucket"
+			"Action":
+			[
+				"ec2:RunInstances",
+				"ec2:TerminateInstances",
+				"ec2:DescribeInstances",
+				"ec2:CreateTags",
+				"ec2:CancelSpotInstanceRequests",
+				"ec2:DescribeImages"
 			],
-			"Resource": [
+			"Resource": [ "*" ]
+		},
+		
+		{
+			"Sid": "iamPassRole",
+			"Effect": "Allow",
+			"Action": [ "iam:PassRole" ],
+			"Resource":
+			[
+				"arn:aws:iam::983585628015:role/vazProjectsRole",
+				"arn:aws:iam::983585628015:role/vazProjectsStagingRole"
+			]
+		},
+		
+		{
+			"Sid": "cloudfrontInvalidate",
+			"Effect": "Allow",
+			"Action": [ "cloudfront:CreateInvalidation" ],
+			"Resource":
+			[
+				"arn:aws:cloudfront::983585628015:distribution/E14SOTLPYZH9C5",
+				"arn:aws:cloudfront::983585628015:distribution/E2L2SVNZVPKVQV"
+			]
+		},
+		
+		{
+			"Sid": "s3ListBuckets",
+			"Effect": "Allow",
+			"Action": [ "s3:ListBucket" ],
+			"Resource":
+			[
 				"arn:aws:s3:::vaz-projects",
 				"arn:aws:s3:::vaz-projects-logs"
 			]
 		},
+		
 		{
-			"Sid": "S3WriteAccess",
+			"Sid": "s3WriteToBucket",
 			"Effect": "Allow",
-			"Action": [
+			"Action":
+			[
 				"s3:GetObject",
 				"s3:GetObjectAcl",
 				"s3:PutObject",
 				"s3:PutObjectAcl",
 				"s3:DeleteObject"
 			],
-			"Resource": [
-				"arn:aws:s3:::vaz-projects/production/*",
-				"arn:aws:s3:::vaz-projects-logs/production/*"
+			"Resource":
+			[
+				"arn:aws:s3:::vaz-projects/*",
+				"arn:aws:s3:::vaz-projects-logs/*"
 			]
-		}
-	]
-}
-
-route53ChangeRecordSets:
-{
-	"Version": "2012-10-17",
-	"Statement": [
+		},
+		
 		{
-			"Sid": "Route53ChangeRecordSets",
+			"Sid": "route53ChangeRecordSets",
 			"Effect": "Allow",
-			"Action": [
+			"Action":
+			[
 				"route53:ChangeResourceRecordSets",
 				"route53:GetChange"
 			],
-			"Resource": [
+			"Resource":
+			[
 				"arn:aws:route53:::hostedzone/ZWFCO3AYVXVEU",
 				"arn:aws:route53:::change/*"
 			]
-		}
-	]
-}
-
-# After certificates.
-acmImportCertificate
-{
-	"Version": "2012-10-17",
-	"Statement": [
+		},
+		
+		# After certificates.
 		{
-			"Sid": "ACMImportCertificate",
+			"Sid": "acmImportCertificate",
 			"Effect": "Allow",
-			"Action": [
-				"acm:ImportCertificate"
-			],
-			"Resource": [
-				"arn:aws:acm:us-east-1:983585628015:certificate/220619d8-ef66-488f-b575-51704e578f8d"
-			]
+			"Action": [ "acm:ImportCertificate" ],
+			"Resource": [ "arn:aws:acm:us-east-1:983585628015:certificate/220619d8-ef66-488f-b575-51704e578f8d" ]
 		}
 	]
 }
