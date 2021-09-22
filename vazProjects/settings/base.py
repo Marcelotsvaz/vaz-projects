@@ -7,6 +7,7 @@
 
 
 import os
+import socket
 from pathlib import Path
 
 from django.utils.translation import gettext_lazy as _
@@ -17,7 +18,7 @@ from django.utils.translation import gettext_lazy as _
 ########################################
 BASE_DIR = Path( __file__ ).resolve().parents[2]
 
-ALLOWED_HOSTS = [ os.environ['hostname'] ]
+ALLOWED_HOSTS = [ socket.gethostname() ]
 
 ROOT_URLCONF = 'urls'
 WSGI_APPLICATION = 'wsgi.application'

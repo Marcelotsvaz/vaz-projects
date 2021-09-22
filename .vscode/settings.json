@@ -3,9 +3,13 @@
 	
 	"terminal.integrated.profiles.linux": {
 		"bash": {
-			"path": "bash",
-			"args": ["-c", "set -a; source '${workspaceFolder}/server/scripts/development.sh'; set +a; bash"],
+			"path": "/usr/bin/bash",
+			"args": [ "-c", "set -a; source '${workspaceFolder}/server/scripts/development.sh'; bash" ],
 		},
+		"fish": {
+			"path": "/usr/bin/fish",
+			"args": [ "-c", "sourceEnv '${workspaceFolder}/server/scripts/development.sh'" ],
+		}
 	},
 	
 	"runOnSave.commands": [
