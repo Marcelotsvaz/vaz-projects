@@ -26,3 +26,4 @@ cloudfrontCertificateArn='arn:aws:acm:us-east-1:983585628015:certificate/5fb0c8c
 
 # Django
 DJANGO_SETTINGS_MODULE='settings.staging'
+PYTHONPYCACHEPREFIX='deployment/env/pycache'

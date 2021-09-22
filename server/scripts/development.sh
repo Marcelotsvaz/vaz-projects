@@ -14,3 +14,4 @@ hostname='vaz-pc.lan'
 
 # Django
 DJANGO_SETTINGS_MODULE='settings.development'
+PYTHONPYCACHEPREFIX='deployment/env/pycache'
