@@ -27,7 +27,7 @@ useradd -rms /usr/bin/nologin ${user}
 
 echo '::1 memcached' >> /etc/hosts	# TODO: Remove this.
 
-cd ~${user}/
+cd /home/${user}/
 
 sudo -Eu ${user} bash << EOF
 aws s3 cp s3://${bucket}/${environment}/source.tar.gz - | tar -xz
