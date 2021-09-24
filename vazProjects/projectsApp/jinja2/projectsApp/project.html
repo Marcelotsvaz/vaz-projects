@@ -11,7 +11,7 @@
 
 
 {% block content %}
-	{% if not currentPage %}
+	{% if not currentPage %} {# At project index. #}
 		<p>{{ project.render_content() | safe }}</p>
 	{% else %}
 		<p>{{ currentPage.render_content() | safe }}</p>
@@ -34,14 +34,14 @@
 		
 		<ul>
 			<li>
-				{% if currentPage %}
+				{% if currentPage %} {# Not at project index. #}
 					<a href="{{ project.get_absolute_url() }}">{{ _('Project Index') }}</a>
 				{% else %}
 					<strong>{{ _('Project Index') }}</strong>
 				{% endif %}
 			</li>
 			
-			{% for page in project.pages.all() %}
+			{% for page in pages %}
 				<li>
 					{% if page.number == currentPage.number %}
 						<strong>{{ page.full_name }}</strong>

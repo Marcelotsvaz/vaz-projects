@@ -33,8 +33,10 @@ def project( httpRequest, project_slug, page_number = None ):
 	project = get_object_or_404( Project, slug = project_slug, draft = False )
 	
 	if page_number:
-		page = get_object_or_404( Page, project = project, number = page_number )
+		currentPage = get_object_or_404( Page, project = project, number = page_number, draft = False )
 	else:
-		page = None
+		currentPage = None
 	
-	return render( httpRequest, 'projectsApp/project.html', { 'project': project, 'currentPage': page } )
+	pages = project.pages.filter( draft = False )
+	
+	return render( httpRequest, 'projectsApp/project.html', { 'project': project, 'currentPage': currentPage, 'pages': pages } )
