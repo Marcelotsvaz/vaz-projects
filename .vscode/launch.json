@@ -2,7 +2,7 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Launch Development Server",
+			"name": "Run Development Server",
 			"type": "python",
 			"request": "launch",
 			"django": true,
@@ -13,6 +13,20 @@
 			"args": [
 				"runserver",
 				"0.0.0.0:8000",
+			],
+		},
+		{
+			"name": "Run Tests",
+			"type": "python",
+			"request": "launch",
+			"django": true,
+			"subProcess": true,
+			"justMyCode": false,
+			"envFile": "${workspaceFolder}/server/scripts/development.sh",
+			"program": "${workspaceFolder}/vazProjects/manage.py",
+			"args": [
+				"test",
+				"vazProjects",
 			],
 		},
 		{

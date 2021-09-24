@@ -7,6 +7,7 @@
 
 
 from django.test import TestCase
+from django.db.models import Max
 
 from .models import Category, Project, Page
 
@@ -18,9 +19,14 @@ def createProject():
 	return Project.objects.create( category = category )
 
 
-def createPages( project, number ):
-	for index in range( 1, number + 1 ):
-		Page.objects.create( project = project, number = index )
+def createPages( project, quantity ):
+	lastPageNumber = project.pages.aggregate( last_page = Max( 'number' ) )['last_page'] or 0
+	lastPage = None
+	
+	for index in range( lastPageNumber + 1, lastPageNumber + quantity + 1 ):
+		lastPage = Page.objects.create( project = project, number = index )
+	
+	return lastPage
 
 
 
@@ -63,15 +69,17 @@ class ProjectModelTests( TestCase ):
 		'''
 		
 		project = createProject()
-		createPages( project, 10 )
+		lastEditedPage = createPages( project, 5 )
+		createPages( project, 5 )
+		project.publish()
 		
 		# Not last edited yet.
-		lastEditPage = Page.objects.all()[4]
-		self.assertNotEqual( project.last_edited, lastEditPage.last_edited )
+		self.assertNotEqual( project.last_edited, lastEditedPage.last_edited )
 		
 		# Now last edited.
-		lastEditPage.save()
-		self.assertEqual( project.last_edited, lastEditPage.last_edited )
+		lastEditedPage.refresh_from_db()
+		lastEditedPage.save()
+		self.assertEqual( project.last_edited, lastEditedPage.last_edited )
 	
 	
 	def testLastEditedWithEditedProject( self ):
@@ -80,11 +88,28 @@ class ProjectModelTests( TestCase ):
 		'''
 		
 		project = createProject()
-		createPages( project, 10 )
+		lastPage = createPages( project, 10 )
+		project.publish()
 		
 		# Not last edited yet.
+		lastPage.refresh_from_db()
+		lastPage.save()
 		self.assertNotEqual( project.last_edited, project.base_last_edited )
 		
 		# Now last edited.
 		project.save()
+		self.assertEqual( project.last_edited, project.base_last_edited )
+	
+	
+	def testLastEditedWithUnpublishedPages( self ):
+		'''
+		last_edited should return base_last_edited even after new pages are created but not published.
+		'''
+		
+		project = createProject()
+		createPages( project, 5 )	# Will be published.
+		project.publish()			# Will update the project after all pages.
+		createPages( project, 5 )	# Won't be published.
+		
+		# New pages not published.
 		self.assertEqual( project.last_edited, project.base_last_edited )
