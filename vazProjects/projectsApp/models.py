@@ -117,10 +117,18 @@ class Project( models.Model ):
 		else:
 			return self.base_last_edited
 	
-	def publish( self, publishPages = True ):
+	def publish( self, publishPages = False ):
+		'''
+		Set `draft` to false and update `posted`, only if the project isn't already published.
+		Optionally also publish unpublished pages.
+		'''
+		
 		if publishPages:
 			for page in self.pages.filter( draft = True ):
 				page.publish()
+		
+		if self.draft == False:
+			return
 		
 		self.draft = False
 		self.posted = timezone.now()
@@ -184,9 +192,20 @@ class Page( models.Model ):
 	
 	@property
 	def full_name( self ):
+		'''
+		Return the full name of the page, which includes its `type`, `number` and `name`.
+		'''
+		
 		return ( self.type or _('Part {0}: {1}') ).format( self.number, self.name )
 	
 	def publish( self ):
+		'''
+		Set `draft` to false and update `posted`, only if the page isn't already published.
+		'''
+		
+		if self.draft == False:
+			return
+		
 		self.draft = False
 		self.posted = timezone.now()
 		

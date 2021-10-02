@@ -8,6 +8,8 @@
 
 from django.contrib import admin
 from jet.admin import CompactInline
+from django_object_actions import DjangoObjectActions
+from django.utils.translation import gettext_lazy as _
 
 from .models import Category, Project, Page
 
@@ -77,12 +79,16 @@ class PageInLine( CompactInline ):
 		( None, main ),
 		( 'Metadata', metadata ),
 	)
-	readonly_fields = ( 'last_edited', )
+	readonly_fields = (
+		'draft',
+		'posted',
+		'last_edited',
+	)
 
 
 
 @admin.register( Project )
-class ProjectAdmin( admin.ModelAdmin ):
+class ProjectAdmin( DjangoObjectActions, admin.ModelAdmin ):
 	'''
 	Project admin page.
 	'''
@@ -115,11 +121,27 @@ class ProjectAdmin( admin.ModelAdmin ):
 		)
 	}
 	
+	# Object actions.
+	def publish( self, request, object ):
+		object.publish()
+	publish.label = _('Publish')
+	publish.short_description = _('Publish this project.')
+	
+	def publishAll( self, request, object ):
+		object.publish( publishPages = True )
+	publishAll.label = _('Publish All')
+	publishAll.short_description = _('Publish this project and all of its pages.')
+	
 	
 	# Edit page options.
 	fieldsets = (
 		( None, main ),
 	)
 	prepopulated_fields = { 'slug': ( 'name', ) }
-	readonly_fields = ( 'base_last_edited', )
+	readonly_fields = (
+		'draft',
+		'posted', 
+		'base_last_edited', 
+	)
 	inlines = [ PageInLine ]
+	change_actions = ( 'publish', 'publishAll' )

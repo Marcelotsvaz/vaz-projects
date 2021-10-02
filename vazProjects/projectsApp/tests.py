@@ -131,7 +131,7 @@ class ProjectModelTests( TestCase ):
 		project = TestUtils.createProject()
 		lastEditedPage = TestUtils.createPages( project, 5 )
 		TestUtils.createPages( project, 5 )
-		project.publish()
+		project.publish( publishPages = True )
 		
 		# Not last edited yet.
 		self.assertNotEqual( project.last_edited, lastEditedPage.last_edited )
@@ -149,7 +149,7 @@ class ProjectModelTests( TestCase ):
 		
 		project = TestUtils.createProject()
 		lastPage = TestUtils.createPages( project, 10 )
-		project.publish()
+		project.publish( publishPages = True )
 		
 		# Not last edited yet.
 		lastPage.refresh_from_db()
@@ -167,9 +167,8 @@ class ProjectModelTests( TestCase ):
 		'''
 		
 		project = TestUtils.createProject()
-		TestUtils.createPages( project, 5 )	# Will be published.
-		project.publish()					# Will update the project after all pages.
-		TestUtils.createPages( project, 5 )	# Won't be published.
+		project.publish()
+		TestUtils.createPages( project, 5 )
 		
 		# New pages not published.
 		self.assertEqual( project.last_edited, project.base_last_edited )
@@ -238,7 +237,7 @@ class ProjectViewTests( TestCase ):
 		
 		project = TestUtils.createProject()
 		lastPage = TestUtils.createPages( project, 5 )
-		project.publish()
+		project.publish( publishPages = True )
 		
 		response = Client().get( reverse( 'projectsApp:project', args = [ TestUtils.projectSlug, lastPage.number ] ) )
 		
@@ -252,7 +251,7 @@ class ProjectViewTests( TestCase ):
 		
 		project = TestUtils.createProject()
 		TestUtils.createPages( project, 5 )
-		project.publish()
+		project.publish( publishPages = True )
 		lastPage = TestUtils.createPages( project, 5 )
 		
 		response = Client().get( reverse( 'projectsApp:project', args = [ TestUtils.projectSlug, lastPage.number ] ) )

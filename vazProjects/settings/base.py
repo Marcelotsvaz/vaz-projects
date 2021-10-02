@@ -101,6 +101,7 @@ INSTALLED_APPS = [
 	'siteApp.apps.siteAppConfig',
 	'projectsApp.apps.projectsAppConfig',
 	'django_cleanup.apps.CleanupConfig',
+	'django_object_actions',
 ]
 
 
