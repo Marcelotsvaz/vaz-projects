@@ -6,31 +6,90 @@
 
 
 
-from django.test import TestCase, Client
-from django.db.models import Max
+from django.test import TestCase, Client, override_settings
 from django.urls import reverse
+from django.db.models import Max
+from django.conf import settings
+from django.core.files.uploadedfile import SimpleUploadedFile
+
+from base64 import b64decode
 
 from .models import Category, Project, Page
 
 
 
-def createProject( **kwargs ):
-	category = Category.objects.get_or_create()[0]
+# Put all test media files in a subdirectory of MEDIA_ROOT.
+TESTS_MEDIA_ROOT = settings.MEDIA_ROOT / 'tests'
+
+
+
+class TestUtils():
 	
-	return Project.objects.create( category = category, **kwargs )
-
-
-def createPages( project, quantity, **kwargs ):
-	lastPageNumber = project.pages.aggregate( last_page = Max( 'number' ) )['last_page'] or 0
-	lastPage = None
+	# Defaults.
+	projectName = 'Test-Project'
+	projectSlug = 'test-project'
 	
-	for index in range( lastPageNumber + 1, lastPageNumber + quantity + 1 ):
-		lastPage = Page.objects.create( project = project, number = index, **kwargs )
+	pageName = 'Test-Page'
 	
-	return lastPage
+	
+	@classmethod
+	def testImage( cls ):
+		'''
+		Return a instance of SimpleUploadedFile containing a 2px x 2px JPG image.
+		'''
+		
+		return SimpleUploadedFile(
+			'test-image.png',
+			b64decode( 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=' ),
+		)
+	
+	
+	@classmethod
+	@override_settings( MEDIA_ROOT = TESTS_MEDIA_ROOT )
+	def createProject( cls, **kwargs ):
+		'''
+		Create a test project and return it. Images and a slug are supplied to properly render templates.
+		'''
+		
+		kwargs.setdefault( 'name', cls.projectName ),
+		kwargs.setdefault( 'slug', cls.projectSlug ),
+		
+		category = Category.objects.get_or_create()[0]
+		
+		return Project.objects.create(
+			category = category,
+			banner_original = cls.testImage(),
+			thumbnail_original = cls.testImage(),
+			**kwargs
+		)
+	
+	
+	@classmethod
+	@override_settings( MEDIA_ROOT = TESTS_MEDIA_ROOT )
+	def createPages( cls, project, quantity, **kwargs ):
+		'''
+		Create `quantity` test pages and return the last one. Images are supplied to properly render templates.
+		'''
+		
+		kwargs.setdefault( 'name', cls.pageName ),
+		
+		lastPageNumber = project.pages.aggregate( last_page = Max( 'number' ) )['last_page'] or 0
+		lastPage = None
+		
+		for index in range( lastPageNumber + 1, lastPageNumber + quantity + 1 ):
+			lastPage = Page.objects.create(
+				project = project,
+				number = index,
+				banner_original = cls.testImage(),
+				thumbnail_original = cls.testImage(),
+				**kwargs
+				)
+		
+		return lastPage
 
 
 
+@override_settings( MEDIA_ROOT = TESTS_MEDIA_ROOT )
 class ProjectModelTests( TestCase ):
 	
 	def testSinglePageWithZeroPages( self ):
@@ -38,7 +97,7 @@ class ProjectModelTests( TestCase ):
 		single_page should return True if the project has no pages.
 		'''
 		
-		project = createProject()
+		project = TestUtils.createProject()
 		
 		self.assertIs( project.single_page, True )
 	
@@ -48,8 +107,8 @@ class ProjectModelTests( TestCase ):
 		single_page should return False if the project has one or more pages.
 		'''
 		
-		project = createProject()
-		createPages( project, 1 )
+		project = TestUtils.createProject()
+		TestUtils.createPages( project, 1 )
 		
 		self.assertIs( project.single_page, False )
 	
@@ -59,7 +118,7 @@ class ProjectModelTests( TestCase ):
 		last_edited should return base_last_edited if the project has zero pages.
 		'''
 		
-		project = createProject()
+		project = TestUtils.createProject()
 		
 		self.assertEqual( project.last_edited, project.base_last_edited )
 	
@@ -69,9 +128,9 @@ class ProjectModelTests( TestCase ):
 		last_edited should return page.last_edited of the last edited page if the project has one or more pages.
 		'''
 		
-		project = createProject()
-		lastEditedPage = createPages( project, 5 )
-		createPages( project, 5 )
+		project = TestUtils.createProject()
+		lastEditedPage = TestUtils.createPages( project, 5 )
+		TestUtils.createPages( project, 5 )
 		project.publish()
 		
 		# Not last edited yet.
@@ -88,8 +147,8 @@ class ProjectModelTests( TestCase ):
 		last_edited should return base_last_edited if the project was edited after the pages.
 		'''
 		
-		project = createProject()
-		lastPage = createPages( project, 10 )
+		project = TestUtils.createProject()
+		lastPage = TestUtils.createPages( project, 10 )
 		project.publish()
 		
 		# Not last edited yet.
@@ -107,15 +166,16 @@ class ProjectModelTests( TestCase ):
 		last_edited should return base_last_edited even after new pages are created but not published.
 		'''
 		
-		project = createProject()
-		createPages( project, 5 )	# Will be published.
-		project.publish()			# Will update the project after all pages.
-		createPages( project, 5 )	# Won't be published.
+		project = TestUtils.createProject()
+		TestUtils.createPages( project, 5 )	# Will be published.
+		project.publish()					# Will update the project after all pages.
+		TestUtils.createPages( project, 5 )	# Won't be published.
 		
 		# New pages not published.
 		self.assertEqual( project.last_edited, project.base_last_edited )
 
 
+@override_settings( MEDIA_ROOT = TESTS_MEDIA_ROOT )
 class ProjectsViewTests( TestCase ):
 	
 	def testPublishedProject( self ):
@@ -123,15 +183,12 @@ class ProjectsViewTests( TestCase ):
 		Published projects should appear in the projects page.
 		'''
 		
-		name = 'Test-Project'
-		slug = name.lower()
-		
-		createProject( slug = slug, name = name ).publish()
+		TestUtils.createProject().publish()
 		
 		response = Client().get( reverse( 'projectsApp:projects' ) )
 		
-		self.assertContains( response, slug )
-		self.assertContains( response, name )
+		self.assertContains( response, TestUtils.projectSlug )
+		self.assertContains( response, TestUtils.projectName )
 	
 	
 	def testUnpublishedProject( self ):
@@ -139,17 +196,15 @@ class ProjectsViewTests( TestCase ):
 		Unpublished projects shouldn't appear in the projects page.
 		'''
 		
-		name = 'Test-Project'
-		slug = name.lower()
-		
-		createProject( slug = slug, name = name )
+		TestUtils.createProject()
 		
 		response = Client().get( reverse( 'projectsApp:projects' ) )
 		
-		self.assertNotContains( response, slug )
-		self.assertNotContains( response, name )
+		self.assertNotContains( response, TestUtils.projectSlug )
+		self.assertNotContains( response, TestUtils.projectName )
 
 
+@override_settings( MEDIA_ROOT = TESTS_MEDIA_ROOT )
 class ProjectViewTests( TestCase ):
 	
 	def testPublishedProject( self ):
@@ -157,14 +212,11 @@ class ProjectViewTests( TestCase ):
 		Published project should be accessible.
 		'''
 		
-		name = 'Test-Project'
-		slug = name.lower()
+		TestUtils.createProject().publish()
 		
-		createProject( slug = slug, name = name ).publish()
+		response = Client().get( reverse( 'projectsApp:project', args = [ TestUtils.projectSlug ] ) )
 		
-		response = Client().get( reverse( 'projectsApp:project', args = [ slug ] ) )
-		
-		self.assertContains( response, name )
+		self.assertContains( response, TestUtils.projectName )
 	
 	
 	def testUnpublishedProject( self ):
@@ -172,14 +224,11 @@ class ProjectViewTests( TestCase ):
 		Unpublished project should return 404, not found.
 		'''
 		
-		name = 'Test-Project'
-		slug = name.lower()
+		TestUtils.createProject()
 		
-		createProject( slug = slug, name = name )
+		response = Client().get( reverse( 'projectsApp:project', args = [ TestUtils.projectSlug ] ) )
 		
-		response = Client().get( reverse( 'projectsApp:project', args = [ slug ] ) )
-		
-		self.assertNotContains( response, name, status_code = 404 )
+		self.assertNotContains( response, TestUtils.projectName, status_code = 404 )
 	
 	
 	def testPublishedPage( self ):
@@ -187,17 +236,13 @@ class ProjectViewTests( TestCase ):
 		Published project page should be accessible.
 		'''
 		
-		projectName = 'Test-Project'
-		projectSlug = projectName.lower()
-		pageName = 'Test-Page'
-		
-		project = createProject( slug = projectSlug, name = projectName )
-		lastPage = createPages( project, 5, name = pageName )
+		project = TestUtils.createProject()
+		lastPage = TestUtils.createPages( project, 5 )
 		project.publish()
 		
-		response = Client().get( reverse( 'projectsApp:project', args = [ projectSlug, lastPage.number ] ) )
+		response = Client().get( reverse( 'projectsApp:project', args = [ TestUtils.projectSlug, lastPage.number ] ) )
 		
-		self.assertContains( response, pageName )
+		self.assertContains( response, TestUtils.pageName )
 	
 	
 	def testUnpublishedPage( self ):
@@ -205,14 +250,11 @@ class ProjectViewTests( TestCase ):
 		Unpublished project page should return 404, not found.
 		'''
 		
-		projectName = 'Test-Project'
-		projectSlug = projectName.lower()
-		pageName = 'Test-Page'
-		
-		project = createProject( slug = projectSlug, name = projectName )
+		project = TestUtils.createProject()
+		TestUtils.createPages( project, 5 )
 		project.publish()
-		lastPage = createPages( project, 5, name = pageName )
+		lastPage = TestUtils.createPages( project, 5 )
 		
-		response = Client().get( reverse( 'projectsApp:project', args = [ projectSlug, lastPage.number ] ) )
+		response = Client().get( reverse( 'projectsApp:project', args = [ TestUtils.projectSlug, lastPage.number ] ) )
 		
-		self.assertNotContains( response, pageName, status_code = 404 )
+		self.assertNotContains( response, TestUtils.pageName, status_code = 404 )
