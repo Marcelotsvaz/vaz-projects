@@ -12,12 +12,12 @@ from .secrets import *
 
 
 # General
-########################################
+#---------------------------------------
 ENVIRONMENT = 'production'
 
 
 # Static and media files
-########################################
+#---------------------------------------
 STATICFILES_STORAGE = 'commonApp.backends.StaticCloudfrontStorage'
 DEFAULT_FILE_STORAGE = 'commonApp.backends.CloudfrontStorage'
 
@@ -36,21 +36,21 @@ AWS_S3_OBJECT_PARAMETERS = {
 
 
 # Security
-########################################
+#---------------------------------------
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 LANGUAGE_COOKIE_SECURE = True
 
 
 # Apps
-########################################
+#---------------------------------------
 INSTALLED_APPS += [
 	'storages',
 ]
 
 
 # Cache
-########################################
+#---------------------------------------
 CACHES = {
 	'default':
 	{

@@ -3,13 +3,13 @@
 
 
 # Dependencies
-########################################
+#---------------------------------------
 pacman -Syu --noconfirm arch-install-scripts reflector
 reflector --protocol https --latest 50 --sort rate --save /etc/pacman.d/mirrorlist
 
 
 # Variables
-########################################
+#---------------------------------------
 export AWS_DEFAULT_OUTPUT=text
 instanceID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
 availabilityZone=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)
@@ -17,7 +17,7 @@ mountPoint=/mnt/new
 
 
 # Create Volume
-########################################
+#---------------------------------------
 volumeID=$(aws ec2 create-volume --size 2 --availability-zone $availabilityZone --query 'VolumeId')
 aws ec2 wait volume-available --volume-ids $volumeID
 aws ec2 attach-volume --volume-id $volumeID --instance-id $instanceID --device /dev/sdf
@@ -27,7 +27,7 @@ export disk=$(lsblk -nro SERIAL,PATH | grep ${volumeID/-/} | cut -d ' ' -f2) # G
 
 
 # Partitioning and Filesystem
-########################################
+#---------------------------------------
 sgdisk --clear $disk
 sgdisk --new 1:0:+1M --change-name 1:'Boot' --typecode 1:ef02 $disk
 sgdisk --new 2:0:0 --change-name 2:'Root' $disk
@@ -39,7 +39,7 @@ mount ${disk}p2 $mountPoint
 
 
 # Install Arch Linux
-########################################
+#---------------------------------------
 pacstrap -c $mountPoint \
 base linux grub \
 openssh sudo aws-cli gdisk \
@@ -52,7 +52,7 @@ genfstab -U $mountPoint >> $mountPoint/etc/fstab
 
 
 # Chroot
-########################################
+#---------------------------------------
 mount --bind /dev $mountPoint/dev
 mount --bind /sys $mountPoint/sys
 mount --bind /proc $mountPoint/proc
@@ -60,7 +60,7 @@ chroot $mountPoint
 
 
 # Standard Configuration
-########################################
+#---------------------------------------
 # Time zone
 ln -sf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
 
@@ -94,7 +94,7 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 
 # Custom Configuration
-########################################
+#---------------------------------------
 # Users
 mkdir -m 700 /etc/skel/.ssh
 touch /etc/skel/.ssh/authorized_keys
@@ -277,7 +277,7 @@ rm $mountPoint/{root/.bash_history,var/log/pacman.log}
 
 
 # Create AMI
-########################################
+#---------------------------------------
 umount -R $mountPoint
 rm -r $mountPoint
 aws ec2 detach-volume --volume-id $volumeID

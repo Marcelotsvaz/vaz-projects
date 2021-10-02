@@ -15,7 +15,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 # General
-########################################
+#---------------------------------------
 BASE_DIR = Path( __file__ ).resolve().parents[2]
 
 ALLOWED_HOSTS = [ socket.gethostname() ]
@@ -25,7 +25,7 @@ WSGI_APPLICATION = 'wsgi.application'
 
 
 # Localization
-########################################
+#---------------------------------------
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
@@ -41,13 +41,13 @@ TIME_ZONE = 'America/Sao_Paulo'
 
 
 # Admin
-########################################
+#---------------------------------------
 JET_DEFAULT_THEME = 'dark-gray'
 JET_SIDE_MENU_COMPACT = True
 
 
 # Databases
-########################################
+#---------------------------------------
 DATABASES = {
 	'default': {
 		'ENGINE': 'django.db.backends.sqlite3',
@@ -59,7 +59,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 
 # Email
-########################################
+#---------------------------------------
 EMAIL_HOST = 'email-ssl.com.br'
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
@@ -69,7 +69,7 @@ ADMINS = [ ( 'Marcelo Vaz', 'marcelotsvaz@gmail.com' ) ]
 
 
 # django-imagekit
-########################################
+#---------------------------------------
 IMAGEKIT_CACHEFILE_DIR = 'cache'
 IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY = 'commonApp.misc.Optimistic'
 IMAGEKIT_SPEC_CACHEFILE_NAMER = 'imagekit.cachefiles.namers.source_name_dot_hash'
@@ -86,7 +86,7 @@ IMAGE_OPTIONS = {
 
 
 # Apps
-########################################
+#---------------------------------------
 INSTALLED_APPS = [
 	'imagekit',
 	'jet.dashboard',
@@ -105,7 +105,7 @@ INSTALLED_APPS = [
 
 
 # Middleware
-########################################
+#---------------------------------------
 MIDDLEWARE = [
 	'commonApp.middleware.ServerCacheMiddleware',
 	'django.middleware.http.ConditionalGetMiddleware',
@@ -122,7 +122,7 @@ MIDDLEWARE = [
 
 
 # Templates
-########################################
+#---------------------------------------
 TEMPLATES = [
 	{
 		'BACKEND': 'django.template.backends.jinja2.Jinja2',
@@ -147,7 +147,7 @@ TEMPLATES = [
 
 
 # Password validators
-########################################
+#---------------------------------------
 AUTH_PASSWORD_VALIDATORS = [
 	{ 'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', },
 	{ 'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', },

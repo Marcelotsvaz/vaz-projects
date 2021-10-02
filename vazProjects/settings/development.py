@@ -12,17 +12,17 @@ from .secrets import *
 
 
 # General
-########################################
+#---------------------------------------
 ENVIRONMENT = 'development'
 
 
 # Debug
-########################################
+#---------------------------------------
 DEBUG = True
 
 
 # Static and media files
-########################################
+#---------------------------------------
 STATICFILES_STORAGE = 'commonApp.backends.StaticOverwriteLocalStorage'
 DEFAULT_FILE_STORAGE = 'commonApp.backends.OverwriteLocalStorage'
 
@@ -37,7 +37,7 @@ STATICFILES_DIRS = [
 
 
 # Cache
-########################################
+#---------------------------------------
 CACHES = {
 	'default':
 	{

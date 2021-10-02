@@ -12,13 +12,13 @@ echo 'Starting Instance Configuration Script...'
 
 
 # Script Setup
-########################################
+#---------------------------------------
 set -e	# Abort on error.
 
 
 
 # System Setup
-########################################
+#---------------------------------------
 hostnamectl set-hostname ${hostname}
 
 echo ${sshKey} > ~marcelotsvaz/.ssh/authorized_keys
@@ -41,7 +41,7 @@ systemctl enable /home/${user}/server/systemdUnits/*
 
 
 # Django Setup
-########################################
+#---------------------------------------
 sudo -Eu ${user} bash << EOF
 python -m venv deployment/env/
 source deployment/env/bin/activate
@@ -55,7 +55,7 @@ EOF
 
 
 # Start Services
-########################################
+#---------------------------------------
 systemctl start backup.timer dehydrated.timer nginx memcached uwsgi
 
 

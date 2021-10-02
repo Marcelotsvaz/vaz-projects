@@ -16,7 +16,7 @@ from django.conf import settings
 
 
 # Storage backends
-################################################################################
+#-------------------------------------------------------------------------------
 class OverwriteStorageMixin():
 	'''
 	Mixin that overrides the get_available_name method so that it deletes the

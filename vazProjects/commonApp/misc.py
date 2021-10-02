@@ -11,7 +11,7 @@ from django.conf import settings
 
 
 # django-imagekit
-################################################################################
+#-------------------------------------------------------------------------------
 class Optimistic():
 	'''
 	A strategy that acts immediately when the source file changes, generating
@@ -29,7 +29,7 @@ class Optimistic():
 
 
 # django-debug-toolbar
-################################################################################
+#-------------------------------------------------------------------------------
 def showDebugToolbar( request ):
 	'''
 	Callback used by django-debug-toolbar.
