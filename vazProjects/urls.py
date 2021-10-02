@@ -29,6 +29,6 @@ if settings.ENVIRONMENT != 'production':
 		urlpatterns.append( path( '__debug__/', include( debug_toolbar.urls ) ) )
 	
 	# Serve static files in development.
-	if settings.ENVIRONMENT == 'development':
+	if settings.ENVIRONMENT == 'development':	# pragma: no cover
 		from django.conf.urls.static import static
 		urlpatterns += static( settings.MEDIA_URL, document_root = settings.MEDIA_ROOT )
