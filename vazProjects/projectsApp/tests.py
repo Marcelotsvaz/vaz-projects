@@ -19,7 +19,7 @@ from .models import Category, Project, Page
 
 
 # Put all test media files in a subdirectory of MEDIA_ROOT.
-TESTS_MEDIA_ROOT = settings.MEDIA_ROOT / 'tests'
+TESTS_MEDIA_ROOT = str( settings.MEDIA_ROOT ) + 'tests/'
 
 
 
