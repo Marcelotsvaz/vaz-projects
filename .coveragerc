@@ -9,6 +9,8 @@
 [run]
 data_file = deployment/.coverage
 source = vazProjects
+omit =
+	*/secrets.py
 
 [report]
 precision = 2
