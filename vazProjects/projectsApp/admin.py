@@ -124,11 +124,17 @@ class ProjectAdmin( DjangoObjectActions, admin.ModelAdmin ):
 	# Object actions.
 	def publish( self, request, object ):
 		object.publish()
+		
+		self.message_user( request, _('Published project.'), level = 25 )
+	
 	publish.label = _('Publish')
 	publish.short_description = _('Publish this project.')
 	
 	def publishAll( self, request, object ):
 		object.publish( publishPages = True )
+		
+		self.message_user( request, _('Published project and pages.'), level = 25 )
+	
 	publishAll.label = _('Publish All')
 	publishAll.short_description = _('Publish this project and all of its pages.')
 	
