@@ -35,6 +35,7 @@ class Sitemap( TemplateView ):
 	template_name = 'siteApp/sitemap.xml'
 	content_type = 'text/xml'
 	
+	
 	def get_context_data( self, **kwargs ):
 		context = super().get_context_data( **kwargs )
 		
@@ -42,6 +43,8 @@ class Sitemap( TemplateView ):
 		
 		views = [
 			'siteApp:home',
+			'siteApp:about_me',
+			'projectsApp:projects',
 		]
 		
 		for view in views:
