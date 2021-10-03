@@ -109,10 +109,31 @@ class Project( models.Model ):
 	
 	@property
 	def last_edited( self ):
-		if self.single_page:
-			return self.base_last_edited
+		# Will return None for single page projects or if all pages are drafts.
+		pagesLastEdited = self.pages.filter( draft = False ).aggregate( last_edited = Max( 'last_edited' ) )['last_edited']
+		
+		if pagesLastEdited:
+			return max( self.base_last_edited, pagesLastEdited )
 		else:
-			return max( self.base_last_edited, self.pages.aggregate( last_edited = Max( 'last_edited' ) )['last_edited'] )
+			return self.base_last_edited
+	
+	def publish( self, publishPages = False ):
+		'''
+		Set `draft` to false and update `posted`, only if the project isn't already published.
+		Optionally also publish unpublished pages.
+		'''
+		
+		if publishPages:
+			for page in self.pages.filter( draft = True ):
+				page.publish()
+		
+		if self.draft == False:
+			return
+		
+		self.draft = False
+		self.posted = timezone.now()
+		
+		self.save()
 
 
 
@@ -171,9 +192,21 @@ class Page( models.Model ):
 	
 	@property
 	def full_name( self ):
+		'''
+		Return the full name of the page, which includes its `type`, `number` and `name`.
+		'''
+		
 		return ( self.type or _('Part {0}: {1}') ).format( self.number, self.name )
 	
-	# def publish( self ):
-	# 	self.draft = False
-	# 	self.posted = timezone.now()
-	# 	self.save()
+	def publish( self ):
+		'''
+		Set `draft` to false and update `posted`, only if the page isn't already published.
+		'''
+		
+		if self.draft == False:
+			return
+		
+		self.draft = False
+		self.posted = timezone.now()
+		
+		self.save()

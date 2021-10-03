@@ -88,12 +88,12 @@ if settings.ENVIRONMENT != 'development':
 			super().__init__( location = location, custom_domain = base_url, **kwargs )
 			
 		
-		def url( self, name, parameters = None, expire = None ):
+		def url( self, name, parameters = None, expire = None, http_method = None ):
 			'''
 			Remove AWS_LOCATION from url.
 			'''
 			
-			url = super().url( name, parameters, expire )
+			url = super().url( name, parameters, expire, http_method )
 			
 			return re.sub( fr'(://[\w\-.]+/){self.location}/?', r'\1', url )
 		

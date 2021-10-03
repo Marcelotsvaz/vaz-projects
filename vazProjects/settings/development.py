@@ -29,10 +29,10 @@ DEFAULT_FILE_STORAGE = 'commonApp.backends.OverwriteLocalStorage'
 STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'deployment/media'
+MEDIA_ROOT = BASE_DIR / 'deployment/media/'
 
 STATICFILES_DIRS = [
-	BASE_DIR / 'deployment/static',
+	BASE_DIR / 'deployment/static/',
 ]
 
 
