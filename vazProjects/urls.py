@@ -24,11 +24,12 @@ urlpatterns = [
 
 if settings.ENVIRONMENT != 'production':
 	# Enable Debug Toolbar.
-	if 'debug_toolbar' in settings.INSTALLED_APPS:
-		import debug_toolbar
-		urlpatterns.append( path( '__debug__/', include( debug_toolbar.urls ) ) )
+	import debug_toolbar
+	
+	urlpatterns.append( path( '__debug__/', include( debug_toolbar.urls ) ) )
 	
 	# Serve static files in development.
 	if settings.ENVIRONMENT == 'development':	# pragma: no cover
 		from django.conf.urls.static import static
+		
 		urlpatterns += static( settings.MEDIA_URL, document_root = settings.MEDIA_ROOT )
