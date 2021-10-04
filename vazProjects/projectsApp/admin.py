@@ -77,7 +77,7 @@ class PageInLine( CompactInline ):
 	# Edit page options.
 	fieldsets = (
 		( None, main ),
-		( 'Metadata', metadata ),
+		( _('Metadata'), metadata ),
 	)
 	readonly_fields = (
 		'draft',
@@ -101,7 +101,11 @@ class ProjectAdmin( DjangoObjectActions, admin.ModelAdmin ):
 		'highlight',
 	)
 	list_display_links = ( 'name', )
-	list_filter = ( 'category', 'draft', 'highlight' )
+	list_filter = (
+		'category',
+		'draft',
+		'highlight',
+	)
 	
 	
 	# Fieldsets.
@@ -120,6 +124,7 @@ class ProjectAdmin( DjangoObjectActions, admin.ModelAdmin ):
 			'notes',
 		)
 	}
+	
 	
 	# Object actions.
 	def publish( self, request, object ):
@@ -141,7 +146,7 @@ class ProjectAdmin( DjangoObjectActions, admin.ModelAdmin ):
 	
 	# Edit page options.
 	fieldsets = (
-		( None, main ),
+		( _('Project'), main ),
 	)
 	prepopulated_fields = { 'slug': ( 'name', ) }
 	readonly_fields = (
@@ -150,4 +155,7 @@ class ProjectAdmin( DjangoObjectActions, admin.ModelAdmin ):
 		'base_last_edited', 
 	)
 	inlines = [ PageInLine ]
-	change_actions = ( 'publish', 'publishAll' )
+	change_actions = (
+		'publish',
+		'publishAll',
+	)
