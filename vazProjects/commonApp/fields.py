@@ -125,7 +125,7 @@ class MarkdownField( TextField ):
 		renderer.enable( settings.MARKDOWN_FEATURES )
 		renderer.options['breaks'] = True
 		
-		renderer.use( imageGalleryPlugin, instance = self )
+		renderer.use( imageGalleryPlugin, markdownImages = self.getMarkdownImages() )
 		renderer.add_render_rule( "link_open", linkAttributes )
 		
 		return renderer.render( getattr( self, field.attname ) )

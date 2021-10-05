@@ -24,16 +24,16 @@ def linkAttributes( self, tokens, idx, options, env ):
 	return self.renderToken( tokens, idx, options, env )
 
 
-def imageGalleryPlugin( md, instance ):
+def imageGalleryPlugin( md, markdownImages ):
 	'''
 	Plugin for rendering image galleries using Django UserImage.
 	
-	Syntax: #[type](identifier1, identifier2, identifier3)
+	Syntax: #[cssClass1 cssClass2](identifier1, identifier2, identifier3)
 	'''
 	
-	md.inline.ruler.before( 'image', 'imageGallery', partial( imageGallery, instance = instance ) )
+	md.inline.ruler.before( 'image', 'imageGallery', partial( imageGallery, markdownImages = markdownImages ) )
 	# TODO
-	# md.block.ruler.before( 'paragraph', 'imageGallery', partial( imageGallery, instance = instance ) )
+	# md.block.ruler.before( 'paragraph', 'imageGallery', partial( imageGallery, markdownImages = markdownImages ) )
 
 
 class CharacterNotFound( Exception ):
@@ -56,7 +56,7 @@ def parseStream( state, char ):
 
 # Fix empty paragraphs in Markdown content
 # def imageGallery( state, startLine, endLine, silent, instance ):
-def imageGallery( state, silent, instance ):
+def imageGallery( state, silent, markdownImages ):
 	'''
 	Rule
 	'''
@@ -65,8 +65,8 @@ def imageGallery( state, silent, instance ):
 	
 	try:
 		parseStream( state, '#' )
-		cssClassStart		= parseStream( state, '[' )
-		cssClassEnd			= parseStream( state, ']' )
+		cssClassesStart		= parseStream( state, '[' )
+		cssClassesEnd		= parseStream( state, ']' )
 		identifiersStart	= parseStream( state, '(' )
 		identifiersEnd		= parseStream( state, ')' )
 	except CharacterNotFound:
@@ -74,15 +74,18 @@ def imageGallery( state, silent, instance ):
 		return False
 	
 	if not silent:
-		cssClass = state.src[cssClassStart:cssClassEnd - 1]
+		cssClasses = state.src[cssClassesStart:cssClassesEnd - 1]
 		identifiers = state.src[identifiersStart:identifiersEnd - 1]
-		identifiers = [ identifier.strip() for identifier in identifiers.split( ',' ) ]
 		
-		userImages = [ userImage for userImage in instance.user_images.all() if userImage.identifier in identifiers ]
+		if identifiers.strip() == '*':
+			images = markdownImages
+		else:
+			identifiers = [ identifier.strip() for identifier in identifiers.split( ',' ) ]
+			images = [ image for image in markdownImages if image.identifier in identifiers ]
 		
 		renderedTemplate = loader.render_to_string(
 			'commonApp/image_gallery.html',
-			{ 'userImages': userImages, 'cssClass': cssClass },
+			{ 'images': images, 'cssClasses': cssClasses },
 		)
 		
 		state.push( 'html_block', '', 0 ).content = renderedTemplate

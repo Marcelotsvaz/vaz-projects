@@ -32,14 +32,6 @@ class MarkdownExtensionsTests( TestCase ):
 
 class MarkdownImageGalleryTests( TestCase ):
 	
-	class MockModel:
-		def __init__( self ):
-			self.user_images = self
-		
-		def all( self ):
-			return []
-	
-	
 	def testEmptyMarkdownImageGallery( self ):
 		'''
 		A Markdown gallery with no identifiers should render a empty `div`.
@@ -48,7 +40,7 @@ class MarkdownImageGalleryTests( TestCase ):
 		inputText = '#[]()'
 		
 		renderer = MarkdownIt( 'zero' )
-		renderer.use( imageGalleryPlugin, instance = self.MockModel() )
+		renderer.use( imageGalleryPlugin, markdownImages = [] )
 		
 		self.assertInHTML( '<div class="imageGallery"></div>', renderer.render( inputText ) )
 	
@@ -61,7 +53,7 @@ class MarkdownImageGalleryTests( TestCase ):
 		inputText = '#[testClass]()'
 		
 		renderer = MarkdownIt( 'zero' )
-		renderer.use( imageGalleryPlugin, instance = self.MockModel() )
+		renderer.use( imageGalleryPlugin, markdownImages = [] )
 		
 		self.assertInHTML( '<div class="imageGallery testClass"></div>', renderer.render( inputText ) )
 	
@@ -74,6 +66,6 @@ class MarkdownImageGalleryTests( TestCase ):
 		inputText = '#[testClass1 testClass2]()'
 		
 		renderer = MarkdownIt( 'zero' )
-		renderer.use( imageGalleryPlugin, instance = self.MockModel() )
+		renderer.use( imageGalleryPlugin, markdownImages = [] )
 		
 		self.assertInHTML( '<div class="imageGallery testClass1 testClass2"></div>', renderer.render( inputText ) )

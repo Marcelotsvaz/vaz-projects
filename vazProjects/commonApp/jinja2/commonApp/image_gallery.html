@@ -1,17 +1,17 @@
-<div class="imageGallery {{ cssClass }}">
-	{% for userImage in userImages %}
-		<a href="{{ userImage.image_large.url }}">
-			<img src="{{ userImage.image_small.url }}" alt="{{ userImage.alt }}">
+<div class="imageGallery {{ cssClasses }}">
+	{% for image in images %}
+		<a href="{{ image.image_large.url }}">
+			<img src="{{ image.image_small.url }}" alt="{{ image.alt }}">
 		</a>
 		
 		<div>
 			<figure>
-				<img src="{{ userImage.image_large.url }}" alt="{{ userImage.alt }}" loading="lazy">
+				<img src="{{ image.image_large.url }}" alt="{{ image.alt }}" loading="lazy">
 				<figcaption>
-					<p>{{ userImage.alt }}</p>
-					{% if userImage.attribution %}<p>{{ _('Crédito: ') }}{{ userImage.attribution }}</p>{% endif %}
+					<p>{{ image.alt }}</p>
+					{% if image.attribution %}<p>{{ _('Credits: ') }}{{ image.attribution }}</p>{% endif %}
 				</figcaption>
-				<button>{{ _('Fechar') }}</button>
+				<button>{{ _('Close') }}</button>
 			</figure>
 		</div>
 	{% endfor %}
