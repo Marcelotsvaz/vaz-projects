@@ -12,9 +12,9 @@
 
 {% block content %}
 	{% if not currentPage %} {# At project index. #}
-		<p>{{ project.render_content() | safe }}</p>
+		{{ project.render_content() | safe }}
 	{% else %}
-		<p>{{ currentPage.render_content() | safe }}</p>
+		{{ currentPage.render_content() | safe }}
 		
 		{% if previousPage %}
 			<a href="{{ previousPage.get_absolute_url() }}">{{ _('Previous: {0}').format( previousPage.full_name ) }}</a>

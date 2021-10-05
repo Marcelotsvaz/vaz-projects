@@ -7,6 +7,7 @@
 
 
 from functools import partial
+import re
 
 from django.template import loader
 
@@ -14,14 +15,14 @@ from .models import UserImage
 
 
 
-def linkAttributes( self, tokens, idx, options, env ):
+def linkAttributes( self, tokens, index, options, env ):
 	'''
 	Add target and rel attributes to links.
 	'''
 	
-	tokens[idx].attrSet( 'rel', 'noopener' )
+	tokens[index].attrSet( 'rel', 'noopener' )
 	
-	return self.renderToken( tokens, idx, options, env )
+	return self.renderToken( tokens, index, options, env )
 
 
 def imageGalleryPlugin( md, markdownImages ):
@@ -31,51 +32,35 @@ def imageGalleryPlugin( md, markdownImages ):
 	Syntax: #[cssClass1 cssClass2](identifier1, identifier2, identifier3)
 	'''
 	
-	md.inline.ruler.before( 'image', 'imageGallery', partial( imageGallery, markdownImages = markdownImages ) )
-	# TODO
-	# md.block.ruler.before( 'paragraph', 'imageGallery', partial( imageGallery, markdownImages = markdownImages ) )
+	md.block.ruler.before(
+		'paragraph',
+		'imageGallery',
+		partial( imageGallery, markdownImages = markdownImages ),
+		{ 'alt': [ 'paragraph', 'reference', 'blockquote', 'list' ] }
+	)
 
 
-class CharacterNotFound( Exception ):
-	pass
-
-
-def parseStream( state, char ):
+def imageGallery( state, startLine, endLine, silent, markdownImages ):
 	'''
-	Parse the state's stream until char is found or state.posMax is reached.
-	'''
-	
-	while state.pos < state.posMax:
-		state.pos = state.pos + 1
-		
-		if state.src[state.pos - 1] == char:
-			return state.pos
-	
-	raise CharacterNotFound
-
-
-# Fix empty paragraphs in Markdown content
-# def imageGallery( state, startLine, endLine, silent, instance ):
-def imageGallery( state, silent, markdownImages ):
-	'''
-	Rule
+	Rule for image gallery.
 	'''
 	
-	oldPos = state.pos
+	lineContent = state.getLines( startLine, startLine + 1, 0, False ).strip()
 	
-	try:
-		parseStream( state, '#' )
-		cssClassesStart		= parseStream( state, '[' )
-		cssClassesEnd		= parseStream( state, ']' )
-		identifiersStart	= parseStream( state, '(' )
-		identifiersEnd		= parseStream( state, ')' )
-	except CharacterNotFound:
-		state.pos = oldPos
+	# Only run the regex if the first two characters match.
+	if not lineContent.startswith( '#[' ):
 		return False
 	
+	match = re.match( r'^#\[(.*)\]\((.*)\)$', lineContent )
+	
+	if not match:
+		return False
+	
+	cssClasses = match[1]
+	identifiers = match[2]
+	
 	if not silent:
-		cssClasses = state.src[cssClassesStart:cssClassesEnd - 1]
-		identifiers = state.src[identifiersStart:identifiersEnd - 1]
+		state.line = startLine + 1
 		
 		if identifiers.strip() == '*':
 			images = markdownImages
@@ -88,6 +73,8 @@ def imageGallery( state, silent, markdownImages ):
 			{ 'images': images, 'cssClasses': cssClasses },
 		)
 		
-		state.push( 'html_block', '', 0 ).content = renderedTemplate
+		token = state.push( 'html_block', '', 0 )
+		token.content = renderedTemplate
+		token.map = [startLine, state.line]
 	
 	return True
