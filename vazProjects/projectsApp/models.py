@@ -17,6 +17,7 @@ from django.db.models import (
 	UniqueConstraint,
 	Max,
 )
+from django.contrib.contenttypes.fields import GenericRelation
 from django.urls import reverse
 from django.conf import settings
 from django.utils import timezone
@@ -26,7 +27,7 @@ from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 
 from commonApp.fields import TextField, MarkdownField
-from commonApp.models import getUploadFolder
+from commonApp.models import getUploadFolder, UserImage
 
 
 
@@ -88,6 +89,7 @@ class Project( models.Model ):
 	posted				= DateTimeField(	_('posted'), default = timezone.now )
 	base_last_edited	= DateTimeField(	_('base last edited'), auto_now = True  )
 	notes				= TextField(		_('notes'), blank = True )
+	user_images			= GenericRelation(	UserImage, for_concrete_model = False )
 	
 	
 	class Meta:
@@ -116,6 +118,13 @@ class Project( models.Model ):
 			return max( self.base_last_edited, pagesLastEdited )
 		else:
 			return self.base_last_edited
+	
+	def getMarkdownImages( self ):
+		'''
+		Return the images used in the Markdown fields.
+		'''
+		
+		return self.user_images.all()
 	
 	def publish( self, publishPages = False ):
 		'''
@@ -197,6 +206,13 @@ class Page( models.Model ):
 		'''
 		
 		return ( self.type or _('Part {0}: {1}') ).format( self.number, self.name )
+	
+	def getMarkdownImages( self ):
+		'''
+		Return the images used in the Markdown fields.
+		'''
+		
+		return self.project.user_images.all()
 	
 	def publish( self ):
 		'''

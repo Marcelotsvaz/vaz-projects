@@ -11,6 +11,7 @@ from jet.admin import CompactInline
 from django_object_actions import DjangoObjectActions
 from django.utils.translation import gettext_lazy as _
 
+from commonApp.admin import UserImageInLine
 from .models import Category, Project, Page
 
 
@@ -154,7 +155,7 @@ class ProjectAdmin( DjangoObjectActions, admin.ModelAdmin ):
 		'posted', 
 		'base_last_edited', 
 	)
-	inlines = [ PageInLine ]
+	inlines = [ PageInLine, UserImageInLine ]
 	change_actions = (
 		'publish',
 		'publishAll',

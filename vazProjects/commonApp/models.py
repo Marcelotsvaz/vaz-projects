@@ -71,6 +71,7 @@ class UserImage( models.Model ):
 	
 	class Meta:
 		verbose_name = _('user image')
+		verbose_name_plural = _('user images')
 		
 		constraints = [
 			UniqueConstraint( fields = [ 'identifier', 'content_type', 'object_id' ], name = 'uniqueForObject' ),
