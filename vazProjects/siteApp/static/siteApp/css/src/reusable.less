@@ -43,104 +43,107 @@
 .hidden { display: none !important; }
 
 
-// div.imageGallery
-// {
-// 	display: flex;
-// 	flex-wrap: wrap;
-// 	justify-content: space-evenly;
-// 	align-items: center;
+div.imageGallery
+{
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-evenly;
+	align-items: center;
 	
-// 	margin: -12.5px;	// Hack until Safari supports gap in flexbox.
+	margin: -12.5px;	// Hack until Safari supports gap in flexbox.
 	
-// 	& + * { margin-top: 50px; }
+	& + * { margin-top: 50px; }
 	
-// 	> a > img
-// 	{
-// 		margin: 12.5px;	// Hack until Safari supports gap in flexbox.
+	> a
+	{
+		margin: 12.5px;	// Hack until Safari supports gap in flexbox.
 		
-// 		display: block;
-		
-// 		width: 250px;
-		
-// 		box-shadow: 5px 5px 10px @contentTextColor;
-// 	}
+		> img
+		{
+			display: block;
+			
+			width: 250px;
+			
+			box-shadow: 5px 5px 10px @contentTextColor;
+		}
+	}
 	
-// 	> div
-// 	{
-// 		display: none;
+	> div
+	{
+		display: none;
 		
-// 		position: fixed;
-// 		z-index: 2;
-// 		top: 0px;
-// 		right: 0px;
-// 		bottom: 0px;
-// 		left: 0px;
+		position: fixed;
+		z-index: 2;
+		top: 0px;
+		right: 0px;
+		bottom: 0px;
+		left: 0px;
 		
-// 		background-color: hsla( 0, 0, 0, 0.75 );
+		background-color: hsla( 0, 0, 0, 0.75 );
 		
-// 		> figure
-// 		{
-// 			display: grid;
-// 			grid-template-columns: 1fr auto;
-// 			grid-template-rows: 1fr auto;
-// 			align-items: center;
-// 			gap: 15px;
+		> figure
+		{
+			display: grid;
+			grid-template-columns: 1fr auto;
+			grid-template-rows: 1fr auto;
+			align-items: center;
+			gap: 15px;
 			
-// 			position: fixed;
-// 			top: 50%;
-// 			left: 50%;
+			position: fixed;
+			top: 50%;
+			left: 50%;
 			
-// 			transform: translate( -50%, -50% );
+			transform: translate( -50%, -50% );
 			
-// 			padding: 15px;
-// 			max-width: 90vw;
-// 			max-height: 90vh;
+			padding: 15px;
+			max-width: 90vw;
+			max-height: 90vh;
 			
-// 			box-shadow: 5px 5px 10px @contentTextColor;
+			box-shadow: 5px 5px 10px @contentTextColor;
 			
-// 			background-color: @contentBackgroundColor;
+			background-color: @contentBackgroundColor;
 			
-// 			> img
-// 			{
-// 				grid-column: span 2;
+			> img
+			{
+				grid-column: span 2;
 				
-// 				width: 100%;
-// 			}
+				width: 100%;
+			}
 			
-// 			> figcaption > p
-// 			{
-// 				margin: 0px;
-// 				margin-top: 15px;
+			> figcaption > p
+			{
+				margin: 0px;
+				margin-top: 15px;
 				
-// 				text-align: center;
+				text-align: center;
 				
-// 				&:first-child
-// 				{
-// 					margin-top: 0px;
+				&:first-child
+				{
+					margin-top: 0px;
 					
-// 					font-weight: bold;
-// 				}
-// 			}
+					font-weight: bold;
+				}
+			}
 			
-// 			> button
-// 			{
-// 				border: 1px solid;
-// 				padding: 5px;
+			> button
+			{
+				border: 1px solid;
+				padding: 5px;
 				
-// 				background-color: @headerBackgroundColor;
+				background-color: @headerBackgroundColor;
 				
-// 				font-weight: bold;
+				font-weight: bold;
 				
-// 				&:hover { background-color: lighten( @headerBackgroundColor, 10% ); }
+				&:hover { background-color: lighten( @headerBackgroundColor, 10% ); }
 				
-// 				&:focus
-// 				{
-// 					outline: 2px solid rgb( 0, 120, 215 );
-// 					outline-offset: -1px;
-// 				}
+				&:focus
+				{
+					outline: 2px solid rgb( 0, 120, 215 );
+					outline-offset: -1px;
+				}
 				
-// 				&:active { transform: translateY( 2px ); }
-// 			}
-// 		}
-// 	}
-// }
+				&:active { transform: translateY( 2px ); }
+			}
+		}
+	}
+}
