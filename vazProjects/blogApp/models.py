@@ -37,13 +37,13 @@ class BlogPost( models.Model ):
 	banner_original		= ImageField(		_('banner'), upload_to = getUploadFolder( 'banner-original' ) )
 	banner				= ImageSpecField(
 		source = 'banner_original',
-		processors = [ ResizeToFill( 2000, 750 ) ],
+		processors = [ ResizeToFill( 1920, 750 ) ],
 		format = 'JPEG',
 		options = settings.IMAGE_OPTIONS['JPEG'],
 	)
 	thumbnail			= ImageSpecField(
 		source = 'banner_original',
-		processors = [ ResizeToFill( 300, 300 ) ],
+		processors = [ ResizeToFill( 1000, 350 ) ],
 		format = 'JPEG',
 		options = settings.IMAGE_OPTIONS['JPEG'],
 	)

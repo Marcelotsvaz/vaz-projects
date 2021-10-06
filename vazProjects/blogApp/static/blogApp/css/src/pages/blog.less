@@ -8,41 +8,35 @@
 
 .blog
 {
-	ul
+	> main.content > article
 	{
-		> li
+		margin-bottom: 50px;
+		
+		&:last-child { margin-bottom: 0px; }
+		
+		> h2
 		{
-			display: grid;
-			grid:
-					"thumbnail	title		title"			auto
-					"thumbnail	description	description"	1fr
-					"thumbnail	date		comments"		auto
-				/	auto		1fr			auto;
-			gap: 10px;
+			margin-bottom: 15px;
 			
-			> img
-			{
-				grid-area: thumbnail;
-				
-				border: 1px solid black;
-				width: 200px;
-				height: 125px;
-			}
+			border-bottom: 3px solid @contentTextColor;
+		}
+		
+		> a > img
+		{
+			display: block;
 			
-			> h2
-			{
-				grid-area: title;
-			}
+			width: calc( 100% - 10px * 2 );
+			margin: 10px;
+		}
+		
+		> p { text-align: justify; }
+		
+		> div >
+		{
+			display: flex;
+			justify-content: space-between;
 			
-			> p
-			{
-				grid-area: description;
-			}
-			
-			> span
-			{
-				font-size: smaller;
-			}
+			font-size: smaller;
 		}
 	}
 }
