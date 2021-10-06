@@ -1,0 +1,28 @@
+{% extends "siteApp/base.html" %}
+
+
+
+{% block pageName %}blog{% endblock %}
+{% block title %}{{ _('Blog') }} | {{ super() }}{% endblock %}
+
+{% block bannerTitle %}{{ _('Blog') }}{% endblock %}
+{% block bannerImage %}{{ static( 'blogApp/images/banner.jpg' ) }}{% endblock %}
+
+
+
+{% block content %}
+	<ul>
+		{% for post in posts %}
+			<li>
+				<img src="{{ post.thumbnail.url }}" alt="{{ _('{0} thumbnail.').format( post.title ) }}"/>
+				
+				<h2><a href="{{ post.get_absolute_url() }}">{{ post.title }}</a></h2>
+				
+				<p>{{ post.content }}</p>
+				
+				<span>{{ _('Last update: {0}').format( post.last_edited.date() ) }}</span>
+				<span><a href="{{ post.get_absolute_url() }}">{{ _('{0} comments').format( 15 ) }}</a></span>
+			</li>
+		{% endfor %}
+	</ul>
+{% endblock %}
