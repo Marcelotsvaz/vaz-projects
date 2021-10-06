@@ -18,11 +18,12 @@ class Projects( ListView ):
 	Projects view.
 	'''
 	
+	model = Project
 	template_name = 'projectsApp/projects.html'
 	context_object_name = 'projects'
 	
-	def get_queryset(self):
-		return Project.objects.filter( draft = False )
+	def get_queryset( self ):
+		return super().get_queryset().filter( draft = False )
 
 
 def project( httpRequest, project_slug, page_number = None ):
