@@ -18,6 +18,7 @@ class Blog( ListView ):
 	'''
 	
 	model = BlogPost
+	paginate_by = 10
 	template_name = 'blogApp/blog.html'
 	context_object_name = 'posts'
 	

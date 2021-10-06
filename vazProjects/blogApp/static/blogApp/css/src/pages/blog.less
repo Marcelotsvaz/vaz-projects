@@ -31,12 +31,29 @@
 		
 		> p { text-align: justify; }
 		
-		> div >
+		> div
 		{
 			display: flex;
 			justify-content: space-between;
 			
 			font-size: smaller;
+		}
+	}
+	
+	> main.content > div.pagination
+	{
+		display: flex;
+		
+		font-weight: bold;
+		
+		> span
+		{
+			flex-basis: 0;
+			flex-grow: 1;
+			
+			&:nth-child( 2 ) { text-align: center; }
+			
+			&:last-child { text-align: right; }
 		}
 	}
 }

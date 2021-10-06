@@ -24,6 +24,24 @@
 			</div>
 		</article>
 	{% endfor %}
+	
+	<nav class="pagination">
+		<span>
+			{% if page_obj.has_next() %}
+				<a href="{{ url( 'blogApp:blog', args = [ page_obj.next_page_number() ] ) }}">{{ _('Older posts') }}</a>
+			{% endif %}
+		</span>
+		
+		<span>
+			{{ _('Page {0} of {1}').format( page_obj.number, paginator.num_pages ) }}
+		</span>
+		
+		<span>
+			{% if page_obj.has_previous() %}
+				<a href="{{ url( 'blogApp:blog', args = [ page_obj.previous_page_number() ] ) }}">{{ _('Newer posts') }}</a>
+			{% endif %}
+		</span>
+	</nav>
 {% endblock %}
 
 
