@@ -6,8 +6,6 @@
 
 
 
-from pathlib import PurePath
-
 from django.db import models
 from django.db.models import (
 	CharField, SlugField,
