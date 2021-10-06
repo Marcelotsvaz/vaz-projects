@@ -22,6 +22,7 @@ class Projects( ListView ):
 	template_name = 'projectsApp/projects.html'
 	context_object_name = 'projects'
 	
+	
 	def get_queryset( self ):
 		return super().get_queryset().filter( draft = False )
 

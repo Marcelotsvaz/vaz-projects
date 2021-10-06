@@ -30,6 +30,7 @@ class Favicon( RedirectView ):
 	
 	url = settings.STATIC_URL + 'siteApp/images/favicon.png'
 	
+	
 	def get( self, *args, **kwargs ):
 		response = super().get( *args, **kwargs )
 		

@@ -19,7 +19,7 @@
 		{% if previousPage %}
 			<a href="{{ previousPage.get_absolute_url() }}">{{ _('Previous: {0}').format( previousPage.full_name ) }}</a>
 		{% endif %}
-
+		
 		{% if nextPage %}
 			<a href="{{ nextPage.get_absolute_url() }}">{{ _('Next: {0}').format( nextPage.full_name ) }}</a>
 		{% endif %}
