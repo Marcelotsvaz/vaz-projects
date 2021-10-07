@@ -30,14 +30,14 @@ STATICFILES_STORAGE = 'commonApp.backends.StaticOverwriteLocalStorage'
 DEFAULT_FILE_STORAGE = 'commonApp.backends.OverwriteLocalStorage'
 
 STATIC_URL = '/static/'
+STATIC_ROOT = 'deployment/collectedStatic'
+STATICFILES_DIRS = [
+	BASE_DIR / 'deployment/static/',	# Less files are compiled into this folder.
+]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'deployment/media/'
 TESTS_MEDIA_ROOT = MEDIA_ROOT / 'tests/'
-
-STATICFILES_DIRS = [
-	BASE_DIR / 'deployment/static/',
-]
 
 
 # Apps
