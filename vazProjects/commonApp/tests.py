@@ -13,6 +13,7 @@ from django.test import TestCase
 from markdown_it import MarkdownIt
 
 from .markdown_it_extensions import linkAttributes, imageGalleryPlugin
+from . import settings
 
 
 
@@ -35,14 +36,8 @@ class MarkdownExtensionsTests( TestCase ):
 class MarkdownImageGalleryTests( TestCase ):
 	
 	def getRenderer( self, markdownImages = [] ):
-		renderer = MarkdownIt( 'zero' )
-		renderer.enable( [
-			'heading',
-			'list',
-			'emphasis',
-			'newline',
-			'link',
-		] )
+		renderer = MarkdownIt( 'zero', options_update = settings.MARKDOWN_OPTIONS )
+		renderer.enable( settings.MARKDOWN_FEATURES )
 		renderer.use( imageGalleryPlugin, markdownImages = markdownImages )
 		
 		return renderer
