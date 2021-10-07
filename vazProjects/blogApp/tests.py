@@ -17,11 +17,6 @@ from .models import BlogPost
 
 
 
-# Put all test media files in a subdirectory of MEDIA_ROOT.
-TESTS_MEDIA_ROOT = str( settings.MEDIA_ROOT ) + 'tests/'
-
-
-
 class TestUtils():
 	
 	# Defaults.
@@ -42,7 +37,7 @@ class TestUtils():
 	
 	
 	@classmethod
-	@override_settings( MEDIA_ROOT = TESTS_MEDIA_ROOT )
+	@override_settings( MEDIA_ROOT = settings.TESTS_MEDIA_ROOT )
 	def createPost( cls, **kwargs ):
 		'''
 		Create a test post and return it. Images and a slug are supplied to properly render templates.
@@ -58,7 +53,7 @@ class TestUtils():
 
 
 
-@override_settings( MEDIA_ROOT = TESTS_MEDIA_ROOT )
+@override_settings( MEDIA_ROOT = settings.TESTS_MEDIA_ROOT )
 class BlogViewTests( TestCase ):
 	
 	def testPublishedBlogPost( self ):
@@ -87,7 +82,7 @@ class BlogViewTests( TestCase ):
 		self.assertNotContains( response, TestUtils.postTitle )
 
 
-@override_settings( MEDIA_ROOT = TESTS_MEDIA_ROOT )
+@override_settings( MEDIA_ROOT = settings.TESTS_MEDIA_ROOT )
 class BlogPostViewTests( TestCase ):
 	
 	def testPublishedBlogPost( self ):

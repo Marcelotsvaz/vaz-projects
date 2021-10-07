@@ -18,11 +18,6 @@ from .models import Category, Project, Page
 
 
 
-# Put all test media files in a subdirectory of MEDIA_ROOT.
-TESTS_MEDIA_ROOT = str( settings.MEDIA_ROOT ) + 'tests/'
-
-
-
 class TestUtils():
 	
 	# Defaults.
@@ -45,7 +40,7 @@ class TestUtils():
 	
 	
 	@classmethod
-	@override_settings( MEDIA_ROOT = TESTS_MEDIA_ROOT )
+	@override_settings( MEDIA_ROOT = settings.TESTS_MEDIA_ROOT )
 	def createProject( cls, **kwargs ):
 		'''
 		Create a test project and return it. Images and a slug are supplied to properly render templates.
@@ -65,7 +60,7 @@ class TestUtils():
 	
 	
 	@classmethod
-	@override_settings( MEDIA_ROOT = TESTS_MEDIA_ROOT )
+	@override_settings( MEDIA_ROOT = settings.TESTS_MEDIA_ROOT )
 	def createPages( cls, project, quantity, **kwargs ):
 		'''
 		Create `quantity` test pages and return the last one. Images are supplied to properly render templates.
@@ -89,7 +84,7 @@ class TestUtils():
 
 
 
-@override_settings( MEDIA_ROOT = TESTS_MEDIA_ROOT )
+@override_settings( MEDIA_ROOT = settings.TESTS_MEDIA_ROOT )
 class ProjectModelTests( TestCase ):
 	
 	def testSinglePageWithZeroPages( self ):
@@ -174,7 +169,7 @@ class ProjectModelTests( TestCase ):
 		self.assertEqual( project.last_edited, project.base_last_edited )
 
 
-@override_settings( MEDIA_ROOT = TESTS_MEDIA_ROOT )
+@override_settings( MEDIA_ROOT = settings.TESTS_MEDIA_ROOT )
 class ProjectsViewTests( TestCase ):
 	
 	def testPublishedProject( self ):
@@ -203,7 +198,7 @@ class ProjectsViewTests( TestCase ):
 		self.assertNotContains( response, TestUtils.projectName )
 
 
-@override_settings( MEDIA_ROOT = TESTS_MEDIA_ROOT )
+@override_settings( MEDIA_ROOT = settings.TESTS_MEDIA_ROOT )
 class ProjectViewTests( TestCase ):
 	
 	def testPublishedProject( self ):

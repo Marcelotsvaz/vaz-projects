@@ -30,6 +30,7 @@ STATIC_ROOT = 'staging/static/'
 
 MEDIA_URL = 'https://static-files.staging.vazprojects.com/'
 MEDIA_ROOT = 'staging/media/'
+TESTS_MEDIA_ROOT = MEDIA_ROOT + 'tests/'
 
 
 # Apps

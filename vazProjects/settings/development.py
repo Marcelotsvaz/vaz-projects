@@ -33,6 +33,7 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'deployment/media/'
+TESTS_MEDIA_ROOT = MEDIA_ROOT / 'tests/'
 
 STATICFILES_DIRS = [
 	BASE_DIR / 'deployment/static/',
