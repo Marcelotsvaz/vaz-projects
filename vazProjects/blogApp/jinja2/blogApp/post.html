@@ -1,0 +1,15 @@
+{% extends "siteApp/base.html" %}
+
+
+
+{% block pageName %}post{% endblock %}
+{% block title %}{{ post.title }} | {{ super() }}{% endblock %}
+
+{% block bannerTitle %}{{ post.title }}{% endblock %}
+{% block bannerImage %}{{ post.banner.url }}{% endblock %}
+
+
+
+{% block content %}
+	{{ post.render_content() | safe }}
+{% endblock %}

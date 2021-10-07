@@ -1,0 +1,55 @@
+{% extends "siteApp/base.html" %}
+
+
+
+{% block pageName %}blog{% endblock %}
+{% block title %}{{ _('Blog') }} | {{ super() }}{% endblock %}
+
+
+
+{% block content %}
+	{% for post in posts %}
+		<article>
+			<h2><a href="{{ post.get_absolute_url() }}">{{ post.title }}</a></h2>
+			
+			<a href="{{ post.get_absolute_url() }}">
+				<img src="{{ post.thumbnail.url }}" alt="{{ _('Thumbnail for post: {0}.').format( post.title ) }}"/>
+			</a>
+			
+			<div>{{ post.render_content( beforeBreak = True ) | safe }}</div>
+			
+			<footer>
+				<span>{{ _('Last update: {0}').format( post.last_edited.date() ) }}</span>
+				<span><a href="{{ post.get_absolute_url() }}">{{ _('{0} comments').format( 15 ) }}</a></span>
+			</footer>
+		</article>
+	{% endfor %}
+	
+	<nav class="pagination">
+		<span>
+			{% if page_obj.has_next() %}
+				<a href="{{ url( 'blogApp:blog', args = [ page_obj.next_page_number() ] ) }}">{{ _('Older posts') }}</a>
+			{% endif %}
+		</span>
+		
+		<span>
+			{{ _('Page {0} of {1}').format( page_obj.number, paginator.num_pages ) }}
+		</span>
+		
+		<span>
+			{% if page_obj.has_previous() %}
+				<a href="{{ url( 'blogApp:blog', args = [ page_obj.previous_page_number() ] ) }}">{{ _('Newer posts') }}</a>
+			{% endif %}
+		</span>
+	</nav>
+{% endblock %}
+
+
+
+{% block sidebar %}
+	<h3>{{ _('Search') }}</h3>
+	
+	<h3>{{ _('Posts by date') }}</h3>
+	
+	<h3>{{ _('Tags') }}</h3>
+{% endblock %}

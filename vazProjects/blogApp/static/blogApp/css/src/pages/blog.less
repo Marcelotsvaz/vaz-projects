@@ -1,0 +1,59 @@
+//
+// VAZ Projects
+//
+//
+// Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+.blog
+{
+	> main.content > article
+	{
+		margin-bottom: 50px;
+		
+		&:last-child { margin-bottom: 0px; }
+		
+		h2
+		{
+			margin-bottom: 15px;
+			
+			border-bottom: 3px solid @contentTextColor;
+		}
+		
+		img
+		{
+			display: block;
+			
+			width: calc( 100% - 10px * 2 );
+			margin: 10px;
+		}
+		
+		p { text-align: justify; }
+		
+		footer
+		{
+			display: flex;
+			justify-content: space-between;
+			
+			font-size: smaller;
+		}
+	}
+	
+	> main.content > nav.pagination
+	{
+		display: flex;
+		
+		font-weight: bold;
+		
+		span
+		{
+			flex-basis: 0;
+			flex-grow: 1;
+			
+			&:nth-child( 2 ) { text-align: center; }
+			
+			&:last-child { text-align: right; }
+		}
+	}
+}

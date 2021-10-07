@@ -41,20 +41,22 @@ class MarkdownField( TextField ):
 	TextField rendered with Markdown.
 	'''
 	
-	def _render_FIELD( self, field ):
+	def _render_FIELD( self, field, beforeBreak = False, separator = '<!--break-->' ):
 		'''
 		Return a rendered version of the MarkdownField.
 		'''
 		
-		renderer = MarkdownIt( 'zero' )
-		
+		renderer = MarkdownIt( 'zero', options_update = settings.MARKDOWN_OPTIONS )
 		renderer.enable( settings.MARKDOWN_FEATURES )
-		renderer.options['breaks'] = True
-		
 		renderer.use( imageGalleryPlugin, markdownImages = self.getMarkdownImages() )
 		renderer.add_render_rule( "link_open", linkAttributes )
 		
-		return renderer.render( getattr( self, field.attname ) )
+		markdownSource = getattr( self, field.attname )
+		
+		if beforeBreak:
+			markdownSource = markdownSource.partition( separator )[0]
+		
+		return renderer.render( markdownSource )
 	
 	
 	def contribute_to_class( self, cls, name, private_only = False ):
