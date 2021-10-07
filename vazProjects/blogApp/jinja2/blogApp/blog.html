@@ -16,12 +16,12 @@
 				<img src="{{ post.thumbnail.url }}" alt="{{ _('Thumbnail for post: {0}.').format( post.title ) }}"/>
 			</a>
 			
-			<p>{{ post.content }}</p>
+			<div>{{ post.render_content( beforeBreak = True ) | safe }}</div>
 			
-			<div>
+			<footer>
 				<span>{{ _('Last update: {0}').format( post.last_edited.date() ) }}</span>
 				<span><a href="{{ post.get_absolute_url() }}">{{ _('{0} comments').format( 15 ) }}</a></span>
-			</div>
+			</footer>
 		</article>
 	{% endfor %}
 	
