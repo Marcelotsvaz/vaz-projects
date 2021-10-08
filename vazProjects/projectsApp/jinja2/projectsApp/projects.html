@@ -14,9 +14,9 @@
 	<ul>
 		{% for project in projects %}
 			<li>
-				<img src="{{ project.thumbnail.url }}" alt="{{ _('{0} thumbnail.').format( project.name ) }}"/>
-				
 				<h2><a href="{{ project.get_absolute_url() }}">{{ project.name }}</a></h2>
+				
+				<img src="{{ project.thumbnail.url }}" alt="{{ _('{0} thumbnail.').format( project.name ) }}"/>
 				
 				<p>{{ project.description }}</p>
 				

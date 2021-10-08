@@ -19,5 +19,6 @@
 {% block content %}
 	{{ post.render_content() | safe }}
 	
+	<h2>{{ _('Comments') }}</h2>
 	{{ comments.section( post.get_absolute_url(), self.title(), request.build_absolute_uri() ) }}
 {% endblock %}

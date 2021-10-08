@@ -20,6 +20,7 @@
 	{% if not currentPage %}	{# Project index or single page. #}
 		{{ project.render_content() | safe }}
 		
+		<h2>{{ _('Comments') }}</h2>
 		{{ comments.section( project.get_absolute_url(), self.title(), request.build_absolute_uri() ) }}
 	{% else %}					{# Project page. #}
 		{{ currentPage.render_content() | safe }}
@@ -32,6 +33,7 @@
 			<a href="{{ nextPage.get_absolute_url() }}">{{ _('Next: {0}').format( nextPage.full_name ) }}</a>
 		{% endif %}
 		
+		<h2>{{ _('Comments') }}</h2>
 		{{ comments.section( currentPage.get_absolute_url(), self.title(), request.build_absolute_uri() ) }}
 	{% endif %}
 {% endblock %}
