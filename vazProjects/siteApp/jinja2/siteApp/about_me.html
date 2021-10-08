@@ -2,11 +2,18 @@
 
 
 
+{% import "commonApp/comments.html" as comments %}
+
+
+
+{% block extraScripts %}{{ comments.script() }}{% endblock %}
+
 {% block pageName %}about_me{% endblock %}
 {% block title %}{{ _('About Me') }} | {{ super() }}{% endblock %}
 
 
 
 {% block content %}
-	<h1>{{ _('About Me') }}</h1>
+	<h2>{{ _('Comments') }}</h2>
+	{{ comments.section( request.path, self.title(), request.build_absolute_uri() ) }}
 {% endblock %}
