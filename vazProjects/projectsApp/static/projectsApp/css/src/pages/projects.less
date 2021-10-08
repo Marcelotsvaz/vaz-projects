@@ -8,9 +8,9 @@
 
 .projects
 {
-	ul
+	> main.content > ul
 	{
-		> li
+		li
 		{
 			display: grid;
 			grid:
@@ -20,7 +20,7 @@
 				/	auto		1fr			auto;
 			gap: 10px;
 			
-			> img
+			img
 			{
 				grid-area: thumbnail;
 				
@@ -29,20 +29,11 @@
 				height: 125px;
 			}
 			
-			> h2
-			{
-				grid-area: title;
-			}
+			h2 { grid-area: title; }
 			
-			> p
-			{
-				grid-area: description;
-			}
+			p { grid-area: description; }
 			
-			> span
-			{
-				font-size: smaller;
-			}
+			span { font-size: smaller; }
 		}
 	}
 }

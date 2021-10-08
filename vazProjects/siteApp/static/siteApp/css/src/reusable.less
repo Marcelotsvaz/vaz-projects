@@ -50,9 +50,7 @@ div.imageGallery
 	justify-content: space-evenly;
 	align-items: center;
 	
-	margin: -12.5px;	// Hack until Safari supports gap in flexbox.
-	
-	& + * { margin-top: 50px; }
+	margin: ( 50px - 12.5px ) -12.5px;	// Hack until Safari supports gap in flexbox.
 	
 	> a
 	{

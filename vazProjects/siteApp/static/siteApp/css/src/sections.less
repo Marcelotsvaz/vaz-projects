@@ -17,13 +17,13 @@ body
 	
 	display: grid;
 	grid:
-	"...			header			header			..."			auto
-	"...			menu			menu			..."			auto
-	"...			banner			banner			..."			auto
-	"...			bannerHeader	bannerHeader	..."			auto
-	"...			content			sidebar			..."			1fr
-	"...			footer			footer			..."			auto
-	/ [all-start]	var(--margin)	1fr		auto	var(--margin)			[all-end];
+					"...			header			header			..."			auto
+					"...			menu			menu			..."			auto
+					"...			banner			banner			..."			auto
+					"...			bannerHeader	bannerHeader	..."			auto
+					"...			content			sidebar			..."			1fr
+					"...			footer			footer			..."			auto
+	/ [all-start]	var(--margin)	1fr				auto			var(--margin)	[all-end];
 	
 	background-color: @headerBackgroundColor;
 	
@@ -38,11 +38,12 @@ body
 	
 	padding: 25px;
 	
-	> h1
+	h1
 	{
-		line-height: 50px;
+		margin: 0px;
+		border: none;
 		
-		> a { text-decoration: none; }
+		line-height: 50px;
 	}
 }
 
@@ -54,7 +55,7 @@ body
 	
 	display: flex;
 	
-	> a
+	a
 	{
 		padding: 10px 20px;
 		
@@ -75,7 +76,7 @@ body
 {
 	display: contents;
 	
-	> img
+	img
 	{
 		grid-area: banner / all / bannerHeader;
 		
@@ -97,12 +98,15 @@ body
 		background-color: hsla( 0, 0, 0, 0.5 );
 	}
 	
-	> h1
+	h1
 	{
 		grid-area: bannerHeader;
 		
-		height: 100px;
+		margin: 0px;
+		border: none;
 		padding: 25px 50px;
+		
+		line-height: 50px;
 		
 		color: hsl( 0, 0, 95% );
 	}
@@ -154,12 +158,6 @@ body::before
 	padding: 25px;
 	
 	color: @contentTextColor;
-	
-	> h3
-	{
-		margin-bottom: 10px;
-		border-bottom: 3px solid @contentTextColor;
-	}
 }
 
 
@@ -172,14 +170,14 @@ body::before
 	
 	text-align: center;
 	
-	> p:first-of-type
+	p:first-of-type
 	{
 		font-weight: bold;
 		
 		img { vertical-align: middle; }
 	}
 	
-	> hr
+	hr
 	{
 		margin: 25px 0px;
 		border: none;
