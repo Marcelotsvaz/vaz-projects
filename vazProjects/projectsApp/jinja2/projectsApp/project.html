@@ -2,6 +2,12 @@
 
 
 
+{% import "commonApp/comments.html" as comments %}
+
+
+
+{% block extraScripts %}{{ comments.script() }}{% endblock %}
+
 {% block pageName %}project{% endblock %}
 {% block title %}{{ project.name }} | {{ super() }}{% endblock %}
 
@@ -11,9 +17,11 @@
 
 
 {% block content %}
-	{% if not currentPage %} {# At project index. #}
+	{% if not currentPage %}	{# Project index or single page. #}
 		{{ project.render_content() | safe }}
-	{% else %}
+		
+		{{ comments.section( project.get_absolute_url(), self.title(), request.build_absolute_uri() ) }}
+	{% else %}					{# Project page. #}
 		{{ currentPage.render_content() | safe }}
 		
 		{% if previousPage %}
@@ -23,6 +31,8 @@
 		{% if nextPage %}
 			<a href="{{ nextPage.get_absolute_url() }}">{{ _('Next: {0}').format( nextPage.full_name ) }}</a>
 		{% endif %}
+		
+		{{ comments.section( currentPage.get_absolute_url(), self.title(), request.build_absolute_uri() ) }}
 	{% endif %}
 {% endblock %}
 
@@ -34,10 +44,10 @@
 		
 		<ul>
 			<li>
-				{% if currentPage %} {# Not at project index. #}
-					<a href="{{ project.get_absolute_url() }}">{{ _('Project Index') }}</a>
-				{% else %}
+				{% if not currentPage %}	{# Project index. #}
 					<strong>{{ _('Project Index') }}</strong>
+				{% else %}
+					<a href="{{ project.get_absolute_url() }}">{{ _('Project Index') }}</a>
 				{% endif %}
 			</li>
 			
