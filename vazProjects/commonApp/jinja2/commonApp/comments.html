@@ -1,0 +1,19 @@
+{% macro script() -%}
+	<script
+		src="https://{{ settings.DISQUS_SHORTNAME }}.disqus.com/embed.js"
+		data-timestamp="{{ ( datetime.now().timestamp() * 1000 ) | int }}"
+		defer
+	></script>
+{%- endmacro %}
+
+
+{% macro section( identifier, title, url ) -%}
+	<section
+		id="disqusThread"
+		data-identifier="{{ identifier }}"
+		data-title="{{ title }}"
+		data-url="{{ url }}"
+	></section>
+	
+	<noscript>TODO</noscript>
+{%- endmacro %}

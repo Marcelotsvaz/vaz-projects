@@ -68,3 +68,8 @@ CACHES = {
 	},
 }
 CACHE_MIDDLEWARE_SECONDS = CACHES['default']['TIMEOUT']
+
+
+# Disqus
+#---------------------------------------
+DISQUS_SHORTNAME = 'staging-vazprojects'

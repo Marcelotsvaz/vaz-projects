@@ -10,6 +10,7 @@ from django.utils.translation import gettext, ngettext
 from django.templatetags.static import static
 from django.urls import reverse
 from django.conf import settings
+from datetime import datetime
 
 from jinja2 import Environment
 
@@ -24,6 +25,7 @@ def environment( **options ):
 		'static': static,
 		'url': reverse,
 		'settings': settings,
+		'datetime': datetime,
 	})
 	
 	return env

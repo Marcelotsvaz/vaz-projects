@@ -38,3 +38,19 @@ function hideFigure( event )
 		$( event.currentTarget ).hide();
 	}
 }
+
+
+// 
+// Disqus.
+//------------------------------------------------------------------------------
+disqus_container_id = 'disqusThread'
+
+
+function disqus_config()
+{
+	const disqusDiv = document.getElementById( disqus_container_id );
+	
+	this.page.identifier = disqusDiv.dataset.identifier;
+	this.page.title = disqusDiv.dataset.title;
+	this.page.url = disqusDiv.dataset.url;
+};
