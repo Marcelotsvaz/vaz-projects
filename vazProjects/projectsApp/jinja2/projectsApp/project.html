@@ -18,11 +18,15 @@
 
 {% block content %}
 	{% if not currentPage %}	{# Project index or single page. #}
-		{{ project.render_content() | safe }}
+		<article>
+			{{ project.render_content() | safe }}
+		</article>
 		
 		{{ comments.section( project.get_absolute_url(), self.title(), request.build_absolute_uri() ) }}
 	{% else %}					{# Project page. #}
-		{{ currentPage.render_content() | safe }}
+		<article>
+			{{ currentPage.render_content() | safe }}
+		</article>
 		
 		{% if previousPage %}
 			<a href="{{ previousPage.get_absolute_url() }}">{{ _('Previous: {0}').format( previousPage.full_name ) }}</a>

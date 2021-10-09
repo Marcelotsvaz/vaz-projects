@@ -17,7 +17,9 @@
 
 
 {% block content %}
-	{{ post.render_content() | safe }}
+	<article>
+		{{ post.render_content() | safe }}
+	</article>
 	
 	{{ comments.section( post.get_absolute_url(), self.title(), request.build_absolute_uri() ) }}
 {% endblock %}

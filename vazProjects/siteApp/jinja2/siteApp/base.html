@@ -30,9 +30,7 @@
 	
 	<body class="{% block pageName required %}{% endblock %}">
 		<header class="header">
-			<h1>
-				<a class="logo" href="{{ url( 'siteApp:home' ) }}">VAZ Projects</a>
-			</h1>
+			<a href="{{ url( 'siteApp:home' ) }}">{{ _('VAZ Projects') }}</a>
 		</header>
 		
 		<nav class="menu">
