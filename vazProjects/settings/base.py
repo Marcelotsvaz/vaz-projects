@@ -32,11 +32,10 @@ USE_TZ = True
 
 USE_THOUSAND_SEPARATOR = True
 
-LANGUAGE_CODE = 'en'
-LANGUAGES = (
-	( 'en', _('English') ),
-	( 'pt-br', _('Brazilian Portuguese') ),
-)
+LANGUAGE_CODE = 'en-US'
+LANGUAGES = [
+	( 'en-US', _('American English') ),
+]
 TIME_ZONE = 'America/Sao_Paulo'
 
 
