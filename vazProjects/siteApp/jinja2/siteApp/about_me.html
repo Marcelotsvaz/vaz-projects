@@ -14,6 +14,5 @@
 
 
 {% block content %}
-	<h2>{{ _('Comments') }}</h2>
 	{{ comments.section( request.path, self.title(), request.build_absolute_uri() ) }}
 {% endblock %}
