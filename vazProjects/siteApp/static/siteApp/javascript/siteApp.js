@@ -6,6 +6,10 @@
 
 
 
+'use strict';
+
+
+
 // 
 // General stuff.
 //------------------------------------------------------------------------------
@@ -43,7 +47,7 @@ function hideFigure( event )
 // 
 // Disqus.
 //------------------------------------------------------------------------------
-disqus_container_id = 'disqusThread'
+var disqus_container_id = 'disqusThread';
 
 
 function disqus_config()
@@ -53,4 +57,4 @@ function disqus_config()
 	this.page.identifier = disqusDiv.dataset.identifier;
 	this.page.title = disqusDiv.dataset.title;
 	this.page.url = disqusDiv.dataset.url;
-};
+}
