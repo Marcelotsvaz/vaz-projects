@@ -23,7 +23,7 @@ default:
             - .cache/pip/
     
     before_script:
-        - set -a; source server/scripts/staging.sh; set +a
+        - set -a; source server/scripts/${CI_ENVIRONMENT_TIER}.sh; set +a
         - apt-get update
 
 
@@ -43,7 +43,7 @@ test:
     
     script:
         - apt-get install --yes --no-install-recommends --quiet libmemcached-dev
-        - pip install -r requirements/staging.txt
+        - pip install -r requirements/${environment}.txt
         - mkdir -p deployment; cp ${DJANGO_SECRETS_FILE} deployment/secrets.py
         - coverage run vazProjects/manage.py test vazProjects
         - coverage report; coverage xml
@@ -64,11 +64,11 @@ launchInstance:
     script:
         - apt-get install --yes --no-install-recommends --quiet libmemcached-dev npm awscli
         - npm install --global less
-        - pip install -r requirements/staging.txt
+        - pip install -r requirements/${environment}.txt
         - mkdir -p deployment; cp ${DJANGO_SECRETS_FILE} deployment/secrets.py
-        - server/scripts/deploy.sh staging terminateInstance
-        - server/scripts/deploy.sh staging uploadFiles
-        - server/scripts/deploy.sh staging launchInstance
+        - server/scripts/deploy.sh ${environment} terminateInstance
+        - server/scripts/deploy.sh ${environment} uploadFiles
+        - server/scripts/deploy.sh ${environment} launchInstance
 
 
 terminateInstance:
@@ -84,4 +84,4 @@ terminateInstance:
     
     script:
         - apt-get install --yes --no-install-recommends --quiet awscli
-        - server/scripts/deploy.sh staging terminateInstance
+        - server/scripts/deploy.sh ${environment} terminateInstance
