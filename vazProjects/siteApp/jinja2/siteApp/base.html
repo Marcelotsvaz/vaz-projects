@@ -44,7 +44,14 @@
 		{% if self.bannerTitle() %}
 			<header class="banner">
 				<img src="{% block bannerImage %}{% endblock %}" alt="{{ _('Banner image.') }}">
-				<h1>{% block bannerTitle %}{% endblock %}</h1>
+				
+				<div>
+					<h1>{% block bannerTitle %}{% endblock %}</h1>
+					
+					{% if self.bannerText() %}
+						<p>{% block bannerText %}{% endblock %}</p>
+					{% endif %}
+				</div>
 			</header>
 		{% endif %}
 		

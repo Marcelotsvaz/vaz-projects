@@ -19,7 +19,12 @@
 			<div>{{ post.render_content( beforeBreak = True ) | safe }}</div>
 			
 			<footer>
-				<span>{{ _('Last update: {0}').format( post.last_edited.date() ) }}</span>
+				<span>
+					{% trans user = 'Marcelotsvaz', isoTime = post.posted.isoformat(), date = post.posted.strftime( '%B %-d, %Y' ) %}
+						by {{ user }} on <time datetime="{{ isoTime }}">{{ date }}</time>
+					{% endtrans %}
+				</span>
+				
 				<span><a href="{{ post.get_absolute_url() }}">{{ _('{0} comments').format( 15 ) }}</a></span>
 			</footer>
 		</article>
