@@ -26,6 +26,7 @@ from imagekit.processors import ResizeToFill
 
 from commonApp.fields import TextField, MarkdownField
 from commonApp.models import getUploadFolder, UserImage
+from commonApp.misc import getDisqusCommentCount
 
 
 
@@ -117,6 +118,16 @@ class Project( models.Model ):
 		else:
 			return self.base_last_edited
 	
+	@property
+	def comment_count( self ):
+		'''
+		Get the number of comments in the threads associated with this post and all of its pages.
+		'''
+		
+		pageCommentCount = sum( map( lambda page: page.comment_count, self.pages.filter( draft = False ) ) )
+		
+		return getDisqusCommentCount( self.get_absolute_url() ) + pageCommentCount
+			
 	def getMarkdownImages( self ):
 		'''
 		Return the images used in the Markdown fields.
@@ -204,6 +215,14 @@ class Page( models.Model ):
 		'''
 		
 		return ( self.type or _('Part {0}: {1}') ).format( self.number, self.name )
+	
+	@property
+	def comment_count( self ):
+		'''
+		Get the number of comments in the thread associated with this page.
+		'''
+		
+		return getDisqusCommentCount( self.get_absolute_url() )
 	
 	def getMarkdownImages( self ):
 		'''

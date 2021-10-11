@@ -56,7 +56,7 @@ else:
 
 # Cache
 #---------------------------------------
-CACHES['default']['TIMEOUT'] = 1
+CACHES['default']['TIMEOUT'] = 60
 CACHE_MIDDLEWARE_SECONDS = CACHES['default']['TIMEOUT']
 
 

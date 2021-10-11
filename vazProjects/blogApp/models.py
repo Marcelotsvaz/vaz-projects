@@ -23,6 +23,7 @@ from imagekit.processors import ResizeToFill
 
 from commonApp.fields import MarkdownField
 from commonApp.models import getUploadFolder, UserImage
+from commonApp.misc import getDisqusCommentCount
 
 
 
@@ -73,6 +74,14 @@ class BlogPost( models.Model ):
 		'''
 		
 		return self.user_images.all()
+	
+	@property
+	def comment_count( self ):
+		'''
+		Get the number of comments in the thread associated with this post.
+		'''
+		
+		return getDisqusCommentCount( self.get_absolute_url() )
 	
 	def publish( self ):
 		'''

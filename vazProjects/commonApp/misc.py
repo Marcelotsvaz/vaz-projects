@@ -6,6 +6,9 @@
 
 
 
+import requests
+
+from django.core.cache import cache
 from django.conf import settings
 
 
@@ -36,3 +39,33 @@ def showDebugToolbar( request ):
 	'''
 	
 	return settings.DEBUG
+
+
+
+# Disqus
+#-------------------------------------------------------------------------------
+def getDisqusCommentCount( identifier, refresh = False ):
+	'''
+	Return the post count for a Disqus thread by `identifier`. Results are cached.
+	'''
+	
+	cacheKey = f'getDisqusCommentCount:{identifier}'
+	commentCount = cache.get( cacheKey )
+	
+	if commentCount is None or refresh:
+		url = 'https://disqus.com/api/3.0/threads/list.json'
+		parameters = {
+			'api_key': settings.DISQUS_API_KEY,
+			'forum': settings.DISQUS_SHORTNAME,
+			'thread': 'ident:' + identifier,
+		}
+		
+		request = requests.get( url, params = parameters )
+		
+		if request.status_code != 200:
+			return 0
+		
+		commentCount = request.json()['response'][0]['posts']
+		cache.set( cacheKey, commentCount )
+	
+	return commentCount

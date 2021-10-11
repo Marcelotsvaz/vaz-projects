@@ -155,3 +155,8 @@ AUTH_PASSWORD_VALIDATORS = [
 	{ 'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator', },
 	{ 'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', },
 ]
+
+
+# Disqus
+#---------------------------------------
+DISQUS_API_KEY = 'a5pgeL0uQcBBwVusQO1HM4GIx1P1MdCNeqkamBAVuBLnuT0scmmmtrDiQxKdrJoG'
