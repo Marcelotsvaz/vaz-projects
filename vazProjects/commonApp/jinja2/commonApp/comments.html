@@ -1,10 +1,7 @@
 {% macro script() %}
-	<script
-		src="https://{{ settings.DISQUS_SHORTNAME }}.disqus.com/embed.js"
-		data-timestamp="{{ ( datetime.now().timestamp() * 1000 ) | int }}"
-		defer
-	></script>
+	<script src="https://{{ settings.DISQUS_SHORTNAME }}.disqus.com/embed.js" defer></script>
 {% endmacro %}
+
 
 
 {% macro section( identifier, title, url ) %}
@@ -18,6 +15,6 @@
 			data-url="{{ url }}"
 		></div>
 		
-		<noscript>TODO</noscript>
+		<noscript>{{ _('You need JavaScript enabled to see comments.') }}</noscript>
 	</section>
 {% endmacro %}
