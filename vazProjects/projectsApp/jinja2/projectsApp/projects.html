@@ -25,7 +25,11 @@
 				{% endtrans %}
 			</span>
 			
-			<span><a href="{{ project.get_absolute_url() }}#comments">{{ _('{0} comments').format( project.comment_count ) }}</a></span>
+			<span>
+				<a href="{{ project.get_absolute_url() }}#comments">
+					{{ ngettext( '{0} comment', '{0} comments', project.comment_count ).format( project.comment_count ) }}
+				</a>
+			</span>
 		</article>
 	{% endfor %}
 {% endblock %}
