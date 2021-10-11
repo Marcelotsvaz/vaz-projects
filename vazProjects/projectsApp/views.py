@@ -34,7 +34,7 @@ def project( httpRequest, project_slug, page_number = None ):
 	
 	project = get_object_or_404( Project, slug = project_slug, draft = False )
 	
-	if page_number:
+	if page_number is not None:
 		currentPage = get_object_or_404( Page, project = project, number = page_number, draft = False )
 	else:
 		currentPage = None

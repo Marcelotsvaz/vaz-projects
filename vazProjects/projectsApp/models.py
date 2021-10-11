@@ -113,7 +113,7 @@ class Project( models.Model ):
 		# Will return None for single page projects or if all pages are drafts.
 		pagesLastEdited = self.pages.filter( draft = False ).aggregate( last_edited = Max( 'last_edited' ) )['last_edited']
 		
-		if pagesLastEdited:
+		if pagesLastEdited is not None:
 			return max( self.base_last_edited, pagesLastEdited )
 		else:
 			return self.base_last_edited
