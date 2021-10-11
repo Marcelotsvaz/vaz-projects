@@ -21,7 +21,7 @@
 				<p>{{ project.description }}</p>
 				
 				<span>{{ _('Last update: {0}').format( project.last_edited.date() ) }}</span>
-				<span><a href="{{ project.get_absolute_url() }}">{{ _('{0} comments').format( 15 ) }}</a></span>
+				<span><a href="{{ project.get_absolute_url() }}#comments">{{ _('{0} comments').format( 15 ) }}</a></span>
 			</li>
 		{% endfor %}
 	</ul>
