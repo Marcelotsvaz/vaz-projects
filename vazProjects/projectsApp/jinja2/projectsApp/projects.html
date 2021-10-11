@@ -11,18 +11,21 @@
 
 
 {% block content %}
-	<ul>
-		{% for project in projects %}
-			<li>
-				<h2><a href="{{ project.get_absolute_url() }}">{{ project.name }}</a></h2>
-				
-				<img src="{{ project.thumbnail.url }}" alt="{{ _('{0} thumbnail.').format( project.name ) }}"/>
-				
-				<p>{{ project.description }}</p>
-				
-				<span>{{ _('Last update: {0}').format( project.last_edited.date() ) }}</span>
-				<span><a href="{{ project.get_absolute_url() }}#comments">{{ _('{0} comments').format( 15 ) }}</a></span>
-			</li>
-		{% endfor %}
-	</ul>
+	{% for project in projects %}
+		<article>
+			<h2><a href="{{ project.get_absolute_url() }}">{{ project.name }}</a></h2>
+			
+			<img src="{{ project.thumbnail.url }}" alt="{{ _('{0} thumbnail.').format( project.name ) }}"/>
+			
+			<p>{{ project.description }}</p>
+			
+			<span>
+				{% trans user = 'Marcelotsvaz', isoTime = project.posted.isoformat(), date = project.posted.strftime( '%B %-d, %Y' ) %}
+					by {{ user }} on <time datetime="{{ isoTime }}">{{ date }}</time>
+				{% endtrans %}
+			</span>
+			
+			<span><a href="{{ project.get_absolute_url() }}#comments">{{ _('{0} comments').format( 15 ) }}</a></span>
+		</article>
+	{% endfor %}
 {% endblock %}
