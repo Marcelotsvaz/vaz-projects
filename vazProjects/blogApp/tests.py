@@ -43,13 +43,14 @@ class TestUtils():
 		Create a test post and return it. Images and a slug are supplied to properly render templates.
 		'''
 		
-		kwargs.setdefault( 'title', cls.postTitle ),
-		kwargs.setdefault( 'slug', cls.postSlug ),
+		defaults = {
+			'title': cls.postTitle,
+			'slug': cls.postSlug,
+			'banner_original': cls.testImage(),
+		}
+		defaults.update( kwargs )
 		
-		return BlogPost.objects.create(
-			banner_original = cls.testImage(),
-			**kwargs
-		)
+		return BlogPost.objects.create( **defaults )
 
 
 
@@ -80,6 +81,7 @@ class BlogViewTests( TestCase ):
 		
 		self.assertNotContains( response, TestUtils.postSlug )
 		self.assertNotContains( response, TestUtils.postTitle )
+
 
 
 @override_settings( MEDIA_ROOT = settings.TESTS_MEDIA_ROOT )

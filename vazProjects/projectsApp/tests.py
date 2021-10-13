@@ -46,17 +46,16 @@ class TestUtils():
 		Create a test project and return it. Images and a slug are supplied to properly render templates.
 		'''
 		
-		kwargs.setdefault( 'name', cls.projectName ),
-		kwargs.setdefault( 'slug', cls.projectSlug ),
+		defaults = {
+			'category': Category.objects.get_or_create()[0],
+			'name': cls.projectName,
+			'slug': cls.projectSlug,
+			'banner_original': cls.testImage(),
+			'thumbnail_original': cls.testImage(),
+		}
+		defaults.update( kwargs )
 		
-		category = Category.objects.get_or_create()[0]
-		
-		return Project.objects.create(
-			category = category,
-			banner_original = cls.testImage(),
-			thumbnail_original = cls.testImage(),
-			**kwargs
-		)
+		return Project.objects.create( **defaults )
 	
 	
 	@classmethod
@@ -66,19 +65,19 @@ class TestUtils():
 		Create `quantity` test pages and return the last one. Images are supplied to properly render templates.
 		'''
 		
-		kwargs.setdefault( 'name', cls.pageName ),
+		defaults = {
+			'project': project,
+			'name': cls.pageName,
+			'banner_original': cls.testImage(),
+			'thumbnail_original': cls.testImage(),
+		}
+		defaults.update( kwargs )
 		
 		lastPageNumber = project.pages.aggregate( last_page = Max( 'number' ) )['last_page'] or 0
 		lastPage = None
 		
 		for index in range( lastPageNumber + 1, lastPageNumber + quantity + 1 ):
-			lastPage = Page.objects.create(
-				project = project,
-				number = index,
-				banner_original = cls.testImage(),
-				thumbnail_original = cls.testImage(),
-				**kwargs
-				)
+			lastPage = Page.objects.create( number = index, **defaults )
 		
 		return lastPage
 
@@ -169,6 +168,7 @@ class ProjectModelTests( TestCase ):
 		self.assertEqual( project.last_edited, project.base_last_edited )
 
 
+
 @override_settings( MEDIA_ROOT = settings.TESTS_MEDIA_ROOT )
 class ProjectsViewTests( TestCase ):
 	
@@ -196,6 +196,7 @@ class ProjectsViewTests( TestCase ):
 		
 		self.assertNotContains( response, TestUtils.projectSlug )
 		self.assertNotContains( response, TestUtils.projectName )
+
 
 
 @override_settings( MEDIA_ROOT = settings.TESTS_MEDIA_ROOT )

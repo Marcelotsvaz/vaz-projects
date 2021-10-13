@@ -17,6 +17,30 @@ from . import settings
 
 
 
+class TestUtils():
+	
+	@classmethod
+	def getRenderer( cls, markdownImages = [] ):
+		renderer = MarkdownIt( 'zero', options_update = settings.MARKDOWN_OPTIONS )
+		renderer.enable( settings.MARKDOWN_FEATURES )
+		renderer.add_render_rule( "link_open", linkAttributes )
+		renderer.use( imageGalleryPlugin, markdownImages = markdownImages )
+		
+		return renderer
+	
+	@classmethod
+	def getMockUserImage( cls, name = 'image' ):
+		mock = Mock()
+		mock.identifier = f'{name}-identifier'
+		mock.image_small.url = f'{name}-image_small-url'
+		mock.image_large.url = f'{name}-image_large-url'
+		mock.attribution = f'{name}-attribution'
+		mock.alt = f'{name}-alt'
+		
+		return mock
+
+
+
 class MarkdownExtensionsTests( TestCase ):
 	
 	def testMarkdownLinkNoopener( self ):
@@ -26,32 +50,13 @@ class MarkdownExtensionsTests( TestCase ):
 		
 		inputText = '[LinkTitle](LinkAddress)'
 		
-		renderer = MarkdownIt( 'zero' )
-		renderer.enable( [ 'link' ] )
-		renderer.add_render_rule( "link_open", linkAttributes )
+		renderer = TestUtils.getRenderer()
 		
 		self.assertInHTML( '<a href="LinkAddress" rel="noopener">LinkTitle</a>', renderer.render( inputText ) )
 
 
+
 class MarkdownImageGalleryTests( TestCase ):
-	
-	def getRenderer( self, markdownImages = [] ):
-		renderer = MarkdownIt( 'zero', options_update = settings.MARKDOWN_OPTIONS )
-		renderer.enable( settings.MARKDOWN_FEATURES )
-		renderer.use( imageGalleryPlugin, markdownImages = markdownImages )
-		
-		return renderer
-	
-	def getMockUserImage( self, name = 'image' ):
-		mock = Mock()
-		mock.identifier = f'{name}-identifier'
-		mock.image_small.url = f'{name}-image_small-url'
-		mock.image_large.url = f'{name}-image_large-url'
-		mock.attribution = f'{name}-attribution'
-		mock.alt = f'{name}-alt'
-		
-		return mock
-	
 	
 	# Test interactions with other Markdown features.
 	#---------------------------------------------------------------------------
@@ -62,7 +67,7 @@ class MarkdownImageGalleryTests( TestCase ):
 		
 		inputText = '#[]()'
 		
-		renderer = self.getRenderer()
+		renderer = TestUtils.getRenderer()
 				
 		self.assertHTMLEqual( '<div class="imageGallery"></div>', renderer.render( inputText ) )
 	
@@ -74,7 +79,7 @@ class MarkdownImageGalleryTests( TestCase ):
 		
 		inputText = 'Some text!\n#[]()\nSome more text!'
 		
-		renderer = self.getRenderer()
+		renderer = TestUtils.getRenderer()
 		
 		self.assertHTMLEqual( '<p>Some text!</p><div class="imageGallery"></div><p>Some more text!</p>', renderer.render( inputText ) )
 	
@@ -86,7 +91,7 @@ class MarkdownImageGalleryTests( TestCase ):
 		
 		inputText = '# Header Text!\n#[]()\n# Another Header Text!'
 		
-		renderer = self.getRenderer()
+		renderer = TestUtils.getRenderer()
 		
 		self.assertHTMLEqual( '<h1>Header Text!</h1><div class="imageGallery"></div><h1>Another Header Text!</h1>', renderer.render( inputText ) )
 	
@@ -98,9 +103,9 @@ class MarkdownImageGalleryTests( TestCase ):
 		
 		inputText = '#[]() extra'
 		
-		renderer = self.getRenderer()
+		renderer = TestUtils.getRenderer()
 		
-		self.assertHTMLEqual( '<p>#<a href=""></a> extra</p>', renderer.render( inputText ) )
+		self.assertHTMLEqual( '<p>#<a href="" rel="noopener"></a> extra</p>', renderer.render( inputText ) )
 	
 	
 	# Test classes.
@@ -112,7 +117,7 @@ class MarkdownImageGalleryTests( TestCase ):
 		
 		inputText = '#[testClass]()'
 		
-		renderer = self.getRenderer()
+		renderer = TestUtils.getRenderer()
 		
 		self.assertHTMLEqual( '<div class="imageGallery testClass"></div>', renderer.render( inputText ) )
 	
@@ -124,7 +129,7 @@ class MarkdownImageGalleryTests( TestCase ):
 		
 		inputText = '#[testClass1 testClass2]()'
 		
-		renderer = self.getRenderer()
+		renderer = TestUtils.getRenderer()
 		
 		self.assertHTMLEqual( '<div class="imageGallery testClass1 testClass2"></div>', renderer.render( inputText ) )
 	
@@ -136,11 +141,11 @@ class MarkdownImageGalleryTests( TestCase ):
 		Test if all images are rendered when a wildcard is used as a identifier.
 		'''
 		
-		image1 = self.getMockUserImage( name = 'image1' )
-		image2 = self.getMockUserImage( name = 'image2' )
+		image1 = TestUtils.getMockUserImage( name = 'image1' )
+		image2 = TestUtils.getMockUserImage( name = 'image2' )
 		inputText = '#[](*)'
 		
-		renderer = self.getRenderer( markdownImages = [ image1, image2 ] )
+		renderer = TestUtils.getRenderer( markdownImages = [ image1, image2 ] )
 		renderedOutput = renderer.render( inputText )
 		
 		self.assertInHTML( f'<img src="{image1.image_small.url}" alt="{image1.alt}">', renderedOutput )
@@ -152,11 +157,11 @@ class MarkdownImageGalleryTests( TestCase ):
 		Test if all images are rendered when they are manually specified.
 		'''
 		
-		image1 = self.getMockUserImage( name = 'image1' )
-		image2 = self.getMockUserImage( name = 'image2' )
+		image1 = TestUtils.getMockUserImage( name = 'image1' )
+		image2 = TestUtils.getMockUserImage( name = 'image2' )
 		inputText = f'#[]({image1.identifier}, {image2.identifier})'
 		
-		renderer = self.getRenderer( markdownImages = [ image1, image2 ] )
+		renderer = TestUtils.getRenderer( markdownImages = [ image1, image2 ] )
 		renderedOutput = renderer.render( inputText )
 		
 		self.assertInHTML( f'<img src="{image1.image_small.url}" alt="{image1.alt}">', renderedOutput )
@@ -168,12 +173,12 @@ class MarkdownImageGalleryTests( TestCase ):
 		Test if only the specified images are rendered when they are manually specified.
 		'''
 		
-		image1 = self.getMockUserImage( name = 'image1' )
-		image2 = self.getMockUserImage( name = 'image2' )
-		image3 = self.getMockUserImage( name = 'image3' )
+		image1 = TestUtils.getMockUserImage( name = 'image1' )
+		image2 = TestUtils.getMockUserImage( name = 'image2' )
+		image3 = TestUtils.getMockUserImage( name = 'image3' )
 		inputText = f'#[]({image2.identifier})'
 		
-		renderer = self.getRenderer( markdownImages = [ image1, image2, image3 ] )
+		renderer = TestUtils.getRenderer( markdownImages = [ image1, image2, image3 ] )
 		renderedOutput = renderer.render( inputText )
 		
 		self.assertNotIn( image1.image_small.url, renderedOutput )
@@ -186,11 +191,11 @@ class MarkdownImageGalleryTests( TestCase ):
 		Test if undefined identifiers are ignored.
 		'''
 		
-		image1 = self.getMockUserImage( name = 'image1' )
-		image2 = self.getMockUserImage( name = 'image2' )
+		image1 = TestUtils.getMockUserImage( name = 'image1' )
+		image2 = TestUtils.getMockUserImage( name = 'image2' )
 		inputText = f'#[]({image1.identifier}, {image2.identifier})'
 		
-		renderer = self.getRenderer( markdownImages = [ image2 ] )
+		renderer = TestUtils.getRenderer( markdownImages = [ image2 ] )
 		renderedOutput = renderer.render( inputText )
 		
 		self.assertInHTML( f'<img src="{image2.image_small.url}" alt="{image2.alt}">', renderedOutput )
