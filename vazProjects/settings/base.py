@@ -110,8 +110,8 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
 	'commonApp.middleware.ServerCacheMiddleware',
 	'django.middleware.http.ConditionalGetMiddleware',
-	'django.middleware.cache.UpdateCacheMiddleware',
 	'compression_middleware.middleware.CompressionMiddleware',
+	'django.middleware.cache.UpdateCacheMiddleware',
 	'django.contrib.sessions.middleware.SessionMiddleware',
 	'django.middleware.locale.LocaleMiddleware',
 	'django.middleware.common.CommonMiddleware',

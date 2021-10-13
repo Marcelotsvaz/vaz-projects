@@ -51,7 +51,8 @@ INSTALLED_APPS += [
 #---------------------------------------
 # Put the debug toolbar middleware as high up as possible, but not before the CompressionMiddleware.
 for index, item in enumerate( MIDDLEWARE ):
-	if item == 'compression_middleware.middleware.CompressionMiddleware':
+	# if item == 'compression_middleware.middleware.CompressionMiddleware':
+	if item == 'django.middleware.cache.UpdateCacheMiddleware':	# TODO: Workaround until Django Debug Toolbar supports brotli.
 		MIDDLEWARE.insert( index + 1, 'debug_toolbar.middleware.DebugToolbarMiddleware' )
 		break
 else:
