@@ -58,14 +58,21 @@ def getDisqusCommentCount( identifier, refresh = False ):
 			'api_key': settings.DISQUS_API_KEY,
 			'forum': settings.DISQUS_SHORTNAME,
 			'thread': 'ident:' + identifier,
+			'limit': 1,
 		}
 		
 		request = requests.get( url, params = parameters )
+		thread = request.json()['response'][0]
 		
 		if request.status_code != 200:
 			return 0
 		
-		commentCount = request.json()['response'][0]['posts']
+		# An invalid identifier returns all threads in the forum instead of returning an error.
+		if identifier in thread['identifiers']:
+			commentCount = thread['posts']
+		else:
+			commentCount = 0	# Thread not created yet.
+		
 		cache.set( cacheKey, commentCount )
 	
 	return commentCount
