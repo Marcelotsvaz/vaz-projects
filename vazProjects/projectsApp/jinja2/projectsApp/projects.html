@@ -24,7 +24,7 @@
 					<p>{{ project.description }}</p>
 					
 					<span>
-						{% trans user = 'Marcelotsvaz', isoTime = project.posted.isoformat(), date = project.posted.strftime( '%B %-d, %Y' ) %}
+						{% trans user = project.author.get_username(), isoTime = project.posted.isoformat(), date = project.posted.strftime( '%B %-d, %Y' ) %}
 							by {{ user }} on <time datetime="{{ isoTime }}">{{ date }}</time>
 						{% endtrans %}
 					</span>

@@ -16,6 +16,7 @@ from django.db.models import (
 	Max,
 )
 from django.contrib.contenttypes.fields import GenericRelation
+from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.conf import settings
 from django.utils import timezone
@@ -61,6 +62,12 @@ class Project( models.Model ):
 	# Fields.
 	slug				= SlugField(		_('slug'), max_length = 100, unique = True )
 	name				= CharField(		_('name'), max_length = 100 )
+	author				= ForeignKey(
+		get_user_model(),
+		on_delete = models.PROTECT,
+		related_name = 'projects',
+		verbose_name = _('author'),
+	)
 	category			= ForeignKey(
 		Category,
 		on_delete = models.PROTECT,

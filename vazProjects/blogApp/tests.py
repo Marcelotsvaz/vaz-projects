@@ -10,6 +10,7 @@ from django.test import TestCase, Client, override_settings
 from django.urls import reverse
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.contrib.auth import get_user_model
 
 from base64 import b64decode
 
@@ -20,8 +21,8 @@ from .models import BlogPost
 class TestUtils():
 	
 	# Defaults.
-	postTitle = 'Test-Post'
 	postSlug = 'test-post'
+	postTitle = 'Test-Post'
 	
 	
 	@classmethod
@@ -44,8 +45,9 @@ class TestUtils():
 		'''
 		
 		defaults = {
-			'title': cls.postTitle,
 			'slug': cls.postSlug,
+			'title': cls.postTitle,
+			'author': get_user_model().objects.get_or_create()[0],
 			'banner_original': cls.testImage(),
 		}
 		defaults.update( kwargs )

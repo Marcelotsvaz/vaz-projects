@@ -11,8 +11,10 @@ from django.db.models import (
 	CharField, SlugField,
 	BooleanField,
 	DateTimeField, ImageField,
+	ForeignKey,
 )
 from django.contrib.contenttypes.fields import GenericRelation
+from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.conf import settings
 from django.utils import timezone
@@ -35,6 +37,12 @@ class BlogPost( models.Model ):
 	# Fields.
 	slug				= SlugField(		_('slug'), max_length = 100, unique = True )
 	title				= CharField(		_('title'), max_length = 100 )
+	author				= ForeignKey(
+		get_user_model(),
+		on_delete = models.PROTECT,
+		related_name = 'posts',
+		verbose_name = _('author'),
+	)
 	banner_original		= ImageField(		_('banner'), upload_to = getUploadFolder( 'banner-original' ) )
 	banner				= ImageSpecField(
 		source = 'banner_original',

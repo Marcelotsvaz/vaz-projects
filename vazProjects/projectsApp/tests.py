@@ -11,6 +11,7 @@ from django.urls import reverse
 from django.db.models import Max
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.contrib.auth import get_user_model
 
 from base64 import b64decode
 
@@ -21,8 +22,8 @@ from .models import Category, Project, Page
 class TestUtils():
 	
 	# Defaults.
-	projectName = 'Test-Project'
 	projectSlug = 'test-project'
+	projectName = 'Test-Project'
 	
 	pageName = 'Test-Page'
 	
@@ -47,9 +48,10 @@ class TestUtils():
 		'''
 		
 		defaults = {
-			'category': Category.objects.get_or_create()[0],
-			'name': cls.projectName,
 			'slug': cls.projectSlug,
+			'name': cls.projectName,
+			'author': get_user_model().objects.get_or_create()[0],
+			'category': Category.objects.get_or_create()[0],
 			'banner_original': cls.testImage(),
 			'thumbnail_original': cls.testImage(),
 		}

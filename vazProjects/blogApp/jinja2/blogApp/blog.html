@@ -20,7 +20,7 @@
 			
 			<footer>
 				<span>
-					{% trans user = 'Marcelotsvaz', isoTime = post.posted.isoformat(), date = post.posted.strftime( '%B %-d, %Y' ) %}
+					{% trans user = post.author.get_username(), isoTime = post.posted.isoformat(), date = post.posted.strftime( '%B %-d, %Y' ) %}
 						by {{ user }} on <time datetime="{{ isoTime }}">{{ date }}</time>
 					{% endtrans %}
 				</span>
