@@ -22,7 +22,7 @@ body
 }
 
 
-article, section
+article, section	// Must come before `h1 + *` rules.
 {
 	margin-top: 50px;
 	margin-bottom: 50px;
@@ -47,6 +47,8 @@ h1, h2, h3, h4, h5, h6
 	border-bottom: 3px solid @contentTextColor;
 	
 	&:first-child { margin-top: 0px; }
+	
+	+ * { margin-top: 0px; }	// Margin between header and next element is always the header margin.
 	
 	a { text-decoration: none; }
 }
