@@ -98,6 +98,7 @@ class ProjectAdmin( DjangoObjectActions, admin.ModelAdmin ):
 	list_display = (
 		'category',
 		'name',
+		'author',
 		'draft',
 		'highlight',
 	)
@@ -113,6 +114,7 @@ class ProjectAdmin( DjangoObjectActions, admin.ModelAdmin ):
 	main = {
 		'fields': (
 			( 'name', 'slug' ),
+			'author',
 			'category',
 			'banner_original',
 			'thumbnail_original',

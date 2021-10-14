@@ -24,6 +24,7 @@ class BlogPostAdmin( DjangoObjectActions, admin.ModelAdmin ):
 	# List display options.
 	list_display = (
 		'title',
+		'author',
 		'posted',
 		'draft',
 	)
@@ -38,6 +39,7 @@ class BlogPostAdmin( DjangoObjectActions, admin.ModelAdmin ):
 	main = {
 		'fields': (
 			( 'title', 'slug' ),
+			'author',
 			'banner_original',
 			'content',
 			'draft',
