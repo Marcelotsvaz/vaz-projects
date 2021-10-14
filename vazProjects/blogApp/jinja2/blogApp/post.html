@@ -14,8 +14,9 @@
 {% block bannerTitle %}{{ post.title }}{% endblock %}
 {% block bannerText %}
 	{% trans user = post.author.get_username(), isoTime = post.posted.isoformat(), date = post.posted.strftime( '%B %-d, %Y' ) %}
-		by {{ user }} on <time datetime="{{ isoTime }}">{{ date }}</time>
+		by {{ user }} on <time datetime="{{ isoTime }}">{{ date }}</time> 
 	{% endtrans %}
+	{% if post.draft %}{{ _('(Draft)') }}{% endif %}
 {% endblock %}
 {% block bannerImage %}{{ post.banner.url }}{% endblock %}
 
@@ -26,5 +27,7 @@
 		{{ post.render_content() | safe }}
 	</article>
 	
-	{{ comments.section( post.get_absolute_url(), self.title(), request.build_absolute_uri() ) }}
+	{% if not post.draft %}
+		{{ comments.section( post.get_absolute_url(), self.title(), request.build_absolute_uri() ) }}
+	{% endif %}
 {% endblock %}

@@ -22,7 +22,9 @@
 			{{ project.render_content() | safe }}
 		</article>
 		
-		{{ comments.section( project.get_absolute_url(), self.title(), request.build_absolute_uri() ) }}
+		{% if not project.draft %}
+			{{ comments.section( project.get_absolute_url(), self.title(), request.build_absolute_uri() ) }}
+		{% endif %}
 	{% else %}					{# Project page. #}
 		<article>
 			{{ currentPage.render_content() | safe }}
@@ -36,7 +38,9 @@
 			<a href="{{ nextPage.get_absolute_url() }}">{{ _('Next: {0}').format( nextPage.full_name ) }}</a>
 		{% endif %}
 		
-		{{ comments.section( currentPage.get_absolute_url(), self.title(), request.build_absolute_uri() ) }}
+		{% if not currentPage.draft %}
+			{{ comments.section( currentPage.get_absolute_url(), self.title(), request.build_absolute_uri() ) }}
+		{% endif %}
 	{% endif %}
 {% endblock %}
 
@@ -62,6 +66,8 @@
 					{% else %}
 						<a href="{{ page.get_absolute_url() }}">{{ page.full_name }}</a>
 					{% endif %}
+					
+					{% if page.draft %}{{ _('(Draft)') }}{% endif %}
 				</li>
 			{% endfor %}
 		</ul>

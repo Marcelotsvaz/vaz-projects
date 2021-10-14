@@ -38,4 +38,7 @@ class Post( DetailView ):
 	
 	
 	def get_queryset(self):
-		return super().get_queryset().filter( draft = False )
+		if self.request.user.is_staff:
+			return super().get_queryset().all()
+		else:
+			return super().get_queryset().filter( draft = False )
