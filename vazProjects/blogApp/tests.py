@@ -6,13 +6,14 @@
 
 
 
+from base64 import b64decode
+from unittest.mock import patch
+
 from django.test import TestCase, Client, override_settings
 from django.urls import reverse
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib.auth import get_user_model
-
-from base64 import b64decode
 
 from .models import BlogPost
 
@@ -59,7 +60,8 @@ class TestUtils():
 @override_settings( MEDIA_ROOT = settings.TESTS_MEDIA_ROOT )
 class BlogViewTests( TestCase ):
 	
-	def testPublishedBlogPost( self ):
+	@patch( 'blogApp.models.getDisqusCommentCount', autospec = True, return_value = 0 )
+	def testPublishedBlogPost( self, mock ):
 		'''
 		Published posts should appear in the blog page.
 		'''

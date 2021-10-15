@@ -6,14 +6,15 @@
 
 
 
+from base64 import b64decode
+from unittest.mock import patch
+
 from django.test import TestCase, Client, override_settings
 from django.urls import reverse
 from django.db.models import Max
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib.auth import get_user_model
-
-from base64 import b64decode
 
 from .models import Category, Project, Page
 
@@ -174,7 +175,8 @@ class ProjectModelTests( TestCase ):
 @override_settings( MEDIA_ROOT = settings.TESTS_MEDIA_ROOT )
 class ProjectsViewTests( TestCase ):
 	
-	def testPublishedProject( self ):
+	@patch( 'projectsApp.models.getDisqusCommentCount', autospec = True, return_value = 0 )
+	def testPublishedProject( self, mock ):
 		'''
 		Published projects should appear in the projects page.
 		'''
