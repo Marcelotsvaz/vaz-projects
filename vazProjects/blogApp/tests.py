@@ -8,7 +8,7 @@
 
 from unittest.mock import patch
 
-from django.test import TestCase, Client
+from django.test import TestCase, Client, override_settings
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 
@@ -40,6 +40,7 @@ class TestUtils():
 
 
 
+@override_settings( DEFAULT_FILE_STORAGE = 'commonApp.backends.OverwriteLocalStorage' )
 class BlogViewTests( TestCase ):
 	
 	@patch( 'blogApp.models.getDisqusCommentCount', autospec = True, return_value = 0 )
@@ -70,6 +71,7 @@ class BlogViewTests( TestCase ):
 
 
 
+@override_settings( DEFAULT_FILE_STORAGE = 'commonApp.backends.OverwriteLocalStorage' )
 class BlogPostViewTests( TestCase ):
 	
 	def testPublishedBlogPost( self ):
