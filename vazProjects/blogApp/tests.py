@@ -6,13 +6,10 @@
 
 
 
-from base64 import b64decode
 from unittest.mock import patch
 
-from django.test import TestCase, Client, override_settings
+from django.test import TestCase, Client
 from django.urls import reverse
-from django.conf import settings
-from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib.auth import get_user_model
 
 from .models import BlogPost
@@ -27,19 +24,6 @@ class TestUtils():
 	
 	
 	@classmethod
-	def testImage( cls ):
-		'''
-		Return a instance of SimpleUploadedFile containing a 2px x 2px JPG image.
-		'''
-		
-		return SimpleUploadedFile(
-			'test-image.png',
-			b64decode( 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=' ),
-		)
-	
-	
-	@classmethod
-	@override_settings( MEDIA_ROOT = settings.TESTS_MEDIA_ROOT )
 	def createPost( cls, **kwargs ):
 		'''
 		Create a test post and return it. Images and a slug are supplied to properly render templates.
@@ -49,7 +33,6 @@ class TestUtils():
 			'slug': cls.postSlug,
 			'title': cls.postTitle,
 			'author': get_user_model().objects.get_or_create()[0],
-			'banner_original': cls.testImage(),
 		}
 		defaults.update( kwargs )
 		
@@ -57,7 +40,6 @@ class TestUtils():
 
 
 
-@override_settings( MEDIA_ROOT = settings.TESTS_MEDIA_ROOT )
 class BlogViewTests( TestCase ):
 	
 	@patch( 'blogApp.models.getDisqusCommentCount', autospec = True, return_value = 0 )
@@ -88,7 +70,6 @@ class BlogViewTests( TestCase ):
 
 
 
-@override_settings( MEDIA_ROOT = settings.TESTS_MEDIA_ROOT )
 class BlogPostViewTests( TestCase ):
 	
 	def testPublishedBlogPost( self ):
