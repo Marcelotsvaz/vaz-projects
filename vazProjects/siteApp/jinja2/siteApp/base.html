@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="{{ request.LANGUAGE_CODE }}">
+<html lang="{% block language %}{{ request.LANGUAGE_CODE }}{% endblock %}">
 	<head>
 		{# CSS #}
 		<link rel="stylesheet" href="{{ static( 'commonApp/css/normalize-8.0.1.css' ) }}"/>

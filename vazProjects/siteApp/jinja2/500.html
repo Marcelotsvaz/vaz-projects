@@ -2,6 +2,8 @@
 
 
 
+{% block language %}{{ settings.LANGUAGE_CODE }}{% endblock %}
+
 {% block pageName %}error{% endblock %}
 {% block title %}{{ _('500 Internal Server Error') }} | {{ super() }}{% endblock %}
 
