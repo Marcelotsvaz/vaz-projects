@@ -8,7 +8,7 @@
 
 from unittest.mock import patch
 
-from django.test import TestCase, Client, override_settings
+from django.test import TestCase, Client
 from django.urls import reverse
 from django.db.models import Max
 from django.contrib.auth import get_user_model
@@ -150,7 +150,6 @@ class ProjectModelTests( TestCase ):
 
 
 
-@override_settings( DEFAULT_FILE_STORAGE = 'commonApp.backends.OverwriteLocalStorage' )
 class ProjectsViewTests( TestCase ):
 	
 	@patch( 'projectsApp.models.getDisqusCommentCount', autospec = True, return_value = 0 )
@@ -181,7 +180,6 @@ class ProjectsViewTests( TestCase ):
 
 
 
-@override_settings( DEFAULT_FILE_STORAGE = 'commonApp.backends.OverwriteLocalStorage' )
 class ProjectViewTests( TestCase ):
 	
 	def testPublishedProject( self ):

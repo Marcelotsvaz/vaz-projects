@@ -37,7 +37,6 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'deployment/media/'
-TESTS_MEDIA_ROOT = MEDIA_ROOT / 'tests/'
 
 
 # Apps

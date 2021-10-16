@@ -27,6 +27,7 @@
 			"args": [
 				"test",
 				"vazProjects",
+				"--pattern=tests.py",
 			],
 		},
 		{
