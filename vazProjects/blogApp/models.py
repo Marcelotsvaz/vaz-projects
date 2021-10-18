@@ -64,7 +64,7 @@ class BlogPost( models.Model ):
 	posted				= DateTimeField(	_('posted'), default = timezone.now )
 	last_edited			= DateTimeField(	_('last edited'), auto_now = True  )
 	
-	tags				= TaggableManager()
+	tags				= TaggableManager(	_('tags') )
 	
 	
 	class Meta:
