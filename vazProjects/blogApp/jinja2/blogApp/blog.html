@@ -66,9 +66,21 @@
 
 
 {% block sidebar %}
-	<h3>{{ _('Search') }}</h3>
+	<section>
+		<h3>{{ _('Search') }}</h3>
+	</section>
 	
-	<h3>{{ _('Posts by date') }}</h3>
+	<section>
+		<h3>{{ _('Posts by date') }}</h3>
+	</section>
 	
-	<h3>{{ _('Tags') }}</h3>
+	<section>
+		<h3>{{ _('Tags') }}</h3>
+		
+		<ul>
+			{% for tag in tags %}
+				<li><a href="" rel="tag">{{ tag.name }}</a></li>
+			{% endfor %}
+		</ul>
+	</section>
 {% endblock %}

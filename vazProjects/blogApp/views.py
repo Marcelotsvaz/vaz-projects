@@ -8,6 +8,8 @@
 
 from django.views.generic import ListView, DetailView
 
+from taggit.models import TaggedItem
+
 from .models import BlogPost
 
 
@@ -25,6 +27,13 @@ class Blog( ListView ):
 	
 	def get_queryset( self ):
 		return super().get_queryset().filter( draft = False )
+	
+	def get_context_data( self, **kwargs ):
+		context = super().get_context_data( **kwargs )
+		
+		context['tags'] = TaggedItem.tags_for( BlogPost, blogpost__draft = False )
+		
+		return context
 
 
 class Post( DetailView ):
@@ -37,7 +46,7 @@ class Post( DetailView ):
 	context_object_name = 'post'
 	
 	
-	def get_queryset(self):
+	def get_queryset( self ):
 		if self.request.user.is_staff:
 			return super().get_queryset().all()
 		else:
