@@ -23,6 +23,8 @@ from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 
+from taggit.managers import TaggableManager
+
 from commonApp.fields import MarkdownField
 from commonApp.models import getUploadFolder, UserImage
 from commonApp.misc import getDisqusCommentCount
@@ -61,6 +63,8 @@ class BlogPost( models.Model ):
 	draft				= BooleanField(		_('draft'), default = True )
 	posted				= DateTimeField(	_('posted'), default = timezone.now )
 	last_edited			= DateTimeField(	_('last edited'), auto_now = True  )
+	
+	tags				= TaggableManager()
 	
 	
 	class Meta:

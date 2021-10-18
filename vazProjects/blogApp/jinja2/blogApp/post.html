@@ -27,6 +27,16 @@
 		{{ post.render_content() | safe }}
 	</article>
 	
+	{% if post.tags.all() %}
+		<section>
+			{{ _('Tags:') }}
+			
+			{% for tag in post.tags.all() -%}
+				<a href="" rel="tag">{{ tag.name }}</a>{% if not loop.last %}, {% endif %}
+			{%- endfor %}
+		</section>
+	{% endif %}
+	
 	{% if not post.draft %}
 		{{ comments.section( post.get_absolute_url(), self.title(), request.build_absolute_uri() ) }}
 	{% endif %}

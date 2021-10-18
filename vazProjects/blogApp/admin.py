@@ -45,6 +45,7 @@ class BlogPostAdmin( DjangoObjectActions, admin.ModelAdmin ):
 			'draft',
 			'posted',
 			'last_edited',
+			'tags',
 		)
 	}
 	

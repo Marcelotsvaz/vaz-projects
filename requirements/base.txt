@@ -7,6 +7,7 @@ django-compression-middleware==0.4.1
 django-imagekit==4.0.2
 django-object-actions==3.0.2
 django-storages==1.11.1
+django-taggit==1.5.1
 Jinja2==3.0.1
 markdown-it-py==1.1.0
 Pillow-SIMD==7.0.0.post3

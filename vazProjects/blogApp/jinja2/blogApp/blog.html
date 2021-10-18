@@ -19,17 +19,27 @@
 			<div>{{ post.render_content( beforeBreak = True ) | safe }}</div>
 			
 			<footer>
-				<span>
+				{% if post.tags.all() %}
+					<div class="tags">
+						{{ _('Tags:') }}
+						
+						{% for tag in post.tags.all() -%}
+							<a href="" rel="tag">{{ tag.name }}</a>{% if not loop.last %}, {% endif %}
+						{%- endfor %}
+					</div>
+				{% endif %}
+				
+				<div>
 					{% trans user = post.author.get_username(), isoTime = post.posted.isoformat(), date = post.posted.strftime( '%B %-d, %Y' ) %}
 						by {{ user }} on <time datetime="{{ isoTime }}">{{ date }}</time>
 					{% endtrans %}
-				</span>
+				</div>
 				
-				<span>
+				<div>
 					<a href="{{ post.get_absolute_url() }}#comments">
 						{{ ngettext( '{0} comment', '{0} comments', post.comment_count ).format( post.comment_count ) }}
 					</a>
-				</span>
+				</div>
 			</footer>
 		</article>
 	{% endfor %}
