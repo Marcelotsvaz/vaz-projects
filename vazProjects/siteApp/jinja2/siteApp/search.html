@@ -3,22 +3,23 @@
 
 
 {% block pageName %}blog{% endblock %}
-{% block title %}{{ _('Blog') }} | {{ super() }}{% endblock %}
+{% block title %}{{ _('Search') }} | {{ super() }}{% endblock %}
 
 
 
 {% block content %}
-	{% for post in posts %}
+	{% for result in results %}
 		<article>
-			<h2><a href="{{ post.get_absolute_url() }}">{{ post.title }}</a></h2>
+			<h2><a href="">{{ result.title }}</a></h2>
 			
-			<a href="{{ post.get_absolute_url() }}">
+			{# <a href="{{ post.get_absolute_url() }}">
 				<img src="{{ post.thumbnail.url }}" alt="{{ _('Thumbnail for post: {0}.').format( post.title ) }}"/>
-			</a>
+			</a> #}
 			
-			<div>{{ post.render_content( beforeBreak = True ) | safe }}</div>
+			{# <div>{{ post.render_content( beforeBreak = True ) | safe }}</div> #}
+			<div>{{ result.content | safe }}</div>
 			
-			<footer>
+			{# <footer>
 				{% if post.tags.all() %}
 					<div class="tags">
 						{{ _('Tags:') }}
@@ -40,14 +41,14 @@
 						{{ ngettext( '{0} comment', '{0} comments', post.comment_count ).format( post.comment_count ) }}
 					</a>
 				</div>
-			</footer>
+			</footer> #}
 		</article>
 	{% endfor %}
 	
 	<nav class="pagination">
 		<span>
-			{% if nextPageUrl %}
-				<a href="{{ nextPageUrl }}">{{ _('Older posts') }}</a>
+			{% if previousPageUrl %}
+				<a href="{{ previousPageUrl }}">{{ _('Previous page') }}</a>
 			{% endif %}
 		</span>
 		
@@ -56,8 +57,8 @@
 		</span>
 		
 		<span>
-			{% if previousPageUrl %}
-				<a href="{{ previousPageUrl }}">{{ _('Newer posts') }}</a>
+			{% if nextPageUrl %}
+				<a href="{{ nextPageUrl }}">{{ _('Next page') }}</a>
 			{% endif %}
 		</span>
 	</nav>
@@ -66,13 +67,5 @@
 
 
 {% block sidebar %}
-	<section>
-		<h3>{{ _('Tags') }}</h3>
-		
-		<ul>
-			{% for tag in allTags %}
-				<li><a href="{{ url( 'blogApp:blog', kwargs = { 'tag_slug': tag.slug } ) }}" rel="tag">{{ tag.name }}</a></li>
-			{% endfor %}
-		</ul>
-	</section>
+
 {% endblock %}

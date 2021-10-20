@@ -36,16 +36,22 @@ class Blog( ListView ):
 		context['allTags'] = TaggedItem.tags_for( BlogPost, blogpost__draft = False )
 		
 		# Pagination.
-		if context['page_obj'].has_next():
-			urlKwargs = { 'page': context['page_obj'].next_page_number(), **self.get_url_kwargs() }
-			
-			context['nextPageUrl'] = reverse( 'blogApp:blog', kwargs = urlKwargs )
-		
 		if context['page_obj'].has_previous():
-			urlKwargs = { 'page': context['page_obj'].previous_page_number(), **self.get_url_kwargs() }
+			urlKwargs = {
+				'page': context['page_obj'].previous_page_number(),
+				**self.get_url_kwargs(),
+			}
 			
 			context['previousPageUrl'] = reverse( 'blogApp:blog', kwargs = urlKwargs )
 		
+		if context['page_obj'].has_next():
+			urlKwargs = {
+				'page': context['page_obj'].next_page_number(),
+				**self.get_url_kwargs(),
+			}
+			
+			context['nextPageUrl'] = reverse( 'blogApp:blog', kwargs = urlKwargs )
+			
 		return context
 	
 	def get_url_kwargs( self ):

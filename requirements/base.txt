@@ -4,6 +4,7 @@ Django==3.2.6
 django-3-jet==1.0.8
 django-cleanup==5.2.0
 django-compression-middleware==0.4.1
+django-elasticsearch-dsl==7.2.0
 django-imagekit==4.0.2
 django-object-actions==3.0.2
 django-storages==1.11.1
@@ -21,6 +22,8 @@ Brotli==1.0.9
 certifi==2021.10.8
 charset-normalizer==2.0.6
 django-appconf==1.0.4
+elasticsearch==7.15.1
+elasticsearch-dsl==7.4.0
 idna==3.2
 jmespath==0.10.0
 MarkupSafe==2.0.1

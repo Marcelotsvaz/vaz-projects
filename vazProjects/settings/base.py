@@ -67,22 +67,6 @@ SERVER_EMAIL = 'UTL Server <server@utlturismo.com.br>'
 ADMINS = [ ( 'Marcelo Vaz', 'marcelotsvaz@gmail.com' ) ]
 
 
-# django-imagekit
-#---------------------------------------
-IMAGEKIT_CACHEFILE_DIR = 'cache'
-IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY = 'commonApp.misc.Optimistic'
-IMAGEKIT_SPEC_CACHEFILE_NAMER = 'imagekit.cachefiles.namers.source_name_dot_hash'
-IMAGE_OPTIONS = {
-	'JPEG': {
-		'optimize': True,
-		'quality': 95,
-		'progressive': True,
-	},
-	'PNG': {
-		'optimize': True,
-	},
-}
-
 
 # Apps
 #---------------------------------------
@@ -101,6 +85,7 @@ INSTALLED_APPS = [
 	'projectsApp.apps.projectsAppConfig',
 	'blogApp.apps.blogAppConfig',
 	'taggit',
+	'django_elasticsearch_dsl',
 	'django_cleanup.apps.CleanupConfig',
 	'django_object_actions',
 ]
@@ -158,6 +143,32 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# django-imagekit
+#---------------------------------------
+IMAGEKIT_CACHEFILE_DIR = 'cache'
+IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY = 'commonApp.misc.Optimistic'
+IMAGEKIT_SPEC_CACHEFILE_NAMER = 'imagekit.cachefiles.namers.source_name_dot_hash'
+IMAGE_OPTIONS = {
+	'JPEG': {
+		'optimize': True,
+		'quality': 95,
+		'progressive': True,
+	},
+	'PNG': {
+		'optimize': True,
+	},
+}
+
+
 # Disqus
 #---------------------------------------
 DISQUS_API_KEY = 'a5pgeL0uQcBBwVusQO1HM4GIx1P1MdCNeqkamBAVuBLnuT0scmmmtrDiQxKdrJoG'
+
+
+# Django Elasticsearch DSL
+#---------------------------------------
+ELASTICSEARCH_DSL = {
+	'default': {
+		'hosts': 'localhost:9200'
+	},
+}
