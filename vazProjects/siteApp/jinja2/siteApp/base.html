@@ -64,7 +64,7 @@
 				<section class="search">
 					<h3>{{ _('Search') }}</h3>
 					
-					<form class="searchForm" action="{{ url( 'siteApp:search' ) }}">
+					<form class="searchForm" role="search" action="{{ url( 'siteApp:search' ) }}">
 						<input type="search" name="query" placeholder="{{ _('Search the site...') }}" value="{% block searchQuery %}{% endblock %}">
 						<input type="submit" value="{{ _('Search') }}">
 					</form>
