@@ -10,7 +10,7 @@ from django.views.generic import TemplateView, ListView
 from django.urls import reverse
 from django.utils.http import urlencode
 
-from blogApp.search import BlogPostDocument
+from django_elasticsearch_dsl.search import Search as DslSearch
 
 
 
@@ -46,7 +46,7 @@ class Search( ListView ):
 		return super().setup( request, *args, **kwargs )
 	
 	def get_queryset( self ):
-		return BlogPostDocument.search().query(
+		return DslSearch().query(
 			'multi_match',
 			query = self.searchQuery,
 			fields = [ 'title', 'content' ],

@@ -16,7 +16,9 @@ from .models import BlogPost
 @registry.register_document
 class BlogPostDocument( Document ):
 	
+	title = fields.TextField( attr = 'title' )
 	content = fields.TextField( attr = 'render_content' )
+	url = fields.TextField( attr = 'get_absolute_url' )
 	
 	
 	class Index:
@@ -24,9 +26,6 @@ class BlogPostDocument( Document ):
 	
 	class Django:
 		model = BlogPost
-		fields = [
-			'title',
-		]
 	
 	
 	def get_queryset( self ):

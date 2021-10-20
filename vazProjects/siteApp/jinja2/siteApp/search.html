@@ -15,7 +15,7 @@
 	{% if results %}
 		{% for result in results %}
 			<article>
-				<h2><a href="">{{ result.title }}</a></h2>
+				<h2><a href="{{ result.url }}">{{ result.title }}</a></h2>
 				
 				<div>{{ result.content | safe }}</div>
 			</article>
