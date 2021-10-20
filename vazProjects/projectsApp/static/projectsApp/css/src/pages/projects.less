@@ -6,33 +6,30 @@
 
 
 
-.projects
+.projects > main.content article
 {
-	article
+	display: grid;
+	grid:
+			"thumbnail	title		title"			auto
+			"thumbnail	description	description"	1fr
+			"thumbnail	date		comments"		auto
+		/	auto		1fr			auto;
+	gap: 10px;
+	
+	> * { margin: 0px; }
+	
+	img
 	{
-		display: grid;
-		grid:
-				"thumbnail	title		title"			auto
-				"thumbnail	description	description"	1fr
-				"thumbnail	date		comments"		auto
-			/	auto		1fr			auto;
-		gap: 10px;
+		grid-area: thumbnail;
 		
-		> * { margin: 0px; }
-		
-		img
-		{
-			grid-area: thumbnail;
-			
-			border: 1px solid black;
-			width: 200px;
-			height: 125px;
-		}
-		
-		h3 { grid-area: title; }
-		
-		p { grid-area: description; }
-		
-		span { font-size: smaller; }
+		border: 1px solid black;
+		width: 200px;
+		height: 125px;
 	}
+	
+	h3 { grid-area: title; }
+	
+	p { grid-area: description; }
+	
+	span { font-size: smaller; }
 }

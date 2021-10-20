@@ -2,7 +2,7 @@
 
 
 
-{% block pageName %}blog{% endblock %}
+{% block pageName %}search{% endblock %}
 {% block title %}{{ _('Search') }} | {{ super() }}{% endblock %}
 
 
@@ -12,15 +12,6 @@
 
 
 {% block content %}
-	<header>
-		<h1>{{ _('Search') }}</h1>
-		
-		<form action="{{ url( 'siteApp:search' ) }}">
-			<input type="text" name="query" value="{{ searchQuery }}">
-			<input type="submit" value="{{ _('Search') }}">
-		</form>
-	</header>
-	
 	{% if results %}
 		{% for result in results %}
 			<article>
@@ -48,7 +39,7 @@
 			</span>
 		</nav>
 	{% else %}
-		<p>{{ _('Your search returned no results, maybe try some different keywords.') }}</p>
+		<p class="noResults">{{ _('Your search returned no results, maybe try some different keywords.') }}</p>
 	{% endif %}
 {% endblock %}
 

@@ -6,49 +6,29 @@
 
 
 
-.blog
+.blog > main.content article
 {
-	> main.content > article
+	img
 	{
-		img
-		{
-			display: block;
-			
-			width: calc( 100% - 10px * 2 );
-			margin: 10px;
-		}
+		display: block;
 		
-		p { text-align: justify; }
-		
-		footer
-		{
-			display: flex;
-			justify-content: space-between;
-			flex-wrap: wrap;
-			
-			margin-top: 15px;
-			
-			font-size: smaller;
-			line-height: 1.5;
-			
-			.tags { flex-basis: 100%; }
-		}
+		width: calc( 100% - 10px * 2 );
+		margin: 10px;
 	}
 	
-	> main.content > nav.pagination
+	p { text-align: justify; }
+	
+	footer
 	{
 		display: flex;
+		justify-content: space-between;
+		flex-wrap: wrap;
 		
-		font-weight: bold;
+		margin-top: 15px;
 		
-		span
-		{
-			flex-basis: 0;
-			flex-grow: 1;
-			
-			&:nth-child( 2 ) { text-align: center; }
-			
-			&:last-child { text-align: right; }
-		}
+		font-size: smaller;
+		line-height: 1.5;
+		
+		.tags { flex-basis: 100%; }
 	}
 }
