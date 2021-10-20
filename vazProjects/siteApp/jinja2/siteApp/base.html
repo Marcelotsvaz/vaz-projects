@@ -61,6 +61,15 @@
 		
 		{% if self.sidebar() %}
 			<nav class="sidebar">
+				<section>
+					<h3>{{ _('Search') }}</h3>
+					
+					<form action="{{ url( 'siteApp:search' ) }}">
+						<input type="text" name="query" value="{% block searchQuery %}{% endblock %}">
+						<input type="submit" value="{{ _('Search') }}">
+					</form>
+				</section>
+				
 				{% block sidebar %}{% endblock %}
 			</nav>
 		{% endif %}

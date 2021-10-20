@@ -7,61 +7,49 @@
 
 
 
+{% block searchQuery %}{{ searchQuery }}{% endblock %}
+
+
+
 {% block content %}
-	{% for result in results %}
-		<article>
-			<h2><a href="">{{ result.title }}</a></h2>
-			
-			{# <a href="{{ post.get_absolute_url() }}">
-				<img src="{{ post.thumbnail.url }}" alt="{{ _('Thumbnail for post: {0}.').format( post.title ) }}"/>
-			</a> #}
-			
-			{# <div>{{ post.render_content( beforeBreak = True ) | safe }}</div> #}
-			<div>{{ result.content | safe }}</div>
-			
-			{# <footer>
-				{% if post.tags.all() %}
-					<div class="tags">
-						{{ _('Tags:') }}
-						
-						{% for tag in post.tags.all() -%}
-							<a href="{{ url( 'blogApp:blog', kwargs = { 'tag_slug': tag.slug } ) }}" rel="tag">{{ tag.name }}</a>{% if not loop.last %}, {% endif %}
-						{%- endfor %}
-					</div>
-				{% endif %}
-				
-				<div>
-					{% trans user = post.author.get_username(), isoTime = post.posted.isoformat(), date = post.posted.strftime( '%B %-d, %Y' ) %}
-						by {{ user }} on <time datetime="{{ isoTime }}">{{ date }}</time>
-					{% endtrans %}
-				</div>
-				
-				<div>
-					<a href="{{ post.get_absolute_url() }}#comments">
-						{{ ngettext( '{0} comment', '{0} comments', post.comment_count ).format( post.comment_count ) }}
-					</a>
-				</div>
-			</footer> #}
-		</article>
-	{% endfor %}
+	<header>
+		<h1>{{ _('Search') }}</h1>
+		
+		<form action="{{ url( 'siteApp:search' ) }}">
+			<input type="text" name="query" value="{{ searchQuery }}">
+			<input type="submit" value="{{ _('Search') }}">
+		</form>
+	</header>
 	
-	<nav class="pagination">
-		<span>
-			{% if previousPageUrl %}
-				<a href="{{ previousPageUrl }}">{{ _('Previous page') }}</a>
-			{% endif %}
-		</span>
+	{% if results %}
+		{% for result in results %}
+			<article>
+				<h2><a href="">{{ result.title }}</a></h2>
+				
+				<div>{{ result.content | safe }}</div>
+			</article>
+		{% endfor %}
 		
-		<span>
-			{{ _('Page {0} of {1}').format( page_obj.number, paginator.num_pages ) }}
-		</span>
-		
-		<span>
-			{% if nextPageUrl %}
-				<a href="{{ nextPageUrl }}">{{ _('Next page') }}</a>
-			{% endif %}
-		</span>
-	</nav>
+		<nav class="pagination">
+			<span>
+				{% if previousPageUrl %}
+					<a href="{{ previousPageUrl }}">{{ _('Previous page') }}</a>
+				{% endif %}
+			</span>
+			
+			<span>
+				{{ _('Page {0} of {1}').format( page_obj.number, paginator.num_pages ) }}
+			</span>
+			
+			<span>
+				{% if nextPageUrl %}
+					<a href="{{ nextPageUrl }}">{{ _('Next page') }}</a>
+				{% endif %}
+			</span>
+		</nav>
+	{% else %}
+		<p>{{ _('Your search returned no results, maybe try some different keywords.') }}</p>
+	{% endif %}
 {% endblock %}
 
 

@@ -8,6 +8,7 @@
 
 from django.views.generic import TemplateView, ListView
 from django.urls import reverse
+from django.utils.http import urlencode
 
 from blogApp.search import BlogPostDocument
 
@@ -39,35 +40,36 @@ class Search( ListView ):
 	context_object_name = 'results'
 	
 	
+	def setup( self, request, *args, **kwargs ):
+		self.searchQuery = request.GET.get( 'query', '' )
+		
+		return super().setup( request, *args, **kwargs )
+	
 	def get_queryset( self ):
-		results = BlogPostDocument.search().query(
+		return BlogPostDocument.search().query(
 			'multi_match',
-			query = self.kwargs['query'],
+			query = self.searchQuery,
 			fields = [ 'title', 'content' ],
 			fuzziness = 2
-		)
-		
-		return results
+		).execute()
 	
 	def get_context_data( self, **kwargs ):
 		context = super().get_context_data( **kwargs )
 		
+		context['searchQuery'] = self.searchQuery
+		
 		# Pagination.
 		if context['page_obj'].has_previous():
-			urlKwargs = {
-				'query': self.kwargs['query'],
-				'page': context['page_obj'].previous_page_number(),
-			}
-						
-			context['previousPageUrl'] = reverse( 'siteApp:search', kwargs = urlKwargs )
+			url = reverse( 'siteApp:search', kwargs = { 'page': context['page_obj'].previous_page_number() } )
+			queryString = urlencode( { 'query': self.searchQuery } )
+			
+			context['previousPageUrl'] = f'{url}?{queryString}'
 		
 		if context['page_obj'].has_next():
-			urlKwargs = {
-				'query': self.kwargs['query'],
-				'page': context['page_obj'].next_page_number(),
-			}
+			url = reverse( 'siteApp:search', kwargs = { 'page': context['page_obj'].next_page_number() } )
+			queryString = urlencode( { 'query': self.searchQuery } )
 			
-			context['nextPageUrl'] = reverse( 'siteApp:search', kwargs = urlKwargs )
+			context['nextPageUrl'] = f'{url}?{queryString}'
 		
 		return context
 
