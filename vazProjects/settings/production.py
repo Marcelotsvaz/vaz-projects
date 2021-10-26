@@ -65,3 +65,8 @@ CACHE_MIDDLEWARE_SECONDS = CACHES['default']['TIMEOUT']
 # Disqus
 #---------------------------------------
 DISQUS_SHORTNAME = 'vazprojects'
+
+
+# Django Elasticsearch DSL
+#---------------------------------------
+ELASTICSEARCH_DSL['default']['hosts'] = 'elasticsearch:9200'
