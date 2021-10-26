@@ -38,12 +38,10 @@ test:
         name: staging
         action: prepare
     
-    variables:
-        discovery.type: single-node # For Elasticsearch.
-    
     services:
         - memcached:1.6.10-buster
-        - elasticsearch:7.14.2
+        - name: elasticsearch:7.14.2
+          command: [ 'elasticsearch', '-E discovery.type=single-node' ]
     
     script:
         - apt-get install --yes --no-install-recommends --quiet libmemcached-dev
