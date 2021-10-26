@@ -6,6 +6,8 @@
 
 
 
+from django.utils.translation import gettext_lazy as _
+
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 
@@ -16,9 +18,9 @@ from .models import BlogPost
 @registry.register_document
 class BlogPostDocument( Document ):
 	
-	title = fields.TextField( attr = 'title' )
-	content = fields.TextField( attr = 'render_content' )
-	url = fields.TextField( attr = 'get_absolute_url' )
+	title		= fields.TextField( attr = 'title' )
+	content		= fields.TextField( attr = 'render_content' )
+	url			= fields.TextField( attr = 'get_absolute_url', index = False )
 	
 	
 	class Index:
@@ -30,3 +32,19 @@ class BlogPostDocument( Document ):
 	
 	def get_queryset( self ):
 		return super().get_queryset().filter( draft = False )
+	
+	@property
+	def resultTitle( self ):
+		return self.title
+	
+	@property
+	def resultLocation( self ):
+		return _('found in blog')
+	
+	@property
+	def resultUrl( self ):
+		return self.url
+	
+	@property
+	def resultDescription( self ):
+		return self.content

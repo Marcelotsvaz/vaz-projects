@@ -12,6 +12,9 @@ from django.utils.http import urlencode
 
 from django_elasticsearch_dsl.search import Search as DslSearch
 
+from blogApp.documents import BlogPostDocument
+from projectsApp.documents import ProjectDocument, PageDocument
+
 
 
 class Home( TemplateView ):
@@ -46,10 +49,15 @@ class Search( ListView ):
 		return super().setup( request, *args, **kwargs )
 	
 	def get_queryset( self ):
-		return DslSearch().query(
+		docTypes = [
+			ProjectDocument,
+			PageDocument,
+			BlogPostDocument,
+		]
+		
+		return DslSearch( doc_type = docTypes ).query(
 			'multi_match',
 			query = self.searchQuery,
-			fields = [ 'title', 'content' ],
 			fuzziness = 2
 		).execute()
 	
