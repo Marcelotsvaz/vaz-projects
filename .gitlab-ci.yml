@@ -38,6 +38,9 @@ test:
         name: staging
         action: prepare
     
+    variables:
+        discovery.type: single-node # For Elasticsearch.
+    
     services:
         - memcached:1.6.10-buster
         - elasticsearch:7.14.2
