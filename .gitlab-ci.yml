@@ -38,10 +38,13 @@ test:
         name: staging
         action: prepare
     
+    variables:
+        ES_JAVA_OPTS: '-Xms128m -Xmx128m'   # TODO: Move to services after GitLab update.
+    
     services:
         - memcached:1.6.10-buster
         - name: elasticsearch:7.14.2
-          command: [ 'elasticsearch', '-E discovery.type=single-node' ]
+          command: [ 'elasticsearch', '-Ediscovery.type=single-node' ]
     
     script:
         - apt-get install --yes --no-install-recommends --quiet libmemcached-dev
