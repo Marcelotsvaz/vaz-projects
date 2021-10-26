@@ -40,6 +40,7 @@ test:
     
     services:
         - memcached:1.6.10-buster
+        - elasticsearch:7.14.2
     
     script:
         - apt-get install --yes --no-install-recommends --quiet libmemcached-dev
