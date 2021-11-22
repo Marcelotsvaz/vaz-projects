@@ -9,6 +9,7 @@
 
 include=$(find vazProjects/*App/static/*App/css/src/ -prune)
 lessc														\
+	--no-color												\
 	--source-map											\
 	--include-path="${include///[[:space:]]//:}"			\
 	vazProjects/siteApp/static/siteApp/css/src/siteApp.less	\
