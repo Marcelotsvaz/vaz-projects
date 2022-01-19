@@ -18,7 +18,7 @@ mountPoint=/mnt/new
 
 # Create Volume
 #---------------------------------------
-volumeID=$(aws ec2 create-volume --size 2 --availability-zone $availabilityZone --query 'VolumeId')
+volumeID=$(aws ec2 create-volume --size 3 --availability-zone $availabilityZone --volume-type gp3 --no-encrypted --query 'VolumeId')
 aws ec2 wait volume-available --volume-ids $volumeID
 aws ec2 attach-volume --volume-id $volumeID --instance-id $instanceID --device /dev/sdf
 aws ec2 wait volume-in-use --volume-ids $volumeID
@@ -44,7 +44,7 @@ pacstrap -c $mountPoint \
 base linux grub \
 openssh sudo aws-cli gdisk \
 man-db nano tmux mercurial \
-nginx memcached dovecot postfix dehydrated \
+nginx memcached chromium dovecot postfix dehydrated \
 gcc libjpeg-turbo libmemcached
 
 # Fstab
@@ -298,4 +298,4 @@ aws ec2 register-image \
 --virtualization-type hvm \
 --ena-support \
 --root-device-name /dev/xvda \
---block-device-mappings '[{"DeviceName": "/dev/xvda","Ebs":{"SnapshotId":"'$snapshotID'"}}]'
+--block-device-mappings '[{"DeviceName": "/dev/xvda","Ebs":{"SnapshotId":"'$snapshotID'","VolumeType":"gp3"}}]'
