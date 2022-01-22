@@ -8,6 +8,7 @@
 
 stages:
     - test
+    - upload
     - deploy
 
 
@@ -20,6 +21,8 @@ default:
     
     before_script:
         - set -a; source server/scripts/${CI_ENVIRONMENT_TIER}.sh; set +a
+        - curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add -
+        - apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
         - apt-get update
 
 
@@ -59,7 +62,7 @@ test:
 
 
 uploadFiles:
-    stage: deploy
+    stage: upload
     
     environment:
         name: staging
