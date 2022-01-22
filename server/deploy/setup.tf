@@ -1,0 +1,36 @@
+#
+# VAZ Projects
+#
+#
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+terraform {
+	required_providers {
+		aws = {
+			source = "hashicorp/aws"
+			version = "~> 3.27"
+		}
+	}
+	
+	backend "http" {
+		lock_method = "POST"
+		unlock_method = "DELETE"
+		retry_wait_min = 5
+	}
+	
+	required_version = ">= 0.14.9"
+}
+
+
+provider "aws" {
+	region = "sa-east-1"
+	
+	default_tags {
+		tags = {
+			Project = "VAZ Projects"
+			Environment = var.environment
+		}
+	}
+}

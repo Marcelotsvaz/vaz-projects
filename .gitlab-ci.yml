@@ -18,10 +18,6 @@ variables:
 default:
     image: python:3.9.6-bullseye
     
-    cache:
-        paths:
-            - .cache/pip/
-    
     before_script:
         - set -a; source server/scripts/${CI_ENVIRONMENT_TIER}.sh; set +a
         - apt-get update
@@ -46,6 +42,10 @@ test:
         - name: elasticsearch:7.14.2
           command: [ 'elasticsearch', '-Ediscovery.type=single-node' ]
     
+    cache:
+        paths:
+            - .cache/pip/
+    
     script:
         - apt-get install --yes --no-install-recommends --quiet libmemcached-dev
         - pip install -r requirements/${environment}.txt
@@ -58,6 +58,25 @@ test:
             cobertura: deployment/coverage.xml
 
 
+uploadFiles:
+    stage: deploy
+    
+    environment:
+        name: staging
+        action: prepare
+    
+    cache:
+        paths:
+            - .cache/pip/
+    
+    script:
+        - apt-get install --yes --no-install-recommends --quiet libmemcached-dev npm awscli
+        - npm install --global less
+        - pip install -r requirements/${environment}.txt
+        - mkdir -p deployment; cp ${DJANGO_SECRETS_FILE} deployment/secrets.py
+        - server/scripts/deploy.sh ${environment} uploadFiles
+
+
 launchInstance:
     stage: deploy
     
@@ -66,13 +85,19 @@ launchInstance:
         action: start
         on_stop: terminateInstance
     
+    cache:
+        paths:
+            - deployment/terraform/
+    
     script:
-        - apt-get install --yes --no-install-recommends --quiet libmemcached-dev npm awscli
-        - npm install --global less
-        - pip install -r requirements/${environment}.txt
-        - mkdir -p deployment; cp ${DJANGO_SECRETS_FILE} deployment/secrets.py
-        - server/scripts/deploy.sh ${environment} terminateInstance
-        - server/scripts/deploy.sh ${environment} uploadFiles
+        - apt-get install --yes --no-install-recommends --quiet terraform
+        - terraformUrl="${GITLAB_API_URL}/projects/${PROJECT_ID}/terraform/state/${environment}"
+        - terraform -chdir=server/deploy init                       \
+        -     -backend-config="address=${terraformUrl}"             \
+        -     -backend-config="lock_address=${terraformUrl}/lock"   \
+        -     -backend-config="unlock_address=${terraformUrl}/lock" \
+        -     -backend-config="username=gitlab-ci-token"            \
+        -     -backend-config="password=${CI_JOB_TOKEN}"
         - server/scripts/deploy.sh ${environment} launchInstance
 
 
@@ -87,6 +112,10 @@ terminateInstance:
         - when: manual
           allow_failure: true
     
+    cache:
+        paths:
+            - deployment/terraform/
+    
     script:
-        - apt-get install --yes --no-install-recommends --quiet awscli
+        - apt-get install --yes --no-install-recommends --quiet terraform
         - server/scripts/deploy.sh ${environment} terminateInstance

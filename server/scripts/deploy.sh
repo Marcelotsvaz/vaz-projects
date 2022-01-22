@@ -31,42 +31,17 @@ if [[ ${2} = 'uploadFiles' ]]; then
 	
 	# Invalidade static files cache.
 	aws cloudfront create-invalidation --distribution-id ${cloudfrontId} --paths '/*'
-	
-	
 elif [[ ${2} = 'launchInstance' ]]; then
-	# Get latest AMI.
-	imageId=$(aws ec2 describe-images --filters 'Name=name,Values=Arch Linux AMI' --query 'Images[0].ImageId' --output text)
+	userData=$(cd server/scripts/ && tar -cz per*.sh ${environment}.sh --transform="s/${environment}.sh/environment.sh/" | base64 -w 0 | base64 -w 0)
 	
-	# TODO: Select region on launch.
-	# TODO: Select instance type on launch.
-	# Launch spot instance from template.
-	userData=$(cd server/scripts/ && tar -cz per*.sh ${environment}.sh --transform="s/${environment}.sh/environment.sh/" | base64 -w 0)
-	aws ec2 run-instances											\
-		--cli-input-json file://server/scripts/${environment}.json	\
-		--user-data ${userData}										\
-		--image-id ${imageId}
-	
-	
+	terraform -chdir=server/deploy apply	\
+		-auto-approve						\
+		-var="environment=${environment}"	\
+		-var="user_data=${userData}"
 elif [[ ${2} = 'terminateInstance' ]]; then
-	# Cancel spot instance request.
-	requestIds=$(aws ec2 describe-instances								\
-		--filter "Name=tag:Name, Values=${instanceName}"				\
-		'Name=instance-state-name, Values=running'						\
-		--query 'Reservations[*].Instances[*].SpotInstanceRequestId'	\
-		--output text)
-	if [[ ${requestIds} ]]; then
-		aws ec2 cancel-spot-instance-requests --spot-instance-request-ids ${requestIds}
-	fi
-	
-	# Cancel spot instance.
-	instanceIds=$(aws ec2 describe-instances				\
-		--filter "Name=tag:Name, Values=${instanceName}"	\
-		'Name=instance-state-name, Values=running'			\
-		--query 'Reservations[*].Instances[*].InstanceId'	\
-		--output text)
-	if [[ ${instanceIds} ]]; then
-		aws ec2 terminate-instances --instance-ids ${instanceIds}
-	fi
+	terraform -chdir=server/deploy destroy	\
+		-auto-approve						\
+		-var="environment=${environment}"
 else
 	exit -1
 fi
