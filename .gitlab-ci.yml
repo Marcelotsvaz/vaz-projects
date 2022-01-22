@@ -21,8 +21,6 @@ default:
     
     before_script:
         - set -a; source server/scripts/${CI_ENVIRONMENT_TIER}.sh; set +a
-        - curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add -
-        - apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
         - apt-get update
 
 
@@ -81,6 +79,8 @@ uploadFiles:
 
 
 launchInstance:
+    image: hashicorp/terraform:1.1.4
+    
     stage: deploy
     
     environment:
@@ -93,7 +93,6 @@ launchInstance:
             - deployment/terraform/
     
     script:
-        - apt-get install --yes --no-install-recommends --quiet terraform
         - terraformUrl="${GITLAB_API_URL}/projects/${PROJECT_ID}/terraform/state/${environment}"
         - terraform -chdir=server/deploy init                       \
         -     -backend-config="address=${terraformUrl}"             \
@@ -105,6 +104,8 @@ launchInstance:
 
 
 terminateInstance:
+    image: hashicorp/terraform:1.1.4
+    
     stage: deploy
     
     environment:
@@ -120,5 +121,4 @@ terminateInstance:
             - deployment/terraform/
     
     script:
-        - apt-get install --yes --no-install-recommends --quiet terraform
         - server/scripts/deploy.sh ${environment} terminateInstance
