@@ -94,13 +94,7 @@ launchInstance:
             - deployment/terraform/
     
     script:
-        - terraformUrl="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/terraform/state/${environment}"
-        - terraform -chdir=server/deploy init
-          -backend-config="address=${terraformUrl}"
-          -backend-config="lock_address=${terraformUrl}/lock"
-          -backend-config="unlock_address=${terraformUrl}/lock"
-          -backend-config="username=gitlab-ci-token"
-          -backend-config="password=${CI_JOB_TOKEN}"
+        - apk add --no-cache bash tar
         - server/scripts/deploy.sh ${environment} launchInstance
 
 
@@ -124,4 +118,5 @@ terminateInstance:
             - deployment/terraform/
     
     script:
+        - apk add --no-cache bash
         - server/scripts/deploy.sh ${environment} terminateInstance
