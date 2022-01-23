@@ -30,6 +30,7 @@ provider "aws" {
 	default_tags {
 		tags = {
 			Project = "VAZ Projects"
+			"Environment Name" = local.environmentName
 			Environment = var.environment
 		}
 	}

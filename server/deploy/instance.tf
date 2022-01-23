@@ -30,7 +30,7 @@ resource "aws_spot_instance_request" "app_server" {
 	
 	root_block_device { volume_size = 5 }
 	
-	tags = { Name = "VAZ Projects ${var.environment} Server Spot Request" }
+	tags = { Name = "VAZ Projects ${local.environmentName} Server Spot Request" }
 }
 
 
@@ -40,7 +40,7 @@ data "aws_default_tags" "current" {}
 resource "aws_ec2_tag" "app_server_tag" {
 	resource_id = aws_spot_instance_request.app_server.spot_instance_id
 	
-	for_each = merge( { Name = "VAZ Projects ${var.environment} Server" }, data.aws_default_tags.current.tags )
+	for_each = merge( { Name = "VAZ Projects ${local.environmentName} Server" }, data.aws_default_tags.current.tags )
 	key = each.key
 	value = each.value
 }
@@ -49,7 +49,7 @@ resource "aws_ec2_tag" "app_server_tag" {
 resource "aws_ec2_tag" "app_server_volume_tag" {
 	resource_id = aws_spot_instance_request.app_server.root_block_device.0.volume_id
 	
-	for_each = merge( { Name = "VAZ Projects ${var.environment} Server Root" }, data.aws_default_tags.current.tags )
+	for_each = merge( { Name = "VAZ Projects ${local.environmentName} Server Root" }, data.aws_default_tags.current.tags )
 	key = each.key
 	value = each.value
 }

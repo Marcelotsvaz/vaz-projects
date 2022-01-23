@@ -17,3 +17,9 @@ variable "user_data" {
 	description = "EC2 user data (base64 encoded)."
 	default = ""
 }
+
+
+
+locals {
+	environmentName = title( var.environment )
+}
