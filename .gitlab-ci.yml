@@ -94,7 +94,7 @@ launchInstance:
             - deployment/terraform/
     
     script:
-        - terraformUrl="${GITLAB_API_URL}/projects/${PROJECT_ID}/terraform/state/${environment}"
+        - terraformUrl="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/terraform/state/${environment}"
         - terraform -chdir=server/deploy init
           -backend-config="address=${terraformUrl}"
           -backend-config="lock_address=${terraformUrl}/lock"
