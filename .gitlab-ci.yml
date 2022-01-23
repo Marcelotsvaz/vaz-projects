@@ -79,7 +79,9 @@ uploadFiles:
 
 
 launchInstance:
-    image: hashicorp/terraform:1.1.4
+    image:
+        name: hashicorp/terraform:1.1.4
+        entrypoint: [ "" ]
     
     stage: deploy
     
@@ -104,7 +106,9 @@ launchInstance:
 
 
 terminateInstance:
-    image: hashicorp/terraform:1.1.4
+    image:
+        name: hashicorp/terraform:1.1.4
+        entrypoint: [ "" ]
     
     stage: deploy
     
