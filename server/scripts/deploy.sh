@@ -7,14 +7,14 @@
 
 
 
-# Activate Python virtual env, if there is one.
-source 'deployment/env/bin/activate'
-
 # Export variables, abort on error end echo commands.
 set -aex
 
+# Activate Python virtual env, if there is one.
+source 'deployment/env/bin/activate' || true
+
 # Load environment variables.
-source "deployment/local.sh"
+source "deployment/local.sh" || true
 source "server/scripts/${1}.sh"
 
 # Terraform variables.
