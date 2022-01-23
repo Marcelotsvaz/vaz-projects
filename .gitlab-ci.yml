@@ -95,12 +95,12 @@ launchInstance:
     
     script:
         - terraformUrl="${GITLAB_API_URL}/projects/${PROJECT_ID}/terraform/state/${environment}"
-        - terraform -chdir=server/deploy init                       \
-        -     -backend-config="address=${terraformUrl}"             \
-        -     -backend-config="lock_address=${terraformUrl}/lock"   \
-        -     -backend-config="unlock_address=${terraformUrl}/lock" \
-        -     -backend-config="username=gitlab-ci-token"            \
-        -     -backend-config="password=${CI_JOB_TOKEN}"
+        - terraform -chdir=server/deploy init
+          -backend-config="address=${terraformUrl}"
+          -backend-config="lock_address=${terraformUrl}/lock"
+          -backend-config="unlock_address=${terraformUrl}/lock
+          -backend-config="username=gitlab-ci-token"
+          -backend-config="password=${CI_JOB_TOKEN}"
         - server/scripts/deploy.sh ${environment} launchInstance
 
 
