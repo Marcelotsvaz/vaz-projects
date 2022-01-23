@@ -21,7 +21,6 @@ default:
     
     before_script:
         - set -a; source server/scripts/${CI_ENVIRONMENT_TIER}.sh; set +a
-        - apt-get update
 
 
 
@@ -48,7 +47,7 @@ test:
             - .cache/pip/
     
     script:
-        - apt-get install --yes --no-install-recommends --quiet libmemcached-dev
+        - apt-get update; apt-get install --yes --no-install-recommends --quiet libmemcached-dev
         - pip install -r requirements/${environment}.txt
         - mkdir -p deployment; cp ${DJANGO_SECRETS_FILE} deployment/secrets.py
         - coverage run vazProjects/manage.py test vazProjects --pattern='tests.py' --settings='settings.testing'
@@ -71,7 +70,7 @@ uploadFiles:
             - .cache/pip/
     
     script:
-        - apt-get install --yes --no-install-recommends --quiet libmemcached-dev npm awscli
+        - apt-get update; apt-get install --yes --no-install-recommends --quiet libmemcached-dev npm awscli
         - npm install --global less
         - pip install -r requirements/${environment}.txt
         - mkdir -p deployment; cp ${DJANGO_SECRETS_FILE} deployment/secrets.py
