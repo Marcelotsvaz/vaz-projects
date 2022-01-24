@@ -34,8 +34,12 @@
 			"id": "task",
 			"type": "pickString",
 			"description": "Select the operation",
-			"default": "",
+			"default": "launchInstance",
 			"options": [
+				{
+					"label": "Setup AWS",
+					"value": "setupAws"
+				},
 				{
 					"label": "Upload Files",
 					"value": "uploadFiles"
