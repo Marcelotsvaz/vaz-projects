@@ -34,13 +34,12 @@ test:
         name: staging
         action: prepare
     
-    variables:
-        ES_JAVA_OPTS: '-Xms128m -Xmx128m'   # TODO: Move to services after GitLab update.
-    
     services:
         - memcached:1.6.10-buster
         - name: elasticsearch:7.14.2
           command: [ 'elasticsearch', '-Ediscovery.type=single-node' ]
+          variables:
+              ES_JAVA_OPTS: '-Xms128m -Xmx128m'
     
     cache:
         paths:
