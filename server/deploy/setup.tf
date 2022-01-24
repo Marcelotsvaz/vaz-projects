@@ -27,11 +27,5 @@ terraform {
 provider "aws" {
 	region = "sa-east-1"
 	
-	default_tags {
-		tags = {
-			Project = "VAZ Projects"
-			"Environment Name" = local.environmentName
-			Environment = var.environment
-		}
-	}
+	default_tags { tags = local.default_tags }
 }

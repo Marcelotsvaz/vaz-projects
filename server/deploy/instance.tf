@@ -17,6 +17,11 @@ data "aws_ami" "arch_linux" {
 }
 
 
+locals {
+	app_server_root_volume_tags = merge( { Name = "VAZ Projects ${local.environmentName} Server Root" }, local.default_tags )
+}
+
+
 resource "aws_spot_instance_request" "app_server" {
 	ami = data.aws_ami.arch_linux.id
 	instance_type = "t3a.small"
@@ -28,28 +33,29 @@ resource "aws_spot_instance_request" "app_server" {
 	instance_interruption_behavior = "stop"
 	wait_for_fulfillment = true
 	
-	root_block_device { volume_size = 5 }
+	root_block_device {
+		volume_size = 5
+		
+		tags = local.app_server_root_volume_tags
+	}
 	
 	tags = { Name = "VAZ Projects ${local.environmentName} Server Spot Request" }
 }
 
 
-data "aws_default_tags" "current" {}
-
-
-resource "aws_ec2_tag" "app_server_tag" {
+resource "aws_ec2_tag" "app_server_tags" {
 	resource_id = aws_spot_instance_request.app_server.spot_instance_id
 	
-	for_each = merge( { Name = "VAZ Projects ${local.environmentName} Server" }, data.aws_default_tags.current.tags )
+	for_each = merge( { Name = "VAZ Projects ${local.environmentName} Server" }, local.default_tags )
 	key = each.key
 	value = each.value
 }
 
 
-resource "aws_ec2_tag" "app_server_volume_tag" {
+resource "aws_ec2_tag" "app_server_root_volume_tags" {
 	resource_id = aws_spot_instance_request.app_server.root_block_device.0.volume_id
 	
-	for_each = merge( { Name = "VAZ Projects ${local.environmentName} Server Root" }, data.aws_default_tags.current.tags )
+	for_each = local.app_server_root_volume_tags
 	key = each.key
 	value = each.value
 }

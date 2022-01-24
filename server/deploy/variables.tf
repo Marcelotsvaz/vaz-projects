@@ -22,4 +22,9 @@ variable "user_data" {
 
 locals {
 	environmentName = title( var.environment )
+	default_tags = {
+		Project = "VAZ Projects"
+		Environment = var.environment
+		"Environment Name" = local.environmentName
+	}
 }
