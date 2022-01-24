@@ -21,7 +21,7 @@ source "server/scripts/${2}.sh"
 
 # Terraform variables.
 terraformRoot='server/terraform'
-TF_DATA_DIR='../../deployment/terraform'
+TF_DATA_DIR='../../../deployment/terraform'
 TF_IN_AUTOMATION='True'
 
 
@@ -35,7 +35,7 @@ function terraformInit()
 	
 	terraformUrl="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/terraform/state/${stateName}"
 	
-	terraform -chdir=${terraformRoot} init -reconfigure				\
+	terraform init -reconfigure										\
 		-backend-config="address=${terraformUrl}"					\
 		-backend-config="lock_address=${terraformUrl}/lock"			\
 		-backend-config="unlock_address=${terraformUrl}/lock"		\
@@ -46,11 +46,15 @@ function terraformInit()
 
 
 # 
-# AAA
+# Setup AWS infrastructure common to all environments.
 #-------------------------------------------------------------------------------
 function setupAws()
 {
+	cd ${terraformRoot}/global
 	terraformInit global
+	terraform apply		\
+		-auto-approve	\
+		-var="environment=global"
 }
 
 
@@ -83,8 +87,9 @@ function launchInstance()
 {
 	userData=$(cd server/scripts/ && tar -cz per*.sh ${environment}.sh --transform="s/${environment}.sh/environment.sh/" | base64 -w 0 | base64 -w 0)
 	
+	cd ${terraformRoot}/instance
 	terraformInit ${environment}
-	terraform -chdir=${terraformRoot} apply	\
+	terraform apply							\
 		-auto-approve						\
 		-var="environment=${environment}"	\
 		-var="user_data=${userData}"
@@ -97,8 +102,9 @@ function launchInstance()
 #-------------------------------------------------------------------------------
 function terminateInstance()
 {
+	cd ${terraformRoot}/instance
 	terraformInit ${environment}
-	terraform -chdir=${terraformRoot} destroy	\
+	terraform destroy							\
 		-auto-approve							\
 		-var="environment=${environment}"
 }
