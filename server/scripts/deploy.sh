@@ -10,12 +10,14 @@
 # Export variables, abort on error end echo commands.
 set -aex
 
-# Activate Python virtual env, if there is one.
-source 'deployment/env/bin/activate' || true
+# Setup environment when running outside CI.
+if [[ ${3} = 'local' ]]; then
+	source 'deployment/env/bin/activate'
+	source 'deployment/local.sh'
+fi
 
 # Load environment variables.
-source "deployment/local.sh" || true
-source "server/scripts/${1}.sh"
+source "server/scripts/${2}.sh"
 
 # Terraform variables.
 terraformRoot='server/deploy'
@@ -39,7 +41,7 @@ function terraformInit()
 
 
 
-if [[ ${2} = 'uploadFiles' ]]; then
+if [[ ${1} = 'uploadFiles' ]]; then
 	# Source upload.
 	git archive HEAD |								\
 	tar -f - --wildcards --delete '**/static/**' |	\
@@ -52,7 +54,7 @@ if [[ ${2} = 'uploadFiles' ]]; then
 	
 	# Invalidade static files cache.
 	aws cloudfront create-invalidation --distribution-id ${cloudfrontId} --paths '/*'
-elif [[ ${2} = 'launchInstance' ]]; then
+elif [[ ${1} = 'launchInstance' ]]; then
 	userData=$(cd server/scripts/ && tar -cz per*.sh ${environment}.sh --transform="s/${environment}.sh/environment.sh/" | base64 -w 0 | base64 -w 0)
 	
 	terraformInit
@@ -60,7 +62,7 @@ elif [[ ${2} = 'launchInstance' ]]; then
 		-auto-approve						\
 		-var="environment=${environment}"	\
 		-var="user_data=${userData}"
-elif [[ ${2} = 'terminateInstance' ]]; then
+elif [[ ${1} = 'terminateInstance' ]]; then
 	terraformInit
 	terraform -chdir=${terraformRoot} destroy	\
 		-auto-approve							\
