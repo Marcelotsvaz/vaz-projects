@@ -18,15 +18,15 @@ data "aws_ami" "arch_linux" {
 
 
 locals {
-	app_server_root_volume_tags = merge( { Name = "VAZ Projects ${local.environmentName} Server Root" }, local.default_tags )
+	app_server_root_volume_tags = merge( { Name = "${local.projectName} Server Root" }, local.default_tags )
 }
 
 
 resource "aws_spot_instance_request" "app_server" {
 	ami = data.aws_ami.arch_linux.id
 	instance_type = "t3a.small"
-	subnet_id = "subnet-0894058c2c5843be6"
-	vpc_security_group_ids = [ "sg-0c3e4b6d598d9745f" ]
+	subnet_id = aws_subnet.subnet_c.id
+	vpc_security_group_ids = [ aws_default_security_group.security_group.id ]
 	iam_instance_profile = "vazProjectsStagingRole"
 	user_data_base64 = var.user_data
 	ebs_optimized = true
@@ -39,14 +39,14 @@ resource "aws_spot_instance_request" "app_server" {
 		tags = local.app_server_root_volume_tags
 	}
 	
-	tags = { Name = "VAZ Projects ${local.environmentName} Server Spot Request" }
+	tags = { Name = "${local.projectName} Server Spot Request" }
 }
 
 
 resource "aws_ec2_tag" "app_server_tags" {
 	resource_id = aws_spot_instance_request.app_server.spot_instance_id
 	
-	for_each = merge( { Name = "VAZ Projects ${local.environmentName} Server" }, local.default_tags )
+	for_each = merge( { Name = "${local.projectName} Server" }, local.default_tags )
 	key = each.key
 	value = each.value
 }

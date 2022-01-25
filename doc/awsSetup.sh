@@ -2,66 +2,6 @@
 
 
 
-# Network.
-#-----------------------------------------------------------------------------------------------------------------------
-VPC:
-	Name: VAZ Projects VPC
-	IPv4 CIDR block: 10.1.0.0/16
-	IPv6 CIDR block: Amazon-provided IPv6 CIDR block
-	Tags:
-		Project: VAZ Projects
-
-Route Table (Auto):
-	Name: VAZ Projects Route Table
-	Tags:
-		Project: VAZ Projects
-	
-ACL (Auto):
-	Name: VAZ Projects ACL
-	Tags:
-		Project: VAZ Projects
-
-Subnet:
-	Name: VAZ Projects Subnet C
-	Tags:
-		Project: VAZ Projects
-	Region: sa-east-1c
-	IPv4 block: 10.1.3.0/24
-	IPv6 block: xxxx:xxxx:xxxx:xx03::/64
-	Auto-assign public IPv4 and IPv6
-
-Gateway:
-	Name: VAZ Projects Internet Gateway
-	Tags:
-		Project: VAZ Projects
-	Attach to VPC
-	Add to route table:
-		0.0.0.0/0 to Internet Gateway
-		::/0 to Internet Gateway
-
-Security Group (Auto):
-	Tags:
-		Name: VAZ Projects Production Security Group
-		Project: VAZ Projects
-	Delete default rule
-	Allow inbound IPv4 and IPv6 connections from anywhere:
-		SSH - IPv4
-		HTTP - IPv4
-		HTTPS - IPv4
-
-Security Group:
-	Name: VAZ Projects Staging Security Group
-	Description: VAZ Projects Staging Security Group
-	Tags:
-		Name: VAZ Projects Staging Security Group
-		Project: VAZ Projects
-	Allow inbound IPv4 and IPv6 connections from anywhere:
-		SSH - IPv4
-		HTTP - IPv4
-		HTTPS - IPv4
-
-
-
 # Create buckets.
 #-----------------------------------------------------------------------------------------------------------------------
 Name: vaz-projects / vaz-projects-logs
