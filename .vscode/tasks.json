@@ -34,23 +34,27 @@
 			"id": "task",
 			"type": "pickString",
 			"description": "Select the operation",
-			"default": "launchInstance",
+			"default": "deployEnvironment",
 			"options": [
 				{
-					"label": "Setup AWS",
-					"value": "setupAws"
+					"label": "Deploy AWS",
+					"value": "deployAws"
+				},
+				{
+					"label": "Destroy AWS",
+					"value": "destroyAws"
 				},
 				{
 					"label": "Upload Files",
 					"value": "uploadFiles"
 				},
 				{
-					"label": "Launch Instance",
-					"value": "launchInstance"
+					"label": "Deploy Environment",
+					"value": "deployEnvironment"
 				},
 				{
-					"label": "Terminate Instance",
-					"value": "terminateInstance"
+					"label": "Destroy Environment",
+					"value": "destroyEnvironment"
 				},
 			],
 		},

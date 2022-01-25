@@ -46,13 +46,27 @@ function terraformInit()
 
 
 # 
-# Setup AWS infrastructure common to all environments.
+# Deploy AWS infrastructure common to all environments.
 #-------------------------------------------------------------------------------
-function setupAws()
+function deployAws()
 {
 	cd ${terraformRoot}/global
 	terraformInit global
 	terraform apply		\
+		-auto-approve	\
+		-var="environment=global"
+}
+
+
+
+# 
+# Destroy AWS infrastructure common to all environments.
+#-------------------------------------------------------------------------------
+function destroyAws()
+{
+	cd ${terraformRoot}/global
+	terraformInit global
+	terraform destroy	\
 		-auto-approve	\
 		-var="environment=global"
 }
@@ -81,9 +95,9 @@ function uploadFiles()
 
 
 # 
-# Launch the instance.
+# Deploy environment-specific AWS resources.
 #-------------------------------------------------------------------------------
-function launchInstance()
+function deployEnvironment()
 {
 	userData=$(cd server/scripts/ && tar -cz per*.sh ${environment}.sh --transform="s/${environment}.sh/environment.sh/" | base64 -w 0 | base64 -w 0)
 	
@@ -98,9 +112,9 @@ function launchInstance()
 
 
 # 
-# Terminate the instance.
+# Destroy environment-specific AWS resources.
 #-------------------------------------------------------------------------------
-function terminateInstance()
+function destroyEnvironment()
 {
 	cd ${terraformRoot}/instance
 	terraformInit ${environment}
@@ -114,14 +128,16 @@ function terminateInstance()
 # 
 # Run command.
 #-------------------------------------------------------------------------------
-if [[ ${1} = 'setupAws' ]]; then
-	setupAws
+if [[ ${1} = 'deployAws' ]]; then
+	deployAws
+elif [[ ${1} = 'destroyAws' ]]; then
+	destroyAws
 elif [[ ${1} = 'uploadFiles' ]]; then
 	uploadFiles
-elif [[ ${1} = 'launchInstance' ]]; then
-	launchInstance
-elif [[ ${1} = 'terminateInstance' ]]; then
-	terminateInstance
+elif [[ ${1} = 'deployEnvironment' ]]; then
+	deployEnvironment
+elif [[ ${1} = 'destroyEnvironment' ]]; then
+	destroyEnvironment
 else
 	exit 1
 fi
