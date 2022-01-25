@@ -168,81 +168,7 @@ Tags:
 
 # Create IAM roles.
 #-----------------------------------------------------------------------------------------------------------------------
-# Staging.
-Use case: EC2
-Tags:
-	Project: VAZ Projects
-Name: vazProjectsStagingRole
-
-Policies:
-	Name: vazProjectsStagingRolePolicy
-{
-	"Version": "2012-10-17",
-	"Statement":
-	[
-		{
-			"Sid": "s3ListBuckets",
-			"Effect": "Allow",
-			"Action": [ "s3:ListBucket" ],
-			"Resource":
-			[
-				"arn:aws:s3:::vaz-projects",
-				"arn:aws:s3:::vaz-projects-logs"
-			]
-		},
-		
-		{
-			"Sid": "s3WriteToBucket",
-			"Effect": "Allow",
-			"Action":
-			[
-				"s3:GetObject",
-				"s3:GetObjectAcl",
-				"s3:PutObject",
-				"s3:PutObjectAcl",
-				"s3:DeleteObject"
-			],
-			"Resource":
-			[
-				"arn:aws:s3:::vaz-projects/staging/*",
-				"arn:aws:s3:::vaz-projects-logs/staging/*"
-			]
-		},
-		
-		{
-			"Sid": "route53ChangeRecordSets",
-			"Effect": "Allow",
-			"Action":
-			[
-				"route53:ChangeResourceRecordSets",
-				"route53:GetChange"
-			],
-			"Resource":
-			[
-				"arn:aws:route53:::hostedzone/ZWFCO3AYVXVEU",
-				"arn:aws:route53:::change/*"
-			]
-		},
-		
-		# After certificates.
-		{
-			"Sid": "acmImportCertificate",
-			"Effect": "Allow",
-			"Action": [ "acm:ImportCertificate" ],
-			"Resource": [ "arn:aws:acm:us-east-1:983585628015:certificate/5fb0c8c9-790c-4bf2-8916-363f4be21463" ]
-		}
-	]
-}
-
-
-# Production.
-Use case: EC2
-Tags:
-	Project: VAZ Projects
-Name: vazProjectsRole
-
-Policies:
-	Name: vazProjectsRolePolicy
+# Deploy.
 {
 	"Version": "2012-10-17",
 	"Statement":
@@ -283,58 +209,6 @@ Policies:
 				"arn:aws:cloudfront::983585628015:distribution/E2L2SVNZVPKVQV"
 			]
 		},
-		
-		{
-			"Sid": "s3ListBuckets",
-			"Effect": "Allow",
-			"Action": [ "s3:ListBucket" ],
-			"Resource":
-			[
-				"arn:aws:s3:::vaz-projects",
-				"arn:aws:s3:::vaz-projects-logs"
-			]
-		},
-		
-		{
-			"Sid": "s3WriteToBucket",
-			"Effect": "Allow",
-			"Action":
-			[
-				"s3:GetObject",
-				"s3:GetObjectAcl",
-				"s3:PutObject",
-				"s3:PutObjectAcl",
-				"s3:DeleteObject"
-			],
-			"Resource":
-			[
-				"arn:aws:s3:::vaz-projects/*",
-				"arn:aws:s3:::vaz-projects-logs/*"
-			]
-		},
-		
-		{
-			"Sid": "route53ChangeRecordSets",
-			"Effect": "Allow",
-			"Action":
-			[
-				"route53:ChangeResourceRecordSets",
-				"route53:GetChange"
-			],
-			"Resource":
-			[
-				"arn:aws:route53:::hostedzone/ZWFCO3AYVXVEU",
-				"arn:aws:route53:::change/*"
-			]
-		},
-		
-		# After certificates.
-		{
-			"Sid": "acmImportCertificate",
-			"Effect": "Allow",
-			"Action": [ "acm:ImportCertificate" ],
-			"Resource": [ "arn:aws:acm:us-east-1:983585628015:certificate/220619d8-ef66-488f-b575-51704e578f8d" ]
-		}
 	]
 }
 

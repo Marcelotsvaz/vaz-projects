@@ -15,6 +15,7 @@ variable "environment" {
 
 locals {
 	projectName = "VAZ Projects"
+	projectCode = "vazProjects"
 	environmentName = title( var.environment )
 	default_tags = {
 		Project = local.projectName

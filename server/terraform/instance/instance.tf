@@ -27,7 +27,7 @@ resource "aws_spot_instance_request" "app_server" {
 	instance_type = "t3a.small"
 	subnet_id = aws_subnet.subnet_c.id
 	vpc_security_group_ids = [ aws_default_security_group.security_group.id ]
-	iam_instance_profile = "vazProjectsStagingRole"
+	iam_instance_profile = aws_iam_instance_profile.instance_profile.name
 	user_data_base64 = var.user_data
 	ebs_optimized = true
 	instance_interruption_behavior = "stop"
