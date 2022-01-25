@@ -56,7 +56,7 @@ data "aws_iam_policy_document" "instance_policy" {
 		]
 		
 		resources = [
-			"arn:aws:route53:::hostedzone/ZWFCO3AYVXVEU",
+			data.aws_route53_zone.hosted_zone.arn,
 			"arn:aws:route53:::change/*",
 		]
 	}

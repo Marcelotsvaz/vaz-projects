@@ -1,4 +1,28 @@
-# AWS recipe:
+#
+# VAZ Projects
+#
+#
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+# Account.
+#-----------------------------------------------------------------------------------------------------------------------
+Setup account
+Account Alias: marcelotsvaz
+Update address
+Setup alternate contacts
+Add two-factor authentication to root user
+Add access to billing data
+
+IAM User:
+	Username: Marcelotsvaz
+	Create group:
+		Name: Administrator
+		Permissions: AdministratorAccess
+	Add two-factor authentication
+
+Enable EC2 EBS encryption
 
 
 
@@ -219,24 +243,6 @@ Tags:
 terraform import -var="environment=global" aws_route53_zone.production ZWFCO3AYVXVEU
 terraform import -var="environment=global" aws_route53_record.production_soa ZWFCO3AYVXVEU_vazprojects.com_SOA
 terraform import -var="environment=global" aws_route53_record.production_ns ZWFCO3AYVXVEU_vazprojects.com_NS
-
-Zone file:
-vazprojects.com.						3600	CAA		0 issue "letsencrypt.org"
-
-vazprojects.com.						60		A		0.0.0.0
-vazprojects.com.						60		AAAA	::
-
-staging.vazprojects.com.				60		A		0.0.0.0
-staging.vazprojects.com.				60		AAAA	::
-
-vazprojects.com.						3600	TXT		"google-site-verification=x9tLElJp9QijYSWjI5x5LwQh5Am0r1xfHhF7iYeHSPs"
-
-# Manual after certificates.
-static-files.vazprojects.com.			-		A		???.cloudfront.net
-static-files.vazprojects.com.			-		AAAA	???.cloudfront.net
-
-static-files.staging.vazprojects.com.	-		A		???.cloudfront.net
-static-files.staging.vazprojects.com.	-		AAAA	???.cloudfront.net
 
 
 
