@@ -216,8 +216,9 @@ Tags:
 
 # Route53 setup.
 #-----------------------------------------------------------------------------------------------------------------------
-Tags:
-	Project: VAZ Projects
+terraform import -var="environment=global" aws_route53_zone.production ZWFCO3AYVXVEU
+terraform import -var="environment=global" aws_route53_record.production_soa ZWFCO3AYVXVEU_vazprojects.com_SOA
+terraform import -var="environment=global" aws_route53_record.production_ns ZWFCO3AYVXVEU_vazprojects.com_NS
 
 Zone file:
 vazprojects.com.						3600	CAA		0 issue "letsencrypt.org"
@@ -236,13 +237,6 @@ static-files.vazprojects.com.			-		AAAA	???.cloudfront.net
 
 static-files.staging.vazprojects.com.	-		A		???.cloudfront.net
 static-files.staging.vazprojects.com.	-		AAAA	???.cloudfront.net
-
-# Update TTL.
-vazprojects.com.						3600	SOA		ns-1068.awsdns-05.org. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400
-vazprojects.com.						3600	NS		ns-1068.awsdns-05.org.
-vazprojects.com.						3600	NS		ns-527.awsdns-01.net.
-vazprojects.com.						3600	NS		ns-1832.awsdns-37.co.uk.
-vazprojects.com.						3600	NS		ns-282.awsdns-35.com.
 
 
 
