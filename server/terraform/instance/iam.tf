@@ -8,12 +8,14 @@
 
 data "aws_iam_policy_document" "instance_assume_role_policy" {
 	statement {
-		actions = [ "sts:AssumeRole" ]
+		sid = "ec2AssumeRole"
 		
 		principals {
 			type = "Service"
 			identifiers = [ "ec2.amazonaws.com" ]
 		}
+		
+		actions = [ "sts:AssumeRole" ]
 	}
 }
 
@@ -25,8 +27,8 @@ data "aws_iam_policy_document" "instance_policy" {
 		actions = [ "s3:ListBucket" ]
 		
 		resources = [
-			"arn:aws:s3:::vaz-projects",
-			"arn:aws:s3:::vaz-projects-logs",
+			aws_s3_bucket.bucket.arn,
+			aws_s3_bucket.logs_bucket.arn,
 		]
 	}
 	
@@ -42,8 +44,9 @@ data "aws_iam_policy_document" "instance_policy" {
 		]
 		
 		resources = [
-			"arn:aws:s3:::vaz-projects/staging/*",
-			"arn:aws:s3:::vaz-projects-logs/staging/*",
+			# TODO: remove staging, add nginx.
+			"${aws_s3_bucket.bucket.arn}/staging/*",
+			"${aws_s3_bucket.logs_bucket.arn}/staging/*",
 		]
 	}
 	
@@ -65,14 +68,14 @@ data "aws_iam_policy_document" "instance_policy" {
 		sid = "acmImportCertificate"
 		
 		actions = [ "acm:ImportCertificate" ]
-		
+		# TODO: ACM.
 		resources = [ "arn:aws:acm:us-east-1:983585628015:certificate/5fb0c8c9-790c-4bf2-8916-363f4be21463" ]
 	}
 }
 
 
 resource "aws_iam_role" "instance_role" {
-	name = "${local.projectCode}${title(var.environment)}Role"
+	name = "${local.projectCode}-${var.environment}-role"
 	assume_role_policy = data.aws_iam_policy_document.instance_assume_role_policy.json
 	
 	inline_policy {
