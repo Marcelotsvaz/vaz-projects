@@ -238,14 +238,6 @@ Tags:
 
 
 
-# Route53 setup.
-#-----------------------------------------------------------------------------------------------------------------------
-terraform import -var="environment=global" aws_route53_zone.production ZWFCO3AYVXVEU
-terraform import -var="environment=global" aws_route53_record.production_soa ZWFCO3AYVXVEU_vazprojects.com_SOA
-terraform import -var="environment=global" aws_route53_record.production_ns ZWFCO3AYVXVEU_vazprojects.com_NS
-
-
-
 # Certificate setup.
 #-----------------------------------------------------------------------------------------------------------------------
 TODO: better keys and update certificate.sh
