@@ -26,98 +26,6 @@ Enable EC2 EBS encryption
 
 
 
-# Create Cloudfront distribuition.
-#-----------------------------------------------------------------------------------------------------------------------
-# Staging.
-Origin:
-	Domain: vaz-projects.s3.sa-east-1.amazonaws.com
-	Path: /staging/static
-	Name: S3-Staging-Static
-	Yes use OAI
-		Create: VAZ Projects Staging Origin Access Identity
-Default cache behavior:
-	Viewer protocol policy: HTTPS Only
-Settings:
-	# After certificate.
-	Alternate domain name (CNAME): static-files.staging.vazprojects.com
-	# After certificate.
-	Custom SSL certificate: static-files.staging.vazprojects.com
-	Standard logging:
-		Bucket: vaz-projects-logs
-		Prefix: staging/cloudfront/
-	Description: VAZ Projects Staging Distribuition
-
-New origin:
-	Domain: vaz-projects.s3.sa-east-1.amazonaws.com
-	Path: /staging/media
-	Name: S3-Staging-Media
-	Yes use OAI (VAZ Projects Staging Origin Access Identity)
-
-New origin group:
-	Origins: Static + Media
-	Name: S3-Staging
-	Failover criteria: 403 - Forbidden
-
-Edit default behaviour:
-	Origin and origin groups: S3-Staging
-
-Create favicon behavior:
-	Pattern: favicon.ico
-	Origin and origin groups: S3-Staging-Static
-	Viewer protocol policy: HTTPS Only
-	Origin request: Lambda@Edge (arn:aws:lambda:us-east-1:983585628015:function:FaviconRedirect:3)
-
-Tags:
-	Project: VAZ Projects
-
-
-# Production.
-Origin:
-	Domain: vaz-projects.s3.sa-east-1.amazonaws.com
-	Path: /production/static
-	Name: S3-Production-Static
-	Yes use OAI
-		Create: VAZ Projects Origin Access Identity
-Default cache behavior:
-	Viewer protocol policy: HTTPS Only
-Settings:
-	# After certificate.
-	Alternate domain name (CNAME): static-files.vazprojects.com
-	# After certificate.
-	Custom SSL certificate: static-files.vazprojects.com
-	Standard logging:
-		Bucket: vaz-projects-logs
-		Prefix: production/cloudfront/
-	Description: VAZ Projects Distribuition
-
-New origin:
-	Domain: vaz-projects.s3.sa-east-1.amazonaws.com
-	Path: /production/media
-	Name: S3-Production-Media
-	Yes use OAI (VAZ Projects Origin Access Identity)
-
-New origin group:
-	Origins: Static + Media
-	Name: S3-Production
-	Failover criteria: 403 - Forbidden
-
-Edit default behaviour:
-	Origin and origin groups: S3-Production
-
-Create favicon behavior:
-	Pattern: favicon.ico
-	Origin and origin groups: S3-Production-Static
-	Viewer protocol policy: HTTPS Only
-	Origin request: Lambda@Edge (arn:aws:lambda:us-east-1:983585628015:function:FaviconRedirect:3)
-
-Tags:
-	Project: VAZ Projects
-
-
-# Go back to bucket permissions.
-
-
-
 # Create IAM roles.
 #-----------------------------------------------------------------------------------------------------------------------
 # Deploy.
@@ -202,9 +110,6 @@ Upload to ACM
 	Project: VAZ Projects
 	Name: VAZ Projects Staging Cloudfront Certificate
 
-# Go back to Role permissions.
-# Go back to Cloudfront certificate and CNAME.
-# Go back to Route53 alias.
 
 
 # Production.
@@ -234,10 +139,6 @@ aws s3 cp cloudfront.crt s3://vaz-projects/production/deployment/tls/
 Upload to ACM
 	Project: VAZ Projects
 	Name: VAZ Projects Cloudfront Certificate
-
-# Go back to Role permissions.
-# Go back to Cloudfront certificate and CNAME.
-# Go back to Route53 alias.
 
 
 

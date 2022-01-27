@@ -16,8 +16,8 @@ resource "aws_route53_record" "a_cloudfront" {
 	type = "A"
 	
 	alias {
-		name = "dueu4du7a5a4e.cloudfront.net"
-		zone_id = "Z2FDTNDATAQYW2"
+		name = aws_cloudfront_distribution.distribution.domain_name
+		zone_id = aws_cloudfront_distribution.distribution.hosted_zone_id
 		evaluate_target_health = false
 	}
 }
@@ -30,8 +30,8 @@ resource "aws_route53_record" "aaaa_cloudfront" {
 	type = "AAAA"
 	
 	alias {
-		name = "dueu4du7a5a4e.cloudfront.net"
-		zone_id = "Z2FDTNDATAQYW2"
+		name = aws_cloudfront_distribution.distribution.domain_name
+		zone_id = aws_cloudfront_distribution.distribution.hosted_zone_id
 		evaluate_target_health = false
 	}
 }
