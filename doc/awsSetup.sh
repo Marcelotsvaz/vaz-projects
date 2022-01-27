@@ -26,54 +26,6 @@ Enable EC2 EBS encryption
 
 
 
-# Create IAM roles.
-#-----------------------------------------------------------------------------------------------------------------------
-# Deploy.
-{
-	"Version": "2012-10-17",
-	"Statement":
-	[
-		{
-			"Sid": "ec2Access",
-			"Effect": "Allow",
-			"Action":
-			[
-				"ec2:RunInstances",
-				"ec2:TerminateInstances",
-				"ec2:DescribeInstances",
-				"ec2:CreateTags",
-				"ec2:CancelSpotInstanceRequests",
-				"ec2:DescribeImages"
-			],
-			"Resource": [ "*" ]
-		},
-		
-		{
-			"Sid": "iamPassRole",
-			"Effect": "Allow",
-			"Action": [ "iam:PassRole" ],
-			"Resource":
-			[
-				"arn:aws:iam::983585628015:role/vazProjectsRole",
-				"arn:aws:iam::983585628015:role/vazProjectsStagingRole"
-			]
-		},
-		
-		{
-			"Sid": "cloudfrontInvalidate",
-			"Effect": "Allow",
-			"Action": [ "cloudfront:CreateInvalidation" ],
-			"Resource":
-			[
-				"arn:aws:cloudfront::983585628015:distribution/E14SOTLPYZH9C5",
-				"arn:aws:cloudfront::983585628015:distribution/E2L2SVNZVPKVQV"
-			]
-		},
-	]
-}
-
-
-
 # Certificate setup.
 #-----------------------------------------------------------------------------------------------------------------------
 TODO: better keys and update certificate.sh
