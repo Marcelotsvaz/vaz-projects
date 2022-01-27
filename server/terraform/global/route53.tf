@@ -65,6 +65,16 @@ resource "aws_route53_record" "production_staging_ns" {
 }
 
 
+resource "aws_route53_record" "production_portfolio_ns" {
+	zone_id = aws_route53_zone.production.zone_id
+	
+	name = aws_route53_zone.portfolio.name
+	type = "NS"
+	ttl = "3600"
+	records = aws_route53_delegation_set.portfolio.name_servers
+}
+
+
 
 # 
 # staging.vazprojects.com hosted zone.
@@ -103,4 +113,46 @@ resource "aws_route53_record" "staging_ns" {
 	type = "NS"
 	ttl = "3600"
 	records = aws_route53_delegation_set.staging.name_servers
+}
+
+
+
+# 
+# portfolio.vazprojects.com hosted zone.
+#-------------------------------------------------------------------------------
+resource "aws_route53_delegation_set" "portfolio" {
+	
+}
+
+
+resource "aws_route53_zone" "portfolio" {
+	name = "portfolio.${aws_route53_zone.production.name}"
+	delegation_set_id = aws_route53_delegation_set.portfolio.id
+	
+	tags = {
+		Name: "Portfolio Hosted Zone"
+		Project: "Portfolio"
+	}
+}
+
+
+resource "aws_route53_record" "portfolio_soa" {
+	zone_id = aws_route53_zone.portfolio.zone_id
+	allow_overwrite = true
+	
+	name = aws_route53_zone.portfolio.name
+	type = "SOA"
+	ttl = "3600"
+	records = [ "${aws_route53_delegation_set.portfolio.name_servers[0]} awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400" ]
+}
+
+
+resource "aws_route53_record" "portfolio_ns" {
+	zone_id = aws_route53_zone.portfolio.zone_id
+	allow_overwrite = true
+	
+	name = aws_route53_zone.portfolio.name
+	type = "NS"
+	ttl = "3600"
+	records = aws_route53_delegation_set.portfolio.name_servers
 }
