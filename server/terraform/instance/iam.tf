@@ -68,8 +68,8 @@ data "aws_iam_policy_document" "instance_policy" {
 		sid = "acmImportCertificate"
 		
 		actions = [ "acm:ImportCertificate" ]
-		# TODO: ACM.
-		resources = [ "arn:aws:acm:us-east-1:983585628015:certificate/5fb0c8c9-790c-4bf2-8916-363f4be21463" ]
+		
+		resources = [ aws_acm_certificate.cloudfront.arn ]
 	}
 }
 

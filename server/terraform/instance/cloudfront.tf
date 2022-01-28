@@ -13,8 +13,7 @@ resource "aws_cloudfront_distribution" "distribution" {
 	is_ipv6_enabled = true
 	
 	viewer_certificate {
-		# TODO: ACM.
-		acm_certificate_arn = "arn:aws:acm:us-east-1:983585628015:certificate/5fb0c8c9-790c-4bf2-8916-363f4be21463"
+		acm_certificate_arn = aws_acm_certificate.cloudfront.arn
 		ssl_support_method = "sni-only"
 		minimum_protocol_version = "TLSv1.2_2021"
 	}

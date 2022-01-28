@@ -7,7 +7,7 @@
 
 
 # 
-# Cloudfront.
+# CloudFront.
 #-------------------------------------------------------------------------------
 resource "aws_route53_record" "a_cloudfront" {
 	zone_id = data.aws_route53_zone.hosted_zone.zone_id
@@ -39,6 +39,22 @@ resource "aws_route53_record" "aaaa_cloudfront" {
 
 
 # 
+# ACM certificate validation.
+#-------------------------------------------------------------------------------
+resource "aws_route53_record" "acm" {
+	for_each = { for record in aws_acm_certificate.cloudfront.domain_validation_options : record.domain_name => record }
+	
+	zone_id = data.aws_route53_zone.hosted_zone.zone_id
+	
+	name = each.value.resource_record_name
+	type = each.value.resource_record_type
+	ttl = "60"
+	records = [ each.value.resource_record_value ]
+}
+
+
+
+# 
 # Third-party records.
 #-------------------------------------------------------------------------------
 resource "aws_route53_record" "caa" {
@@ -47,7 +63,7 @@ resource "aws_route53_record" "caa" {
 	name = data.aws_route53_zone.hosted_zone.name
 	type = "CAA"
 	ttl = "3600"
-	records = [ "0 issue \"letsencrypt.org\"" ]
+	records = [ "0 issue \"amazonaws.com\"" ]
 }
 
 

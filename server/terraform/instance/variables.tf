@@ -21,9 +21,12 @@ variable "user_data" {
 
 
 locals {
+	# TODO: _ camelcase
 	projectName = "VAZ Projects"
 	projectCode = "vazProjects"
 	environmentName = title( var.environment )
+	domain = "staging.vazprojects.com"
+	region = "sa-east-1"
 	default_tags = {
 		Project = local.projectName
 		Environment = var.environment

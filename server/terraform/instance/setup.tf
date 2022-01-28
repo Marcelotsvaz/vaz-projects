@@ -25,7 +25,16 @@ terraform {
 
 
 provider "aws" {
-	region = "sa-east-1"
+	region = local.region
+	
+	default_tags { tags = local.default_tags }
+}
+
+
+provider "aws" {
+	alias = "us_east_1"
+	
+	region = "us-east-1"
 	
 	default_tags { tags = local.default_tags }
 }
