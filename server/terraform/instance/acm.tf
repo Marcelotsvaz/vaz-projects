@@ -9,7 +9,7 @@
 resource "aws_acm_certificate" "cloudfront" {
 	provider = aws.us_east_1
 	
-	domain_name = local.domain
+	domain_name = "static-files.${local.domain}"
 	validation_method = "DNS"
 	
 	tags = {
