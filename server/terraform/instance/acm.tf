@@ -13,7 +13,7 @@ resource "aws_acm_certificate" "cloudfront" {
 	validation_method = "DNS"
 	
 	tags = {
-		Name: "${local.projectName} Cloudfront Certificate"
+		Name: "${local.project_name} Cloudfront Certificate"
 	}
 	
 	lifecycle {

@@ -15,20 +15,20 @@ resource "aws_route53_delegation_set" "production" {
 
 
 resource "aws_route53_zone" "production" {
-	name = "vazprojects.com"
+	name = local.domain
 	delegation_set_id = aws_route53_delegation_set.production.id
 	
 	provisioner "local-exec" {
 		command = <<-EOF
 			aws route53domains update-domain-nameservers	\
 				--region us-east-1							\
-				--domain-name vazprojects.com				\
+				--domain-name ${local.domain}				\
 				--nameservers ${join( " ", [ for ns in aws_route53_delegation_set.production.name_servers : "Name=${ns}"] )}
 		EOF
 	}
 	
 	tags = {
-		Name: "${local.projectName} Hosted Zone"
+		Name: "${local.project_name} Hosted Zone"
 	}
 }
 
@@ -89,7 +89,7 @@ resource "aws_route53_zone" "staging" {
 	delegation_set_id = aws_route53_delegation_set.staging.id
 	
 	tags = {
-		Name: "${local.projectName} Hosted Zone"
+		Name: "${local.project_name} Hosted Zone"
 	}
 }
 

@@ -18,7 +18,7 @@ data "aws_ami" "arch_linux" {
 
 
 locals {
-	app_server_root_volume_tags = merge( { Name = "${local.projectName} Server Root" }, local.default_tags )
+	app_server_root_volume_tags = merge( { Name = "${local.project_name} Server Root" }, local.default_tags )
 }
 
 
@@ -39,14 +39,14 @@ resource "aws_spot_instance_request" "app_server" {
 		tags = local.app_server_root_volume_tags
 	}
 	
-	tags = { Name = "${local.projectName} Server Spot Request" }
+	tags = { Name = "${local.project_name} Server Spot Request" }
 }
 
 
 resource "aws_ec2_tag" "app_server_tags" {
 	resource_id = aws_spot_instance_request.app_server.spot_instance_id
 	
-	for_each = merge( { Name = "${local.projectName} Server" }, local.default_tags )
+	for_each = merge( { Name = "${local.project_name} Server" }, local.default_tags )
 	key = each.key
 	value = each.value
 }

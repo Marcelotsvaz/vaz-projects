@@ -11,7 +11,7 @@ resource "aws_vpc" "vpc" {
 	assign_generated_ipv6_cidr_block = true
 	
 	tags = {
-		Name: "${local.projectName} VPC"
+		Name: "${local.project_name} VPC"
 	}
 }
 
@@ -20,7 +20,7 @@ resource "aws_internet_gateway" "gateway" {
 	vpc_id = aws_vpc.vpc.id
 	
 	tags = {
-		Name: "${local.projectName} Internet Gateway"
+		Name: "${local.project_name} Internet Gateway"
 	}
 }
 
@@ -39,7 +39,7 @@ resource "aws_default_route_table" "route_table" {
 	}
 	
 	tags = {
-		Name: "${local.projectName} Route Table"
+		Name: "${local.project_name} Route Table"
 	}
 }
 
@@ -53,7 +53,7 @@ resource "aws_subnet" "subnet_c" {
 	assign_ipv6_address_on_creation = true
 	
 	tags = {
-		Name: "${local.projectName} Subnet C"
+		Name: "${local.project_name} Subnet C"
 	}
 }
 
@@ -99,7 +99,7 @@ resource "aws_default_network_acl" "acl" {
 	}
 	
 	tags = {
-		Name: "${local.projectName} ACL"
+		Name: "${local.project_name} ACL"
 	}
 }
 
@@ -144,6 +144,6 @@ resource "aws_default_security_group" "security_group" {
 	}
 	
 	tags = {
-		Name: "${local.projectName} Security Group"
+		Name: "${local.project_name} Security Group"
 	}
 }

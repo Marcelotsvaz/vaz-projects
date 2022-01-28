@@ -75,7 +75,7 @@ data "aws_iam_policy_document" "instance_policy" {
 
 
 resource "aws_iam_role" "instance_role" {
-	name = "${local.projectCode}-${var.environment}-role"
+	name = "${local.project_code}-${var.environment}-role"
 	assume_role_policy = data.aws_iam_policy_document.instance_assume_role_policy.json
 	
 	inline_policy {
@@ -85,16 +85,16 @@ resource "aws_iam_role" "instance_role" {
 	}
 	
 	tags = {
-		Name: "${local.projectName} Role"
+		Name: "${local.project_name} Role"
 	}
 }
 
 
 resource "aws_iam_instance_profile" "instance_profile" {
-	name = "${local.projectCode}${title(var.environment)}InstanceProfile"
+	name = "${local.project_code}${title(var.environment)}InstanceProfile"
 	role = aws_iam_role.instance_role.name
 	
 	tags = {
-		Name: "${local.projectName} Instance Profile"
+		Name: "${local.project_name} Instance Profile"
 	}
 }

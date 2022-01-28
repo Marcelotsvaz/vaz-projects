@@ -7,8 +7,8 @@
 
 
 resource "aws_cloudfront_distribution" "distribution" {
-	comment = "${local.projectName} Distribuition"
-	aliases = [ "static-files.staging.vazprojects.com" ]
+	comment = "${local.project_name} Distribuition"
+	aliases = [ "static-files.${local.domain}" ]
 	enabled = true
 	is_ipv6_enabled = true
 	
@@ -80,13 +80,13 @@ resource "aws_cloudfront_distribution" "distribution" {
 	}
 	
 	tags = {
-		Name: "${local.projectName} Distribuition"
+		Name: "${local.project_name} Distribuition"
 	}
 }
 
 
 resource "aws_cloudfront_origin_access_identity" "identity" {
-	comment = "${local.projectName} Origin Access Identity"
+	comment = "${local.project_name} Origin Access Identity"
 }
 
 

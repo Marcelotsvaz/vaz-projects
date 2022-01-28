@@ -10,7 +10,7 @@
 # Main bucket.
 #-------------------------------------------------------------------------------
 resource "aws_s3_bucket" "bucket" {
-	bucket = lower( "${local.projectCode}-${var.environment}" )
+	bucket = lower( "${local.project_code}-${var.environment}" )
 	
 	versioning {
 		enabled = true
@@ -31,11 +31,11 @@ resource "aws_s3_bucket" "bucket" {
 	
 	cors_rule {
 		allowed_methods = [ "GET" ]
-		allowed_origins = [ "https://staging.vazprojects.com" ]
+		allowed_origins = [ "https://${local.domain}" ]
 	}
 	
 	tags = {
-		Name: "${local.projectName} Bucket"
+		Name: "${local.project_name} Bucket"
 	}
 }
 
@@ -81,7 +81,7 @@ data "aws_iam_policy_document" "bucket_policy" {
 # Logs bucket.
 #-------------------------------------------------------------------------------
 resource "aws_s3_bucket" "logs_bucket" {
-	bucket = lower( "${local.projectCode}-${var.environment}-logs" )
+	bucket = lower( "${local.project_code}-${var.environment}-logs" )
 	
 	acl = "log-delivery-write"
 	
@@ -94,7 +94,7 @@ resource "aws_s3_bucket" "logs_bucket" {
 	}
 	
 	tags = {
-		Name: "${local.projectName} Logs Bucket"
+		Name: "${local.project_name} Logs Bucket"
 	}
 }
 

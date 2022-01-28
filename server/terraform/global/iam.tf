@@ -9,10 +9,10 @@
 # resource "aws_iam_user" "deploy" {
 # 	for_each = toset( [ "production", "staging" ] )
 	
-# 	name = "${local.projectCode}-${each.value}-deployUser"
+# 	name = "${local.project_code}-${each.value}-deployUser"
 	
 # 	tags = {
-# 		Name: "${local.projectName} Deploy User"
+# 		Name: "${local.project_name} Deploy User"
 # 	}
 # }
 
