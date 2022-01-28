@@ -44,7 +44,7 @@ Server:
 	openssl req -new -subj / -addext 'subjectAltName = DNS:staging.vazprojects.com' -key websiteKey.pem -sha512 -out websiteCsr.pem
 	dehydrated -f ${config} -p accountKey.pem -s websiteCsr.pem --accept-terms > website.crt
 
-Cloudfront:
+CloudFront:
 	openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out cloudfrontKey.pem
 	openssl req -new -subj / -addext 'subjectAltName = DNS:static-files.staging.vazprojects.com' -key cloudfrontKey.pem -sha512 -out cloudfrontCsr.pem
 	dehydrated -f ${config} -p accountKey.pem -s cloudfrontCsr.pem --accept-terms > cloudfront.crt
@@ -58,10 +58,6 @@ aws s3 cp cloudfrontKey.pem s3://vaz-projects/staging/deployment/tls/
 aws s3 cp cloudfrontCsr.pem s3://vaz-projects/staging/deployment/tls/
 aws s3 cp cloudfront.crt s3://vaz-projects/staging/deployment/tls/
 
-Upload to ACM
-	Project: VAZ Projects
-	Name: VAZ Projects Staging Cloudfront Certificate
-
 
 
 # Production.
@@ -74,7 +70,7 @@ Server:
 	openssl req -new -subj / -addext 'subjectAltName = DNS:vazprojects.com' -key websiteKey.pem -sha512 -out websiteCsr.pem
 	dehydrated -f ${config} -p accountKey.pem -s websiteCsr.pem --accept-terms > website.crt
 
-Cloudfront:
+CloudFront:
 	openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out cloudfrontKey.pem
 	openssl req -new -subj / -addext 'subjectAltName = DNS:static-files.vazprojects.com' -key cloudfrontKey.pem -sha512 -out cloudfrontCsr.pem
 	dehydrated -f ${config} -p accountKey.pem -s cloudfrontCsr.pem --accept-terms > cloudfront.crt
@@ -87,10 +83,6 @@ aws s3 cp website.crt s3://vaz-projects/production/deployment/tls/
 aws s3 cp cloudfrontKey.pem s3://vaz-projects/production/deployment/tls/
 aws s3 cp cloudfrontCsr.pem s3://vaz-projects/production/deployment/tls/
 aws s3 cp cloudfront.crt s3://vaz-projects/production/deployment/tls/
-
-Upload to ACM
-	Project: VAZ Projects
-	Name: VAZ Projects Cloudfront Certificate
 
 
 

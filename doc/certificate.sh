@@ -44,7 +44,7 @@ Server:
 	openssl req -new -subj / -addext 'subjectAltName = DNS:vazprojects.com, DNS:www.vazprojects.com' -key websiteKey.pem -sha512 -out websiteCsr.pem
 	dehydrated -f dehydrated.conf -p accountKey.pem -s websiteCsr.pem --accept-terms > website.crt
 	
-Cloudfront:
+CloudFront:
 	openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -out cloudfrontKey.pem
 	openssl req -new -subj /CN=static-files.vazprojects.com -key cloudfrontKey.pem -sha512 -out cloudfrontCsr.pem
 	dehydrated -f dehydrated.conf -p accountKey.pem -s cloudfrontCsr.pem --accept-terms > cloudfront.crt
