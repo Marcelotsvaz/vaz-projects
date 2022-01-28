@@ -47,7 +47,7 @@ python -m venv deployment/env/
 source deployment/env/bin/activate
 
 pip install pip wheel --upgrade
-pip install -r requirements/${environment}.txt
+CPUCOUNT=1 pip install -r requirements/${environment}.txt	# TODO: Fix uWSGI install bug.
 
 vazProjects/manage.py migrate --no-input
 EOF
