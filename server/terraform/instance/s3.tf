@@ -68,9 +68,8 @@ data "aws_iam_policy_document" "bucket_policy" {
 		actions = [ "s3:GetObject" ]
 		
 		resources = [
-			# TODO: remove staging.
-			"${aws_s3_bucket.bucket.arn}/staging/static/*",
-			"${aws_s3_bucket.bucket.arn}/staging/media/*",
+			"${aws_s3_bucket.bucket.arn}/static/*",
+			"${aws_s3_bucket.bucket.arn}/media/*",
 		]
 	}
 }

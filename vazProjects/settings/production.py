@@ -22,12 +22,12 @@ STATICFILES_STORAGE = 'commonApp.backends.StaticCloudfrontStorage'
 DEFAULT_FILE_STORAGE = 'commonApp.backends.CloudfrontStorage'
 
 STATIC_URL = 'https://static-files.vazprojects.com/'
-STATIC_ROOT = 'production/static/'
+STATIC_ROOT = 'static/'
 
 MEDIA_URL = 'https://static-files.vazprojects.com/'
-MEDIA_ROOT = 'production/media/'
+MEDIA_ROOT = 'media/'
 
-AWS_STORAGE_BUCKET_NAME = 'vaz-projects'
+AWS_STORAGE_BUCKET_NAME = 'vazprojects-production'
 AWS_QUERYSTRING_AUTH = False
 
 AWS_S3_OBJECT_PARAMETERS = {

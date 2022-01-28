@@ -30,8 +30,8 @@ echo '::1 memcached' >> /etc/hosts	# TODO: Remove this.
 cd /home/${user}/
 
 sudo -Eu ${user} bash << EOF
-aws s3 cp s3://${bucket}/${environment}/source.tar.gz - | tar -xz
-aws s3 sync s3://${bucket}/${environment}/deployment/ deployment/ --no-progress
+aws s3 cp s3://${bucket}/source.tar.gz - | tar -xz
+aws s3 sync s3://${bucket}/deployment/ deployment/ --no-progress
 
 mkdir deployment/{logs,static}/
 EOF

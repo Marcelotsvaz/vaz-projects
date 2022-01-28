@@ -6,6 +6,12 @@
 
 
 
+locals {
+	origin_id = "s3"
+}
+
+
+
 resource "aws_cloudfront_distribution" "distribution" {
 	comment = "${local.project_name} Distribuition"
 	aliases = [ "static-files.${local.domain}" ]
@@ -19,27 +25,27 @@ resource "aws_cloudfront_distribution" "distribution" {
 	}
 	
 	origin {
-		origin_id = "S3-Staging-Static"
+		origin_id = "${local.origin_id}-static"
 		domain_name = aws_s3_bucket.bucket.bucket_regional_domain_name
-		origin_path = "/staging/static"
+		origin_path = "/static"
 		
 		s3_origin_config { origin_access_identity = aws_cloudfront_origin_access_identity.identity.cloudfront_access_identity_path }
 	}
 	
 	origin {
-		origin_id = "S3-Staging-Media"
+		origin_id = "${local.origin_id}-media"
 		domain_name = aws_s3_bucket.bucket.bucket_regional_domain_name
-		origin_path = "/staging/media"
+		origin_path = "/media"
 		
 		s3_origin_config { origin_access_identity = aws_cloudfront_origin_access_identity.identity.cloudfront_access_identity_path }
 	}
 	
 	origin_group {
-		origin_id = "S3-Staging"
+		origin_id = local.origin_id
 		
-		member { origin_id = "S3-Staging-Static" }
+		member { origin_id = "${local.origin_id}-static" }
 		
-		member { origin_id = "S3-Staging-Media" }
+		member { origin_id = "${local.origin_id}-media" }
 		
 		failover_criteria {
 			status_codes = [ 403 ]
@@ -47,7 +53,7 @@ resource "aws_cloudfront_distribution" "distribution" {
 	}
 	
 	default_cache_behavior {
-		target_origin_id = "S3-Staging"
+		target_origin_id = local.origin_id
 		allowed_methods = [ "GET", "HEAD" ]
 		cached_methods = [ "GET", "HEAD" ]
 		cache_policy_id = data.aws_cloudfront_cache_policy.cache_policy.id
@@ -57,7 +63,7 @@ resource "aws_cloudfront_distribution" "distribution" {
 	
 	ordered_cache_behavior {
 		path_pattern = "favicon.ico"
-		target_origin_id = "S3-Staging-Static"
+		target_origin_id = local.origin_id
 		allowed_methods = [ "GET", "HEAD" ]
 		cached_methods = [ "GET", "HEAD" ]
 		cache_policy_id = data.aws_cloudfront_cache_policy.cache_policy.id
@@ -76,7 +82,7 @@ resource "aws_cloudfront_distribution" "distribution" {
 	
 	logging_config {
 		bucket = aws_s3_bucket.logs_bucket.bucket_domain_name
-		prefix = "staging/cloudfront/"
+		prefix = "cloudfront/"
 	}
 	
 	tags = {

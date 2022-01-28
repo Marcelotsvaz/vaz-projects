@@ -82,7 +82,7 @@ function uploadFiles()
 	git archive HEAD |								\
 	tar -f - --wildcards --delete '**/static/**' |	\
 	gzip |											\
-	aws s3 cp - s3://${bucket}/${environment}/source.tar.gz
+	aws s3 cp - s3://${bucket}/source.tar.gz
 	
 	# Upload static files.
 	server/scripts/less.sh

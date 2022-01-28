@@ -44,9 +44,9 @@ data "aws_iam_policy_document" "instance_policy" {
 		]
 		
 		resources = [
-			# TODO: remove staging, add nginx.
-			"${aws_s3_bucket.bucket.arn}/staging/*",
-			"${aws_s3_bucket.logs_bucket.arn}/staging/*",
+			# TODO: add nginx.
+			"${aws_s3_bucket.bucket.arn}/*",
+			"${aws_s3_bucket.logs_bucket.arn}/*",
 		]
 	}
 	

@@ -19,7 +19,7 @@ hostname='vazprojects.com'
 hostedZoneId='ZWFCO3AYVXVEU'
 
 # Static Files
-bucket='vaz-projects'
+bucket='vazprojects-production'
 cloudfrontId='E2L2SVNZVPKVQV'
 cloudfrontCertificateArn='arn:aws:acm:us-east-1:983585628015:certificate/220619d8-ef66-488f-b575-51704e578f8d'
 
