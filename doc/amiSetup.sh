@@ -18,7 +18,7 @@ mountPoint=/mnt/new
 
 # Create Volume
 #---------------------------------------
-volumeID=$(aws ec2 create-volume --size 3 --availability-zone $availabilityZone --volume-type gp3 --no-encrypted --query 'VolumeId')
+volumeID=$(aws ec2 create-volume --size 4 --availability-zone $availabilityZone --volume-type gp3 --no-encrypted --query 'VolumeId')
 aws ec2 wait volume-available --volume-ids $volumeID
 aws ec2 attach-volume --volume-id $volumeID --instance-id $instanceID --device /dev/sdf
 aws ec2 wait volume-in-use --volume-ids $volumeID
@@ -44,7 +44,7 @@ pacstrap -c $mountPoint \
 base linux grub \
 openssh sudo aws-cli gdisk \
 man-db nano tmux mercurial \
-nginx memcached chromium dovecot postfix dehydrated \
+docker nginx memcached chromium dovecot postfix dehydrated \
 gcc libjpeg-turbo libmemcached
 
 # Fstab
@@ -121,7 +121,6 @@ Ciphers chacha20-poly1305@openssh.com
 MACs hmac-sha2-512-etm@openssh.com
 EOF
 #-------------------------------------------------------------------------------
-systemctl enable sshd
 
 
 # Bash
@@ -267,7 +266,7 @@ WantedBy = multi-user.target
 EOF
 #-------------------------------------------------------------------------------
 
-systemctl enable instanceScriptsSetup perInstance perBoot perShutdown
+systemctl enable instanceScriptsSetup perInstance perBoot perShutdown sshd docker
 
 
 # Clean up
