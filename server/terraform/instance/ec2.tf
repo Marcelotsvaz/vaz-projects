@@ -15,7 +15,7 @@ resource "aws_spot_instance_request" "app_server" {
 	subnet_id = aws_subnet.subnet_c.id
 	vpc_security_group_ids = [ aws_default_security_group.security_group.id ]
 	iam_instance_profile = aws_iam_instance_profile.instance_profile.name
-	user_data_base64 = base64encode( module.user_data.content_base64 )
+	user_data_base64 = module.user_data.content_base64
 	ebs_optimized = true
 	instance_interruption_behavior = "stop"
 	wait_for_fulfillment = true

@@ -184,8 +184,7 @@ resize2fs $partition
 
 
 # Download user data
-curl -s http://169.254.169.254/latest/user-data | base64 --decode | tar -xz -C /root/init/
-chmod +x /root/init/per*.sh
+curl -s http://169.254.169.254/latest/user-data | tar -xz -C /root/init/
 EOF
 #-------------------------------------------------------------------------------
 chmod +x /root/init/instanceScriptsSetup.sh
