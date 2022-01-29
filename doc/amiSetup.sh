@@ -288,12 +288,19 @@ snapshotID=$(aws ec2 create-snapshot \
 aws ec2 wait snapshot-completed --snapshot-ids $snapshotID
 aws ec2 delete-volume --volume-id $volumeID
 
-imageID=$(aws ec2 describe-images --filters 'Name=name,Values=Arch Linux AMI' --query 'Images[0].ImageId')
-aws ec2 deregister-image --image-id $imageID
-aws ec2 register-image \
---name 'Arch Linux AMI' \
---architecture x86_64 \
---virtualization-type hvm \
---ena-support \
---root-device-name /dev/xvda \
---block-device-mappings '[{"DeviceName": "/dev/xvda","Ebs":{"SnapshotId":"'$snapshotID'","VolumeType":"gp3"}}]'
+imageId=$(aws ec2 describe-images --filters 'Name=name,Values=Arch Linux AMI' --query 'Images[0].ImageId')
+aws ec2 deregister-image --image-id $imageId
+newImageId=$(aws ec2 register-image \
+    --name 'Arch Linux AMI' \
+    --architecture x86_64 \
+    --virtualization-type hvm \
+    --ena-support \
+    --root-device-name /dev/xvda \
+    --block-device-mappings '[{"DeviceName": "/dev/xvda","Ebs":{"SnapshotId":"'$snapshotID'","VolumeType":"gp3"}}]' \
+    --query 'ImageId'
+)
+
+# Share with UTL and Venditore account.
+aws ec2 modify-image-attribute \
+    --image-id ${newImageId} \
+    --launch-permission "Add=[ { UserId = 883778058666 }, { UserId = 756912632867 } ]"
