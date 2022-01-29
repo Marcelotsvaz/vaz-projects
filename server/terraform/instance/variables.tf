@@ -12,13 +12,6 @@ variable "environment" {
 }
 
 
-variable "user_data" {
-	type = string
-	description = "EC2 user data (base64 encoded)."
-	default = ""
-}
-
-
 
 locals {
 	project_name = "VAZ Projects"

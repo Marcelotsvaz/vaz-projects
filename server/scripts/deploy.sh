@@ -16,10 +16,8 @@ if [[ ${3} = 'local' ]]; then
 	source 'deployment/local.sh'
 fi
 
-# Load environment variables.
-source "server/scripts/${2}.sh"
-
-# Terraform variables.
+# Variables.
+environment="${2}"
 terraformRoot='server/terraform'
 TF_DATA_DIR='../../../deployment/terraform'
 TF_IN_AUTOMATION='True'
@@ -99,14 +97,11 @@ function uploadFiles()
 #-------------------------------------------------------------------------------
 function deployEnvironment()
 {
-	userData=$(cd server/scripts/ && tar -cz per*.sh ${environment}.sh --transform="s/${environment}.sh/environment.sh/" | base64 -w 0 | base64 -w 0)
-	
 	cd ${terraformRoot}/instance
 	terraformInit ${environment}
 	terraform apply							\
 		-auto-approve						\
-		-var="environment=${environment}"	\
-		-var="user_data=${userData}"
+		-var="environment=${environment}"
 }
 
 
