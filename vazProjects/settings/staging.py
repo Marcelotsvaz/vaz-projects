@@ -25,12 +25,6 @@ DEBUG_TOOLBAR_CONFIG = {
 
 # Static and media files
 #---------------------------------------
-STATIC_URL = 'https://static-files.staging.vazprojects.com/'
-
-MEDIA_URL = 'https://static-files.staging.vazprojects.com/'
-
-AWS_STORAGE_BUCKET_NAME = 'vazprojects-staging'
-
 AWS_S3_OBJECT_PARAMETERS = {
 	'CacheControl': 'max-age=60',
 }

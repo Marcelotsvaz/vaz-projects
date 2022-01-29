@@ -19,7 +19,7 @@ set -e	# Abort on error.
 
 # System Setup
 #---------------------------------------
-hostnamectl set-hostname ${hostname}
+hostnamectl set-hostname ${domainName}
 
 echo ${sshKey} > ~marcelotsvaz/.ssh/authorized_keys
 
