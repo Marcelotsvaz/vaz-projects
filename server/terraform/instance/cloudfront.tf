@@ -70,9 +70,9 @@ resource "aws_cloudfront_distribution" "distribution" {
 		viewer_protocol_policy = "https-only"
 		compress = true
 		
-		lambda_function_association {
-			event_type = "origin-request"
-			lambda_arn = "arn:aws:lambda:us-east-1:983585628015:function:FaviconRedirect:3"
+		function_association {
+			event_type = "viewer-request"
+			function_arn = aws_cloudfront_function.favicon_redirect.arn
 		}
 	}
 	
@@ -98,4 +98,11 @@ resource "aws_cloudfront_origin_access_identity" "identity" {
 
 data "aws_cloudfront_cache_policy" "cache_policy" {
 	name = "Managed-CachingOptimized"
+}
+
+
+resource "aws_cloudfront_function" "favicon_redirect" {
+	name = "${local.project_code}-${var.environment}-faviconRedirect"
+	code = file( "favicon_redirect.js" )
+	runtime = "cloudfront-js-1.0"
 }
