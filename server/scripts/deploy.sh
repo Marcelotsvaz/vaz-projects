@@ -31,7 +31,7 @@ function terraformInit()
 {
 	local stateName=${1}
 	
-	terraformUrl="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/terraform/state/${stateName}"
+	terraformUrl="https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/terraform/state/${stateName}"
 	
 	terraform init -reconfigure										\
 		-backend-config="address=${terraformUrl}"					\

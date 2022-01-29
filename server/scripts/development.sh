@@ -9,6 +9,9 @@
 # System
 environment='development'
 
+# Terraform
+TF_DATA_DIR='../../../deployment/terraform'
+
 # Network
 hostname='vaz-pc.lan'
 
