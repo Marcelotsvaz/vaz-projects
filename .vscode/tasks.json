@@ -45,16 +45,16 @@
 					"value": "destroyAws"
 				},
 				{
-					"label": "Upload Files",
-					"value": "uploadFiles"
-				},
-				{
 					"label": "Deploy Environment",
 					"value": "deployEnvironment"
 				},
 				{
 					"label": "Destroy Environment",
 					"value": "destroyEnvironment"
+				},
+				{
+					"label": "Upload Files",
+					"value": "uploadFiles"
 				},
 			],
 		},

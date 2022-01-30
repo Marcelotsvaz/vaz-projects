@@ -47,6 +47,7 @@ module "user_data" {
 	source = "./user_data"
 	
 	working_dir = "../../scripts"
+	temp_dir = "../../../deployment"
 	
 	files = [
 		"perInstance.sh",

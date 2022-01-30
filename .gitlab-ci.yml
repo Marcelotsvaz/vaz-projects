@@ -8,8 +8,8 @@
 
 stages:
     - test
-    - upload
     - deploy
+    - upload
 
 
 variables:
@@ -55,26 +55,7 @@ test:
             cobertura: deployment/coverage.xml
 
 
-uploadFiles:
-    stage: upload
-    
-    environment:
-        name: staging
-        action: prepare
-    
-    cache:
-        paths:
-            - .cache/pip/
-    
-    script:
-        - apt-get update; apt-get install --yes --no-install-recommends --quiet libmemcached-dev npm awscli
-        - npm install --global less
-        - pip install -r requirements/${CI_ENVIRONMENT_TIER}.txt
-        - mkdir -p deployment; cp ${DJANGO_SECRETS_FILE} deployment/secrets.py
-        - server/scripts/deploy.sh uploadFiles ${CI_ENVIRONMENT_TIER}
-
-
-launchInstance:
+deployEnvironment:
     image:
         name: hashicorp/terraform:1.1.4
         entrypoint: [ "" ]
@@ -84,7 +65,7 @@ launchInstance:
     environment:
         name: staging
         action: start
-        on_stop: terminateInstance
+        on_stop: destroyEnvironment
     
     cache:
         paths:
@@ -93,9 +74,13 @@ launchInstance:
     script:
         - apk add --no-cache bash tar
         - server/scripts/deploy.sh launchInstance ${CI_ENVIRONMENT_TIER}
+    
+    artifacts:
+        paths:
+            - deployment/environment.sh
 
 
-terminateInstance:
+destroyEnvironment:
     image:
         name: hashicorp/terraform:1.1.4
         entrypoint: [ "" ]
@@ -117,3 +102,22 @@ terminateInstance:
     script:
         - apk add --no-cache bash
         - server/scripts/deploy.sh terminateInstance ${CI_ENVIRONMENT_TIER}
+
+
+uploadFiles:
+    stage: upload
+    
+    environment:
+        name: staging
+        action: prepare
+    
+    cache:
+        paths:
+            - .cache/pip/
+    
+    script:
+        - apt-get update; apt-get install --yes --no-install-recommends --quiet libmemcached-dev npm awscli
+        - npm install --global less
+        - pip install -r requirements/${CI_ENVIRONMENT_TIER}.txt
+        - mkdir -p deployment; cp ${DJANGO_SECRETS_FILE} deployment/secrets.py
+        - server/scripts/deploy.sh uploadFiles ${CI_ENVIRONMENT_TIER}

@@ -10,14 +10,18 @@
 # Export variables, abort on error end echo commands.
 set -aex
 
+# Parameters.
+command=${1}
+environment=${2}
+local=${3}
+
 # Setup environment when running outside CI.
-if [[ ${3} = 'local' ]]; then
+if [[ ${local} ]]; then
 	source 'deployment/env/bin/activate'
 	source 'deployment/local.sh'
 fi
 
 # Variables.
-environment="${2}"
 terraformRoot='server/terraform'
 TF_DATA_DIR='../../../deployment/terraform'
 TF_IN_AUTOMATION='True'
@@ -72,27 +76,6 @@ function destroyAws()
 
 
 # 
-# Upload static files and app source to S3.
-#-------------------------------------------------------------------------------
-function uploadFiles()
-{
-	# Source upload.
-	git archive HEAD |								\
-	tar -f - --wildcards --delete '**/static/**' |	\
-	gzip |											\
-	aws s3 cp - s3://${bucket}/source.tar.gz
-	
-	# Upload static files.
-	server/scripts/less.sh
-	vazProjects/manage.py collectstatic --ignore '*/src/*' --no-input
-	
-	# Invalidade static files cache.
-	aws cloudfront create-invalidation --distribution-id ${cloudfrontId} --paths '/*'
-}
-
-
-
-# 
 # Deploy environment-specific AWS resources.
 #-------------------------------------------------------------------------------
 function deployEnvironment()
@@ -121,18 +104,42 @@ function destroyEnvironment()
 
 
 # 
+# Upload static files and app source to S3.
+#-------------------------------------------------------------------------------
+function uploadFiles()
+{
+	# TODO: Check environment.
+	source 'deployment/environment.sh'
+	
+	# Source upload.
+	git archive HEAD |								\
+	tar -f - --wildcards --delete '**/static/**' |	\
+	gzip |											\
+	aws s3 cp - s3://${bucket}/source.tar.gz
+	
+	# Upload static files.
+	server/scripts/less.sh
+	vazProjects/manage.py collectstatic --ignore '*/src/*' --no-input
+	
+	# Invalidade static files cache.
+	aws cloudfront create-invalidation --distribution-id ${cloudfrontId} --paths '/*'
+}
+
+
+
+# 
 # Run command.
 #-------------------------------------------------------------------------------
-if [[ ${1} = 'deployAws' ]]; then
+if [[ ${command} = 'deployAws' ]]; then
 	deployAws
-elif [[ ${1} = 'destroyAws' ]]; then
+elif [[ ${command} = 'destroyAws' ]]; then
 	destroyAws
-elif [[ ${1} = 'uploadFiles' ]]; then
-	uploadFiles
-elif [[ ${1} = 'deployEnvironment' ]]; then
+elif [[ ${command} = 'deployEnvironment' ]]; then
 	deployEnvironment
-elif [[ ${1} = 'destroyEnvironment' ]]; then
+elif [[ ${command} = 'destroyEnvironment' ]]; then
 	destroyEnvironment
+elif [[ ${command} = 'uploadFiles' ]]; then
+	uploadFiles
 else
 	exit 1
 fi
