@@ -12,6 +12,7 @@ django-taggit @ https://github.com/jazzband/django-taggit/archive/9d9ca4b36a09ec
 Jinja2==3.0.3
 markdown-it-py==2.0.0
 Pillow==9.0.0
+pylibmc==1.6.1
 requests==2.27.1
 
 ## The following requirements were added by pip freeze:

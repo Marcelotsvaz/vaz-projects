@@ -65,6 +65,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # Email
 #---------------------------------------
+# TODO: Fix email.
 EMAIL_HOST = 'email-ssl.com.br'
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
@@ -149,6 +150,19 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# Cache
+#---------------------------------------
+CACHES = {
+	'default':
+	{
+		'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
+		'TIMEOUT': 365 * 24 * 60 * 60,	# 1 year.
+		'LOCATION': 'memcached:11211',
+	},
+}
+CACHE_MIDDLEWARE_SECONDS = CACHES['default']['TIMEOUT']
+
+
 # django-imagekit
 #---------------------------------------
 IMAGEKIT_CACHEFILE_DIR = 'cache'
@@ -175,6 +189,6 @@ DISQUS_API_KEY = 'a5pgeL0uQcBBwVusQO1HM4GIx1P1MdCNeqkamBAVuBLnuT0scmmmtrDiQxKdrJ
 #---------------------------------------
 ELASTICSEARCH_DSL = {
 	'default': {
-		'hosts': 'localhost:9200'
+		'hosts': 'elasticsearch:9200'
 	},
 }

@@ -49,24 +49,6 @@ INSTALLED_APPS += [
 ]
 
 
-# Cache
-#---------------------------------------
-CACHES = {
-	'default':
-	{
-		'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
-		'TIMEOUT': 365 * 24 * 60 * 60,	# 1 year.
-		'LOCATION': 'memcached:11211',
-	},
-}
-CACHE_MIDDLEWARE_SECONDS = CACHES['default']['TIMEOUT']
-
-
 # Disqus
 #---------------------------------------
 DISQUS_SHORTNAME = 'vazprojects'
-
-
-# Django Elasticsearch DSL
-#---------------------------------------
-ELASTICSEARCH_DSL['default']['hosts'] = 'elasticsearch:9200'

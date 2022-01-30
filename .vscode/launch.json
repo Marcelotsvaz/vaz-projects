@@ -8,7 +8,7 @@
 			"django": true,
 			"subProcess": true,
 			"justMyCode": false,
-			"envFile": "${workspaceFolder}/server/scripts/development.sh",
+			"envFile": "${workspaceFolder}/server/scripts/local.sh",
 			"program": "${workspaceFolder}/vazProjects/manage.py",
 			"args": [
 				"runserver",
@@ -22,7 +22,7 @@
 			"django": true,
 			"subProcess": true,
 			"justMyCode": false,
-			"envFile": "${workspaceFolder}/server/scripts/development.sh",
+			"envFile": "${workspaceFolder}/server/scripts/local.sh",
 			"program": "${workspaceFolder}/vazProjects/manage.py",
 			"args": [
 				"test",
@@ -46,7 +46,7 @@
 			"django": true,
 			"subProcess": true,
 			"justMyCode": false,
-			"envFile": "${workspaceFolder}/server/scripts/development.sh",
+			"envFile": "${workspaceFolder}/server/scripts/local.sh",
 			"program": "${workspaceFolder}/vazProjects/manage.py",
 			"args": [
 				"${input:command}",
