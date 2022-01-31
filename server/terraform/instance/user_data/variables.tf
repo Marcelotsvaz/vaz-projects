@@ -12,27 +12,27 @@ variable "files" {
 }
 
 
-variable "templated_files" {
-	description = "Templated files that will be added to the archive."
+variable "templates" {
+	description = "Templates that will be rendered and added to the archive."
 	type = set( string )
 }
 
 
 variable "context" {
-	description = "Context for templated files."
+	description = "Context for templates."
 	type = map( any )
 }
 
 
-variable "working_dir" {
-	description = "Working directory."
+variable "input_dir" {
+	description = "Raw file and template location."
 	type = string
 	default = "."
 }
 
 
-variable "temp_dir" {
-	description = "Directory where rendered templates will be temporarily saved."
+variable "output_dir" {
+	description = "Directory where rendered templates will be saved."
 	type = string
 	default = "/tmp/terraform"
 }

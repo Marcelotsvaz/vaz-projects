@@ -46,8 +46,8 @@ data "aws_ami" "arch_linux" {
 module "user_data" {
 	source = "./user_data"
 	
-	working_dir = "../../scripts"
-	temp_dir = "../../../deployment"
+	input_dir = "../../scripts"
+	output_dir = "../../../deployment"
 	
 	files = [
 		"perInstance.sh",
@@ -55,7 +55,7 @@ module "user_data" {
 		"perShutdown.sh",
 	]
 	
-	templated_files = [ "environment.sh" ]
+	templates = [ "environment.sh" ]
 	
 	context = {
 		environment = var.environment
