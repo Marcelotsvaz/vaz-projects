@@ -72,7 +72,10 @@ resource "aws_route53_record" "caa" {
 	name = local.domain
 	type = "CAA"
 	ttl = "3600"
-	records = [ "0 issue \"amazonaws.com\"" ]
+	records = [
+		"0 issue \"letsencrypt.org\"",
+		"0 issue \"amazonaws.com\"",
+	]
 }
 
 
