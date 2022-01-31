@@ -130,16 +130,10 @@ function uploadFiles()
 # 
 # Run command.
 #-------------------------------------------------------------------------------
-if [[ ${command} = 'deployAws' ]]; then
-	deployAws
-elif [[ ${command} = 'destroyAws' ]]; then
-	destroyAws
-elif [[ ${command} = 'deployEnvironment' ]]; then
-	deployEnvironment
-elif [[ ${command} = 'destroyEnvironment' ]]; then
-	destroyEnvironment
-elif [[ ${command} = 'uploadFiles' ]]; then
-	uploadFiles
+if [[ "${command}" =~ ^(deployAws|destroyAws|deployEnvironment|destroyEnvironment|uploadFiles)$ ]]; then
+	${command}
 else
+	echo 'Invalid command.'
+	
 	exit 1
 fi
