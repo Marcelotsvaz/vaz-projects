@@ -7,117 +7,135 @@
 
 
 stages:
-    - test
-    - deploy
-    - upload
+    - build
+    # - test
+    # - deploy
+    # - upload
 
 
 variables:
     PIP_CACHE_DIR: ${CI_PROJECT_DIR}/.cache/pip
+    applicationImage: ${CI_REGISTRY_IMAGE}/application:${CI_COMMIT_SHORT_SHA}
 
 
 default:
-    image: python:3.10.2-bullseye
+    image: docker:20.10.12
 
 
 
 # 
 # Jobs.
 #-----------------------------------------------------------------------------------------------------------------------
-test:
-    stage: test
+build-docker-image:
+    stage: build
     
     environment:
         name: staging
         action: prepare
     
     services:
-        - memcached:1.6.13-bullseye
-        - name: elasticsearch:7.16.3
-          command: [ 'elasticsearch', '-Ediscovery.type=single-node' ]
-          variables:
-              ES_JAVA_OPTS: '-Xms128m -Xmx128m'
-    
-    cache:
-        paths:
-            - .cache/pip/
+        - docker:20.10.12-dind
     
     script:
-        - set -a; source server/scripts/local.sh; set +a
-        - apt-get update; apt-get install --yes --no-install-recommends --quiet libmemcached-dev
-        - pip install -r requirements/${CI_ENVIRONMENT_TIER}.txt
-        - mkdir -p deployment; cp ${DJANGO_SECRETS_FILE} deployment/secrets.py
-        - coverage run vazProjects/manage.py test vazProjects --pattern='tests.py'
-        - coverage report; coverage xml
-    
-    artifacts:
-        reports:
-            cobertura: deployment/coverage.xml
+        - docker login --username ${CI_REGISTRY_USER} --password ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
+        - docker build --pull --tag ${applicationImage} application
+        - docker push ${applicationImage}
 
 
-deployEnvironment:
-    image:
-        name: hashicorp/terraform:1.1.4
-        entrypoint: [ "" ]
+# test:
+#     stage: test
     
-    stage: deploy
+#     environment:
+#         name: staging
+#         action: prepare
     
-    environment:
-        name: staging
-        action: start
-        on_stop: destroyEnvironment
+#     services:
+#         - memcached:1.6.13-bullseye
+#         - name: elasticsearch:7.16.3
+#           command: [ 'elasticsearch', '-Ediscovery.type=single-node' ]
+#           variables:
+#               ES_JAVA_OPTS: '-Xms128m -Xmx128m'
     
-    cache:
-        paths:
-            - deployment/terraform/
+#     cache:
+#         paths:
+#             - .cache/pip/
     
-    script:
-        - apk add --no-cache bash tar jq
-        - server/scripts/deploy.sh deployEnvironment ${CI_ENVIRONMENT_TIER}
+#     script:
+#         - set -a; source server/scripts/local.sh; set +a
+#         - apt-get update; apt-get install --yes --no-install-recommends --quiet libmemcached-dev
+#         - pip install -r requirements/${CI_ENVIRONMENT_TIER}.txt
+#         - mkdir -p deployment; cp ${DJANGO_SECRETS_FILE} deployment/secrets.py
+#         - coverage run vazProjects/manage.py test vazProjects --pattern='tests.py'
+#         - coverage report; coverage xml
     
-    artifacts:
-        paths:
-            - deployment/environment.sh
+#     artifacts:
+#         reports:
+#             cobertura: deployment/coverage.xml
 
 
-destroyEnvironment:
-    image:
-        name: hashicorp/terraform:1.1.4
-        entrypoint: [ "" ]
+# deployEnvironment:
+#     image:
+#         name: hashicorp/terraform:1.1.4
+#         entrypoint: [ "" ]
     
-    stage: deploy
+#     stage: deploy
     
-    environment:
-        name: staging
-        action: stop
+#     environment:
+#         name: staging
+#         action: start
+#         on_stop: destroyEnvironment
     
-    rules:
-        - when: manual
-          allow_failure: true
+#     cache:
+#         paths:
+#             - deployment/terraform/
     
-    cache:
-        paths:
-            - deployment/terraform/
+#     script:
+#         - apk add --no-cache bash tar jq
+#         - server/scripts/deploy.sh deployEnvironment ${CI_ENVIRONMENT_TIER}
     
-    script:
-        - apk add --no-cache bash jq
-        - server/scripts/deploy.sh destroyEnvironment ${CI_ENVIRONMENT_TIER}
+#     artifacts:
+#         paths:
+#             - deployment/environment.sh
 
 
-uploadFiles:
-    stage: upload
+# destroyEnvironment:
+#     image:
+#         name: hashicorp/terraform:1.1.4
+#         entrypoint: [ "" ]
     
-    environment:
-        name: staging
-        action: prepare
+#     stage: deploy
     
-    cache:
-        paths:
-            - .cache/pip/
+#     environment:
+#         name: staging
+#         action: stop
     
-    script:
-        - apt-get update; apt-get install --yes --no-install-recommends --quiet libmemcached-dev npm awscli
-        - npm install --global less
-        - pip install -r requirements/${CI_ENVIRONMENT_TIER}.txt
-        - mkdir -p deployment; cp ${DJANGO_SECRETS_FILE} deployment/secrets.py
-        - server/scripts/deploy.sh uploadFiles ${CI_ENVIRONMENT_TIER}
+#     rules:
+#         - when: manual
+#           allow_failure: true
+    
+#     cache:
+#         paths:
+#             - deployment/terraform/
+    
+#     script:
+#         - apk add --no-cache bash jq
+#         - server/scripts/deploy.sh destroyEnvironment ${CI_ENVIRONMENT_TIER}
+
+
+# uploadFiles:
+#     stage: upload
+    
+#     environment:
+#         name: staging
+#         action: prepare
+    
+#     cache:
+#         paths:
+#             - .cache/pip/
+    
+#     script:
+#         - apt-get update; apt-get install --yes --no-install-recommends --quiet libmemcached-dev npm awscli
+#         - npm install --global less
+#         - pip install -r requirements/${CI_ENVIRONMENT_TIER}.txt
+#         - mkdir -p deployment; cp ${DJANGO_SECRETS_FILE} deployment/secrets.py
+#         - server/scripts/deploy.sh uploadFiles ${CI_ENVIRONMENT_TIER}
