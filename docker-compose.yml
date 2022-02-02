@@ -12,7 +12,8 @@ version: "3.8"
 
 services:
     application:
-        build: vazProjects
+        image: vazprojects-application:development
+        build: application/
         
         env_file:
             - server/scripts/local.sh
