@@ -4,6 +4,7 @@ Django==4.0.1
 django-3-jet @ https://gitlab.com/marcelotsvaz/django-jet/-/archive/45eee09b/django-jet.tar.gz
 django-cleanup==5.2.0
 django-compression-middleware==0.4.1
+django-debug-toolbar==3.2.4
 django-elasticsearch-dsl==7.2.2
 django-imagekit==4.1.0
 django-object-actions==3.1.0
@@ -14,6 +15,7 @@ markdown-it-py==2.0.0
 Pillow==9.0.0
 pylibmc==1.6.1
 requests==2.27.1
+uWSGI==2.0.20
 
 ## The following requirements were added by pip freeze:
 asgiref==3.4.1

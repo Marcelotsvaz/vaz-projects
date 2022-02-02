@@ -1,1 +1,1 @@
-../../deployment/secrets.py
+../deployment/secrets.py

@@ -7,14 +7,14 @@
 
 
 # Terraform
-TF_DATA_DIR='../../../deployment/terraform'
+TF_DATA_DIR=../../../deployment/terraform
 
 # Network
-domainName='vaz-pc.lan'
+domainName=vaz-pc.lan
 
 # Static Files
-bucket='local'
+bucket=local
 
 # Django
-DJANGO_SETTINGS_MODULE='settings.local'
-PYTHONPYCACHEPREFIX='deployment/env/pycache'
+DJANGO_SETTINGS_MODULE=settings.local
+PYTHONPYCACHEPREFIX=deployment/env/pycache

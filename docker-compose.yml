@@ -1,0 +1,47 @@
+#
+# VAZ Projects
+#
+#
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+version: "3.8"
+
+
+
+services:
+    application:
+        build: vazProjects
+        
+        env_file:
+            - server/scripts/local.sh
+        
+        volumes:
+            - type: bind
+              source: deployment/
+              target: /usr/src/app/deployment/
+        
+        command: [ "runserver", "0.0.0.0:8000" ]
+        
+        ports:
+            - "8000:8000"
+    
+    
+    memcached:
+        image: memcached:1.6.13-bullseye
+        
+        ports:
+            - "11211:11211"
+    
+    
+    elasticsearch:
+        image: elasticsearch:7.16.3
+        
+        environment:
+            - discovery.type=single-node
+            - ES_JAVA_OPTS=-Xms128m -Xmx128m
+        
+        ports:
+            - "9200:9200"
+            - "9300:9300"

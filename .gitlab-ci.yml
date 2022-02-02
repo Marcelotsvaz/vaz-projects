@@ -17,7 +17,7 @@ variables:
 
 
 default:
-    image: python:3.9.6-bullseye
+    image: python:3.10.2-bullseye
 
 
 
@@ -32,8 +32,8 @@ test:
         action: prepare
     
     services:
-        - memcached:1.6.10-buster
-        - name: elasticsearch:7.14.2
+        - memcached:1.6.13-bullseye
+        - name: elasticsearch:7.16.3
           command: [ 'elasticsearch', '-Ediscovery.type=single-node' ]
           variables:
               ES_JAVA_OPTS: '-Xms128m -Xmx128m'
