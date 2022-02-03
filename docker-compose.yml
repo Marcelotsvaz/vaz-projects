@@ -6,13 +6,13 @@
 
 
 
-version: "3.8"
+version: '3.8'
 
 
 
 services:
     application:
-        image: vazprojects-application:development
+        image: registry.gitlab.com/marcelotsvaz/vaz-projects/application:latest
         build: application/
         
         env_file:
@@ -20,20 +20,17 @@ services:
         
         volumes:
             - type: bind
-              source: deployment/
+              source: ./deployment/
               target: /usr/src/app/deployment/
         
-        command: [ "runserver", "0.0.0.0:8000" ]
+        command: [ 'runserver', '0.0.0.0:8000' ]
         
         ports:
-            - "8000:8000"
+            - '8000:8000'
     
     
     memcached:
         image: memcached:1.6.13-bullseye
-        
-        ports:
-            - "11211:11211"
     
     
     elasticsearch:
@@ -42,7 +39,8 @@ services:
         environment:
             - discovery.type=single-node
             - ES_JAVA_OPTS=-Xms128m -Xmx128m
-        
-        ports:
-            - "9200:9200"
-            - "9300:9300"
+
+
+
+# depends_on
+# restart

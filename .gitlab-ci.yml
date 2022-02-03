@@ -15,7 +15,7 @@ stages:
 
 variables:
     PIP_CACHE_DIR: ${CI_PROJECT_DIR}/.cache/pip
-    applicationImage: ${CI_REGISTRY_IMAGE}/application:${CI_COMMIT_SHORT_SHA}
+    applicationImage: ${CI_REGISTRY_IMAGE}/application:latest # ${CI_COMMIT_SHORT_SHA}
 
 
 default:
@@ -42,41 +42,32 @@ build-docker-image:
         - docker push ${applicationImage}
 
 
-# test:
-#     stage: test
+unit-tests:
+    stage: test
     
-#     environment:
-#         name: staging
-#         action: prepare
+    environment:
+        name: staging
+        action: prepare
     
-#     services:
-#         - memcached:1.6.13-bullseye
-#         - name: elasticsearch:7.16.3
-#           command: [ 'elasticsearch', '-Ediscovery.type=single-node' ]
-#           variables:
-#               ES_JAVA_OPTS: '-Xms128m -Xmx128m'
+    image: docker/compose:alpine-1.29.2
     
-#     cache:
-#         paths:
-#             - .cache/pip/
+    script:
+        - mkdir -p deployment; cp ${DJANGO_SECRETS_FILE} deployment/secrets.py
+        - docker-compose up --detach
+        - docker-compose exec --no-TTY application curl --silent --retry 300 --retry-connrefused --retry-delay 1 elasticsearch:9200/_cluster/health/
+        - docker-compose exec --no-TTY application coverage run manage.py test
+        - docker-compose exec --no-TTY application coverage report
+        - docker-compose exec --no-TTY application coverage xml
     
-#     script:
-#         - set -a; source server/scripts/local.sh; set +a
-#         - apt-get update; apt-get install --yes --no-install-recommends --quiet libmemcached-dev
-#         - pip install -r requirements/${CI_ENVIRONMENT_TIER}.txt
-#         - mkdir -p deployment; cp ${DJANGO_SECRETS_FILE} deployment/secrets.py
-#         - coverage run vazProjects/manage.py test vazProjects --pattern='tests.py'
-#         - coverage report; coverage xml
-    
-#     artifacts:
-#         reports:
-#             cobertura: deployment/coverage.xml
+    artifacts:
+        reports:
+            cobertura: deployment/coverage.xml
 
 
 # deployEnvironment:
 #     image:
 #         name: hashicorp/terraform:1.1.4
-#         entrypoint: [ "" ]
+#         entrypoint: [ '' ]
     
 #     stage: deploy
     
@@ -101,7 +92,7 @@ build-docker-image:
 # destroyEnvironment:
 #     image:
 #         name: hashicorp/terraform:1.1.4
-#         entrypoint: [ "" ]
+#         entrypoint: [ '' ]
     
 #     stage: deploy
     
