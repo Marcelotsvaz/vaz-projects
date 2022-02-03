@@ -19,7 +19,8 @@ variables:
 
 
 default:
-    image: docker:20.10.12
+    before_script:
+        - docker login --username ${CI_REGISTRY_USER} --password ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
 
 
 
@@ -36,8 +37,9 @@ build-docker-image:
     services:
         - docker:20.10.12-dind
     
+    image: docker:20.10.12
+    
     script:
-        - docker login --username ${CI_REGISTRY_USER} --password ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
         - docker build --pull --tag ${applicationImage} application
         - docker push ${applicationImage}
 
@@ -48,6 +50,9 @@ unit-tests:
     environment:
         name: staging
         action: prepare
+    
+    services:
+        - docker:20.10.12-dind
     
     image: docker/compose:alpine-1.29.2
     
