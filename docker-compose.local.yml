@@ -1,0 +1,23 @@
+#
+# VAZ Projects
+#
+#
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+version: '3.8'
+
+
+
+services:
+    application:
+        image: registry.gitlab.com/marcelotsvaz/vaz-projects/application:development
+        build: application/
+        
+        env_file: [ 'server/scripts/local.sh' ]
+        
+        command: [ './manage.py', 'runserver', '0.0.0.0:8000' ]
+        
+        ports:
+            - '8000:8000'

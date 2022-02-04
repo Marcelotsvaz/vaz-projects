@@ -16,6 +16,7 @@ stages:
 variables:
     PIP_CACHE_DIR: ${CI_PROJECT_DIR}/.cache/pip
     applicationImage: ${CI_REGISTRY_IMAGE}/application:latest # ${CI_COMMIT_SHORT_SHA}
+    composeConfig: '-f docker-compose.yml -f docker-compose.local.yml'
 
 
 
@@ -55,11 +56,11 @@ unit-tests:
     script:
         - docker login --username ${CI_REGISTRY_USER} --password ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
         - mkdir -p deployment; cp ${DJANGO_SECRETS_FILE} deployment/secrets.py
-        - docker-compose up --detach
-        - docker-compose exec --no-TTY application curl --silent --retry 300 --retry-connrefused --retry-delay 1 elasticsearch:9200/_cluster/health/
-        - docker-compose exec --no-TTY application coverage run manage.py test
-        - docker-compose exec --no-TTY application coverage report
-        - docker-compose exec --no-TTY application coverage xml
+        - docker-compose ${composeConfig} up --detach
+        - docker-compose ${composeConfig} exec --no-TTY application curl --silent --retry 300 --retry-connrefused --retry-delay 1 elasticsearch:9200/_cluster/health/
+        - docker-compose ${composeConfig} exec --no-TTY application coverage run manage.py test
+        - docker-compose ${composeConfig} exec --no-TTY application coverage report
+        - docker-compose ${composeConfig} exec --no-TTY application coverage xml
     
     artifacts:
         reports:

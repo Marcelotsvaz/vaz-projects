@@ -16,14 +16,16 @@ WORKDIR /usr/src/app/
 RUN apt-get update && apt-get install --yes --no-install-recommends --quiet libmemcached-dev && rm -rf /var/lib/apt/lists/*
 RUN pip install --no-cache-dir --upgrade pip wheel
 
+RUN useradd -rms /usr/sbin/nologin django
+
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# USER django
+
 COPY . .
 
-ENTRYPOINT [ "./manage.py" ]
 
-# user
 # requirements
 # tag
 # compose build
