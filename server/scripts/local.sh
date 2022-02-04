@@ -9,12 +9,8 @@
 # Terraform
 TF_DATA_DIR=../../../deployment/terraform
 
-# Network
-domainName=vaz-pc.lan
 
-# Static Files
-bucket=local
-
-# Django
+# Django application.
 DJANGO_SETTINGS_MODULE=settings.local
-PYTHONPYCACHEPREFIX=deployment/env/pycache
+domainName=vaz-pc.lan
+bucket=local

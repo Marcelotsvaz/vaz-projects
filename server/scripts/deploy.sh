@@ -83,10 +83,11 @@ function deployEnvironment()
 {
 	cd ${terraformRoot}/instance
 	terraformInit ${environment}
-	terraform apply							\
-		-auto-approve						\
-		-var="environment=${environment}"	\
-		-var="repository_snapshot=${repositorySnapshot}"
+	terraform apply											\
+		-auto-approve										\
+		-var="environment=${environment}"					\
+		-var="repository_snapshot=${repositorySnapshot}"	\
+		-var="application_image=${applicationImage}"
 }
 
 
@@ -98,10 +99,11 @@ function destroyEnvironment()
 {
 	cd ${terraformRoot}/instance
 	terraformInit ${environment}
-	terraform destroy						\
-		-auto-approve						\
-		-var="environment=${environment}"	\
-		-var="repository_snapshot=${repositorySnapshot}"
+	terraform destroy										\
+		-auto-approve										\
+		-var="environment=${environment}"					\
+		-var="repository_snapshot=${repositorySnapshot}"	\
+		-var="application_image=${applicationImage}"
 }
 
 

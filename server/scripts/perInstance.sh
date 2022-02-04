@@ -35,6 +35,7 @@ mkdir deployment/logs/
 
 docker-compose up --detach
 docker-compose exec application ./manage.py migrate --no-input
+docker-compose exec application ./manage.py search_index --populate
 EOF
 
 systemctl enable /home/${user}/server/systemdUnits/*

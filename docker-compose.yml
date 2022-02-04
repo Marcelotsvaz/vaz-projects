@@ -12,20 +12,22 @@ version: '3.8'
 
 services:
     application:
-        image: ${applicationImage}
+        image: ${applicationImage-}
         
-        env_file:
-            - deployment/environment.sh
+        environment:
+            - DJANGO_SETTINGS_MODULE
+            - domainName
+            - bucket
         
         volumes:
             - type: bind
               source: ./deployment/
               target: /usr/src/app/deployment/
         
-        command: [ 'uwsgi', '--ini', 'uwsgi.ini' ]
+        command: [ uwsgi, --ini, uwsgi.ini ]
         
         ports:
-            - '3031:3031'
+            - 3031:3031
     
     
     memcached:
@@ -36,8 +38,8 @@ services:
         image: elasticsearch:7.16.3
         
         environment:
-            - discovery.type=single-node
-            - ES_JAVA_OPTS=-Xms128m -Xmx128m
+            discovery.type: single-node
+            ES_JAVA_OPTS: -Xms128m -Xmx128m
 
 
 

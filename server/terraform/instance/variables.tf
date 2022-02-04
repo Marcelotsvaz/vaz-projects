@@ -18,6 +18,12 @@ variable "repository_snapshot" {
 }
 
 
+variable "application_image" {
+	type = string
+	description = "Application Docker image."
+}
+
+
 
 locals {
 	project_name = "VAZ Projects"

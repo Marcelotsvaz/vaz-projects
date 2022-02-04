@@ -60,6 +60,7 @@ module "user_data" {
 	context = {
 		environment = var.environment
 		repository_snapshot = var.repository_snapshot
+		application_image = var.application_image
 		region = local.region
 		domain = local.domain
 		hosted_zone_id = data.aws_route53_zone.hosted_zone.zone_id
