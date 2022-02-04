@@ -34,8 +34,8 @@ aws s3 sync s3://${bucket}/deployment/ deployment/ --no-progress
 mkdir deployment/logs/
 
 docker-compose up --detach
-docker-compose exec application ./manage.py migrate --no-input
-docker-compose exec application ./manage.py search_index --populate
+docker-compose exec --no-TTY application ./manage.py migrate --no-input
+docker-compose exec --no-TTY application ./manage.py search_index --populate
 EOF
 
 systemctl enable /home/${user}/server/systemdUnits/*
