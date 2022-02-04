@@ -22,6 +22,7 @@ if [[ ${local} ]]; then
 fi
 
 # Variables.
+repositorySnapshot="${CI_PROJECT_URL}/-/archive/${CI_COMMIT_SHA}/vaz-projects.tar.gz"
 terraformRoot='server/terraform'
 TF_DATA_DIR='../../../deployment/terraform'
 TF_IN_AUTOMATION='True'
@@ -84,7 +85,8 @@ function deployEnvironment()
 	terraformInit ${environment}
 	terraform apply							\
 		-auto-approve						\
-		-var="environment=${environment}"
+		-var="environment=${environment}"	\
+		-var="repository_snapshot=${repositorySnapshot}"
 }
 
 
@@ -96,9 +98,10 @@ function destroyEnvironment()
 {
 	cd ${terraformRoot}/instance
 	terraformInit ${environment}
-	terraform destroy							\
-		-auto-approve							\
-		-var="environment=${environment}"
+	terraform destroy						\
+		-auto-approve						\
+		-var="environment=${environment}"	\
+		-var="repository_snapshot=${repositorySnapshot}"
 }
 
 

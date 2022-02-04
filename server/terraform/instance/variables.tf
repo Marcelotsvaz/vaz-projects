@@ -12,6 +12,12 @@ variable "environment" {
 }
 
 
+variable "repository_snapshot" {
+	type = string
+	description = "Link to Git repository containing application code."
+}
+
+
 
 locals {
 	project_name = "VAZ Projects"
