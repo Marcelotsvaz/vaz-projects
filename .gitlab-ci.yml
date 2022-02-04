@@ -55,7 +55,7 @@ unit-tests:
     
     script:
         - docker login --username ${CI_REGISTRY_USER} --password ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
-        - mkdir -p deployment; cp ${DJANGO_SECRETS_FILE} deployment/secrets.py
+        - mkdir deployment; cp ${DJANGO_SECRETS_FILE} deployment/secrets.py; touch deployment/environment.sh
         - docker-compose ${composeConfig} up --detach
         - docker-compose ${composeConfig} exec --no-TTY application curl --silent --retry 300 --retry-connrefused --retry-delay 1 elasticsearch:9200/_cluster/health/
         - docker-compose ${composeConfig} exec --no-TTY application coverage run manage.py test
