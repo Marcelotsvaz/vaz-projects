@@ -18,11 +18,6 @@ variables:
     applicationImage: ${CI_REGISTRY_IMAGE}/application:latest # ${CI_COMMIT_SHORT_SHA}
 
 
-default:
-    before_script:
-        - docker login --username ${CI_REGISTRY_USER} --password ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
-
-
 
 # 
 # Jobs.
@@ -40,6 +35,7 @@ build-docker-image:
     image: docker:20.10.12
     
     script:
+        - docker login --username ${CI_REGISTRY_USER} --password ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
         - docker build --pull --tag ${applicationImage} application
         - docker push ${applicationImage}
 
@@ -57,6 +53,7 @@ unit-tests:
     image: docker/compose:alpine-1.29.2
     
     script:
+        - docker login --username ${CI_REGISTRY_USER} --password ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
         - mkdir -p deployment; cp ${DJANGO_SECRETS_FILE} deployment/secrets.py
         - docker-compose up --detach
         - docker-compose exec --no-TTY application curl --silent --retry 300 --retry-connrefused --retry-delay 1 elasticsearch:9200/_cluster/health/
