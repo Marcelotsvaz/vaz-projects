@@ -17,3 +17,6 @@ bucket=local
 
 # Postgres.
 POSTGRES_PASSWORD=postgres
+
+# Elasticsearch.
+ELASTIC_PASSWORD=elastic

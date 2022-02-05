@@ -22,6 +22,7 @@ services:
             - DJANGO_SETTINGS_MODULE
             - djangoSecretKey
             - POSTGRES_PASSWORD
+            - ELASTIC_PASSWORD
             - AWS_ACCESS_KEY_ID
             - AWS_SECRET_ACCESS_KEY
             - domainName
@@ -61,8 +62,10 @@ services:
         image: elasticsearch:7.16.3
         
         environment:
-            discovery.type: single-node
             ES_JAVA_OPTS: -Xms128m -Xmx128m
+            discovery.type: single-node
+            xpack.security.enabled: true
+            ELASTIC_PASSWORD:
         
         healthcheck:
             test: curl --silent elasticsearch:9200/_cluster/health/

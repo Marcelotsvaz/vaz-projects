@@ -53,21 +53,6 @@ JET_DEFAULT_THEME = 'dark-gray'
 JET_SIDE_MENU_COMPACT = True
 
 
-# Databases
-#---------------------------------------
-DATABASES = {
-	'default': {
-		'ENGINE': 'django.db.backends.postgresql',
-		'HOST': 'postgres',
-		'USER': 'postgres',
-		'PASSWORD': environ['POSTGRES_PASSWORD'],
-		'NAME': 'postgres',
-	},
-}
-
-DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
-
-
 # Email
 #---------------------------------------
 # TODO: Fix email.
@@ -155,6 +140,21 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# Databases
+#---------------------------------------
+DATABASES = {
+	'default': {
+		'ENGINE': 'django.db.backends.postgresql',
+		'HOST': 'postgres',
+		'USER': 'postgres',
+		'PASSWORD': environ['POSTGRES_PASSWORD'],
+		'NAME': 'postgres',
+	},
+}
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+
 # Cache
 #---------------------------------------
 CACHES = {
@@ -166,6 +166,16 @@ CACHES = {
 	},
 }
 CACHE_MIDDLEWARE_SECONDS = CACHES['default']['TIMEOUT']
+
+
+# Django Elasticsearch DSL
+#---------------------------------------
+ELASTICSEARCH_DSL = {
+	'default': {
+		'hosts': [ 'elasticsearch' ],
+		'http_auth': [ 'elastic', environ['ELASTIC_PASSWORD'] ],
+	},
+}
 
 
 # django-imagekit
@@ -188,12 +198,3 @@ IMAGE_OPTIONS = {
 # Disqus
 #---------------------------------------
 DISQUS_API_KEY = 'a5pgeL0uQcBBwVusQO1HM4GIx1P1MdCNeqkamBAVuBLnuT0scmmmtrDiQxKdrJoG'
-
-
-# Django Elasticsearch DSL
-#---------------------------------------
-ELASTICSEARCH_DSL = {
-	'default': {
-		'hosts': 'elasticsearch:9200'
-	},
-}
