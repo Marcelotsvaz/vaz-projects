@@ -20,6 +20,7 @@ services:
         
         environment:
             - DJANGO_SETTINGS_MODULE
+            - djangoSecretKey
             - POSTGRES_PASSWORD
             - AWS_ACCESS_KEY_ID
             - AWS_SECRET_ACCESS_KEY
@@ -28,8 +29,11 @@ services:
         
         volumes:
             - type: bind
-              source: ./deployment/
-              target: /usr/src/app/deployment/
+              source: ./deployment/media
+              target: /usr/src/app/deployment/media
+            - type: bind
+              source: ./deployment/tests
+              target: /usr/src/app/deployment/tests
         
         command: [ uwsgi, --ini, uwsgi.ini ]
         

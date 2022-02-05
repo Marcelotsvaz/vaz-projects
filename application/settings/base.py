@@ -22,6 +22,8 @@ ALLOWED_HOSTS = [ environ['domainName'] ]
 ROOT_URLCONF = 'urls'
 WSGI_APPLICATION = 'wsgi.application'
 
+SECRET_KEY = environ['djangoSecretKey']
+
 
 # Static and media files
 #---------------------------------------
