@@ -54,7 +54,7 @@ runUnitTests:
     
     script:
         - set -a; source server/scripts/local.sh; set +a
-        - docker login --username ${CI_REGISTRY_USER} --password ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
+        - echo ${CI_REGISTRY_PASSWORD} | docker login --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
         - mkdir deployment; cp ${DJANGO_SECRETS_FILE} deployment/secrets.py
         - docker-compose run --rm application coverage run manage.py test
         - docker-compose run --rm application coverage report
@@ -128,7 +128,7 @@ uploadFiles:
     
     script:
         - set -a; source deployment/environment.sh; set +a    # From deployEnvironment.
-        - docker login --username ${CI_REGISTRY_USER} --password ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
+        - echo ${CI_REGISTRY_PASSWORD} | docker login --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
         - apk add --no-cache bash # awscli  # TODO: Cloudfront invalidation.
         - cp ${DJANGO_SECRETS_FILE} deployment/secrets.py
         - docker-compose run --no-deps --rm application ./manage.py collectstatic --ignore '*/src/*' --no-input
