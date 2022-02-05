@@ -111,24 +111,14 @@ function destroyEnvironment()
 # 
 # Upload static files and app source to S3.
 #-------------------------------------------------------------------------------
-function uploadFiles()
-{
-	# TODO: Check environment.
-	source 'deployment/environment.sh'
+# function uploadFiles()
+# {
+# 	# Upload static files.
+# 	vazProjects/manage.py collectstatic --ignore '*/src/*' --no-input
 	
-	# Source upload.
-	git archive HEAD |								\
-	tar -f - --wildcards --delete '**/static/**' |	\
-	gzip |											\
-	aws s3 cp - s3://${bucket}/source.tar.gz
-	
-	# Upload static files.
-	server/scripts/less.sh
-	vazProjects/manage.py collectstatic --ignore '*/src/*' --no-input
-	
-	# Invalidade static files cache.
-	aws cloudfront create-invalidation --distribution-id ${cloudfrontId} --paths '/*'
-}
+# 	# Invalidade static files cache.
+# 	aws cloudfront create-invalidation --distribution-id ${cloudfrontId} --paths '/*'
+# }
 
 
 

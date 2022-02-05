@@ -13,7 +13,8 @@ WORKDIR /usr/src/app/
 # ENV PYTHONDONTWRITEBYTECODE 1
 # ENV PYTHONUNBUFFERED 1
 
-RUN apt-get update && apt-get install --yes --no-install-recommends --quiet libmemcached-dev && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install --yes --no-install-recommends --quiet libmemcached-dev npm && rm -rf /var/lib/apt/lists/*
+RUN npm install --global less
 RUN pip install --no-cache-dir --upgrade pip wheel
 
 RUN useradd -rms /usr/sbin/nologin django
@@ -25,6 +26,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
+RUN lessc																					\
+	--no-color																				\
+	--source-map																			\
+	--include-path="$(find *App/static/*App/css/src/ -prune -printf '%p:' | sed 's/:$//')"	\
+	siteApp/static/siteApp/css/src/siteApp.less												\
+	deployment/static/siteApp/css/siteApp.css
 
 # requirements
 # tag
