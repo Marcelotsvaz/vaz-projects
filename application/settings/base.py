@@ -162,7 +162,7 @@ CACHES = {
 	{
 		'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
 		'TIMEOUT': 365 * 24 * 60 * 60,	# 1 year.
-		'LOCATION': 'memcached:11211',
+		'LOCATION': 'memcached',
 	},
 }
 CACHE_MIDDLEWARE_SECONDS = CACHES['default']['TIMEOUT']
