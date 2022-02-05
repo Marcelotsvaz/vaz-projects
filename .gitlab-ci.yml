@@ -56,11 +56,11 @@ unit-tests:
         - set -a; source server/scripts/local.sh; set +a
         - docker login --username ${CI_REGISTRY_USER} --password ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
         - mkdir deployment; cp ${DJANGO_SECRETS_FILE} deployment/secrets.py
-        - docker-compose up --detach
-        - docker-compose exec --no-TTY application curl --silent --retry 300 --retry-connrefused --retry-delay 1 elasticsearch:9200/_cluster/health/
-        - docker-compose exec --no-TTY application coverage run manage.py test
-        - docker-compose exec --no-TTY application coverage report
-        - docker-compose exec --no-TTY application coverage xml
+        - docker-compose up --detach memcached elasticsearch
+        - docker-compose run --rm application curl --silent --retry 300 --retry-connrefused --retry-delay 1 elasticsearch:9200/_cluster/health/
+        - docker-compose run --rm application coverage run manage.py test
+        - docker-compose run --rm application coverage report
+        - docker-compose run --rm application coverage xml
     
     artifacts:
         reports:
