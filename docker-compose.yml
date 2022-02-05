@@ -6,13 +6,15 @@
 
 
 
-version: '3.8'
-
-
-
 services:
     application:
         image: ${applicationImage-}
+        
+        depends_on:
+            memcached:
+                condition: service_started
+            elasticsearch:
+                condition: service_healthy
         
         environment:
             - DJANGO_SETTINGS_MODULE
@@ -40,8 +42,8 @@ services:
         environment:
             discovery.type: single-node
             ES_JAVA_OPTS: -Xms128m -Xmx128m
-
-
-
-# depends_on
-# restart
+        
+        healthcheck:
+            test: curl --silent elasticsearch:9200/_cluster/health/
+            interval: 1s
+            start_period: 60s

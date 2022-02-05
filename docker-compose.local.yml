@@ -6,10 +6,6 @@
 
 
 
-version: '3.8'
-
-
-
 services:
     application:
         image: registry.gitlab.com/marcelotsvaz/vaz-projects/application:development

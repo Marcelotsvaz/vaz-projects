@@ -56,8 +56,6 @@ unit-tests:
         - set -a; source server/scripts/local.sh; set +a
         - docker login --username ${CI_REGISTRY_USER} --password ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
         - mkdir deployment; cp ${DJANGO_SECRETS_FILE} deployment/secrets.py
-        - docker-compose up --detach memcached elasticsearch
-        - docker-compose run --rm application curl --silent --retry 300 --retry-connrefused --retry-delay 1 elasticsearch:9200/_cluster/health/
         - docker-compose run --rm application coverage run manage.py test
         - docker-compose run --rm application coverage report
         - docker-compose run --rm application coverage xml
@@ -133,5 +131,5 @@ uploadFiles:
         - docker login --username ${CI_REGISTRY_USER} --password ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
         - apk add --no-cache bash # awscli
         - cp ${DJANGO_SECRETS_FILE} deployment/secrets.py
-        - docker-compose run --rm application ./manage.py collectstatic --ignore '*/src/*' --no-input
+        - docker-compose run --no-deps --rm application ./manage.py collectstatic --ignore '*/src/*' --no-input
         # - aws cloudfront create-invalidation --distribution-id ${cloudfrontId} --paths '/*'
