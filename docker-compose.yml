@@ -11,6 +11,8 @@ services:
         image: ${applicationImage-}
         
         depends_on:
+            postgres:
+                condition: service_started
             memcached:
                 condition: service_started
             elasticsearch:
@@ -18,6 +20,7 @@ services:
         
         environment:
             - DJANGO_SETTINGS_MODULE
+            - POSTGRES_PASSWORD
             - AWS_ACCESS_KEY_ID
             - AWS_SECRET_ACCESS_KEY
             - domainName
@@ -32,6 +35,18 @@ services:
         
         ports:
             - 3031:3031
+    
+    
+    postgres:
+        image: postgres:14.1-alpine3.15
+        
+        environment:
+            - POSTGRES_PASSWORD
+        
+        volumes:
+            - type: bind
+              source: ./deployment/database/
+              target: /var/lib/postgresql/data
     
     
     memcached:

@@ -55,8 +55,11 @@ JET_SIDE_MENU_COMPACT = True
 #---------------------------------------
 DATABASES = {
 	'default': {
-		'ENGINE': 'django.db.backends.sqlite3',
-		'NAME': BASE_DIR / 'deployment/vazProjects.sqlite3',
+		'ENGINE': 'django.db.backends.postgresql',
+		'HOST': 'postgres',
+		'USER': 'postgres',
+		'PASSWORD': environ['POSTGRES_PASSWORD'],
+		'NAME': 'postgres',
 	},
 }
 
