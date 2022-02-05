@@ -171,8 +171,8 @@ mkdir /root/init
 cat > /root/init/instanceScriptsSetup.sh << 'EOF'
 #!/bin/bash
 # Grow root partition.
-disk="/dev/disk/by-uuid/$(lsblk -nro MOUNTPOINT,UUID | grep '^/ ' | cut -d ' ' -f2)"
-partition="/dev/disk/by-partuuid/$(lsblk -nro MOUNTPOINT,PARTUUID | grep '^/ ' | cut -d ' ' -f2)"
+disk="/dev/$(lsblk -nro MOUNTPOINT,PKNAME | grep '^/ ' | cut -d ' ' -f2)"
+partition="/dev/$(lsblk -nro MOUNTPOINT,KNAME | grep '^/ ' | cut -d ' ' -f2)"
 
 sgdisk --move-second-header ${disk}
 sgdisk --delete 2 ${disk}
