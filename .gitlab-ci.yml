@@ -59,11 +59,11 @@ runUnitTests:
         - docker-compose up --detach
         - docker-compose exec --no-TTY application coverage run manage.py test
         - docker-compose exec --no-TTY application coverage report
-        - docker-compose exec --no-TTY application coverage xml > deployment/tests/coverage.xml
+        - docker-compose exec --no-TTY application coverage xml > coverage.xml
     
     artifacts:
         reports:
-            cobertura: deployment/tests/coverage.xml
+            cobertura: coverage.xml
 
 
 deployEnvironment:
