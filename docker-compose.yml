@@ -39,11 +39,6 @@ services:
         
         environment:
             - POSTGRES_PASSWORD
-        
-        volumes:
-            - type: bind
-              source: ./deployment/database/
-              target: /var/lib/postgresql/data
     
     
     memcached:
