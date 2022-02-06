@@ -11,6 +11,11 @@ services:
         image: registry.gitlab.com/marcelotsvaz/vaz-projects/application:development
         build: application/
         
+        volumes:
+            - type: bind
+              source: ./deployment/media
+              target: /usr/src/app/deployment/media
+        
         command: [ ./manage.py, runserver, 0.0.0.0:8000 ]
         
         ports:

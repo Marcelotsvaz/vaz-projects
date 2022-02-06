@@ -28,14 +28,6 @@ services:
             - domainName
             - bucket
         
-        volumes:
-            - type: bind
-              source: ./deployment/media
-              target: /usr/src/app/deployment/media
-            - type: bind
-              source: ./deployment/tests
-              target: /usr/src/app/deployment/tests
-        
         command: [ uwsgi, --ini, uwsgi.ini ]
         
         ports:
