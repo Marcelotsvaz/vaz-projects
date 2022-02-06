@@ -56,7 +56,7 @@ services:
         environment:
             ES_JAVA_OPTS: -Xms128m -Xmx128m
             discovery.type: single-node
-            xpack.security.enabled: true
+            xpack.security.enabled: 'true'
             ELASTIC_PASSWORD:
         
         healthcheck:
