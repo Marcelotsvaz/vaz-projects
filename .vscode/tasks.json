@@ -1,23 +1,59 @@
 {
 	"version": "2.0.0",
+	
+	
+	
 	"tasks": [
+		{
+			"label": "Compose",
+			"type": "shell",
+			"command": "set -a; source server/scripts/local.sh; set +a; docker compose -f docker-compose.yml -f docker-compose.local.yml ${input:composeCommand}",
+			"problemMatcher": [],
+		},
+		
+		
 		{
 			"label": "Deploy",
 			"type": "shell",
 			"command": "server/scripts/deploy.sh",
 			"args": [
-				"${input:task}",
+				"${input:deployCommand}",
 				"global",
 				"local",
 			],
 			"problemMatcher": [],
 		},
 	],
+	
+	
+	
 	"inputs": [
 		{
-			"id": "task",
+			"id": "composeCommand",
 			"type": "pickString",
-			"description": "Select the operation",
+			"description": "Select operation",
+			"default": "up",
+			"options": [
+				{
+					"label": "up",
+					"value": "up --detach --build",
+				},
+				{
+					"label": "down",
+					"value": "down"
+				},
+				{
+					"label": "tests",
+					"value": "run --rm application sh -c 'coverage run ./manage.py test; coverage report'"
+				},
+			],
+		},
+		
+		
+		{
+			"id": "deployCommand",
+			"type": "pickString",
+			"description": "Select operation",
 			"default": "deployAws",
 			"options": [
 				{
