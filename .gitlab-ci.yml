@@ -15,6 +15,7 @@ stages:
 
 variables:
     PIP_CACHE_DIR: ${CI_PROJECT_DIR}/.cache/pip
+    repositorySnapshot: ${CI_PROJECT_URL}/-/archive/${CI_COMMIT_SHA}/vaz-projects.tar.gz
     applicationImage: ${CI_REGISTRY_IMAGE}/application:${CI_COMMIT_SHORT_SHA}
 
 

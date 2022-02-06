@@ -15,17 +15,15 @@ command=${1}
 environment=${2}
 local=${3}
 
-# Setup environment when running outside CI.
-if [[ ${local} ]]; then
-	source 'deployment/env/bin/activate'
-	source 'deployment/local.sh'
-fi
-
 # Variables.
-repositorySnapshot="${CI_PROJECT_URL}/-/archive/${CI_COMMIT_SHA}/vaz-projects.tar.gz"
 terraformRoot='server/terraform'
 TF_DATA_DIR='../../../deployment/terraform'
 TF_IN_AUTOMATION='True'
+
+# Setup environment when running outside CI.
+if [[ ${local} ]]; then
+	source 'deployment/local.sh'
+fi
 
 
 
@@ -35,8 +33,7 @@ TF_IN_AUTOMATION='True'
 function terraformInit()
 {
 	local stateName=${1}
-	
-	terraformUrl="https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/terraform/state/${stateName}"
+	local terraformUrl="https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/terraform/state/${stateName}"
 	
 	terraform init -reconfigure										\
 		-backend-config="address=${terraformUrl}"					\

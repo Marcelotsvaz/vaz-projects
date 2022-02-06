@@ -7,7 +7,7 @@
 			"command": "server/scripts/deploy.sh",
 			"args": [
 				"${input:task}",
-				"${input:environment}",
+				"global",
 				"local",
 			],
 			"problemMatcher": [],
@@ -15,26 +15,10 @@
 	],
 	"inputs": [
 		{
-			"id": "environment",
-			"type": "pickString",
-			"description": "Select the target environment",
-			"default": "staging",
-			"options": [
-				{
-					"label": "Staging",
-					"value": "staging"
-				},
-				{
-					"label": "Production",
-					"value": "production"
-				},
-			]
-		},
-		{
 			"id": "task",
 			"type": "pickString",
 			"description": "Select the operation",
-			"default": "deployEnvironment",
+			"default": "deployAws",
 			"options": [
 				{
 					"label": "Deploy AWS",
@@ -43,18 +27,6 @@
 				{
 					"label": "Destroy AWS",
 					"value": "destroyAws"
-				},
-				{
-					"label": "Deploy Environment",
-					"value": "deployEnvironment"
-				},
-				{
-					"label": "Destroy Environment",
-					"value": "destroyEnvironment"
-				},
-				{
-					"label": "Upload Files",
-					"value": "uploadFiles"
 				},
 			],
 		},
