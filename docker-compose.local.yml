@@ -16,7 +16,13 @@ services:
               source: ./deployment/media
               target: /usr/src/app/deployment/media
         
-        command: [ ./manage.py, runserver, 0.0.0.0:8000 ]
+        command:
+            - sh
+            - -c
+            - ./manage.py migrate --no-input;
+              ./manage.py search_index --populate;
+              ./manage.py runserver 0.0.0.0:8000;
+        
         
         ports:
             - 8000:8000

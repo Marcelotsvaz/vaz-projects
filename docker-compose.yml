@@ -28,7 +28,12 @@ services:
             - domainName
             - bucket
         
-        command: [ uwsgi, --ini, uwsgi.ini ]
+        command:
+            - sh
+            - -c
+            - ./manage.py migrate --no-input;
+              ./manage.py search_index --populate;
+              uwsgi --ini uwsgi.ini;
         
         ports:
             - 3031:3031
