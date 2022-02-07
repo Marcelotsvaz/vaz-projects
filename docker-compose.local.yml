@@ -23,7 +23,6 @@ services:
               ./manage.py search_index --populate;
               ./manage.py runserver 0.0.0.0:8000;
         
-        
         ports:
             - 8000:8000
     

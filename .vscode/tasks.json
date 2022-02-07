@@ -8,6 +8,12 @@
 			"label": "Compose",
 			"type": "shell",
 			"command": "set -a; source server/scripts/local.sh; set +a; docker compose -f docker-compose.yml -f docker-compose.local.yml ${input:composeCommand}",
+			"options": {
+				"env": {
+					"DOCKER_BUILDKIT": "1",
+					"COMPOSE_DOCKER_CLI_BUILD": "1",
+				}
+			},
 			"problemMatcher": [],
 		},
 		
@@ -41,6 +47,10 @@
 				{
 					"label": "down",
 					"value": "down"
+				},
+				{
+					"label": "build",
+					"value": "build"
 				},
 				{
 					"label": "tests",

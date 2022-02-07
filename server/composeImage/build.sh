@@ -7,6 +7,6 @@
 
 
 
-imageName='registry.gitlab.com/marcelotsvaz/vaz-projects/compose:2.2.3'
-docker build . --tag ${imageName}
-docker push ${imageName}
+imageName='registry.gitlab.com/marcelotsvaz/vaz-projects/compose:2.2'
+
+docker build --pull --tag ${imageName} --push .

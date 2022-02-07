@@ -17,7 +17,7 @@ variables:
     PIP_CACHE_DIR: ${CI_PROJECT_DIR}/.cache/pip
     repositorySnapshot: ${CI_PROJECT_URL}/-/archive/${CI_COMMIT_SHA}/vaz-projects.tar.gz
     applicationImage: ${CI_REGISTRY_IMAGE}/application:${CI_COMMIT_SHORT_SHA}
-    composeImage: ${CI_REGISTRY_IMAGE}/compose:2.2.3
+    composeImage: ${CI_REGISTRY_IMAGE}/compose:2.2
 
 
 
@@ -32,14 +32,13 @@ buildDockerImage:
         action: prepare
     
     services:
-        - docker:20.10.12-dind-alpine3.15
+        - docker:20.10-dind
     
     image: ${composeImage}
     
     script:
         - docker login --username ${CI_REGISTRY_USER} --password ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
-        - docker build --pull --tag ${applicationImage} application
-        - docker push ${applicationImage}
+        - docker build --pull --tag ${applicationImage} --push application
 
 
 runUnitTests:
@@ -50,7 +49,7 @@ runUnitTests:
         action: prepare
     
     services:
-        - docker:20.10.12-dind-alpine3.15
+        - docker:20.10-dind
     
     image: ${composeImage}
     
@@ -76,7 +75,7 @@ deployEnvironment:
         on_stop: destroyEnvironment
     
     image:
-        name: hashicorp/terraform:1.1.4
+        name: hashicorp/terraform:1.1.5
         entrypoint: [ '' ]
     
     cache:
@@ -104,7 +103,7 @@ destroyEnvironment:
           allow_failure: true
     
     image:
-        name: hashicorp/terraform:1.1.4
+        name: hashicorp/terraform:1.1.5
         entrypoint: [ '' ]
     
     cache:
@@ -124,7 +123,7 @@ uploadFiles:
         action: prepare
     
     services:
-        - docker:20.10.12-dind-alpine3.15
+        - docker:20.10-dind
     
     image: ${composeImage}
     
