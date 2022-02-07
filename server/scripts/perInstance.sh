@@ -33,7 +33,7 @@ curl -s ${repositorySnapshot} | tar -xz --strip-components 1
 aws s3 sync s3://${bucket}/deployment/ deployment/ --no-progress
 mkdir deployment/logs/
 
-docker-compose up --detach
+docker-compose --env-file deployment/secrets.sh up --detach
 EOF
 
 systemctl enable /home/${user}/server/systemdUnits/*
