@@ -4,11 +4,11 @@
 	"terminal.integrated.profiles.linux": {
 		"bash": {
 			"path": "/usr/bin/bash",
-			"args": [ "-c", "set -a; source '${workspaceFolder}/server/scripts/local.sh'; bash" ],
+			"args": [ "-c", "set -a; source '${workspaceFolder}/server/scripts/local.env'; bash" ],
 		},
 		"fish": {
 			"path": "/usr/bin/fish",
-			"args": [ "-c", "sourceEnv '${workspaceFolder}/server/scripts/local.sh'" ],
+			"args": [ "-c", "sourceEnv '${workspaceFolder}/server/scripts/local.env'" ],
 		}
 	},
 	

@@ -9,8 +9,8 @@
 resource "local_file" "templated_file" {
 	for_each = var.templates
 	
-	filename = "${var.output_dir}/${each.value}"
 	content = templatefile( "${var.input_dir}/${each.value}", var.context )
+	filename = trimsuffix( "${var.output_dir}/${each.value}", ".tpl" )
 }
 
 

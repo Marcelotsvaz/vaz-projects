@@ -12,5 +12,5 @@ Description = Backup
 [Service]
 Type = oneshot
 
-EnvironmentFile = /root/init/environment.sh
+EnvironmentFile = /root/init/environment.env
 ExecStart = /home/utl/server/config/backup.sh

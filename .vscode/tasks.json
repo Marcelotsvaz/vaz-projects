@@ -7,7 +7,7 @@
 		{
 			"label": "Compose",
 			"type": "shell",
-			"command": "set -a; source server/scripts/local.sh; set +a; docker compose -f docker-compose.yml -f docker-compose.local.yml ${input:composeCommand}",
+			"command": "set -a; source server/scripts/local.env; set +a; docker compose -f docker-compose.yml -f docker-compose.local.yml ${input:composeCommand}",
 			"options": {
 				"env": {
 					"DOCKER_BUILDKIT": "1",

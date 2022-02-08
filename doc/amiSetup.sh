@@ -219,7 +219,7 @@ ConditionPathExists = !/root/init/perInstance.done
 [Service]
 Type = oneshot
 
-EnvironmentFile = -/root/init/environment.sh
+EnvironmentFile = -/root/init/environment.env
 ExecStart = /root/init/perInstance.sh
 ExecStart = touch /root/init/perInstance.done
 
@@ -239,7 +239,7 @@ ConditionFileIsExecutable = /root/init/perBoot.sh
 [Service]
 Type = oneshot
 
-EnvironmentFile = -/root/init/environment.sh
+EnvironmentFile = -/root/init/environment.env
 ExecStart = /root/init/perBoot.sh
 
 [Install]
@@ -259,7 +259,7 @@ ConditionFileIsExecutable = /root/init/perShutdown.sh
 Type = oneshot
 RemainAfterExit = true
 
-EnvironmentFile = -/root/init/environment.sh
+EnvironmentFile = -/root/init/environment.env
 ExecStop = /root/init/perShutdown.sh
 
 [Install]

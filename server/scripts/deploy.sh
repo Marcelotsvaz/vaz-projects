@@ -22,7 +22,7 @@ TF_IN_AUTOMATION='True'
 
 # Setup environment when running outside CI.
 if [[ ${local} ]]; then
-	source 'deployment/local.sh'
+	source 'deployment/local.env'
 fi
 
 
