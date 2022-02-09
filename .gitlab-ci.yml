@@ -37,7 +37,7 @@ buildDockerImage:
     image: ${composeImage}
     
     script:
-        - docker login --username ${CI_REGISTRY_USER} --password ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
+        - echo ${CI_REGISTRY_PASSWORD} | docker login --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
         - docker build --pull --tag ${applicationImage} application
         - docker push --quiet ${applicationImage}
 
