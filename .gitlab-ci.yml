@@ -64,6 +64,7 @@ runUnitTests:
     
     artifacts:
         reports:
+            junit: unitTests.xml
             cobertura: coverage.xml
 
 

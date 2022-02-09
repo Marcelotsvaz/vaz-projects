@@ -16,6 +16,7 @@ Pillow==9.0.0
 psycopg2==2.9.3
 pylibmc==1.6.1
 requests==2.27.1
+unittest-xml-reporting==3.2.0
 uWSGI==2.0.20
 
 ## The following requirements were added by pip freeze:
@@ -30,6 +31,7 @@ elasticsearch==7.16.3
 elasticsearch-dsl==7.4.0
 idna==3.3
 jmespath==0.10.0
+lxml==4.7.1
 MarkupSafe==2.0.1
 mdurl==0.1.0
 pilkit==2.0

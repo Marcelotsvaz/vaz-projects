@@ -64,6 +64,11 @@ SERVER_EMAIL = 'UTL Server <server@utlturismo.com.br>'
 ADMINS = [ ( 'Marcelo Vaz', 'marcelotsvaz@gmail.com' ) ]
 
 
+# Tests
+#---------------------------------------
+TEST_RUNNER = 'xmlrunner.extra.djangotestrunner.XMLTestRunner'
+TEST_OUTPUT_FILE_NAME = 'unitTests.xml'
+
 
 # Apps
 #---------------------------------------
