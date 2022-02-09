@@ -132,5 +132,5 @@ uploadFiles:
         - set -a; source server/scripts/local.env; set +a    # Only for djangoSecretKey.
         - set -a; source deployment/environment.env; set +a  # From deployEnvironment.
         - echo ${CI_REGISTRY_PASSWORD} | docker login --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
-        - docker compose run --no-deps --rm --quiet-pull application ./manage.py collectstatic --ignore '*/src/*' --no-input
+        - docker compose run --no-TTY --no-deps --quiet-pull --rm application ./manage.py collectstatic --ignore '*/src/*' --no-input
         # - aws cloudfront create-invalidation --distribution-id ${cloudfrontId} --paths '/*'    # TODO: Cloudfront invalidation.
