@@ -14,13 +14,13 @@ variable "files" {
 
 variable "templates" {
 	description = "Templates that will be rendered and added to the archive."
-	type = set( string )
+	type = map( string )
 }
 
 
 variable "context" {
 	description = "Context for templates."
-	type = map( any )
+	type = map( string )
 }
 
 

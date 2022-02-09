@@ -55,7 +55,7 @@ module "user_data" {
 		"perShutdown.sh",
 	]
 	
-	templates = [ "environment.env.tpl" ]
+	templates = { "environment.env.tpl": "environment.env" }
 	
 	context = {
 		environment = var.environment

@@ -9,15 +9,15 @@
 resource "local_file" "templated_file" {
 	for_each = var.templates
 	
-	content = templatefile( "${var.input_dir}/${each.value}", var.context )
-	filename = trimsuffix( "${var.output_dir}/${each.value}", ".tpl" )
+	content = templatefile( "${var.input_dir}/${each.key}", var.context )
+	filename = "${var.output_dir}/${each.value}"
 }
 
 
 data "external" "user_data" {
 	query = {
 		files = join( "#", var.files )
-		templated_files = join( "#", var.templates )
+		templated_files = join( "#", [ for templated_file in var.templates : templated_file ] )
 		input_dir = "${path.cwd}/${var.input_dir}"
 		output_dir = "${path.cwd}/${var.output_dir}"
 	}
