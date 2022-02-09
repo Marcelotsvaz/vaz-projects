@@ -19,7 +19,7 @@ RUN pip install --no-cache-dir --upgrade pip wheel
 RUN apk add --no-cache gcc musl-dev linux-headers jpeg-dev zlib-dev postgresql-dev libmemcached-dev
 
 COPY requirements.txt .
-RUN pip wheel --no-cache-dir --wheel-dir wheels/ -r requirements.txt
+RUN pip wheel --no-cache-dir --progress-bar off --wheel-dir wheels/ -r requirements.txt
 
 
 

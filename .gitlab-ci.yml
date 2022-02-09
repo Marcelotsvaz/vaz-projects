@@ -14,6 +14,7 @@ stages:
 
 
 variables:
+    DOCKER_TLS_CERTDIR: /certs/client   # Enable TLS to Docker host. Silence warning in GitLab CI/CD.
     repositorySnapshot: ${CI_PROJECT_URL}/-/archive/${CI_COMMIT_SHA}/vaz-projects.tar.gz
     applicationImage: ${CI_REGISTRY_IMAGE}/application:${CI_COMMIT_SHORT_SHA}
     composeImage: ${CI_REGISTRY_IMAGE}/compose:2.2
@@ -37,7 +38,8 @@ buildDockerImage:
     
     script:
         - docker login --username ${CI_REGISTRY_USER} --password ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
-        - docker build --pull --tag ${applicationImage} --push application
+        - docker build --pull --tag ${applicationImage} application
+        - docker push --quiet ${applicationImage}
 
 
 runUnitTests:
@@ -55,7 +57,7 @@ runUnitTests:
     script:
         - set -a; source server/scripts/local.env; set +a
         - echo ${CI_REGISTRY_PASSWORD} | docker login --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
-        - docker compose up --detach
+        - docker compose up --detach --quiet-pull
         - docker compose exec --no-TTY application coverage run manage.py test
         - docker compose exec --no-TTY application coverage report
         - docker compose exec --no-TTY application coverage xml > coverage.xml
@@ -130,6 +132,5 @@ uploadFiles:
         - set -a; source server/scripts/local.env; set +a    # Only for djangoSecretKey.
         - set -a; source deployment/environment.env; set +a  # From deployEnvironment.
         - echo ${CI_REGISTRY_PASSWORD} | docker login --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
-        - apk add --no-cache bash # awscli  # TODO: Cloudfront invalidation.
-        - docker compose run --no-deps --rm application ./manage.py collectstatic --ignore '*/src/*' --no-input
-        # - aws cloudfront create-invalidation --distribution-id ${cloudfrontId} --paths '/*'  
+        - docker compose run --no-deps --rm --quiet-pull application ./manage.py collectstatic --ignore '*/src/*' --no-input
+        # - aws cloudfront create-invalidation --distribution-id ${cloudfrontId} --paths '/*'    # TODO: Cloudfront invalidation.
