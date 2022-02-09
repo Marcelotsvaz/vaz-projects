@@ -64,6 +64,8 @@ runUnitTests:
         - docker compose cp application:/usr/src/app/deployment/tests/unitTests.xml .
         - docker compose cp application:/usr/src/app/deployment/tests/coverage.xml .
     
+    coverage: /^TOTAL.+?(\d+(?:\.\d+)?\%)$/
+    
     artifacts:
         reports:
             junit: unitTests.xml
