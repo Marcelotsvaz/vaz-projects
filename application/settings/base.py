@@ -67,6 +67,7 @@ ADMINS = [ ( 'Marcelo Vaz', 'marcelotsvaz@gmail.com' ) ]
 # Tests
 #---------------------------------------
 TEST_RUNNER = 'xmlrunner.extra.djangotestrunner.XMLTestRunner'
+TEST_OUTPUT_DIR = BASE_DIR / 'deployment/tests'
 TEST_OUTPUT_FILE_NAME = 'unitTests.xml'
 
 
