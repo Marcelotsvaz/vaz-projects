@@ -78,7 +78,7 @@ function destroyAws()
 #-------------------------------------------------------------------------------
 function deployEnvironment()
 {
-	cd ${terraformRoot}/instance
+	cd ${terraformRoot}/environment
 	terraformInit ${environment}
 	terraform apply											\
 		-auto-approve										\
@@ -94,7 +94,7 @@ function deployEnvironment()
 #-------------------------------------------------------------------------------
 function destroyEnvironment()
 {
-	cd ${terraformRoot}/instance
+	cd ${terraformRoot}/environment
 	terraformInit ${environment}
 	terraform destroy										\
 		-auto-approve										\
