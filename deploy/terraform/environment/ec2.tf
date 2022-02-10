@@ -190,3 +190,64 @@ data "aws_iam_policy_document" "app_server_policy" {
 		resources = [ aws_acm_certificate.cloudfront.arn ]
 	}
 }
+
+
+
+# 
+# Database server.
+#-------------------------------------------------------------------------------
+module "database_server" {
+	source = "./instance"
+	
+	name = "Database Server"
+	instance_type = "t3a.nano"
+	subnet_id = aws_subnet.subnet_c.id
+	private_ip = "10.0.3.200"	# TODO: Remove this.
+	vpc_security_group_ids = [ aws_default_security_group.security_group.id ]
+	role_name = "${local.project_code}-${var.environment}-databaseServer"
+	role_policy = data.aws_iam_policy_document.database_server_policy
+	root_volume_size = 5
+	user_data_base64 = module.database_server_user_data.content_base64
+	default_tags = local.default_tags
+}
+
+
+module "database_server_user_data" {
+	source = "./user_data"
+	
+	input_dir = "../../../database/scripts"
+	output_dir = "../../../deployment/database"
+	
+	files = [ "perInstance.sh" ]
+	
+	templates = { "environment.env.tpl": "environment.env" }
+	
+	context = {
+		domain = local.domain
+		repository_snapshot = var.repository_snapshot
+		bucket = aws_s3_bucket.bucket.id
+		region = local.region
+	}
+}
+
+
+data "aws_iam_policy_document" "database_server_policy" {
+	statement {
+		sid = "s3ListBuckets"
+		
+		actions = [ "s3:ListBucket" ]
+		
+		resources = [ aws_s3_bucket.bucket.arn ]
+	}
+	
+	statement {
+		sid = "s3ReadFromBucket"
+		
+		actions = [
+			"s3:GetObject",
+			"s3:GetObjectAcl",
+		]
+		
+		resources = [ "${aws_s3_bucket.bucket.arn}/*" ]
+	}
+}
