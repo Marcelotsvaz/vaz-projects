@@ -19,30 +19,19 @@ set -e	# Abort on error.
 
 # System Setup
 #---------------------------------------
+echo ${sshKey} > ~marcelotsvaz/.ssh/authorized_keys	# Admin user.
+
 hostnamectl set-hostname ${domainName}
 
-echo ${sshKey} > ~marcelotsvaz/.ssh/authorized_keys
-
 useradd -rms /usr/bin/nologin -G docker ${user}
-
 cd /home/${user}/
-
 sudo -Eu ${user} bash << EOF
 curl -s ${repositorySnapshot} | tar -xz --strip-components 1
 
-aws s3 sync s3://${bucket}/deployment/ deployment/ --no-progress
-mkdir deployment/logs/
+aws s3 cp s3://${bucket}/deployment/secrets.sh deployment/secrets.sh --no-progress
 
 docker-compose --env-file deployment/secrets.sh up --detach
 EOF
-
-systemctl enable /home/${user}/server/systemdUnits/*
-
-
-
-# Start Services
-#---------------------------------------
-systemctl start backup.timer dehydrated.timer nginx
 
 
 

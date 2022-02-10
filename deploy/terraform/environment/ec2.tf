@@ -125,14 +125,11 @@ module "app_server_user_data" {
 	templates = { "environment.env.tpl": "environment.env" }
 	
 	context = {
-		environment = var.environment
+		region = local.region
 		repository_snapshot = var.repository_snapshot
 		application_image = var.application_image
-		region = local.region
+		environment = var.environment
 		domain = local.domain
-		hosted_zone_id = data.aws_route53_zone.hosted_zone.zone_id
 		bucket = aws_s3_bucket.bucket.id
-		cloudfront_id = aws_cloudfront_distribution.distribution.id
-		cloudfront_certificate_arn = aws_acm_certificate.cloudfront.arn
 	}
 }
