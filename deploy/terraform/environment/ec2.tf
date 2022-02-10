@@ -55,18 +55,15 @@ module "load_balancer_user_data" {
 
 data "aws_iam_policy_document" "load_balancer_policy" {
 	statement {
-		sid = "s3ListBuckets"
+		sid = "s3ListBucket"
 		
 		actions = [ "s3:ListBucket" ]
 		
-		resources = [
-			aws_s3_bucket.bucket.arn,
-			aws_s3_bucket.logs_bucket.arn,
-		]
+		resources = [ aws_s3_bucket.bucket.arn ]
 	}
 	
 	statement {
-		sid = "s3WriteToBucket"
+		sid = "s3WriteDeployment"
 		
 		actions = [
 			"s3:GetObject",
@@ -76,10 +73,7 @@ data "aws_iam_policy_document" "load_balancer_policy" {
 			"s3:DeleteObject",
 		]
 		
-		resources = [
-			"${aws_s3_bucket.bucket.arn}/*",
-			"${aws_s3_bucket.logs_bucket.arn}/*",
-		]
+		resources = [ "${aws_s3_bucket.bucket.arn}/deployment/*" ]
 	}
 	
 	statement {
@@ -141,18 +135,26 @@ module "app_server_user_data" {
 
 data "aws_iam_policy_document" "app_server_policy" {
 	statement {
-		sid = "s3ListBuckets"
+		sid = "s3ListBucket"
 		
 		actions = [ "s3:ListBucket" ]
 		
-		resources = [
-			aws_s3_bucket.bucket.arn,
-			aws_s3_bucket.logs_bucket.arn,
-		]
+		resources = [ aws_s3_bucket.bucket.arn ]
 	}
 	
 	statement {
-		sid = "s3WriteToBucket"
+		sid = "s3GetDeployment"
+		
+		actions = [
+			"s3:GetObject",
+			"s3:GetObjectAcl",
+		]
+		
+		resources = [ "${aws_s3_bucket.bucket.arn}/deployment/*" ]
+	}
+	
+	statement {
+		sid = "s3WriteMedia"
 		
 		actions = [
 			"s3:GetObject",
@@ -162,32 +164,7 @@ data "aws_iam_policy_document" "app_server_policy" {
 			"s3:DeleteObject",
 		]
 		
-		resources = [
-			"${aws_s3_bucket.bucket.arn}/*",
-			"${aws_s3_bucket.logs_bucket.arn}/*",
-		]
-	}
-	
-	statement {
-		sid = "route53ChangeRecordSets"
-		
-		actions = [
-			"route53:ChangeResourceRecordSets",
-			"route53:GetChange",
-		]
-		
-		resources = [
-			data.aws_route53_zone.hosted_zone.arn,
-			"arn:aws:route53:::change/*",
-		]
-	}
-	
-	statement {
-		sid = "acmImportCertificate"
-		
-		actions = [ "acm:ImportCertificate" ]
-		
-		resources = [ aws_acm_certificate.cloudfront.arn ]
+		resources = [ "${aws_s3_bucket.bucket.arn}/media/*" ]
 	}
 }
 
@@ -233,7 +210,7 @@ module "database_server_user_data" {
 
 data "aws_iam_policy_document" "database_server_policy" {
 	statement {
-		sid = "s3ListBuckets"
+		sid = "s3ListBucket"
 		
 		actions = [ "s3:ListBucket" ]
 		
@@ -241,13 +218,13 @@ data "aws_iam_policy_document" "database_server_policy" {
 	}
 	
 	statement {
-		sid = "s3ReadFromBucket"
+		sid = "s3GetDeployment"
 		
 		actions = [
 			"s3:GetObject",
 			"s3:GetObjectAcl",
 		]
 		
-		resources = [ "${aws_s3_bucket.bucket.arn}/*" ]
+		resources = [ "${aws_s3_bucket.bucket.arn}/deployment/*" ]
 	}
 }
