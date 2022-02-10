@@ -26,9 +26,13 @@ variable "vpc_security_group_ids" {
 	type = set( string )
 }
 
-variable "iam_instance_profile" {
+variable "role_name" {
 	description = ""
 	type = string
+}
+
+variable "role_policy" {
+	description = ""
 }
 
 variable "root_volume_size" {

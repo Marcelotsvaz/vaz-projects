@@ -14,7 +14,7 @@ resource "aws_spot_instance_request" "app_server" {
 	instance_type = var.instance_type
 	subnet_id = var.subnet_id
 	vpc_security_group_ids = var.vpc_security_group_ids
-	iam_instance_profile = var.iam_instance_profile
+	iam_instance_profile = aws_iam_instance_profile.instance_profile.name
 	user_data_base64 = var.user_data_base64
 	ebs_optimized = true
 	instance_interruption_behavior = "stop"
