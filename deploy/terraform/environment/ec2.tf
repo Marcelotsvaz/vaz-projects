@@ -13,7 +13,7 @@ module "load_balancer" {
 	source = "./instance"
 	
 	name = "Load Balancer"
-	instance_type = "t3a.micro"
+	instance_type = "t3a.nano"
 	subnet_id = aws_subnet.subnet_c.id
 	vpc_security_group_ids = [ aws_default_security_group.security_group.id ]
 	role_name = "${local.project_code}-${var.environment}-loadBalancer"
