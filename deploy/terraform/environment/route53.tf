@@ -28,6 +28,16 @@ resource "aws_route53_record" "a_load_balancer" {
 }
 
 
+resource "aws_route53_record" "aaaa_load_balancer" {
+	zone_id = data.aws_route53_zone.hosted_zone.zone_id
+	
+	name = local.domain
+	type = "AAAA"
+	ttl = "60"
+	records = [ module.load_balancer.ipv6_address ]
+}
+
+
 
 # 
 # CloudFront.
