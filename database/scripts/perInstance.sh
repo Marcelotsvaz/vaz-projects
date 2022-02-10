@@ -30,7 +30,7 @@ curl -s ${repositorySnapshot} | tar -xz --strip-components 1
 
 aws s3 cp s3://${bucket}/deployment/secrets.sh deployment/secrets.sh --no-progress
 
-docker run --env-file deployment/secrets.sh --detach postgres:14.1-alpine3.15
+docker run --env-file deployment/secrets.sh --network=host --detach postgres:14.1-alpine3.15
 EOF
 
 
