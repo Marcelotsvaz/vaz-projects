@@ -13,12 +13,12 @@ StartLimitBurst = 5
 
 [Service]
 Type = oneshot
-User = utl
-Group = utl
+User = nginx
+Group = nginx
 
 Restart = on-failure
 RestartSec = 1h
 
 EnvironmentFile = /root/init/environment.env
-ExecStart = /home/utl/server/config/tls/dehydrated.sh
+ExecStart = /home/nginx/loadBalancer/config/tls/dehydrated.sh
 ExecStartPost = +systemctl reload nginx

@@ -117,6 +117,14 @@ resource "aws_default_security_group" "security_group" {
 	}
 	
 	ingress {
+		description = "uWSGI"
+		protocol = "tcp"
+		from_port = 3031
+		to_port = 3031
+		self = true
+	}
+	
+	ingress {
 		description = "OpenSSH"
 		protocol = "tcp"
 		from_port = 22

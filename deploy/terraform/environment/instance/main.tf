@@ -9,10 +9,11 @@
 # 
 # Instances.
 #-------------------------------------------------------------------------------
-resource "aws_spot_instance_request" "app_server" {
+resource "aws_spot_instance_request" "instance" {
 	ami = data.aws_ami.arch_linux.id
 	instance_type = var.instance_type
 	subnet_id = var.subnet_id
+	private_ip = var.private_ip
 	vpc_security_group_ids = var.vpc_security_group_ids
 	iam_instance_profile = aws_iam_instance_profile.instance_profile.name
 	user_data_base64 = var.user_data_base64
@@ -23,7 +24,7 @@ resource "aws_spot_instance_request" "app_server" {
 	root_block_device {
 		volume_size = var.root_volume_size
 		
-		tags = local.app_server_root_volume_tags
+		tags = local.instance_root_volume_tags
 	}
 	
 	tags = {
@@ -48,12 +49,12 @@ data "aws_ami" "arch_linux" {
 # Tags.
 #-------------------------------------------------------------------------------
 locals {
-	app_server_root_volume_tags = merge( { Name = "${var.name} Root Volume" }, var.default_tags )
+	instance_root_volume_tags = merge( { Name = "${var.name} Root Volume" }, var.default_tags )
 }
 
 
-resource "aws_ec2_tag" "app_server_tags" {
-	resource_id = aws_spot_instance_request.app_server.spot_instance_id
+resource "aws_ec2_tag" "instance_tags" {
+	resource_id = aws_spot_instance_request.instance.spot_instance_id
 	
 	for_each = merge( { Name = var.name }, var.default_tags )
 	key = each.key
@@ -61,10 +62,10 @@ resource "aws_ec2_tag" "app_server_tags" {
 }
 
 
-resource "aws_ec2_tag" "app_server_root_volume_tags" {
-	resource_id = aws_spot_instance_request.app_server.root_block_device.0.volume_id
+resource "aws_ec2_tag" "instance_root_volume_tags" {
+	resource_id = aws_spot_instance_request.instance.root_block_device.0.volume_id
 	
-	for_each = local.app_server_root_volume_tags
+	for_each = local.instance_root_volume_tags
 	key = each.key
 	value = each.value
 }

@@ -16,6 +16,20 @@ data "aws_route53_zone" "hosted_zone" {
 
 
 # 
+# Load balancer.
+#-------------------------------------------------------------------------------
+resource "aws_route53_record" "a_load_balancer" {
+	zone_id = data.aws_route53_zone.hosted_zone.zone_id
+	
+	name = local.domain
+	type = "A"
+	ttl = "60"
+	records = [ aws_eip.load_balancer_ip.public_ip ]
+}
+
+
+
+# 
 # CloudFront.
 #-------------------------------------------------------------------------------
 resource "aws_route53_record" "a_cloudfront" {
