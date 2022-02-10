@@ -33,7 +33,7 @@ services:
             - -c
             - ./manage.py migrate --no-input;
               ./manage.py search_index --populate;
-              uwsgi --ini uwsgi.ini;
+              uwsgi --ini config/uwsgi.ini;
         
         ports:
             - 3031:3031

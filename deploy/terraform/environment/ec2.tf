@@ -113,7 +113,7 @@ data "aws_iam_policy_document" "app_server_policy" {
 module "app_server_user_data" {
 	source = "./user_data"
 	
-	input_dir = "../../scripts"
+	input_dir = "../../../application/scripts"
 	output_dir = "../../../deployment"
 	
 	files = [

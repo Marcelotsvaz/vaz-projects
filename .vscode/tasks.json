@@ -7,7 +7,7 @@
 		{
 			"label": "Compose",
 			"type": "shell",
-			"command": "set -a; source server/scripts/local.env; set +a; docker compose -f docker-compose.yml -f docker-compose.local.yml ${input:composeCommand}",
+			"command": "set -a; source deploy/local.env; set +a; docker compose -f docker-compose.yml -f docker-compose.local.yml ${input:composeCommand}",
 			"options": {
 				"env": {
 					"DOCKER_BUILDKIT": "1",
@@ -21,7 +21,7 @@
 		{
 			"label": "Deploy",
 			"type": "shell",
-			"command": "server/scripts/deploy.sh",
+			"command": "deploy/deploy.sh",
 			"args": [
 				"${input:deployCommand}",
 				"global",

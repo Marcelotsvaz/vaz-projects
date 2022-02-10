@@ -4,11 +4,11 @@
 	"terminal.integrated.profiles.linux": {
 		"bash": {
 			"path": "/usr/bin/bash",
-			"args": [ "-c", "set -a; source '${workspaceFolder}/server/scripts/local.env'; bash" ],
+			"args": [ "-c", "set -a; source '${workspaceFolder}/deploy/local.env'; bash" ],
 		},
 		"fish": {
 			"path": "/usr/bin/fish",
-			"args": [ "-c", "sourceEnv '${workspaceFolder}/server/scripts/local.env'" ],
+			"args": [ "-c", "sourceEnv '${workspaceFolder}/deploy/local.env'" ],
 		}
 	},
 	
@@ -16,7 +16,7 @@
 		{
 			// Match less files.
 			"match": "\\.less$",
-			"command": "server/scripts/less.sh",
+			"command": "application/scripts/less.sh",
 			"runIn": "backend",
 			"finishStatusMessage": "LESS compiled"
 		},

@@ -16,7 +16,7 @@ environment=${2}
 local=${3}
 
 # Variables.
-terraformRoot='server/terraform'
+terraformRoot='deploy/terraform'
 TF_DATA_DIR='../../../deployment/terraform'
 TF_IN_AUTOMATION='True'
 
