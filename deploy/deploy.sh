@@ -106,23 +106,9 @@ function destroyEnvironment()
 
 
 # 
-# Upload static files and app source to S3.
-#-------------------------------------------------------------------------------
-# function uploadFiles()
-# {
-# 	# Upload static files.
-# 	vazProjects/manage.py collectstatic --ignore '*/src/*' --no-input
-	
-# 	# Invalidade static files cache.
-# 	aws cloudfront create-invalidation --distribution-id ${cloudfrontId} --paths '/*'
-# }
-
-
-
-# 
 # Run command.
 #-------------------------------------------------------------------------------
-if [[ "${command}" =~ ^(deployAws|destroyAws|deployEnvironment|destroyEnvironment|uploadFiles)$ ]]; then
+if [[ "${command}" =~ ^(deployAws|destroyAws|deployEnvironment|destroyEnvironment)$ ]]; then
 	${command}
 else
 	echo 'Invalid command.'
