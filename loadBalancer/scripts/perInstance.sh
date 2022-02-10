@@ -33,7 +33,7 @@ aws s3 sync s3://${bucket}/deployment/ deployment/ --no-progress
 mkdir deployment/logs/
 EOF
 
-systemctl enable /home/${user}/server/systemdUnits/*
+systemctl enable /home/${user}/loadBalancer/systemdUnits/*
 
 
 
