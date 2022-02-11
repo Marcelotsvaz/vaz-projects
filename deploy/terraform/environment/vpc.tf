@@ -9,10 +9,26 @@
 resource "aws_vpc" "vpc" {
 	cidr_block = "10.0.0.0/16"
 	assign_generated_ipv6_cidr_block = true
+	enable_dns_hostnames = true
 	
 	tags = {
 		Name: "${local.project_name} VPC"
 	}
+}
+
+
+resource "aws_vpc_dhcp_options" "dhcp_options" {
+	domain_name = aws_route53_zone.private.name
+	
+	tags = {
+		Name: "${local.project_name} DHCP Options"
+	}
+}
+
+
+resource "aws_vpc_dhcp_options_association" "dns_resolver" {
+	vpc_id = aws_vpc.vpc.id
+	dhcp_options_id = aws_vpc_dhcp_options.dhcp_options.id
 }
 
 
