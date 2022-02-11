@@ -23,7 +23,7 @@ echo ${sshKey} > ~marcelotsvaz/.ssh/authorized_keys	# Admin user.
 
 hostnamectl set-hostname ${domainName}
 
-useradd -rms /usr/bin/nologin --uid 70 --gid 70 -G docker ${user}
+useradd -rms /usr/bin/nologin --uid 70 -G docker ${user}
 cd /home/${user}/
 
 
