@@ -189,6 +189,25 @@ module "database_server" {
 }
 
 
+resource "aws_ebs_volume" "database_volume" {
+	availability_zone = module.database_server.availability_zone
+	type = "gp3"
+	size = 1
+	
+	tags = {
+		Name: "${local.project_name} Database Data Volume"
+	}
+}
+
+
+resource "aws_volume_attachment" "database_volume_attachment" {
+	volume_id = aws_ebs_volume.database_volume.id
+	instance_id = module.database_server.id
+	device_name = "/dev/xvdg"
+	stop_instance_before_detaching = true
+}
+
+
 module "database_server_user_data" {
 	source = "./user_data"
 	
@@ -226,5 +245,13 @@ data "aws_iam_policy_document" "database_server_policy" {
 		]
 		
 		resources = [ "${aws_s3_bucket.bucket.arn}/deployment/*" ]
+	}
+	
+	statement {
+		sid = "ec2DescribeVolume"
+		
+		actions = [ "ec2:DescribeVolumes" ]
+		
+		resources = [ "*" ]
 	}
 }

@@ -11,6 +11,10 @@ output "id" {
 	value = aws_spot_instance_request.instance.spot_instance_id
 }
 
+output "availability_zone" {
+	description = ""
+	value = aws_spot_instance_request.instance.availability_zone
+}
 
 output "ipv6_address" {
 	description = ""
