@@ -220,6 +220,7 @@ module "database_server_user_data" {
 	
 	context = {
 		domain = local.domain
+		data_volume_id = aws_ebs_volume.database_volume.id
 		repository_snapshot = var.repository_snapshot
 		bucket = aws_s3_bucket.bucket.id
 		region = local.region
