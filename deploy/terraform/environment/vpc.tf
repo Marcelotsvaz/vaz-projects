@@ -19,6 +19,7 @@ resource "aws_vpc" "vpc" {
 
 resource "aws_vpc_dhcp_options" "dhcp_options" {
 	domain_name = aws_route53_zone.private.name
+	domain_name_servers = "AmazonProvidedDNS"
 	
 	tags = {
 		Name: "${local.project_name} DHCP Options"
