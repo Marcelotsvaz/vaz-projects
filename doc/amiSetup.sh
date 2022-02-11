@@ -11,19 +11,19 @@ reflector --protocol https --latest 50 --sort rate --save /etc/pacman.d/mirrorli
 # Variables
 #---------------------------------------
 export AWS_DEFAULT_OUTPUT=text
-instanceID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+instanceId=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
 availabilityZone=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)
 mountPoint=/mnt/new
 
 
 # Create Volume
 #---------------------------------------
-volumeID=$(aws ec2 create-volume --size 2 --availability-zone ${availabilityZone} --volume-type gp3 --no-encrypted --query 'VolumeId')
-aws ec2 wait volume-available --volume-ids ${volumeID}
-aws ec2 attach-volume --volume-id ${volumeID} --instance-id ${instanceID} --device /dev/sdf
-aws ec2 wait volume-in-use --volume-ids ${volumeID}
+volumeId=$(aws ec2 create-volume --size 2 --availability-zone ${availabilityZone} --volume-type gp3 --no-encrypted --query 'VolumeId')
+aws ec2 wait volume-available --volume-ids ${volumeId}
+aws ec2 attach-volume --volume-id ${volumeId} --instance-id ${instanceId} --device /dev/sdf
+aws ec2 wait volume-in-use --volume-ids ${volumeId}
 sleep 3
-export disk=$(lsblk -nro SERIAL,PATH | grep ${volumeID/-/} | cut -d ' ' -f2) # Get attached EBS volume device path.
+export disk=$(lsblk -nro SERIAL,PATH | grep ${volumeId/-/} | cut -d ' ' -f2) # Get attached EBS volume device path.
 
 
 # Partitioning and Filesystem
@@ -79,6 +79,9 @@ Name = en*
 
 [Network]
 DHCP = yes
+
+[DHCPv4]
+UseDomains = yes
 EOF
 #-------------------------------------------------------------------------------
 ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
@@ -279,15 +282,15 @@ rm ${mountPoint}/{root/.bash_history,var/log/pacman.log}
 #---------------------------------------
 umount -R ${mountPoint}
 rm -r ${mountPoint}
-aws ec2 detach-volume --volume-id ${volumeID}
-aws ec2 wait volume-available --volume-ids ${volumeID}
+aws ec2 detach-volume --volume-id ${volumeId}
+aws ec2 wait volume-available --volume-ids ${volumeId}
 
-snapshotID=$(aws ec2 create-snapshot \
-    --volume-id ${volumeID} \
+snapshotId=$(aws ec2 create-snapshot \
+    --volume-id ${volumeId} \
     --tag-specifications 'ResourceType=snapshot,Tags=[{Key=Name,Value=Arch Linux AMI Snapshot}]' \
     --query 'SnapshotId')
-aws ec2 wait snapshot-completed --snapshot-ids ${snapshotID}
-aws ec2 delete-volume --volume-id ${volumeID}
+aws ec2 wait snapshot-completed --snapshot-ids ${snapshotId}
+aws ec2 delete-volume --volume-id ${volumeId}
 
 imageId=$(aws ec2 describe-images --filters 'Name=name,Values=Arch Linux AMI' --query 'Images[0].ImageId')
 aws ec2 deregister-image --image-id ${imageId}
@@ -297,7 +300,7 @@ newImageId=$(aws ec2 register-image \
     --virtualization-type hvm \
     --ena-support \
     --root-device-name /dev/xvda \
-    --block-device-mappings '[{"DeviceName": "/dev/xvda","Ebs":{"SnapshotId":"'${snapshotID}'","VolumeType":"gp3"}}]' \
+    --block-device-mappings '[{"DeviceName": "/dev/xvda","Ebs":{"SnapshotId":"'${snapshotId}'","VolumeType":"gp3"}}]' \
     --query 'ImageId'
 )
 

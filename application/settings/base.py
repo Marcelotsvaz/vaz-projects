@@ -148,7 +148,7 @@ AUTH_PASSWORD_VALIDATORS = [
 DATABASES = {
 	'default': {
 		'ENGINE': 'django.db.backends.postgresql',
-		'HOST': f'postgres.private.{environ["domainName"]}',
+		'HOST': 'postgres',
 		'USER': 'postgres',
 		'PASSWORD': environ['POSTGRES_PASSWORD'],
 		'NAME': 'postgres',
