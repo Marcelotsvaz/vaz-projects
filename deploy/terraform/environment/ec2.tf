@@ -14,12 +14,15 @@ module "load_balancer" {
 	
 	name = "${local.project_name} Load Balancer"
 	instance_type = "t3a.nano"
+	
 	subnet_id = aws_subnet.subnet_c.id
 	vpc_security_group_ids = [ aws_default_security_group.security_group.id ]
 	private_hosted_zone = aws_route53_zone.private
 	hostname = "load-balancer"
+	
 	role_name = "${local.project_code}-${var.environment}-loadBalancer"
 	role_policy = data.aws_iam_policy_document.load_balancer_policy
+	
 	root_volume_size = 5
 	user_data_base64 = module.load_balancer_user_data.content_base64
 	default_tags = local.default_tags
@@ -103,12 +106,15 @@ module "app_server" {
 	
 	name = "${local.project_name} Application Server"
 	instance_type = "t3a.small"
+	
 	subnet_id = aws_subnet.subnet_c.id
 	vpc_security_group_ids = [ aws_default_security_group.security_group.id ]
 	private_hosted_zone = aws_route53_zone.private
 	hostname = "application"
+	
 	role_name = "${local.project_code}-${var.environment}-appServer"
 	role_policy = data.aws_iam_policy_document.app_server_policy
+	
 	root_volume_size = 5
 	user_data_base64 = module.app_server_user_data.content_base64
 	default_tags = local.default_tags
@@ -181,12 +187,15 @@ module "database_server" {
 	
 	name = "${local.project_name} Database Server"
 	instance_type = "t3a.nano"
+	
 	subnet_id = aws_subnet.subnet_c.id
 	vpc_security_group_ids = [ aws_default_security_group.security_group.id ]
 	private_hosted_zone = aws_route53_zone.private
 	hostname = "postgres"
+	
 	role_name = "${local.project_code}-${var.environment}-databaseServer"
 	role_policy = data.aws_iam_policy_document.database_server_policy
+	
 	root_volume_size = 5
 	user_data_base64 = module.database_server_user_data.content_base64
 	default_tags = local.default_tags
@@ -195,8 +204,9 @@ module "database_server" {
 
 resource "aws_ebs_volume" "database_volume" {
 	availability_zone = aws_subnet.subnet_c.availability_zone
-	type = "gp3"
 	size = 1
+	type = "gp3"
+	encrypted = true
 	
 	tags = {
 		Name: "${local.project_name} Database Data Volume"

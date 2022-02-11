@@ -22,6 +22,7 @@ resource "aws_spot_instance_request" "instance" {
 	
 	root_block_device {
 		volume_size = var.root_volume_size
+		encrypted = true
 		
 		tags = local.instance_root_volume_tags
 	}
