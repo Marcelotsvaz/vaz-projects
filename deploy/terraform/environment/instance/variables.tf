@@ -21,15 +21,18 @@ variable "subnet_id" {
 	type = string
 }
 
-variable "private_ip" {
-	description = ""
-	type = string
-	default = ""
-}
-
 variable "vpc_security_group_ids" {
 	description = ""
 	type = set( string )
+}
+
+variable "private_hosted_zone" {
+	description = ""
+}
+
+variable "hostname" {
+	description = ""
+	type = string
 }
 
 variable "role_name" {

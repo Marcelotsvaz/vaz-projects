@@ -23,8 +23,6 @@ echo ${sshKey} > ~marcelotsvaz/.ssh/authorized_keys	# Admin user.
 
 hostnamectl set-hostname ${domainName}
 
-echo '10.0.3.200 postgres' >> /etc/hosts	# TODO: Remove this.
-
 useradd -rms /usr/bin/nologin -G docker ${user}
 cd /home/${user}/
 sudo -Eu ${user} bash << EOF

@@ -16,6 +16,8 @@ module "load_balancer" {
 	instance_type = "t3a.nano"
 	subnet_id = aws_subnet.subnet_c.id
 	vpc_security_group_ids = [ aws_default_security_group.security_group.id ]
+	private_hosted_zone = aws_route53_zone.private
+	hostname = "load-balancer"
 	role_name = "${local.project_code}-${var.environment}-loadBalancer"
 	role_policy = data.aws_iam_policy_document.load_balancer_policy
 	root_volume_size = 5
@@ -102,8 +104,9 @@ module "app_server" {
 	name = "${local.project_name} Application Server"
 	instance_type = "t3a.small"
 	subnet_id = aws_subnet.subnet_c.id
-	private_ip = "10.0.3.150"	# TODO: Remove this.
 	vpc_security_group_ids = [ aws_default_security_group.security_group.id ]
+	private_hosted_zone = aws_route53_zone.private
+	hostname = "application"
 	role_name = "${local.project_code}-${var.environment}-appServer"
 	role_policy = data.aws_iam_policy_document.app_server_policy
 	root_volume_size = 5
@@ -179,8 +182,9 @@ module "database_server" {
 	name = "${local.project_name} Database Server"
 	instance_type = "t3a.nano"
 	subnet_id = aws_subnet.subnet_c.id
-	private_ip = "10.0.3.200"	# TODO: Remove this.
 	vpc_security_group_ids = [ aws_default_security_group.security_group.id ]
+	private_hosted_zone = aws_route53_zone.private
+	hostname = "postgres"
 	role_name = "${local.project_code}-${var.environment}-databaseServer"
 	role_policy = data.aws_iam_policy_document.database_server_policy
 	root_volume_size = 5

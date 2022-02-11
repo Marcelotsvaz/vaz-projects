@@ -13,7 +13,6 @@ resource "aws_spot_instance_request" "instance" {
 	ami = data.aws_ami.arch_linux.id
 	instance_type = var.instance_type
 	subnet_id = var.subnet_id
-	private_ip = var.private_ip
 	vpc_security_group_ids = var.vpc_security_group_ids
 	iam_instance_profile = aws_iam_instance_profile.instance_profile.name
 	user_data_base64 = var.user_data_base64
@@ -46,7 +45,7 @@ data "aws_ami" "arch_linux" {
 
 
 # 
-# Tags.
+# Instance tags.
 #-------------------------------------------------------------------------------
 locals {
 	instance_root_volume_tags = merge( { Name = "${var.name} Root Volume" }, var.default_tags )
@@ -68,4 +67,18 @@ resource "aws_ec2_tag" "instance_root_volume_tags" {
 	for_each = local.instance_root_volume_tags
 	key = each.key
 	value = each.value
+}
+
+
+
+# 
+# Private DNS.
+#-------------------------------------------------------------------------------
+resource "aws_route53_record" "a" {
+	zone_id = var.private_hosted_zone.zone_id
+	
+	name = "${var.hostname}.${var.private_hosted_zone.name}"
+	type = "A"
+	ttl = "60"
+	records = [ aws_spot_instance_request.instance.private_ip ]
 }

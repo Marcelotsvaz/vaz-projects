@@ -7,6 +7,43 @@
 
 
 # 
+# Private Route53 hosted zone.
+#-------------------------------------------------------------------------------
+resource "aws_route53_zone" "private" {
+	name = "private.${local.domain}"
+	
+	vpc { vpc_id = aws_vpc.vpc.id }
+	
+	tags = {
+		Name: "${local.project_name} Private Hosted Zone"
+	}
+}
+
+
+# resource "aws_route53_record" "private_soa" {
+# 	zone_id = aws_route53_zone.private.zone_id
+# 	allow_overwrite = true
+	
+# 	name = aws_route53_zone.private.name
+# 	type = "SOA"
+# 	ttl = "3600"
+# 	records = [ "${aws_route53_zone.private.name_servers[0]} awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400" ]
+# }
+
+
+# resource "aws_route53_record" "private_ns" {
+# 	zone_id = aws_route53_zone.private.zone_id
+# 	allow_overwrite = true
+	
+# 	name = aws_route53_zone.private.name
+# 	type = "NS"
+# 	ttl = "3600"
+# 	records = aws_route53_zone.private.name_servers
+# }
+
+
+
+# 
 # External Route53 hosted zone.
 #-------------------------------------------------------------------------------
 data "aws_route53_zone" "hosted_zone" {
