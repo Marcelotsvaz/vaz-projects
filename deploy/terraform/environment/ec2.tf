@@ -12,7 +12,7 @@
 module "load_balancer" {
 	source = "./instance"
 	
-	name = "Load Balancer"
+	name = "${local.project_name} Load Balancer"
 	instance_type = "t3a.nano"
 	subnet_id = aws_subnet.subnet_c.id
 	vpc_security_group_ids = [ aws_default_security_group.security_group.id ]
@@ -99,7 +99,7 @@ data "aws_iam_policy_document" "load_balancer_policy" {
 module "app_server" {
 	source = "./instance"
 	
-	name = "Application Server"
+	name = "${local.project_name} Application Server"
 	instance_type = "t3a.small"
 	subnet_id = aws_subnet.subnet_c.id
 	private_ip = "10.0.3.150"	# TODO: Remove this.
@@ -176,7 +176,7 @@ data "aws_iam_policy_document" "app_server_policy" {
 module "database_server" {
 	source = "./instance"
 	
-	name = "Database Server"
+	name = "${local.project_name} Database Server"
 	instance_type = "t3a.nano"
 	subnet_id = aws_subnet.subnet_c.id
 	private_ip = "10.0.3.200"	# TODO: Remove this.
