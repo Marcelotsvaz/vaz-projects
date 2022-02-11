@@ -190,7 +190,7 @@ module "database_server" {
 
 
 resource "aws_ebs_volume" "database_volume" {
-	availability_zone = module.database_server.availability_zone
+	availability_zone = aws_subnet.subnet_c.availability_zone
 	type = "gp3"
 	size = 1
 	
