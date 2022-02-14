@@ -84,7 +84,7 @@ DHCP = yes
 UseDomains = yes
 EOF
 #-------------------------------------------------------------------------------
-ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
 systemctl enable systemd-{networkd,resolved,timesyncd}
 
 # Bootloader.
