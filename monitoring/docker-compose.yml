@@ -14,7 +14,7 @@ services:
             - GF_SECURITY_ADMIN_PASSWORD
         
         volumes:
-            - /home/grafana/data/grafana:/var/lib/grafana
+            - grafana:/var/lib/grafana
         
         ports:
             - 80:3000
@@ -32,3 +32,8 @@ services:
         
         volumes:
             - ./config/promtail.yml:/etc/promtail/config.yml
+
+
+
+volumes:
+    grafana:
