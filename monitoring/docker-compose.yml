@@ -1,0 +1,31 @@
+#
+# VAZ Projects
+#
+#
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+services:
+    grafana:
+        image: grafana/grafana:8.2.6
+        
+        volumes:
+            - /home/grafana/data/grafana:/var/lib/grafana
+        
+        ports:
+            - 80:3000
+    
+    
+    loki:
+        image: grafana/loki:2.4.2
+        
+        volumes:
+            - ./config/loki.yaml:/etc/loki/local-config.yaml
+    
+    
+    promtail:
+        image: grafana/promtail:2.4.2
+        
+        volumes:
+            - ./config/promtail.yml:/etc/promtail/config.yml
