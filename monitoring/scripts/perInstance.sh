@@ -59,10 +59,10 @@ mount ${dataPartition} ${dataDir}
 sudo -Eu ${user} bash << EOF
 curl -s ${repositorySnapshot} | tar -xz --strip-components 1
 
-aws s3 cp s3://${bucket}/deployment/secrets.sh deployment/secrets.sh --no-progress
+aws s3 cp s3://${bucket}/deployment/secrets.env deployment/ --no-progress
 
 cd monitoring
-docker compose --env-file deployment/secrets.sh up --detach --quiet-pull
+docker compose --env-file deployment/secrets.env up --detach --quiet-pull
 EOF
 
 

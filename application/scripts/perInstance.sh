@@ -28,9 +28,9 @@ cd /home/${user}/
 sudo -Eu ${user} bash << EOF
 curl -s ${repositorySnapshot} | tar -xz --strip-components 1
 
-aws s3 cp s3://${bucket}/deployment/secrets.sh deployment/secrets.sh --no-progress
+aws s3 cp s3://${bucket}/deployment/secrets.env deployment/ --no-progress
 
-docker compose --env-file deployment/secrets.sh up --no-deps --detach --quiet-pull application memcached elasticsearch
+docker compose --env-file deployment/secrets.env up --no-deps --detach --quiet-pull application memcached elasticsearch
 EOF
 
 

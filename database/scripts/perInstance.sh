@@ -59,9 +59,9 @@ mount ${dataPartition} ${databaseDataDir}
 sudo -Eu ${user} bash << EOF
 curl -s ${repositorySnapshot} | tar -xz --strip-components 1
 
-aws s3 cp s3://${bucket}/deployment/secrets.sh deployment/secrets.sh --no-progress
+aws s3 cp s3://${bucket}/deployment/secrets.env deployment/ --no-progress
 
-docker run --env-file deployment/secrets.sh --volume ${databaseDataDir}/data:/var/lib/postgresql/data --network=host --detach postgres:14.1-alpine3.15
+docker run --env-file deployment/secrets.env --volume ${databaseDataDir}/data:/var/lib/postgresql/data --network=host --detach postgres:14.1-alpine3.15
 EOF
 
 
