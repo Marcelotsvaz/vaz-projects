@@ -134,6 +134,14 @@ resource "aws_default_security_group" "security_group" {
 	}
 	
 	ingress {
+		description = "uWSGI"
+		protocol = "tcp"
+		from_port = 3031
+		to_port = 3031
+		self = true
+	}
+	
+	ingress {
 		description = "PostgreSQL"
 		protocol = "tcp"
 		from_port = 5432
@@ -142,10 +150,10 @@ resource "aws_default_security_group" "security_group" {
 	}
 	
 	ingress {
-		description = "uWSGI"
+		description = "Loki"
 		protocol = "tcp"
-		from_port = 3031
-		to_port = 3031
+		from_port = 3100
+		to_port = 3100
 		self = true
 	}
 	

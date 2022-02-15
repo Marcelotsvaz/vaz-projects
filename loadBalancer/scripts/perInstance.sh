@@ -29,9 +29,10 @@ sudo -Eu ${user} bash << EOF
 curl -s ${repositorySnapshot} | tar -xz --strip-components 1
 
 aws s3 sync s3://${bucket}/deployment/ deployment/ --no-progress
-
-mkdir deployment/logs/
 EOF
+
+cd loadBalancer
+docker compose up --detach --quiet-pull
 
 systemctl enable /home/${user}/loadBalancer/systemdUnits/*
 
