@@ -42,9 +42,7 @@ if [[ -z ${dataPartition} ]]; then
 	mkfs.ext4 ${dataPartition}
 fi
 
-systemctl stop docker
 mount ${dataPartition} /var/lib/docker/volumes
-systemctl start docker
 
 
 
@@ -54,13 +52,12 @@ useradd -rms /usr/bin/nologin -G docker ${user}
 cd /home/${user}
 sudo -Eu ${user} bash << EOF
 curl -s ${repositorySnapshot} | tar -xz --strip-components 1
-
 aws s3 cp s3://${bucket}/deployment/secrets.env deployment/ --no-progress
-
-cd monitoring
-docker compose --env-file ../deployment/secrets.env up --detach --quiet-pull
 EOF
 
+cd monitoring
+systemctl enable --now docker
+docker compose --env-file ../deployment/secrets.env up --detach --quiet-pull
 
 
 echo 'Finished Instance Configuration Script.'

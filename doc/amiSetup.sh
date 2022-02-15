@@ -167,6 +167,20 @@ EOF
 #-------------------------------------------------------------------------------
 
 
+# Docker
+#-------------------------------------------------------------------------------
+cat > /etc/docker/daemon.json << 'EOF'
+{
+    "dns-opts": [ "ndots:1" ]
+}
+EOF
+#-------------------------------------------------------------------------------
+# Docker adds ndots:0 to container's /etc/resolv.conf, which disables search domains in musl.
+# 
+# If we specify any DNS option Docker stops handling DNS servers listening on 127.0.0.0/8 like systemd-resolved
+# stub resolver so we use /run/systemd/resolve/resolv.conf instead of stub-resolv.conf.
+
+
 # Init scripts.
 mkdir /root/init
 
@@ -270,7 +284,7 @@ WantedBy = multi-user.target
 EOF
 #-------------------------------------------------------------------------------
 
-systemctl enable instanceScriptsSetup perInstance perBoot perShutdown sshd docker
+systemctl enable sshd instanceScriptsSetup perInstance perBoot perShutdown
 
 
 # Clean up.

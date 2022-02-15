@@ -21,8 +21,6 @@ services:
     promtail:
         image: grafana/promtail:2.4.2
         
-        dns_opt: [ ndots:1 ]
-        
         volumes: [ ./config/promtail.yaml:/etc/promtail/config.yml:ro ]
         
         ports: [ 1514:1514 ]
