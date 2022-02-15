@@ -19,11 +19,9 @@ clients:
   - url: http://loki:3100/loki/api/v1/push
 
 
-scrape_configs:ss
-  - job_name: system
-    static_configs:
-      - targets:
-          - localhost
+scrape_configs:
+  - job_name: journalAA
+    journal:
+        path: /mnt/journal
         labels:
-            job: varlogs
-            __path__: /var/log/*log
+            job: journalAATest
