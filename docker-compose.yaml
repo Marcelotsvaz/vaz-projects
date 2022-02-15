@@ -25,31 +25,30 @@ services:
         dns_opt: [ ndots:1 ]
         
         environment:
-            - DJANGO_SETTINGS_MODULE
-            - djangoSecretKey
-            - POSTGRES_PASSWORD
-            - ELASTIC_PASSWORD
-            - AWS_ACCESS_KEY_ID
-            - AWS_SECRET_ACCESS_KEY
-            - domainName
-            - bucket
+          - DJANGO_SETTINGS_MODULE
+          - djangoSecretKey
+          - POSTGRES_PASSWORD
+          - ELASTIC_PASSWORD
+          - AWS_ACCESS_KEY_ID
+          - AWS_SECRET_ACCESS_KEY
+          - domainName
+          - bucket
         
         command:
-            - sh
-            - -c
-            - ./manage.py migrate --no-input;
-              ./manage.py search_index --populate;
-              uwsgi --ini config/uwsgi.ini;
+          - sh
+          - -c
+          - ./manage.py migrate --no-input;
+            ./manage.py search_index --populate;
+            uwsgi --ini config/uwsgi.ini;
         
-        ports:
-            - 3031:3031
+        ports: [ 3031:3031 ]
     
     
     postgres:
         image: postgres:14.1-alpine3.15
         
         environment:
-            - POSTGRES_PASSWORD
+          - POSTGRES_PASSWORD
     
     
     memcached:

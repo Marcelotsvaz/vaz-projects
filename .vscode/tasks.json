@@ -7,7 +7,7 @@
 		{
 			"label": "Compose",
 			"type": "shell",
-			"command": "docker compose -f docker-compose.yml -f docker-compose.local.yml --env-file deploy/local.env ${input:composeCommand}",
+			"command": "docker compose -f docker-compose.yaml -f docker-compose.local.yaml --env-file deploy/local.env ${input:composeCommand}",
 			"options": {
 				"env": {
 					"DOCKER_BUILDKIT": "1",

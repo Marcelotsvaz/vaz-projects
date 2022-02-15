@@ -23,7 +23,6 @@ services:
         
         dns_opt: [ ndots:1 ]
         
-        volumes:
-          - ./config/promtail.yml:/etc/promtail/config.yml:ro
+        volumes: [ ./config/promtail.yaml:/etc/promtail/config.yml:ro ]
         
         ports: [ 1514:1514 ]

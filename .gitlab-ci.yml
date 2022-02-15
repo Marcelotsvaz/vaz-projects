@@ -7,10 +7,10 @@
 
 
 stages:
-    - build
-    - test
-    - deploy
-    - upload
+  - build
+  - test
+  - deploy
+  - upload
 
 
 variables:
@@ -31,15 +31,14 @@ buildDockerImage:
         name: staging
         action: prepare
     
-    services:
-        - docker:20.10-dind
+    services: [ docker:20.10-dind ]
     
     image: ${composeImage}
     
     script:
-        - echo ${CI_REGISTRY_PASSWORD} | docker login --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
-        - docker build --pull --tag ${applicationImage} application
-        - docker push --quiet ${applicationImage}
+      - echo ${CI_REGISTRY_PASSWORD} | docker login --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
+      - docker build --pull --tag ${applicationImage} application
+      - docker push --quiet ${applicationImage}
 
 
 runUnitTests:
@@ -49,20 +48,19 @@ runUnitTests:
         name: staging
         action: prepare
     
-    services:
-        - docker:20.10-dind
+    services: [ docker:20.10-dind ]
     
     image: ${composeImage}
     
     script:
-        - set -a; source deploy/local.env; set +a
-        - echo ${CI_REGISTRY_PASSWORD} | docker login --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
-        - docker compose up --detach --quiet-pull
-        - docker compose exec --no-TTY application coverage run manage.py test
-        - docker compose exec --no-TTY application coverage report
-        - docker compose exec --no-TTY application coverage xml
-        - docker compose cp application:/usr/src/app/deployment/tests/unitTests.xml .
-        - docker compose cp application:/usr/src/app/deployment/tests/coverage.xml .
+      - set -a; source deploy/local.env; set +a
+      - echo ${CI_REGISTRY_PASSWORD} | docker login --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
+      - docker compose up --detach --quiet-pull
+      - docker compose exec --no-TTY application coverage run manage.py test
+      - docker compose exec --no-TTY application coverage report
+      - docker compose exec --no-TTY application coverage xml
+      - docker compose cp application:/usr/src/app/deployment/tests/unitTests.xml .
+      - docker compose cp application:/usr/src/app/deployment/tests/coverage.xml .
     
     coverage: /^TOTAL.+?(\d+(?:\.\d+)?\%)$/
     
@@ -85,16 +83,15 @@ deployEnvironment:
         entrypoint: [ '' ]
     
     cache:
-        paths:
-            - deployment/
+        paths: [ deployment/ ]
     
     script:
-        - apk add --no-cache bash tar jq
-        - deploy/deploy.sh deployEnvironment ${CI_ENVIRONMENT_TIER}
+      - apk add --no-cache bash tar jq
+      - deploy/deploy.sh deployEnvironment ${CI_ENVIRONMENT_TIER}
     
     artifacts:
         paths:
-            - deployment/application/environment.env
+          - deployment/application/environment.env
 
 
 destroyEnvironment:
@@ -105,20 +102,19 @@ destroyEnvironment:
         action: stop
     
     rules:
-        - when: manual
-          allow_failure: true
+      - when: manual
+        allow_failure: true
     
     image:
         name: hashicorp/terraform:1.1.5
         entrypoint: [ '' ]
     
     cache:
-        paths:
-            - deployment/
+        paths: [ deployment/ ]
     
     script:
-        - apk add --no-cache bash jq
-        - deploy/deploy.sh destroyEnvironment ${CI_ENVIRONMENT_TIER}
+      - apk add --no-cache bash jq
+      - deploy/deploy.sh destroyEnvironment ${CI_ENVIRONMENT_TIER}
 
 
 uploadFiles:
@@ -128,14 +124,13 @@ uploadFiles:
         name: staging
         action: prepare
     
-    services:
-        - docker:20.10-dind
+    services: [ docker:20.10-dind ]
     
     image: ${composeImage}
     
     script:
-        - set -a; source deploy/local.env; set +a    # Only for djangoSecretKey.
-        - set -a; source deployment/application/environment.env; set +a  # From deployEnvironment.
-        - echo ${CI_REGISTRY_PASSWORD} | docker login --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
-        - docker compose run --no-TTY --no-deps --quiet-pull --rm application ./manage.py collectstatic --ignore '*/src/*' --no-input
-        # - aws cloudfront create-invalidation --distribution-id ${cloudfrontId} --paths '/*'    # TODO: Cloudfront invalidation.
+      - set -a; source deploy/local.env; set +a    # Only for djangoSecretKey.
+      - set -a; source deployment/application/environment.env; set +a  # From deployEnvironment.
+      - echo ${CI_REGISTRY_PASSWORD} | docker login --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
+      - docker compose run --no-TTY --no-deps --quiet-pull --rm application ./manage.py collectstatic --ignore '*/src/*' --no-input
+    #   - aws cloudfront create-invalidation --distribution-id ${cloudfrontId} --paths '/*'    # TODO: Cloudfront invalidation.
