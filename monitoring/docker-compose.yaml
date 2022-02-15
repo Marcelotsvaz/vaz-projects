@@ -21,7 +21,9 @@ services:
     loki:
         image: grafana/loki:2.4.2
         
-        volumes: [ ./config/loki.yaml:/etc/loki/local-config.yaml:ro ]
+        volumes:
+          - ./config/loki.yaml:/etc/loki/local-config.yaml:ro
+          - loki:/loki
             
         ports: [ 3100:3100 ]
     
@@ -37,3 +39,4 @@ services:
 
 volumes:
     grafana:
+    loki:
