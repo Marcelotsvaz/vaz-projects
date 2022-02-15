@@ -22,15 +22,10 @@ set -e	# Abort on error.
 echo ${sshKey} > ~marcelotsvaz/.ssh/authorized_keys	# Admin user.
 hostnamectl set-hostname ${domainName}
 
-useradd -rms /usr/bin/nologin --uid 70 -G docker ${user}
-cd /home/${user}/
-
 
 
 # PostgreSQL data volume setup
 #---------------------------------------
-databaseDataDir="/home/${user}/postgresql"
-
 aws ec2 wait volume-in-use --volume-ids ${dataVolumeId}
 dataDisk=$(lsblk -nro SERIAL,PATH | grep ${dataVolumeId/-/} | cut -d ' ' -f2)
 dataPartition=$(lsblk -nro PKNAME,FSTYPE,PATH | grep "^${dataDisk/\/dev\//} " | grep ext4 | cut -d ' ' -f3)
@@ -44,24 +39,25 @@ if [[ -z ${dataPartition} ]]; then
 	
 	dataPartition=$(lsblk -nro PKNAME,PATH | grep "^${dataDisk/\/dev\//} " | cut -d ' ' -f2)
 	
-	uid=$(id -u ${user})
-	mkfs.ext4 -E root_owner=${uid}:${uid} ${dataPartition}
+	mkfs.ext4 ${dataPartition}
 fi
 
-mkdir ${databaseDataDir}
-mount ${dataPartition} ${databaseDataDir}
+mount ${dataPartition} /var/lib/docker/volumes
 
 
 
 # PostgreSQL start
 #---------------------------------------
+useradd -rms /usr/bin/nologin -G docker ${user}
+cd /home/${user}
 sudo -Eu ${user} bash << EOF
 curl -s ${repositorySnapshot} | tar -xz --strip-components 1
 aws s3 cp s3://${bucket}/deployment/secrets.env deployment/ --no-progress
 EOF
 
+cd database
 systemctl enable --now docker
-docker run --env-file deployment/secrets.env --volume ${databaseDataDir}/data:/var/lib/postgresql/data --network=host --detach postgres:14.1-alpine3.15
+docker compose --env-file ../deployment/secrets.env up --detach --quiet-pull
 
 
 echo 'Finished Instance Configuration Script.'
