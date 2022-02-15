@@ -42,6 +42,7 @@ if [[ -z ${dataPartition} ]]; then
 	mkfs.ext4 ${dataPartition}
 fi
 
+mkdir -p /var/lib/docker/volumes
 mount ${dataPartition} /var/lib/docker/volumes
 
 

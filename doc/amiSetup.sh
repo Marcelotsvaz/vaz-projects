@@ -169,6 +169,7 @@ EOF
 
 # Docker
 #-------------------------------------------------------------------------------
+mkdir /etc/docker
 cat > /etc/docker/daemon.json << 'EOF'
 {
     "dns-opts": [ "ndots:1" ]
