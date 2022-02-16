@@ -21,9 +21,14 @@ services:
     promtail:
         image: grafana/promtail:2.4.2
         
+        environment:
+          - domainName
+        
         volumes:
           - ./config/promtail.yaml:/etc/promtail/config.yml:ro
           - /var/log/journal:/mnt/logs/journal
+        
+        command: [ -config.file=/etc/promtail/config.yml, -config.expand-env=true ]
 
 
 

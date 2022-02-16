@@ -16,13 +16,14 @@ positions:
 
 
 clients:
-  - url: http://loki:3100/loki/api/v1/push
+  - url: http://monitoring:3100/loki/api/v1/push
 
 
 scrape_configs:
   - job_name: journal
     journal:
         path: /mnt/logs/journal
+        json: true
         labels:
             job: journal
-            host: journal
+            hostname: ${domainName}

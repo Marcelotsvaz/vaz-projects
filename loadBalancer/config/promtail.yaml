@@ -23,9 +23,10 @@ scrape_configs:
   - job_name: journal
     journal:
         path: /mnt/logs/journal
+        json: true
         labels:
             job: journal
-            host: journal
+            hostname: ${domainName}
     
   - job_name: nginx
     static_configs:
