@@ -19,6 +19,6 @@ Group = nginx
 Restart = on-failure
 RestartSec = 1h
 
-EnvironmentFile = /root/init/environment.env
+EnvironmentFile = /etc/environment
 ExecStart = /home/nginx/loadBalancer/config/tls/dehydrated.sh
 ExecStartPost = +systemctl reload nginx

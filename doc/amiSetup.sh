@@ -190,10 +190,10 @@ EOF
 
 
 # Init scripts.
-mkdir /root/init
+mkdir -p /usr/local/lib/systemd/system
 
 #-------------------------------------------------------------------------------
-cat > /root/init/instanceScriptsSetup.sh << 'EOF'
+cat > /usr/local/lib/instanceScriptsSetup.sh << 'EOF'
 #!/bin/bash
 # Grow root partition.
 disk="/dev/$(lsblk -nro MOUNTPOINT,PKNAME | grep '^/ ' | cut -d ' ' -f2)"
@@ -209,24 +209,26 @@ resize2fs ${partition}
 
 
 # Download user data.
-curl -s http://169.254.169.254/latest/user-data | tar -xz -C /root/init/
+mkdir /tmp/deploy && cd ${_}
+curl -s http://169.254.169.254/latest/user-data | tar -xz
+mv per*.sh /usr/local/lib/
+mv environment.env /etc/environment
 EOF
 #-------------------------------------------------------------------------------
-chmod +x /root/init/instanceScriptsSetup.sh
+chmod +x /usr/local/lib/instanceScriptsSetup.sh
 
 #-------------------------------------------------------------------------------
-cat > /etc/systemd/system/instanceScriptsSetup.service << 'EOF'
+cat > /usr/local/lib/systemd/system/instanceScriptsSetup.service << 'EOF'
 [Unit]
 Description = Setup Instance Scripts
 Requires = network-online.target
 After = network-online.target
-ConditionPathExists = !/root/init/instanceScriptsSetup.done
+ConditionFirstBoot = yes
 
 [Service]
 Type = oneshot
 
-ExecStart = /root/init/instanceScriptsSetup.sh
-ExecStart = touch /root/init/instanceScriptsSetup.done
+ExecStart = /usr/local/lib/instanceScriptsSetup.sh
 
 [Install]
 WantedBy = multi-user.target
@@ -234,19 +236,18 @@ EOF
 #-------------------------------------------------------------------------------
 
 #-------------------------------------------------------------------------------
-cat > /etc/systemd/system/perInstance.service << 'EOF'
+cat > /usr/local/lib/systemd/system/perInstance.service << 'EOF'
 [Unit]
 Description = Instance Configuration Script
 Requires = instanceScriptsSetup.service network-online.target
 After = instanceScriptsSetup.service network-online.target
-ConditionPathExists = !/root/init/perInstance.done
+ConditionFirstBoot = yes
 
 [Service]
 Type = oneshot
 
-EnvironmentFile = -/root/init/environment.env
-ExecStart = /root/init/perInstance.sh
-ExecStart = touch /root/init/perInstance.done
+EnvironmentFile = -/etc/environment
+ExecStart = /usr/local/lib/perInstance.sh
 
 [Install]
 WantedBy = multi-user.target
@@ -254,18 +255,18 @@ EOF
 #-------------------------------------------------------------------------------
 
 #-------------------------------------------------------------------------------
-cat > /etc/systemd/system/perBoot.service << 'EOF'
+cat > /usr/local/lib/systemd/system/perBoot.service << 'EOF'
 [Unit]
 Description = Boot Script
 Requires = perInstance.service network-online.target
 After = perInstance.service network-online.target
-ConditionFileIsExecutable = /root/init/perBoot.sh
+ConditionFileIsExecutable = /usr/local/lib/perBoot.sh
 
 [Service]
 Type = oneshot
 
-EnvironmentFile = -/root/init/environment.env
-ExecStart = /root/init/perBoot.sh
+EnvironmentFile = -/etc/environment
+ExecStart = /usr/local/lib/perBoot.sh
 
 [Install]
 WantedBy = multi-user.target
@@ -273,25 +274,26 @@ EOF
 #-------------------------------------------------------------------------------
 
 #-------------------------------------------------------------------------------
-cat > /etc/systemd/system/perShutdown.service << 'EOF'
+cat > /usr/local/lib/systemd/system/perShutdown.service << 'EOF'
 [Unit]
 Description = Shutdown Script
 Requires = perInstance.service network-online.target
 After = perInstance.service network-online.target
-ConditionFileIsExecutable = /root/init/perShutdown.sh
+ConditionFileIsExecutable = /usr/local/lib/perShutdown.sh
 
 [Service]
 Type = oneshot
 RemainAfterExit = true
 
-EnvironmentFile = -/root/init/environment.env
-ExecStop = /root/init/perShutdown.sh
+EnvironmentFile = -/etc/environment
+ExecStop = /usr/local/lib/perShutdown.sh
 
 [Install]
 WantedBy = multi-user.target
 EOF
 #-------------------------------------------------------------------------------
 
+systemctl disable systemd-firstboot
 systemctl enable sshd instanceScriptsSetup perInstance perBoot perShutdown
 
 
