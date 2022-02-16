@@ -20,14 +20,14 @@ clients:
 
 
 scrape_configs:
-  - job_name: syslog
-    syslog:
-        listen_address: 0.0.0.0:1514
-        labels:
-            job: nginxTest
-    
   - job_name: journal
     journal:
-        path: /mnt/journal
+        path: /mnt/logs/journal
         labels:
             job: journalTest
+    
+  - job_name: nginx
+    static_configs:
+      - labels:
+            job: nginxTest
+            __path__: /mnt/logs/nginx/*.log
