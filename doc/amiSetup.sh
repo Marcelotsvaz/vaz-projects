@@ -8,12 +8,14 @@ pacman -Syu --noconfirm arch-install-scripts reflector
 reflector --protocol https --latest 50 --sort rate --save /etc/pacman.d/mirrorlist
 
 
+
 # Variables
 #---------------------------------------
 export AWS_DEFAULT_OUTPUT=text
 instanceId=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
 availabilityZone=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)
 mountPoint=/mnt/new
+
 
 
 # Create Volume
@@ -24,6 +26,7 @@ aws ec2 attach-volume --volume-id ${volumeId} --instance-id ${instanceId} --devi
 aws ec2 wait volume-in-use --volume-ids ${volumeId}
 sleep 3
 export disk=$(lsblk -nro SERIAL,PATH | grep ${volumeId/-/} | cut -d ' ' -f2) # Get attached EBS volume device path.
+
 
 
 # Partitioning and Filesystem
@@ -38,6 +41,7 @@ mkdir ${mountPoint}
 mount ${disk}p2 ${mountPoint}
 
 
+
 # Install Arch Linux
 #---------------------------------------
 pacstrap -c ${mountPoint} \
@@ -50,12 +54,14 @@ docker docker-compose nginx
 genfstab -U ${mountPoint} >> ${mountPoint}/etc/fstab
 
 
+
 # Chroot
 #---------------------------------------
 mount --bind /dev ${mountPoint}/dev
 mount --bind /sys ${mountPoint}/sys
 mount --bind /proc ${mountPoint}/proc
 chroot ${mountPoint}
+
 
 
 # Standard Configuration
@@ -93,6 +99,7 @@ kernelParameters='nomodeset console=ttyS0,9600n8 earlyprintk=serial,ttyS0,9600 l
 sed -Ei "s/^(GRUB_CMDLINE_LINUX_DEFAULT)=.*/\1=\"${kernelParameters}\"/g" /etc/default/grub # Set GRUB_CMDLINE_LINUX_DEFAULT.
 sed -Ei 's/^(GRUB_TIMEOUT)=.*/\1=0/g' /etc/default/grub # Set GRUB_TIMEOUT=0.
 grub-mkconfig -o /boot/grub/grub.cfg
+
 
 
 # Custom Configuration
@@ -291,6 +298,8 @@ systemctl enable sshd instanceScriptsSetup perInstance perBoot perShutdown
 # Clean up.
 exit
 rm ${mountPoint}/{root/.bash_history,var/log/pacman.log}
+rm ${mountPoint}/etc/machine-id
+
 
 
 # Create AMI
