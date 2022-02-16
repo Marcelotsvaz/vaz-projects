@@ -33,7 +33,7 @@ services:
         
         volumes:
           - ./config/promtail.yaml:/etc/promtail/config.yml:ro
-          - /var/log/journal:/mnt/journal
+          - /var/log/journal:/mnt/logs/journal
 
 
 

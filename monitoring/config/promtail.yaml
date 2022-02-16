@@ -20,8 +20,9 @@ clients:
 
 
 scrape_configs:
-  - job_name: journalAA
+  - job_name: journal
     journal:
-        path: /mnt/journal
+        path: /mnt/logs/journal
         labels:
-            job: journalAATest
+            job: journal
+            host: journal

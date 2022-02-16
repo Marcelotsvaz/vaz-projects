@@ -24,10 +24,11 @@ scrape_configs:
     journal:
         path: /mnt/logs/journal
         labels:
-            job: journalTest
+            job: journal
+            host: journal
     
   - job_name: nginx
     static_configs:
       - labels:
-            job: nginxTest
+            job: nginx
             __path__: /mnt/logs/nginx/*.log
