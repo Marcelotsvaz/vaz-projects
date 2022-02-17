@@ -49,10 +49,11 @@ module "load_balancer_user_data" {
 	templates = { "environment.env.tpl": "environment.env" }
 	
 	context = {
-		domain = local.domain
+		hostname = "load-balancer"
 		repository_snapshot = var.repository_snapshot
 		bucket = aws_s3_bucket.bucket.id
 		region = local.region
+		domain = local.domain
 		hosted_zone_id = data.aws_route53_zone.hosted_zone.zone_id
 	}
 }
@@ -132,6 +133,7 @@ module "app_server_user_data" {
 	templates = { "environment.env.tpl": "environment.env" }
 	
 	context = {
+		hostname = "application"
 		region = local.region
 		repository_snapshot = var.repository_snapshot
 		application_image = var.application_image
@@ -233,7 +235,7 @@ module "database_server_user_data" {
 	templates = { "environment.env.tpl": "environment.env" }
 	
 	context = {
-		domain = local.domain
+		hostname = "postgres"
 		data_volume_id = aws_ebs_volume.database_volume.id
 		repository_snapshot = var.repository_snapshot
 		bucket = aws_s3_bucket.bucket.id
@@ -336,7 +338,7 @@ module "monitoring_server_user_data" {
 	templates = { "environment.env.tpl": "environment.env" }
 	
 	context = {
-		domain = local.domain
+		hostname = "monitoring"
 		data_volume_id = aws_ebs_volume.monitoring_volume.id
 		repository_snapshot = var.repository_snapshot
 		bucket = aws_s3_bucket.bucket.id

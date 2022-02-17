@@ -22,7 +22,7 @@ services:
         image: grafana/promtail:2.4.2
         
         environment:
-          - domainName
+          - hostname
         
         volumes:
           - ./config/promtail.yaml:/etc/promtail/config.yml:ro

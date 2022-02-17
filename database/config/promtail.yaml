@@ -26,4 +26,4 @@ scrape_configs:
         json: true
         labels:
             job: journal
-            hostname: ${domainName}
+            hostname: ${hostname}

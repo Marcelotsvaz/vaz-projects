@@ -75,9 +75,6 @@ sed -Ei 's/^#(pt_BR\.UTF-8 UTF-8)/\1/g' /etc/locale.gen # Uncomment #pt_BR.UTF-8
 locale-gen
 echo 'LANG=en_US.UTF-8' > /etc/locale.conf
 
-# Network.
-echo 'arch-ec2' > /etc/hostname
-
 #-------------------------------------------------------------------------------
 cat > /etc/systemd/network/main.network << 'EOF'
 [Match]

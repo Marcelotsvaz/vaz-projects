@@ -20,7 +20,7 @@ set -e	# Abort on error.
 # System Setup
 #---------------------------------------
 echo ${sshKey} > ~marcelotsvaz/.ssh/authorized_keys	# Admin user.
-hostnamectl set-hostname ${domainName}
+hostnamectl set-hostname ${hostname}
 
 
 
