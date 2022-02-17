@@ -306,17 +306,21 @@ rm ${mountPoint}/etc/machine-id
 umount -R ${mountPoint}
 rm -r ${mountPoint}
 aws ec2 detach-volume --volume-id ${volumeId}
-aws ec2 wait volume-available --volume-ids ${volumeId}
 
+# Create AMI snapshot.
 snapshotId=$(aws ec2 create-snapshot \
     --volume-id ${volumeId} \
     --tag-specifications 'ResourceType=snapshot,Tags=[{Key=Name,Value=Arch Linux AMI Snapshot}]' \
     --query 'SnapshotId')
-aws ec2 wait snapshot-completed --snapshot-ids ${snapshotId}
-aws ec2 delete-volume --volume-id ${volumeId}
 
+# Clean up.
 imageId=$(aws ec2 describe-images --filters 'Name=name,Values=Arch Linux AMI' --query 'Images[0].ImageId')
 aws ec2 deregister-image --image-id ${imageId}
+aws ec2 wait volume-available --volume-ids ${volumeId}
+aws ec2 delete-volume --volume-id ${volumeId}
+
+# Register AMI.
+aws ec2 wait snapshot-completed --snapshot-ids ${snapshotId}
 newImageId=$(aws ec2 register-image \
     --name 'Arch Linux AMI' \
     --architecture x86_64 \
