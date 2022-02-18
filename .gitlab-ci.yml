@@ -53,9 +53,8 @@ runUnitTests:
     image: ${composeImage}
     
     script:
-      - set -a; source deploy/local.env; set +a
       - echo ${CI_REGISTRY_PASSWORD} | docker login --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
-      - docker compose up --detach --quiet-pull
+      - docker compose --env-file deploy/local.env up --detach --quiet-pull
       - docker compose exec --no-TTY application coverage run manage.py test
       - docker compose exec --no-TTY application coverage report
       - docker compose exec --no-TTY application coverage xml
@@ -129,9 +128,16 @@ uploadFiles:
     image: ${composeImage}
     
     script:
-      - set -a; source deploy/local.env; set +a    # Only for djangoSecretKey.
-      - set -a; source deployment/application/environment.env; set +a  # From deployEnvironment.
       - echo ${CI_REGISTRY_PASSWORD} | docker login --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
       - cd application
-      - docker compose run --no-TTY --no-deps --quiet-pull --rm application ./manage.py collectstatic --ignore '*/src/*' --no-input
+      - docker compose
+            --env-file deploy/local.env
+            --env-file deployment/application/environment.env
+            run
+            --no-TTY
+            --no-deps
+            --quiet-pull
+            --rm
+            application
+            ./manage.py collectstatic --ignore '*/src/*' --no-input
     #   - aws cloudfront create-invalidation --distribution-id ${cloudfrontId} --paths '/*'    # TODO: Cloudfront invalidation.

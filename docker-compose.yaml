@@ -12,7 +12,7 @@ services:
             service: application
             file: application/docker-compose.yaml
         
-        image: registry.gitlab.com/marcelotsvaz/vaz-projects/application:development
+        image: ${applicationImage-registry.gitlab.com/marcelotsvaz/vaz-projects/application:development}
         build: application/
         
         depends_on:
@@ -24,9 +24,10 @@ services:
         command:
           - sh
           - -c
-          - ./manage.py migrate --no-input;
-            ./manage.py search_index --populate;
-            ./manage.py runserver 0.0.0.0:80;
+          - |-
+            ./manage.py migrate --no-input
+            ./manage.py search_index --populate
+            ./manage.py runserver 0.0.0.0:80
         
         ports: [ 80:80 ]
     
