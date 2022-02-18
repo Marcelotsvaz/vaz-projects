@@ -1,0 +1,11 @@
+#
+# VAZ Projects
+#
+#
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+services:
+    postgres:
+        network_mode: host

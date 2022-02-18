@@ -1,0 +1,55 @@
+#
+# VAZ Projects
+#
+#
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+services:
+    application:
+        image: ${applicationImage-}
+        
+        depends_on:
+            memcached:
+                condition: service_started
+            elasticsearch:
+                condition: service_healthy
+        
+        environment:
+          - DJANGO_SETTINGS_MODULE
+          - djangoSecretKey
+          - POSTGRES_PASSWORD
+          - ELASTIC_PASSWORD
+          - AWS_ACCESS_KEY_ID
+          - AWS_SECRET_ACCESS_KEY
+          - domainName
+          - bucket
+        
+        command:
+          - sh
+          - -c
+          - ./manage.py migrate --no-input;
+            ./manage.py search_index --populate;
+            uwsgi --ini config/uwsgi.ini;
+        
+        ports: [ 3031:3031 ]
+    
+    
+    memcached:
+        image: memcached:1.6-bullseye
+    
+    
+    elasticsearch:
+        image: elasticsearch:7.17.0
+        
+        environment:
+            ES_JAVA_OPTS: -Xms128m -Xmx128m
+            discovery.type: single-node
+            xpack.security.enabled: 'true'
+            ELASTIC_PASSWORD:
+        
+        healthcheck:
+            test: curl --silent elasticsearch:9200/_cluster/health/
+            interval: 1s
+            start_period: 60s

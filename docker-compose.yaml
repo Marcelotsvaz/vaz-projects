@@ -8,57 +8,48 @@
 
 services:
     application:
-        image: ${applicationImage-}
+        extends:
+            service: application
+            file: application/docker-compose.yaml
+        
+        image: registry.gitlab.com/marcelotsvaz/vaz-projects/application:development
+        build: application/
         
         depends_on:
             postgres:
                 condition: service_started
-            memcached:
-                condition: service_started
-            elasticsearch:
-                condition: service_healthy
         
-        environment:
-          - DJANGO_SETTINGS_MODULE
-          - djangoSecretKey
-          - POSTGRES_PASSWORD
-          - ELASTIC_PASSWORD
-          - AWS_ACCESS_KEY_ID
-          - AWS_SECRET_ACCESS_KEY
-          - domainName
-          - bucket
+        volumes: [ media:/usr/src/app/deployment/media ]
         
         command:
           - sh
           - -c
           - ./manage.py migrate --no-input;
             ./manage.py search_index --populate;
-            uwsgi --ini config/uwsgi.ini;
+            ./manage.py runserver 0.0.0.0:80;
         
-        ports: [ 3031:3031 ]
+        ports: [ 80:80 ]
     
     
     postgres:
-        image: postgres:14.1-alpine3.15
-        
-        environment:
-          - POSTGRES_PASSWORD
+        extends:
+            service: postgres
+            file: database/docker-compose.yaml
     
     
     memcached:
-        image: memcached:1.6-bullseye
+        extends:
+            service: memcached
+            file: application/docker-compose.yaml
     
     
     elasticsearch:
-        image: elasticsearch:7.17.0
-        
-        environment:
-            ES_JAVA_OPTS: -Xms128m -Xmx128m
-            discovery.type: single-node
-            xpack.security.enabled: 'true'
-            ELASTIC_PASSWORD:
-        
-        healthcheck:
-            test: curl --silent elasticsearch:9200/_cluster/health/
-            interval: 1s
-            start_period: 60s
+        extends:
+            service: elasticsearch
+            file: application/docker-compose.yaml
+
+
+
+volumes:
+    media:
+    postgres:

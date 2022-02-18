@@ -29,8 +29,9 @@ curl -s ${repositorySnapshot} | tar -xz --strip-components 1
 aws s3 cp s3://${bucket}/deployment/secrets.env deployment/ --no-progress
 EOF
 
+cd application
 systemctl enable --now docker
-docker compose --env-file deployment/secrets.env up --no-deps --detach --quiet-pull application memcached elasticsearch
+docker compose --env-file ../deployment/secrets.env up --detach --quiet-pull
 
 
 
