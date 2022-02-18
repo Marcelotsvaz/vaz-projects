@@ -35,6 +35,9 @@ services:
         extends:
             service: postgres
             file: database/docker-compose.yaml
+        
+        network_mode: bridge
+        networks: [ default ]
     
     
     memcached:
