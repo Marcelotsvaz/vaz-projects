@@ -16,7 +16,10 @@ module "load_balancer" {
 	instance_type = "t3a.nano"
 	
 	subnet_id = aws_subnet.subnet_c.id
-	vpc_security_group_ids = [ aws_default_security_group.security_group.id ]
+	vpc_security_group_ids = [
+		aws_default_security_group.common.id,
+		aws_security_group.public.id,
+	]
 	private_hosted_zone = aws_route53_zone.private
 	hostname = "load-balancer"
 	
@@ -109,7 +112,10 @@ module "app_server" {
 	instance_type = "t3a.small"
 	
 	subnet_id = aws_subnet.subnet_c.id
-	vpc_security_group_ids = [ aws_default_security_group.security_group.id ]
+	vpc_security_group_ids = [
+		aws_default_security_group.common.id,
+		aws_security_group.private.id,
+	]
 	private_hosted_zone = aws_route53_zone.private
 	hostname = "application"
 	
@@ -191,7 +197,10 @@ module "database_server" {
 	instance_type = "t3a.nano"
 	
 	subnet_id = aws_subnet.subnet_c.id
-	vpc_security_group_ids = [ aws_default_security_group.security_group.id ]
+	vpc_security_group_ids = [
+		aws_default_security_group.common.id,
+		aws_security_group.private.id,
+	]
 	private_hosted_zone = aws_route53_zone.private
 	hostname = "postgres"
 	
@@ -285,7 +294,10 @@ module "monitoring_server" {
 	instance_type = "t3a.nano"
 	
 	subnet_id = aws_subnet.subnet_c.id
-	vpc_security_group_ids = [ aws_default_security_group.security_group.id ]
+	vpc_security_group_ids = [
+		aws_default_security_group.common.id,
+		aws_security_group.private.id,
+	]
 	private_hosted_zone = aws_route53_zone.private
 	hostname = "monitoring"
 	

@@ -121,7 +121,7 @@ resource "aws_default_network_acl" "acl" {
 }
 
 
-resource "aws_default_security_group" "security_group" {
+resource "aws_default_security_group" "common" {
 	vpc_id = aws_vpc.vpc.id
 	
 	egress {
@@ -133,12 +133,57 @@ resource "aws_default_security_group" "security_group" {
 		ipv6_cidr_blocks = [ "::/0" ]
 	}
 	
+	tags = {
+		Name: "${local.project_name} Common Security Group"
+	}
+}
+
+
+resource "aws_security_group" "public" {
+	vpc_id = aws_vpc.vpc.id
+	
+	ingress {
+		description = "NGINX - HTTPS"
+		protocol = "tcp"
+		from_port = 443
+		to_port = 443
+		cidr_blocks = [ "0.0.0.0/0" ]
+		ipv6_cidr_blocks = [ "::/0" ]
+	}
+	
+	ingress {
+		description = "NGINX - HTTP"
+		protocol = "tcp"
+		from_port = 80
+		to_port = 80
+		cidr_blocks = [ "0.0.0.0/0" ]
+		ipv6_cidr_blocks = [ "::/0" ]
+	}
+	
+	ingress {
+		description = "OpenSSH"
+		protocol = "tcp"
+		from_port = 22
+		to_port = 22
+		cidr_blocks = [ "0.0.0.0/0" ]
+		ipv6_cidr_blocks = [ "::/0" ]
+	}
+	
+	tags = {
+		Name: "${local.project_name} Public Security Group"
+	}
+}
+
+
+resource "aws_security_group" "private" {
+	vpc_id = aws_vpc.vpc.id
+	
 	ingress {
 		description = "uWSGI"
 		protocol = "tcp"
 		from_port = 3031
 		to_port = 3031
-		self = true
+		security_groups = [ aws_security_group.public.id ]
 	}
 	
 	ingress {
@@ -154,7 +199,7 @@ resource "aws_default_security_group" "security_group" {
 		protocol = "tcp"
 		from_port = 3100
 		to_port = 3100
-		self = true
+		security_groups = [ aws_default_security_group.common.id ]
 	}
 	
 	ingress {
@@ -162,29 +207,10 @@ resource "aws_default_security_group" "security_group" {
 		protocol = "tcp"
 		from_port = 22
 		to_port = 22
-		cidr_blocks = [ "0.0.0.0/0" ]
-		ipv6_cidr_blocks = [ "::/0" ]
-	}
-	
-	ingress {
-		description = "NGINX - HTTP"
-		protocol = "tcp"
-		from_port = 80
-		to_port = 80
-		cidr_blocks = [ "0.0.0.0/0" ]
-		ipv6_cidr_blocks = [ "::/0" ]
-	}
-	
-	ingress {
-		description = "NGINX - HTTPS"
-		protocol = "tcp"
-		from_port = 443
-		to_port = 443
-		cidr_blocks = [ "0.0.0.0/0" ]
-		ipv6_cidr_blocks = [ "::/0" ]
+		security_groups = [ aws_security_group.public.id ]
 	}
 	
 	tags = {
-		Name: "${local.project_name} Security Group"
+		Name: "${local.project_name} Private Security Group"
 	}
 }
