@@ -7,15 +7,20 @@
 
 
 services:
-    # nginx:
-    #     image: nginx:1.21-alpine
+    nginx:
+        image: nginx:1.21-alpine
         
-    #     volumes:
-    #         - ./config/nginx.conf:etc/nginx/nginx.conf:ro
+        environment:
+          - domainName
         
-    #     ports:
-    #         - 80:80
-    #         - 443:443
+        volumes:
+            - ./config/nginx.conf:/etc/nginx/templates/default.conf.template:ro
+            - ../deployment/tls:/etc/nginx/tls:ro
+            - nginxLogs:/mnt/logs/nginx
+        
+        ports:
+            - 80:80
+            - 443:443
     
     
     promtail:
@@ -27,6 +32,11 @@ services:
         volumes:
           - ./config/promtail.yaml:/etc/promtail/config.yml:ro
           - /var/log/journal:/mnt/logs/journal
-          - ../deployment/logs:/mnt/logs/nginx
+          - nginxLogs:/mnt/logs/nginx
         
         command: [ -config.file=/etc/promtail/config.yml, -config.expand-env=true ]
+
+
+
+volumes:
+    nginxLogs:

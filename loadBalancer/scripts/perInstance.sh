@@ -27,7 +27,6 @@ cd /home/${user}
 sudo -Eu ${user} bash << EOF
 curl -s ${repositorySnapshot} | tar -xz --strip-components 1
 aws s3 sync s3://${bucket}/deployment/ deployment/ --no-progress
-mkdir deployment/logs
 EOF
 
 cd loadBalancer
@@ -40,7 +39,7 @@ systemctl enable /home/${user}/loadBalancer/systemdUnits/*
 
 # Start Services
 #---------------------------------------
-systemctl start dehydrated.timer nginx
+systemctl start dehydrated.timer
 
 
 
