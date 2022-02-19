@@ -7,7 +7,7 @@
 		{
 			"label": "Compose",
 			"type": "shell",
-			"command": "docker compose --env-file deploy/local.env ${input:composeCommand}",
+			"command": "docker compose ${input:composeCommand}",
 			"options": {
 				"env": {
 					"DOCKER_BUILDKIT": "1",

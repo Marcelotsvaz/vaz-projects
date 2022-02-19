@@ -54,7 +54,7 @@ runUnitTests:
     
     script:
       - echo ${CI_REGISTRY_PASSWORD} | docker login --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
-      - docker compose --env-file deploy/local.env up --no-build --detach --quiet-pull
+      - docker compose up --no-build --detach --quiet-pull
       - docker compose exec --no-TTY application coverage run manage.py test
       - docker compose exec --no-TTY application coverage report
       - docker compose exec --no-TTY application coverage xml
@@ -131,7 +131,6 @@ uploadFiles:
       - echo ${CI_REGISTRY_PASSWORD} | docker login --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
       - docker compose --env-file deployment/application/environment.env pull --quiet application
       - docker compose
-            --env-file deploy/local.env
             --env-file deployment/application/environment.env
             run
             --no-deps

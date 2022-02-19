@@ -15,6 +15,6 @@ AWS_DEFAULT_REGION="${region}"
 applicationImage="${application_image}"
 
 # Django application.
-DJANGO_SETTINGS_MODULE="settings.${environment}"
+DJANGO_SETTINGS_MODULE=settings.${environment}
 domainName="${domain}"
-bucket="${bucket}"
+bucket=${bucket}

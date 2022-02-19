@@ -10,7 +10,7 @@ services:
     application:
         extends:
             service: application
-            file: application/docker-compose.yaml
+            file: &applicationFile application/docker-compose.yaml
         
         image: ${applicationImage-registry.gitlab.com/marcelotsvaz/vaz-projects/application:development}
         build: application/
@@ -18,6 +18,16 @@ services:
         depends_on:
             postgres:
                 condition: service_started
+        
+        environment:
+            DJANGO_SETTINGS_MODULE: ${DJANGO_SETTINGS_MODULE-settings.local}
+            djangoSecretKey: django
+            domainName: vaz-pc.lan
+            bucket: ${bucket-local}
+            POSTGRES_PASSWORD: &postgresPassword postgres
+            ELASTIC_PASSWORD: &elasticsearchPassword elastic
+            AWS_ACCESS_KEY_ID:
+            AWS_SECRET_ACCESS_KEY:
         
         volumes: [ media:/usr/src/app/deployment/media ]
         
@@ -37,6 +47,9 @@ services:
             service: postgres
             file: database/docker-compose.yaml
         
+        environment:
+            POSTGRES_PASSWORD: *postgresPassword
+        
         network_mode: bridge
         networks: [ default ]
     
@@ -44,13 +57,16 @@ services:
     memcached:
         extends:
             service: memcached
-            file: application/docker-compose.yaml
+            file: *applicationFile
     
     
     elasticsearch:
         extends:
             service: elasticsearch
-            file: application/docker-compose.yaml
+            file: *applicationFile
+        
+        environment:
+            ELASTIC_PASSWORD: *elasticsearchPassword
 
 
 

@@ -19,12 +19,10 @@ services:
         environment:
           - DJANGO_SETTINGS_MODULE
           - djangoSecretKey
-          - POSTGRES_PASSWORD
-          - ELASTIC_PASSWORD
-          - AWS_ACCESS_KEY_ID
-          - AWS_SECRET_ACCESS_KEY
           - domainName
           - bucket
+          - POSTGRES_PASSWORD
+          - ELASTIC_PASSWORD
         
         command:
           - sh
