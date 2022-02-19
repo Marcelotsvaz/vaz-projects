@@ -52,3 +52,16 @@ services:
             test: curl --silent elasticsearch:9200/_cluster/health/
             interval: 1s
             start_period: 60s
+    
+    
+    promtail:
+        image: grafana/promtail:2.4.2
+        
+        environment:
+          - hostname
+        
+        volumes:
+          - ./config/promtail.yaml:/etc/promtail/config.yml:ro
+          - /var/log/journal:/mnt/logs/journal
+        
+        command: [ -config.file=/etc/promtail/config.yml, -config.expand-env=true ]
