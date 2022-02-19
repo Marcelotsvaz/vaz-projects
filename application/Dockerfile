@@ -49,19 +49,16 @@ FROM python:3.10-alpine3.15
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-WORKDIR /usr/src/app/
-
 RUN pip install --no-cache-dir --upgrade pip
-
 RUN apk add --no-cache libjpeg libpq libmemcached
-
 RUN --mount=from=wheelBuilder,source=wheels/,target=wheels/	\
 	pip install --no-cache-dir wheels/*
 
-# RUN adduser -Ss /usr/sbin/nologin django
-# USER django
+RUN addgroup -S django && adduser -Ss /sbin/nologin -G django django
+USER django
+WORKDIR /home/django
 
-COPY . .
-COPY --from=lessBuilder siteApp.css deployment/static/siteApp/css/siteApp.css
+COPY --chown=django:django . .
+COPY --chown=django:django --from=lessBuilder siteApp.css deployment/static/siteApp/css/siteApp.css
 
 EXPOSE 3031
