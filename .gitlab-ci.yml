@@ -130,11 +130,11 @@ uploadFiles:
     script:
       - echo ${CI_REGISTRY_PASSWORD} | docker login --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
       - cd application
+      - docker compose --env-file deployment/application/environment.env pull --quiet application
       - docker compose
             --env-file deploy/local.env
             --env-file deployment/application/environment.env
             run
-            --no-build
             --no-deps
             --no-TTY
             --quiet-pull
