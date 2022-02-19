@@ -49,7 +49,7 @@ mount ${dataPartition} /var/lib/docker/volumes
 
 # Monitoring stack start
 #---------------------------------------
-useradd -rms /usr/bin/nologin -G docker ${user}
+useradd -rms /usr/bin/nologin ${user}
 cd /home/${user}
 sudo -Eu ${user} bash << EOF
 curl -s ${repositorySnapshot} | tar -xz --strip-components 1
