@@ -310,15 +310,6 @@ module "monitoring_server" {
 }
 
 
-resource "aws_eip" "monitoring_server_ip" {
-	instance = module.monitoring_server.id
-	
-	tags = {
-		Name = "${local.project_name} Monitoring Server Elastic IP"
-	}
-}
-
-
 resource "aws_ebs_volume" "monitoring_volume" {
 	availability_zone = aws_subnet.subnet_c.availability_zone
 	size = 5

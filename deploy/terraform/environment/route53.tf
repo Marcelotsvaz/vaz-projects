@@ -117,7 +117,7 @@ resource "aws_route53_record" "a_monitoring_server" {
 	name = "monitoring.${local.domain}"
 	type = "A"
 	ttl = "60"
-	records = [ aws_eip.monitoring_server_ip.public_ip ]
+	records = [ aws_eip.load_balancer_ip.public_ip ]
 }
 
 
@@ -127,7 +127,7 @@ resource "aws_route53_record" "aaaa_monitoring_server" {
 	name = "monitoring.${local.domain}"
 	type = "AAAA"
 	ttl = "60"
-	records = [ module.monitoring_server.ipv6_address ]
+	records = [ module.load_balancer.ipv6_address ]
 }
 
 
