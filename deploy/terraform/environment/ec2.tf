@@ -58,6 +58,7 @@ module "load_balancer_user_data" {
 		region = local.region
 		domain = local.domain
 		hosted_zone_id = data.aws_route53_zone.hosted_zone.zone_id
+		cloudfront_certificate_arn = data.aws_acm_certificate.cloudfront.arn
 	}
 }
 
@@ -97,6 +98,14 @@ data "aws_iam_policy_document" "load_balancer_policy" {
 			data.aws_route53_zone.hosted_zone.arn,
 			"arn:aws:route53:::change/*",
 		]
+	}
+	
+	statement {
+		sid = "acmImportCertificate"
+		
+		actions = [ "acm:ImportCertificate" ]
+		
+		resources = [ data.aws_acm_certificate.cloudfront.arn ]
 	}
 }
 

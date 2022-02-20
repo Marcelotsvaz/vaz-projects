@@ -19,3 +19,4 @@ domainName="${domain}"
 
 # dehydrated.sh
 hostedZoneId="${hosted_zone_id}"
+cloudfrontCertificateArn="${cloudfront_certificate_arn}"

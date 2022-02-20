@@ -133,22 +133,6 @@ resource "aws_route53_record" "aaaa_monitoring_server" {
 
 
 # 
-# ACM certificate validation.
-#-------------------------------------------------------------------------------
-resource "aws_route53_record" "acm" {
-	for_each = { for record in aws_acm_certificate.cloudfront.domain_validation_options : record.domain_name => record }
-	
-	zone_id = data.aws_route53_zone.hosted_zone.zone_id
-	
-	name = each.value.resource_record_name
-	type = each.value.resource_record_type
-	ttl = "60"
-	records = [ each.value.resource_record_value ]
-}
-
-
-
-# 
 # Third-party records.
 #-------------------------------------------------------------------------------
 resource "aws_route53_record" "caa" {
