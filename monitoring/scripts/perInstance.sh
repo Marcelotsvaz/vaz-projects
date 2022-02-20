@@ -24,6 +24,17 @@ hostnamectl set-hostname ${hostname}
 
 
 
+# Swap
+#---------------------------------------
+swapFile='/swapfile'
+dd if=/dev/zero of=${swapFile} bs=1M count=512
+chmod 600 ${swapFile}
+mkswap ${swapFile}
+swapon ${swapFile}
+echo "${swapFile} none swap defaults 0 0" >> /etc/fstab
+
+
+
 # Monitoring data volume setup
 #---------------------------------------
 # Wait for volume to be mounted.
