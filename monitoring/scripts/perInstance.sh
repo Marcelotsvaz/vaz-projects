@@ -26,11 +26,14 @@ hostnamectl set-hostname ${hostname}
 
 # Monitoring data volume setup
 #---------------------------------------
-aws ec2 wait volume-in-use --volume-ids ${dataVolumeId}
-dataDisk=$(lsblk -nro SERIAL,PATH | grep ${dataVolumeId/-/} | cut -d ' ' -f2)
-dataPartition=$(lsblk -nro PKNAME,FSTYPE,PATH | grep "^${dataDisk/\/dev\//} " | grep ext4 | cut -d ' ' -f3)
+# Wait for volume to be mounted.
+while [[ -z ${dataDisk} ]]; do
+	dataDisk=$(lsblk -nro SERIAL,PATH | grep ${dataVolumeId/-/} | cut -d ' ' -f2)
+	sleep 1
+done
 
 # Format volume if there's no partitions.
+dataPartition=$(lsblk -nro PKNAME,FSTYPE,PATH | grep "^${dataDisk/\/dev\//} " | grep ext4 | cut -d ' ' -f3)
 if [[ -z ${dataPartition} ]]; then
 	echo Formatting new volume...
 	

@@ -28,9 +28,12 @@ mountPoint=/mnt/new
 volumeId=$(aws ec2 create-volume --size 2 --availability-zone ${availabilityZone} --volume-type gp3 --no-encrypted --query 'VolumeId')
 aws ec2 wait volume-available --volume-ids ${volumeId}
 aws ec2 attach-volume --volume-id ${volumeId} --instance-id ${instanceId} --device /dev/sdf
-aws ec2 wait volume-in-use --volume-ids ${volumeId}
-sleep 3
-export disk=$(lsblk -nro SERIAL,PATH | grep ${volumeId/-/} | cut -d ' ' -f2) # Get attached EBS volume device path.
+
+# Wait for volume to be mounted.
+while [[ -z ${disk} ]]; do
+	export disk=$(lsblk -nro SERIAL,PATH | grep ${volumeId/-/} | cut -d ' ' -f2)    # Get attached EBS volume device path.
+	sleep 1
+done
 
 
 
