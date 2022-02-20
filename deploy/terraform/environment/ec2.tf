@@ -16,6 +16,7 @@ module "load_balancer" {
 	instance_type = "t3a.nano"
 	
 	subnet_id = aws_subnet.subnet_c.id
+	ipv6_address_count = 1
 	vpc_security_group_ids = [
 		aws_default_security_group.common.id,
 		aws_security_group.public.id,

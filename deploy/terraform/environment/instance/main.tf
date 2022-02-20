@@ -13,6 +13,7 @@ resource "aws_spot_instance_request" "instance" {
 	ami = data.aws_ami.arch_linux.id
 	instance_type = var.instance_type
 	subnet_id = var.subnet_id
+	ipv6_address_count = var.ipv6_address_count
 	vpc_security_group_ids = var.vpc_security_group_ids
 	iam_instance_profile = aws_iam_instance_profile.instance_profile.name
 	user_data_base64 = var.user_data_base64
