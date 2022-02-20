@@ -1,3 +1,11 @@
+// 
+// VAZ Projects
+// 
+// 
+// Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
 {
 	"python.pythonPath": "deployment/env/bin/python",
 	

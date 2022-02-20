@@ -1,8 +1,8 @@
 # syntax=docker/dockerfile:1.3
-#
+# 
 # VAZ Projects
-#
-#
+# 
+# 
 # Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
 
 
