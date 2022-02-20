@@ -66,6 +66,8 @@ resource "aws_subnet" "subnet_c" {
 	availability_zone = "sa-east-1c"
 	cidr_block = cidrsubnet( aws_vpc.vpc.cidr_block, 8, 3 )
 	ipv6_cidr_block = cidrsubnet( aws_vpc.vpc.ipv6_cidr_block, 8, 3 )
+	map_public_ip_on_launch = true
+	assign_ipv6_address_on_creation = true
 	
 	depends_on = [ aws_vpc_dhcp_options_association.dns_resolver ]	# Block instance creation before DHCP options is ready.
 	

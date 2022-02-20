@@ -24,7 +24,7 @@ variable "subnet_id" {
 variable "ipv6_address_count" {
 	description = ""
 	type = number
-	default = 0
+	default = 1
 }
 
 variable "vpc_security_group_ids" {
