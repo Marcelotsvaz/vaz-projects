@@ -18,6 +18,16 @@ services:
         ports: [ 80:3000 ]
     
     
+    prometheus:
+        image: prom/prometheus:v2.33.3
+        
+        volumes:
+          - ./config/prometheus.yaml:/etc/prometheus/prometheus.yml:ro
+          - prometheus:/prometheus
+            
+        ports: [ 9090:9090 ]
+    
+    
     loki:
         image: grafana/loki:2.4.2
         
@@ -26,6 +36,17 @@ services:
           - loki:/loki
             
         ports: [ 3100:3100 ]
+    
+    
+    node-exporter:
+        image: prom/node-exporter:v1.3.1
+        
+        volumes: [ /:/mnt/host:ro,rslave ]
+        
+        pid: host
+        network_mode: host
+        
+        command: [ --path.rootfs=/mnt/host ]
     
     
     promtail:
@@ -44,4 +65,5 @@ services:
 
 volumes:
     grafana:
+    prometheus:
     loki:

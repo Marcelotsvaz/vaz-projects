@@ -135,6 +135,14 @@ resource "aws_default_security_group" "common" {
 		ipv6_cidr_blocks = [ "::/0" ]
 	}
 	
+	ingress {
+		description = "Prometheus Metrics"
+		protocol = "tcp"
+		from_port = 9100
+		to_port = 9100
+		self = true
+	}
+	
 	tags = {
 		Name: "${local.project_name} Common Security Group"
 	}

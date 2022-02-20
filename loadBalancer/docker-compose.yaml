@@ -23,6 +23,17 @@ services:
             - 443:443
     
     
+    node-exporter:
+        image: prom/node-exporter:v1.3.1
+        
+        volumes: [ /:/mnt/host:ro,rslave ]
+        
+        pid: host
+        network_mode: host
+        
+        command: [ --path.rootfs=/mnt/host ]
+    
+    
     promtail:
         image: grafana/promtail:2.4.2
         
