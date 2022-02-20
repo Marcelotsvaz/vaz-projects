@@ -195,6 +195,14 @@ resource "aws_security_group" "private" {
 	}
 	
 	ingress {
+		description = "Grafana - HTTP"
+		protocol = "tcp"
+		from_port = 80
+		to_port = 80
+		security_groups = [ aws_security_group.public.id ]
+	}
+	
+	ingress {
 		description = "Loki"
 		protocol = "tcp"
 		from_port = 3100
