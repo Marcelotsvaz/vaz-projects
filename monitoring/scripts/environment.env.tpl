@@ -14,3 +14,6 @@ dataVolumeId="${data_volume_id}"
 repositorySnapshot="${repository_snapshot}"
 bucket="${bucket}"
 AWS_DEFAULT_REGION="${region}"
+
+# Grafana.
+domainName="${domain}"

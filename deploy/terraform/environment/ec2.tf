@@ -356,6 +356,7 @@ module "monitoring_server_user_data" {
 		repository_snapshot = var.repository_snapshot
 		bucket = aws_s3_bucket.bucket.id
 		region = local.region
+		domain = "monitoring.${local.domain}"
 	}
 }
 
