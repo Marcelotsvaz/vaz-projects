@@ -1,0 +1,31 @@
+# 
+# VAZ Projects
+# 
+# 
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+services:
+    node-exporter:
+        image: prom/node-exporter:v1.3.1
+        
+        volumes: [ '/:/mnt/host:ro,rslave' ]
+        
+        pid: host
+        network_mode: host
+        
+        command: [ --path.rootfs=/mnt/host ]
+    
+    
+    promtail:
+        image: grafana/promtail:2.4.2
+        
+        environment:
+          - hostname
+        
+        volumes:
+          - ./config/promtail-common.yaml:/etc/promtail/config.yml:ro
+          - /var/log/journal:/mnt/logs/journal
+        
+        command: [ -config.file=/etc/promtail/config.yml, -config.expand-env=true ]
