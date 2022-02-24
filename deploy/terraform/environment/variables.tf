@@ -28,8 +28,8 @@ variable "application_image" {
 locals {
 	project_name = "VAZ Projects"
 	project_code = "vazProjects"
-	domain = "staging.vazprojects.com"
 	environment_name = title( var.environment )
+	domain = var.environment == "production" ? "vazprojects.com" : "${var.environment}.vazprojects.com"
 	region = "sa-east-1"
 	default_tags = {
 		Project = local.project_name
