@@ -19,7 +19,8 @@ services:
         environment:
           - DJANGO_SETTINGS_MODULE
           - djangoSecretKey
-          - domainName
+          - domain
+          - staticFilesDomain
           - bucket
           - POSTGRES_PASSWORD
           - ELASTIC_PASSWORD

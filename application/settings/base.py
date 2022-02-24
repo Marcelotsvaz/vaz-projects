@@ -17,7 +17,7 @@ from django.utils.translation import gettext_lazy as _
 #---------------------------------------
 BASE_DIR = Path( __file__ ).resolve().parents[1]
 
-ALLOWED_HOSTS = [ environ['domainName'] ]
+ALLOWED_HOSTS = [ environ['domain'] ]
 
 ROOT_URLCONF = 'urls'
 WSGI_APPLICATION = 'wsgi.application'

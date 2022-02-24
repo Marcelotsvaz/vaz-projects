@@ -11,7 +11,10 @@ services:
         image: nginx:1.21-alpine
         
         environment:
-          - domainName
+          - domain
+          - staticFilesDomain
+          - privateDomain
+          - monitoringDomain
         
         volumes:
             - ./config/nginx.conf:/etc/nginx/templates/default.conf.template:ro

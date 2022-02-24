@@ -15,7 +15,10 @@ bucket="${bucket}"
 AWS_DEFAULT_REGION="${region}"
 
 # NGINX.
-domainName="${domain}"
+domain="${domain}"
+staticFilesDomain="${static_files_domain}"
+privateDomain="${private_domain}"
+monitoringDomain="${monitoring_domain}"
 
 # dehydrated.sh
 hostedZoneId="${hosted_zone_id}"

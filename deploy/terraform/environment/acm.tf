@@ -9,6 +9,6 @@
 data "aws_acm_certificate" "cloudfront" {
 	provider = aws.us_east_1
 	
-	domain = "static-files.${local.domain}"
+	domain = local.static_files_domain
 	key_types = [ "EC_prime256v1" ]
 }

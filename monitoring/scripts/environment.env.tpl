@@ -16,4 +16,4 @@ bucket="${bucket}"
 AWS_DEFAULT_REGION="${region}"
 
 # Grafana.
-domainName="${domain}"
+monitoringDomain="${monitoring_domain}"

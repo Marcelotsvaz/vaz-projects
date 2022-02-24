@@ -22,7 +22,8 @@ services:
         environment:
             DJANGO_SETTINGS_MODULE: ${DJANGO_SETTINGS_MODULE-settings.local}
             djangoSecretKey: django
-            domainName: vaz-pc.lan
+            domain: vaz-pc.lan
+            staticFilesDomain: static-files.vaz-pc.lan
             bucket: ${bucket-local}
             POSTGRES_PASSWORD: &postgresPassword postgres
             ELASTIC_PASSWORD: &elasticsearchPassword elastic

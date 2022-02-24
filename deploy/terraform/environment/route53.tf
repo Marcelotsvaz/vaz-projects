@@ -10,7 +10,7 @@
 # Private Route53 hosted zone.
 #-------------------------------------------------------------------------------
 resource "aws_route53_zone" "private" {
-	name = "private.${local.domain}"
+	name = local.private_domain
 	
 	vpc { vpc_id = aws_vpc.vpc.id }
 	
@@ -82,7 +82,7 @@ resource "aws_route53_record" "aaaa_load_balancer" {
 resource "aws_route53_record" "a_cloudfront" {
 	zone_id = data.aws_route53_zone.hosted_zone.zone_id
 	
-	name = "static-files.${local.domain}"
+	name = local.static_files_domain
 	type = "A"
 	
 	alias {
@@ -96,7 +96,7 @@ resource "aws_route53_record" "a_cloudfront" {
 resource "aws_route53_record" "aaaa_cloudfront" {
 	zone_id = data.aws_route53_zone.hosted_zone.zone_id
 	
-	name = "static-files.${local.domain}"
+	name = local.static_files_domain
 	type = "AAAA"
 	
 	alias {
@@ -114,7 +114,7 @@ resource "aws_route53_record" "aaaa_cloudfront" {
 resource "aws_route53_record" "a_monitoring_server" {
 	zone_id = data.aws_route53_zone.hosted_zone.zone_id
 	
-	name = "monitoring.${local.domain}"
+	name = local.monitoring_domain
 	type = "A"
 	ttl = "60"
 	records = [ aws_eip.load_balancer_ip.public_ip ]
@@ -124,7 +124,7 @@ resource "aws_route53_record" "a_monitoring_server" {
 resource "aws_route53_record" "aaaa_monitoring_server" {
 	zone_id = data.aws_route53_zone.hosted_zone.zone_id
 	
-	name = "monitoring.${local.domain}"
+	name = local.monitoring_domain
 	type = "AAAA"
 	ttl = "60"
 	records = [ module.load_balancer.ipv6_address ]

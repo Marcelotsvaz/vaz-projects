@@ -16,5 +16,6 @@ applicationImage="${application_image}"
 
 # Django application.
 DJANGO_SETTINGS_MODULE=settings.${environment}
-domainName="${domain}"
+domain="${domain}"
+staticFilesDomain="${static_files_domain}"
 bucket=${bucket}

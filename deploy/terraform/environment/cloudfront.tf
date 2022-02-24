@@ -14,7 +14,7 @@ locals {
 
 resource "aws_cloudfront_distribution" "distribution" {
 	comment = "${local.project_name} Distribuition"
-	aliases = [ "static-files.${local.domain}" ]
+	aliases = [ local.static_files_domain ]
 	enabled = true
 	is_ipv6_enabled = true
 	

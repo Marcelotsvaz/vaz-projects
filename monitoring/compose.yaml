@@ -11,7 +11,7 @@ services:
         image: grafana/grafana:8.2.6
         
         environment:
-            GF_SERVER_ROOT_URL: https://${domainName}
+            GF_SERVER_ROOT_URL: https://${monitoringDomain}
             GF_SECURITY_ADMIN_PASSWORD:
         
         volumes: [ grafana:/var/lib/grafana ]

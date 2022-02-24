@@ -20,10 +20,10 @@ ENVIRONMENT = 'production'
 STATICFILES_STORAGE = 'commonApp.backends.StaticCloudfrontStorage'
 DEFAULT_FILE_STORAGE = 'commonApp.backends.CloudfrontStorage'
 
-STATIC_URL = f'https://static-files.{environ["domainName"]}/'
+STATIC_URL = f'https://{environ["staticFilesDomain"]}/'
 STATIC_ROOT = 'static/'
 
-MEDIA_URL = f'https://static-files.{environ["domainName"]}/'
+MEDIA_URL = f'https://{environ["staticFilesDomain"]}/'
 MEDIA_ROOT = 'media/'
 
 AWS_STORAGE_BUCKET_NAME = environ["bucket"]

@@ -38,12 +38,12 @@ Account:
 
 Server:
 	openssl genpkey -algorithm EC -pkeyopt ec_paramgen_curve:secp384r1 -out websiteKey.pem
-	openssl req -new -subj / -addext "subjectAltName = DNS:${domainName}, DNS:monitoring.${domainName}" -key websiteKey.pem -sha512 -out websiteCsr.pem
+	openssl req -new -subj / -addext "subjectAltName = DNS:${domain}, DNS:${monitoringDomain}" -key websiteKey.pem -sha512 -out websiteCsr.pem
 	dehydrated -f ${config} -p accountKey.pem -s websiteCsr.pem --accept-terms > website.crt
 
 CloudFront:
 	openssl genpkey -algorithm EC -pkeyopt ec_paramgen_curve:prime256v1 -out cloudfrontKey.pem
-	openssl req -new -subj / -addext "subjectAltName = DNS:static-files.${domainName}" -key cloudfrontKey.pem -sha512 -out cloudfrontCsr.pem
+	openssl req -new -subj / -addext "subjectAltName = DNS:${staticFilesDomain}" -key cloudfrontKey.pem -sha512 -out cloudfrontCsr.pem
 	dehydrated -f ${config} -p accountKey.pem -s cloudfrontCsr.pem --accept-terms > cloudfront.crt
 
 # Upload to S3.

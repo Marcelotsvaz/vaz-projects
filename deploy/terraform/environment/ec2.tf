@@ -58,6 +58,9 @@ module "load_balancer_user_data" {
 		bucket = aws_s3_bucket.bucket.id
 		region = local.region
 		domain = local.domain
+		static_files_domain = local.static_files_domain
+		monitoring_domain = local.monitoring_domain
+		private_domain = local.private_domain
 		hosted_zone_id = data.aws_route53_zone.hosted_zone.zone_id
 		cloudfront_certificate_arn = data.aws_acm_certificate.cloudfront.arn
 	}
@@ -155,6 +158,7 @@ module "app_server_user_data" {
 		application_image = var.application_image
 		environment = var.environment
 		domain = local.domain
+		static_files_domain = local.static_files_domain
 		bucket = aws_s3_bucket.bucket.id
 	}
 }
@@ -356,7 +360,7 @@ module "monitoring_server_user_data" {
 		repository_snapshot = var.repository_snapshot
 		bucket = aws_s3_bucket.bucket.id
 		region = local.region
-		domain = "monitoring.${local.domain}"
+		monitoring_domain = local.monitoring_domain
 	}
 }
 
