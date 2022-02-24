@@ -37,27 +37,31 @@ echo "${swapFile} none swap defaults 0 0" >> /etc/fstab
 
 # Monitoring data volume setup
 #---------------------------------------
+dataDisk="/dev/disk/by-id/nvme-Amazon_Elastic_Block_Store_${dataVolumeId/-/}"
+dataPartition="${dataDisk}-part1"
+
 # Wait for volume to be mounted.
-while [[ -z ${dataDisk} ]]; do
-	dataDisk=$(lsblk -nro SERIAL,PATH | grep ${dataVolumeId/-/} | cut -d ' ' -f2)
+while [[ ! -b ${dataDisk} ]]; do
 	sleep 1
 done
 
 # Format volume if there's no partitions.
-dataPartition=$(lsblk -nro PKNAME,FSTYPE,PATH | grep "^${dataDisk/\/dev\//} " | grep ext4 | cut -d ' ' -f3)
-if [[ -z ${dataPartition} ]]; then
+if [[ ! -b ${dataPartition} ]]; then
 	echo Formatting new volume...
 	
 	sgdisk --clear ${dataDisk}
-	sgdisk --new 1:0:0 --change-name 1:'Data' ${dataDisk}
+	sgdisk --new 1:0:0 --change-name 1:'Docker Volumes' ${dataDisk}
 	
-	dataPartition=$(lsblk -nro PKNAME,PATH | grep "^${dataDisk/\/dev\//} " | cut -d ' ' -f2)
+	# Wait for partition to be available.
+	while [[ ! -b ${dataPartition} ]]; do
+		sleep 1
+	done
 	
 	mkfs.ext4 ${dataPartition}
 fi
 
-mkdir -p /var/lib/docker/volumes
-mount ${dataPartition} /var/lib/docker/volumes
+echo "${dataPartition}	/var/lib/docker/volumes	ext4	X-mount.mkdir	0	2" >> /etc/fstab
+mount ${dataPartition}
 
 
 
