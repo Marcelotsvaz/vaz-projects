@@ -27,10 +27,6 @@ variables:
 buildDockerImage:
     stage: build
     
-    environment:
-        name: staging
-        action: prepare
-    
     services: [ docker:20.10-dind ]
     
     image: ${composeImage}
@@ -43,10 +39,6 @@ buildDockerImage:
 
 runUnitTests:
     stage: test
-    
-    environment:
-        name: staging
-        action: prepare
     
     services: [ docker:20.10-dind ]
     
@@ -73,7 +65,7 @@ deployEnvironment:
     stage: deploy
     
     environment:
-        name: staging
+        name: ${CI_COMMIT_BRANCH}
         action: start
         on_stop: destroyEnvironment
     
@@ -97,7 +89,7 @@ destroyEnvironment:
     stage: deploy
     
     environment:
-        name: staging
+        name: ${CI_COMMIT_BRANCH}
         action: stop
     
     rules:
@@ -120,7 +112,7 @@ uploadFiles:
     stage: upload
     
     environment:
-        name: staging
+        name: ${CI_COMMIT_BRANCH}
         action: prepare
     
     services: [ docker:20.10-dind ]
