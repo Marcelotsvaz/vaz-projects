@@ -57,7 +57,7 @@ services:
     node-exporter:
         extends:
             service: node-exporter
-            file: &commonFile ../monitoring/docker-compose.common.yaml
+            file: &commonFile ../monitoring/compose.common.yaml
     
     
     promtail:

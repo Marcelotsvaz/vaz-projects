@@ -10,7 +10,7 @@ services:
     application:
         extends:
             service: application
-            file: &applicationFile application/docker-compose.yaml
+            file: &applicationFile application/compose.yaml
         
         image: ${applicationImage-registry.gitlab.com/marcelotsvaz/vaz-projects/application:development}
         build: application/
@@ -45,7 +45,7 @@ services:
     postgres:
         extends:
             service: postgres
-            file: database/docker-compose.yaml
+            file: database/compose.yaml
         
         environment:
             POSTGRES_PASSWORD: *postgresPassword
