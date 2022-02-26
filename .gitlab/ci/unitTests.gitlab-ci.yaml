@@ -1,0 +1,31 @@
+# 
+# VAZ Projects
+# 
+# 
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+# 
+# Jobs.
+#-----------------------------------------------------------------------------------------------------------------------
+.unitTests:
+    services: [ docker:20.10-dind ]
+    
+    image: ${composeImage}
+    
+    script:
+      - echo ${CI_REGISTRY_PASSWORD} | docker login --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
+      - docker compose up --no-build --detach --quiet-pull
+      - docker compose exec --no-TTY application coverage run manage.py test
+      - docker compose exec --no-TTY application coverage report
+      - docker compose exec --no-TTY application coverage xml
+      - docker compose cp application:/home/django/deployment/tests/unitTests.xml .
+      - docker compose cp application:/home/django/deployment/tests/coverage.xml .
+    
+    coverage: /^TOTAL.+?(\d+(?:\.\d+)?\%)$/
+    
+    artifacts:
+        reports:
+            junit: unitTests.xml
+            cobertura: coverage.xml

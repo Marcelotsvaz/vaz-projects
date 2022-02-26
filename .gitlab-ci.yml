@@ -6,11 +6,16 @@
 
 
 
+include: .gitlab/ci/*.gitlab-ci.yaml
+
+
 stages:
   - build
   - test
-  - deploy
-  - upload
+  - deploy-staging
+  - cleanup-staging
+  - deploy-production
+  - cleanup-production
 
 
 variables:
@@ -22,113 +27,69 @@ variables:
 
 
 # 
-# Jobs.
+# Local jobs.
 #-----------------------------------------------------------------------------------------------------------------------
-buildDockerImage:
+dockerImage:
     stage: build
-    
-    services: [ docker:20.10-dind ]
-    
-    image: ${composeImage}
-    
-    script:
-      - echo ${CI_REGISTRY_PASSWORD} | docker login --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
-      - docker build --pull --tag ${applicationImage} application
-      - docker push --quiet ${applicationImage}
+    extends: .dockerImage
 
 
-runUnitTests:
+unitTests:
     stage: test
-    
-    services: [ docker:20.10-dind ]
-    
-    image: ${composeImage}
-    
-    script:
-      - echo ${CI_REGISTRY_PASSWORD} | docker login --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
-      - docker compose up --no-build --detach --quiet-pull
-      - docker compose exec --no-TTY application coverage run manage.py test
-      - docker compose exec --no-TTY application coverage report
-      - docker compose exec --no-TTY application coverage xml
-      - docker compose cp application:/home/django/deployment/tests/unitTests.xml .
-      - docker compose cp application:/home/django/deployment/tests/coverage.xml .
-    
-    coverage: /^TOTAL.+?(\d+(?:\.\d+)?\%)$/
-    
-    artifacts:
-        reports:
-            junit: unitTests.xml
-            cobertura: coverage.xml
+    extends: .unitTests
 
 
-deployEnvironment:
-    stage: deploy
-    
+
+# 
+# Staging jobs.
+#-----------------------------------------------------------------------------------------------------------------------
+deploy-staging:
+    stage: deploy-staging
+    extends: .deploy
     environment:
-        name: ${CI_COMMIT_BRANCH}
-        action: start
-        on_stop: destroyEnvironment
-    
-    image:
-        name: hashicorp/terraform:1.1.5
-        entrypoint: [ '' ]
-    
-    cache:
-        paths: [ deployment/ ]
-    
-    script:
-      - apk add --no-cache bash tar jq
-      - deploy/deploy.sh deployEnvironment ${CI_ENVIRONMENT_TIER}
-    
-    artifacts:
-        paths:
-          - deployment/application/environment.env
+        name: staging
+        on_stop: cleanup-staging
 
 
-destroyEnvironment:
-    stage: deploy
-    
+staticFiles-staging:
+    stage: deploy-staging
+    extends: .staticFiles
     environment:
-        name: ${CI_COMMIT_BRANCH}
-        action: stop
-    
+        name: staging
+    needs: [ deploy-staging ]
+
+
+cleanup-staging:
+    stage: cleanup-staging
+    extends: .cleanup
+    environment:
+        name: staging
+
+
+
+# 
+# Production jobs
+#-----------------------------------------------------------------------------------------------------------------------
+deploy-production:
+    stage: deploy-production
+    extends: .deploy
+    environment:
+        name: production
+        on_stop: cleanup-production
     rules:
       - when: manual
-        allow_failure: true
-    
-    image:
-        name: hashicorp/terraform:1.1.5
-        entrypoint: [ '' ]
-    
-    cache:
-        paths: [ deployment/ ]
-    
-    script:
-      - apk add --no-cache bash jq
-      - deploy/deploy.sh destroyEnvironment ${CI_ENVIRONMENT_TIER}
 
 
-uploadFiles:
-    stage: upload
-    
+staticFiles-production:
+    stage: deploy-production
+    extends: .staticFiles
     environment:
-        name: ${CI_COMMIT_BRANCH}
-        action: prepare
-    
-    services: [ docker:20.10-dind ]
-    
-    image: ${composeImage}
-    
-    script:
-      - echo ${CI_REGISTRY_PASSWORD} | docker login --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
-      - docker compose --env-file deployment/application/environment.env pull --quiet application
-      - docker compose
-            --env-file deployment/application/environment.env
-            run
-            --no-deps
-            --no-TTY
-            --quiet-pull
-            --rm
-            application
-            ./manage.py collectstatic --ignore '*/src/*' --no-input
-    #   - aws cloudfront create-invalidation --distribution-id ${cloudfrontId} --paths '/*'    # TODO: Cloudfront invalidation.
+        name: production
+    needs: [ deploy-production ]
+
+
+cleanup-production:
+    stage: cleanup-production
+    extends: .cleanup
+    environment:
+        name: production

@@ -1,0 +1,29 @@
+# 
+# VAZ Projects
+# 
+# 
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+# 
+# Jobs.
+#-----------------------------------------------------------------------------------------------------------------------
+.cleanup:
+    environment:
+        action: stop
+    
+    rules:
+      - when: manual
+        allow_failure: true
+    
+    image:
+        name: hashicorp/terraform:1.1.5
+        entrypoint: [ '' ]
+    
+    cache:
+        paths: [ deployment/ ]
+    
+    script:
+      - apk add --no-cache bash jq
+      - deploy/deploy.sh destroyEnvironment ${CI_ENVIRONMENT_TIER}
