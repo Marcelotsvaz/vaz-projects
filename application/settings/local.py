@@ -24,3 +24,10 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'deployment/media/'
+
+
+# Security
+#---------------------------------------
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+LANGUAGE_COOKIE_SECURE = False
