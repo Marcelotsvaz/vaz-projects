@@ -51,6 +51,8 @@ body
 
 .menu
 {
+	@compactBreakpoint: 550px;
+	
 	grid-area: menu;
 	
 	display: flex;
@@ -66,7 +68,9 @@ body
 		text-decoration: none;
 		white-space: nowrap;
 		
-		&:hover { text-decoration: underline; }
+		&:hover { background-color: darken( @headerBackgroundColor, 10% ); }
+		
+		@media ( max-width: @compactBreakpoint ) { padding: 10px 10px; }
 	}
 }
 
