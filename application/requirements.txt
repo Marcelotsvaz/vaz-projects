@@ -9,7 +9,7 @@ django-elasticsearch-dsl==7.2.2
 django-imagekit==4.1.0
 django-object-actions==3.1.0
 django-storages==1.12.3
-django-taggit @ https://github.com/jazzband/django-taggit/archive/9d9ca4b36a09ec7b4cb0c823be9f90ff2089701e.zip
+django-taggit==2.1.0
 Jinja2==3.0.3
 markdown-it-py==2.0.0
 Pillow==9.0.0
