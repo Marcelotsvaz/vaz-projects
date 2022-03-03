@@ -61,25 +61,21 @@ main.content nav.pagination
 }
 
 	
-div.imageGallery
+.imageGallery
 {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-evenly;
 	align-items: center;
+	gap: 25px;
 	
-	margin: ( 50px - 12.5px ) -12.5px;	// Hack until Safari supports gap in flexbox.
+	& + * { margin-top: 50px; }
 	
-	> a
-	{
-		margin: 12.5px;	// Hack until Safari supports gap in flexbox.
+	> a > img
+	{		
+		width: 250px;
 		
-		> img
-		{
-			width: 250px;
-			
-			box-shadow: 5px 5px 10px @contentTextColor;
-		}
+		box-shadow: 5px 5px 10px @contentTextColor;
 	}
 	
 	> div
@@ -87,21 +83,21 @@ div.imageGallery
 		display: none;
 		
 		position: fixed;
-		z-index: 2;
-		top: 0px;
-		right: 0px;
-		bottom: 0px;
-		left: 0px;
+		z-index: 1;
+		inset: 0px;
 		
 		background-color: hsla( 0, 0, 0, 0.75 );
 		
-		> figure
+		figure
 		{
+			@margin: 15px;
+			@padding: 15px;
+			
 			display: grid;
 			grid-template-columns: 1fr auto;
 			grid-template-rows: 1fr auto;
 			align-items: center;
-			gap: 15px;
+			gap: @padding;
 			
 			position: fixed;
 			top: 50%;
@@ -109,25 +105,30 @@ div.imageGallery
 			
 			transform: translate( -50%, -50% );
 			
-			padding: 15px;
-			max-width: 90vw;
-			max-height: 90vh;
+			max-width: calc( 100vw - 2 * @margin );
+			width: max-content;
+			max-height: calc( 100vh - 2 * @margin );
+			padding: @padding;
 			
 			box-shadow: 5px 5px 10px @contentTextColor;
 			
 			background-color: @contentBackgroundColor;
 			
-			> img
+			img
 			{
 				grid-column: span 2;
+				justify-self: center;
 				
-				width: 100%;
+				max-width: calc( 100vw - 2 * ( @margin + @padding ) );
+				max-height: calc( 100vh - 51.8px - 2 * @margin - 3 * @padding );	// 51.8px is the minimum height of figcaption.
+				
+				object-fit: cover;
 			}
 			
 			> figcaption > p
 			{
 				margin: 0px;
-				margin-top: 15px;
+				margin-top: @padding;
 				
 				text-align: center;
 				
@@ -139,7 +140,7 @@ div.imageGallery
 				}
 			}
 			
-			> button
+			button
 			{
 				border: 1px solid;
 				padding: 5px;

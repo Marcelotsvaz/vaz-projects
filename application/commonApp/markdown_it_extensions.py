@@ -11,8 +11,6 @@ import re
 
 from django.template import loader
 
-from .models import UserImage
-
 
 
 def linkAttributes( self, tokens, index, options, env ):
@@ -65,7 +63,7 @@ def imageGallery( state, startLine, endLine, silent, markdownImages ):
 		if identifiers.strip() == '*':
 			images = markdownImages
 		else:
-			identifiers = [ identifier.strip() for identifier in identifiers.split( ',' ) ]
+			identifiers = { identifier.strip() for identifier in identifiers.split( ',' ) }
 			images = [ image for image in markdownImages if image.identifier in identifiers ]
 		
 		renderedTemplate = loader.render_to_string(
