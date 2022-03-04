@@ -55,7 +55,7 @@ def getDisqusCommentCount( identifier, refresh = False ):
 	if commentCount is None or refresh:
 		url = 'https://disqus.com/api/3.0/threads/list.json'
 		parameters = {
-			'api_key': settings.DISQUS_API_KEY,
+			'api_key': settings.DISQUS_API_PUBLIC_KEY,
 			'forum': settings.DISQUS_SHORTNAME,
 			'thread': 'ident:' + identifier,
 			'limit': 1,

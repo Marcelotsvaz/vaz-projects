@@ -200,4 +200,4 @@ IMAGE_OPTIONS = {
 
 # Disqus
 #---------------------------------------
-DISQUS_API_KEY = 'a5pgeL0uQcBBwVusQO1HM4GIx1P1MdCNeqkamBAVuBLnuT0scmmmtrDiQxKdrJoG'
+DISQUS_API_PUBLIC_KEY = 'sVt2thYWTTP5vy3uCJb2E7KVRgAF3ULId6h42in9WiA0AxM3TGmHFdMrf91jH2WM'
