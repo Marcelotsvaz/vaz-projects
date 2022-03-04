@@ -6,7 +6,31 @@
 
 
 
-.home
+.home .content
 {
+	@singleColumnBreakpoint: 800px;
 	
+	display: grid;
+	grid:
+		"welcome	welcome"	auto
+		"projects	posts"		1fr
+	/	1fr			1fr;
+	gap: 50px;
+	
+	section { margin: 0px; }
+	
+	.welcome { grid-area: welcome; }
+	
+	.projects { grid-area: projects; }
+	
+	.posts { grid-area: posts; }
+	
+	@media ( max-width: @singleColumnBreakpoint )
+	{
+		grid:
+			"welcome"	auto
+			"projects"	auto
+			"posts"		1fr
+		/	1fr	
+	}
 }

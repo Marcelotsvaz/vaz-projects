@@ -7,5 +7,30 @@
 
 
 {% block content %}
+	<section class="welcome">
+		<h2>{{ _('Welcome') }}</h2>
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras feugiat justo sapien, a cursus justo convallis in. Cras auctor diam ut eros ornare tempus. Nunc a semper lectus. Aliquam elementum aliquet mattis. Nunc tellus dui, ultrices eu ipsum quis, ornare dapibus nulla. Donec commodo lectus sed sem malesuada consequat. Duis facilisis neque nec luctus dapibus. Suspendisse elementum turpis massa, nec interdum purus pretium in.</p>
+	</section>
 	
+	<section class="projects">
+		<h2>{{ _('Featured Projects') }}</h2>
+		<ul>
+			{% for project in projects %}
+				<li>
+					<a href="{{ project.get_absolute_url() }}">{{ project.name }}</a>
+				</li>
+			{% endfor %}
+		</ul>
+	</section>
+	
+	<section class="blog">
+		<h2>{{ _('Latest Posts') }}</h2>
+		<ul>
+			{% for post in posts %}
+				<li>
+					<a href="{{ post.get_absolute_url() }}">{{ post.title }}</a>
+				</li>
+			{% endfor %}
+		</ul>
+	</section>
 {% endblock %}

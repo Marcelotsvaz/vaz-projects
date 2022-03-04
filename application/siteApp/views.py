@@ -12,7 +12,9 @@ from django.utils.http import urlencode
 
 from django_elasticsearch_dsl.search import Search as DslSearch
 
+from blogApp.models import BlogPost
 from blogApp.documents import BlogPostDocument
+from projectsApp.models import Project
 from projectsApp.documents import ProjectDocument, PageDocument
 
 
@@ -23,6 +25,15 @@ class Home( TemplateView ):
 	'''
 	
 	template_name = 'siteApp/home.html'
+	
+	
+	def get_context_data( self, **kwargs ):
+		context = super().get_context_data( **kwargs )
+		
+		context['projects'] = Project.objects.filter( draft = False, highlight = True )[:5]
+		context['posts'] = BlogPost.objects.filter( draft = False )[:5]
+		
+		return context
 
 
 class About_me( TemplateView ):
