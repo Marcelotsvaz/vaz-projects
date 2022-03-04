@@ -30,7 +30,10 @@ services:
             AWS_ACCESS_KEY_ID:
             AWS_SECRET_ACCESS_KEY:
         
-        volumes: [ media:/usr/src/app/deployment/media ]
+        volumes:
+          - media:/home/django/deployment/media
+          - ./deployment/static:/home/django/deployment/static
+        #   - ./application:/home/django
         
         command:
           - sh
