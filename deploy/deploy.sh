@@ -17,8 +17,10 @@ local=${3}
 
 # Variables.
 terraformRoot='deploy/terraform'
-TF_DATA_DIR='../../../deployment/terraform'
 TF_IN_AUTOMATION='True'
+TF_DATA_DIR='../../../deployment/terraform'
+terraformPlan=${TF_DATA_DIR}/plan.cache
+terraformChanges=${TF_DATA_DIR}/changes.json
 
 # Setup environment when running outside CI.
 if [[ ${local} ]]; then
@@ -80,11 +82,15 @@ function deployEnvironment()
 {
 	cd ${terraformRoot}/environment
 	terraformInit ${environment}
-	terraform apply											\
-		-auto-approve										\
+	terraform plan											\
 		-var="environment=${environment}"					\
 		-var="repository_snapshot=${repositorySnapshot}"	\
-		-var="application_image=${applicationImage}"
+		-var="application_image=${applicationImage}"		\
+		-out ${terraformPlan}
+	terraform show -no-color ${terraformPlan}																						\
+		| sed -En 's/^Plan: ([0-9]+) to add, ([0-9]+) to change, ([0-9]+) to destroy\.$/{"create":\1,"update":\2,"delete":\3}/p'	\
+		> ${terraformChanges}
+	terraform apply ${terraformPlan}
 }
 
 

@@ -27,3 +27,6 @@
     artifacts:
         paths:
           - deployment/application/environment.env
+        reports:
+            terraform: deployment/terraform/changes.json
+        name: ${CI_ENVIRONMENT_TIER}
