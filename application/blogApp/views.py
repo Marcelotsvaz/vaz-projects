@@ -94,8 +94,8 @@ class Post( DetailView ):
 	context_object_name = 'post'
 	
 	
-	# def get_queryset( self ):
-	# 	if self.request.user.is_staff:
-	# 		return super().get_queryset().all()
-	# 	else:
-	# 		return super().get_queryset().filter( draft = False )
+	def get_queryset( self ):
+		if self.request.user.is_staff:
+			return BlogPost.all_objects.all()
+		else:
+			return super().get_queryset()

@@ -85,6 +85,7 @@ class BlogPost( models.Model ):
 	
 	# Manager.
 	objects = BlogPostManager()
+	all_objects = models.Manager()
 	
 	
 	# Methods.

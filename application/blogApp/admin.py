@@ -50,6 +50,10 @@ class BlogPostAdmin( DjangoObjectActions, admin.ModelAdmin ):
 	}
 	
 	
+	def get_queryset( self, request ):
+		return self.model.all_objects.get_queryset()
+	
+	
 	# Object actions.
 	def publish( self, request, object ):
 		object.publish()

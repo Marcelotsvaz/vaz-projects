@@ -116,6 +116,7 @@ class Project( models.Model ):
 	
 	# Manager.
 	objects = ProjectManager()
+	all_objects = models.Manager()
 	
 	
 	# Methods.
