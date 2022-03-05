@@ -16,8 +16,10 @@
 			"label": "Compose",
 			"type": "shell",
 			"command": "docker compose ${input:composeCommand}",
-			"options": {
-				"env": {
+			"options":
+			{
+				"env":
+				{
 					"DOCKER_BUILDKIT": "1",
 					"COMPOSE_DOCKER_CLI_BUILD": "1",
 				}
@@ -50,7 +52,7 @@
 			"options": [
 				{
 					"label": "up",
-					"value": "up --detach --build",
+					"value": "-f compose.yaml -f compose.development.yaml up --detach --build",
 				},
 				{
 					"label": "down",

@@ -7,8 +7,6 @@
 
 
 {
-	"python.pythonPath": "deployment/env/bin/python",
-	
 	"terminal.integrated.profiles.linux": {
 		"bash": {
 			"path": "/usr/bin/bash",

@@ -1,0 +1,13 @@
+# 
+# VAZ Projects
+# 
+# 
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+services:
+    application:
+        volumes:
+          - ./deployment/static:/home/django/deployment/static
+          - ./application:/home/django
