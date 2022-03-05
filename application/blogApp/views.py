@@ -26,14 +26,11 @@ class Blog( ListView ):
 	context_object_name = 'posts'
 	
 	
-	def get_queryset( self ):
-		return super().get_queryset().filter( draft = False )
-	
 	def get_context_data( self, **kwargs ):
 		context = super().get_context_data( **kwargs )
 		
 		# Tags in the sidebar.
-		context['allTags'] = TaggedItem.tags_for( BlogPost, blogpost__draft = False )
+		context['allTags'] = TaggedItem.tags_for( BlogPost, blogpost__draft = False )	# Taggit is not using our custom manager so we need to filter explicitly.
 		
 		# Pagination.
 		if context['page_obj'].has_previous():
@@ -97,8 +94,8 @@ class Post( DetailView ):
 	context_object_name = 'post'
 	
 	
-	def get_queryset( self ):
-		if self.request.user.is_staff:
-			return super().get_queryset().all()
-		else:
-			return super().get_queryset().filter( draft = False )
+	# def get_queryset( self ):
+	# 	if self.request.user.is_staff:
+	# 		return super().get_queryset().all()
+	# 	else:
+	# 		return super().get_queryset().filter( draft = False )

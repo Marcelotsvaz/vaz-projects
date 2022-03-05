@@ -54,6 +54,16 @@ class Category( models.Model ):
 
 
 
+class ProjectManager( models.Manager ):
+	'''
+	Filtered Project manager.
+	'''
+	
+	def get_queryset( self ):
+		return super().get_queryset().filter( draft = False )
+
+
+
 class Project( models.Model ):
 	'''
 	Project.
@@ -104,6 +114,10 @@ class Project( models.Model ):
 		ordering = ( 'category', 'name' )
 	
 	
+	# Manager.
+	objects = ProjectManager()
+	
+	
 	# Methods.
 	def __str__( self ):
 		return self.name
@@ -131,7 +145,7 @@ class Project( models.Model ):
 		Get the number of comments in the threads associated with this post and all of its pages.
 		'''
 		
-		pageCommentCount = sum( map( lambda page: page.comment_count, self.pages.filter( draft = False ) ) )
+		pageCommentCount = sum( page.comment_count for page in self.pages.filter( draft = False ) )
 		
 		return getDisqusCommentCount( self.get_absolute_url() ) + pageCommentCount
 			

@@ -30,8 +30,8 @@ class Home( TemplateView ):
 	def get_context_data( self, **kwargs ):
 		context = super().get_context_data( **kwargs )
 		
-		context['projects'] = Project.objects.filter( draft = False, highlight = True )[:5]
-		context['posts'] = BlogPost.objects.filter( draft = False )[:5]
+		context['projects'] = Project.objects.filter( highlight = True )[:5]
+		context['posts'] = BlogPost.objects.all()[:5]
 		
 		return context
 

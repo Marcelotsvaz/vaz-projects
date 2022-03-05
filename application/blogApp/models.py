@@ -31,6 +31,16 @@ from commonApp.misc import getDisqusCommentCount
 
 
 
+class BlogPostManager( models.Manager ):
+	'''
+	Filtered BlogPost manager.
+	'''
+	
+	def get_queryset( self ):
+		return super().get_queryset().filter( draft = False )
+
+
+
 class BlogPost( models.Model ):
 	'''
 	Blog post.
@@ -71,6 +81,10 @@ class BlogPost( models.Model ):
 		verbose_name = _('post')
 		verbose_name_plural = _('posts')
 		ordering = ( '-posted', )
+	
+	
+	# Manager.
+	objects = BlogPostManager()
 	
 	
 	# Methods.

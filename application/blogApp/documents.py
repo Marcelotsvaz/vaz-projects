@@ -30,9 +30,6 @@ class BlogPostDocument( Document ):
 		model = BlogPost
 	
 	
-	def get_queryset( self ):
-		return super().get_queryset().filter( draft = False )
-	
 	@property
 	def resultTitle( self ):
 		return self.title

@@ -31,9 +31,6 @@ class ProjectDocument( Document ):
 		model = Project
 	
 	
-	def get_queryset( self ):
-		return super().get_queryset().filter( draft = False )
-	
 	@property
 	def resultTitle( self ):
 		return self.name
