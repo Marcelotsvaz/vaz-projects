@@ -127,13 +127,17 @@ class Project( models.Model ):
 		return reverse( 'projectsApp:project', kwargs = { 'project_slug': self.slug } )
 	
 	@property
+	def all_pages( self ):
+		return self.pages( manager = 'all_objects' )
+	
+	@property
 	def single_page( self ):
-		return self.pages.count() == 0
+		return self.all_pages.count() == 0
 	
 	@property
 	def last_edited( self ):
 		# Will return None for single page projects or if all pages are drafts.
-		pagesLastEdited = self.pages.filter( draft = False ).aggregate( last_edited = Max( 'last_edited' ) )['last_edited']
+		pagesLastEdited = self.pages.aggregate( last_edited = Max( 'last_edited' ) )['last_edited']
 		
 		if pagesLastEdited is not None:
 			return max( self.base_last_edited, pagesLastEdited )
@@ -146,7 +150,7 @@ class Project( models.Model ):
 		Get the number of comments in the threads associated with this post and all of its pages.
 		'''
 		
-		pageCommentCount = sum( page.comment_count for page in self.pages.filter( draft = False ) )
+		pageCommentCount = sum( page.comment_count for page in self.pages.all() )
 		
 		return getDisqusCommentCount( self.get_absolute_url() ) + pageCommentCount
 			
@@ -164,7 +168,7 @@ class Project( models.Model ):
 		'''
 		
 		if publishPages:
-			for page in self.pages.filter( draft = True ):
+			for page in self.all_pages.filter( draft = True ):
 				page.publish()
 		
 		if self.draft == False:
@@ -174,6 +178,16 @@ class Project( models.Model ):
 		self.posted = timezone.now()
 		
 		self.save()
+
+
+
+class PageManager( models.Manager ):
+	'''
+	Filtered Project Page manager.
+	'''
+	
+	def get_queryset( self ):
+		return super().get_queryset().filter( draft = False )
 
 
 
@@ -187,7 +201,7 @@ class Page( models.Model ):
 		Project,
 		on_delete = models.CASCADE,
 		related_name = 'pages',
-		verbose_name = _('project')
+		verbose_name = _('project'),
 	)
 	number				= PositiveIntegerField(	_('page number') )
 	type				= CharField(			_('type'), max_length = 100, blank = True )
@@ -221,6 +235,11 @@ class Page( models.Model ):
 		constraints = [
 			UniqueConstraint( fields = [ 'project', 'number' ], name = 'uniqueForProject' ),
 		]
+	
+	
+	# Manager.
+	objects = ProjectManager()
+	all_objects = models.Manager()
 	
 	
 	# Methods.

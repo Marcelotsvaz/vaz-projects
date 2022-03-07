@@ -30,17 +30,22 @@ def project( httpRequest, project_slug, page_number = None ):
 	
 	# Hide drafts unless user is staff.
 	if httpRequest.user.is_staff:
-		draft = {}
+		projectQueryset = Project.all_objects
 	else:
-		draft = { 'draft': False }
+		projectQueryset = Project.objects
 	
-	project = get_object_or_404( Project, slug = project_slug, **draft )
+	project = get_object_or_404( projectQueryset, slug = project_slug )
+	
+	if httpRequest.user.is_staff:
+		pageQueryset = project.all_pages
+	else:
+		pageQueryset = project.pages
+	
+	pages = pageQueryset.all()
 	
 	if page_number is not None:
-		currentPage = get_object_or_404( Page, project = project, number = page_number, **draft )
+		currentPage = get_object_or_404( pageQueryset, number = page_number )
 	else:
 		currentPage = None
-	
-	pages = project.pages.filter( **draft )
 	
 	return render( httpRequest, 'projectsApp/project.html', { 'project': project, 'currentPage': currentPage, 'pages': pages } )

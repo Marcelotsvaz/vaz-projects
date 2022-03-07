@@ -75,6 +75,10 @@ class PageInLine( CompactInline ):
 	}
 	
 	
+	def get_queryset( self, request ):
+		return self.model.all_objects.get_queryset()
+	
+	
 	# Edit page options.
 	fieldsets = (
 		( None, main ),

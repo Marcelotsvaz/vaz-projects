@@ -55,7 +55,7 @@ class TestUtils():
 		}
 		defaults.update( kwargs )
 		
-		lastPageNumber = project.pages.aggregate( last_page = Max( 'number' ) )['last_page'] or 0
+		lastPageNumber = project.all_pages.aggregate( last_page = Max( 'number' ) )['last_page'] or 0
 		lastPage = None
 		
 		for index in range( lastPageNumber + 1, lastPageNumber + quantity + 1 ):
