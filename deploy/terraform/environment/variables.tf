@@ -7,20 +7,20 @@
 
 
 variable "environment" {
-	type = string
 	description = "Deployment environment."
+	type = string
 }
 
 
 variable "repository_snapshot" {
+	description = "Link to Git repository archive containing application code."
 	type = string
-	description = "Link to Git repository containing application code."
 }
 
 
 variable "application_image" {
-	type = string
 	description = "Application Docker image."
+	type = string
 }
 
 
