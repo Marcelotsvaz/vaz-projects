@@ -16,6 +16,8 @@ services:
             elasticsearch:
                 condition: service_healthy
         
+        restart: unless-stopped
+        
         environment:
           - DJANGO_SETTINGS_MODULE
           - djangoSecretKey
@@ -38,10 +40,14 @@ services:
     
     memcached:
         image: memcached:1.6-bullseye
+        
+        restart: unless-stopped
     
     
     elasticsearch:
         image: elasticsearch:7.17.0
+        
+        restart: unless-stopped
         
         environment:
             ES_JAVA_OPTS: -Xms128m -Xmx128m

@@ -10,6 +10,8 @@ services:
     nginx:
         image: nginx:1.21-alpine
         
+        restart: unless-stopped
+        
         environment:
           - domain
           - staticFilesDomain

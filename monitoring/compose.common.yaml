@@ -10,6 +10,8 @@ services:
     node-exporter:
         image: prom/node-exporter:v1.3.1
         
+        restart: unless-stopped
+        
         volumes: [ '/:/mnt/host:ro,rslave' ]
         
         pid: host
@@ -20,6 +22,8 @@ services:
     
     promtail:
         image: grafana/promtail:2.4.2
+        
+        restart: unless-stopped
         
         environment:
           - hostname
