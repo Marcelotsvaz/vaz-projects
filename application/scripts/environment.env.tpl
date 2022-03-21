@@ -18,4 +18,5 @@ applicationImage="${application_image}"
 DJANGO_SETTINGS_MODULE=settings.${environment}
 domain="${domain}"
 staticFilesDomain="${static_files_domain}"
+s3Endpoint="${s3_endpoint}"
 bucket=${bucket}

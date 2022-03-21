@@ -159,6 +159,7 @@ module "app_server_user_data" {
 		environment = var.environment
 		domain = local.domain
 		static_files_domain = local.static_files_domain
+		s3_endpoint = replace( aws_s3_bucket.bucket.bucket_regional_domain_name, "${aws_s3_bucket.bucket.bucket}.", "https://" )
 		bucket = aws_s3_bucket.bucket.id
 	}
 }
