@@ -91,7 +91,7 @@ class CloudfrontStorage( S3Boto3Storage ):
 		Remove AWS_LOCATION from url.
 		'''
 		
-		url = super().url( name, parameters, expire, http_method )
+		url = super().url( name or '', parameters, expire, http_method )
 		
 		return re.sub( fr'(://[\w\-.]+/){self.location}/?', r'\1', url )
 	
