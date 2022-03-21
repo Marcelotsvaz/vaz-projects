@@ -64,7 +64,8 @@ services:
         
         volumes: [ media:/data ]
         
-        command: server /data --console-address :9001
+        entrypoint: [ sh, -c ]
+        command: [ mkdir -p /data/local && minio server /data --console-address :9001 ]
         
         ports:
           - 9000:9000
