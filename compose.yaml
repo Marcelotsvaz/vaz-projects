@@ -26,7 +26,7 @@ services:
             djangoSecretKey: django
             domain: vaz-pc.lan
             staticFilesDomain: vaz-pc.lan
-            s3Endpoint: http://minio:9000
+            s3Endpoint: ${s3Endpoint-http://minio:9000}
             bucket: ${bucket-local}
             POSTGRES_PASSWORD: &postgresPassword postgres
             ELASTIC_PASSWORD: &elasticsearchPassword elastic
