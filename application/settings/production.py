@@ -17,21 +17,8 @@ ENVIRONMENT = 'production'
 
 # Static and media files
 #---------------------------------------
-STATICFILES_STORAGE = 'commonApp.backends.StaticCloudfrontStorage'
-DEFAULT_FILE_STORAGE = 'commonApp.backends.CloudfrontStorage'
-
 STATIC_URL = f'https://{environ["staticFilesDomain"]}/'
-STATIC_ROOT = 'static/'
-
 MEDIA_URL = f'https://{environ["staticFilesDomain"]}/'
-MEDIA_ROOT = 'media/'
-
-AWS_STORAGE_BUCKET_NAME = environ["bucket"]
-AWS_QUERYSTRING_AUTH = False
-
-AWS_S3_OBJECT_PARAMETERS = {
-	'CacheControl': 'max-age=3600',
-}
 
 
 # Security
@@ -39,13 +26,6 @@ AWS_S3_OBJECT_PARAMETERS = {
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 LANGUAGE_COOKIE_SECURE = True
-
-
-# Apps
-#---------------------------------------
-INSTALLED_APPS += [
-	'storages',
-]
 
 
 # Disqus

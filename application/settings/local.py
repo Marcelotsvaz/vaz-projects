@@ -17,13 +17,9 @@ ENVIRONMENT = 'local'
 
 # Static and media files
 #---------------------------------------
-STATICFILES_STORAGE = 'commonApp.backends.StaticOverwriteLocalStorage'
-DEFAULT_FILE_STORAGE = 'commonApp.backends.OverwriteLocalStorage'
-
-STATIC_URL = '/static/'
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'deployment/media/'
+STATIC_URL = f'http://{environ["staticFilesDomain"]}:9000/{AWS_STORAGE_BUCKET_NAME}/'
+MEDIA_URL = f'http://{environ["staticFilesDomain"]}:9000/{AWS_STORAGE_BUCKET_NAME}/'
+AWS_S3_SECURE_URLS = False
 
 
 # Security

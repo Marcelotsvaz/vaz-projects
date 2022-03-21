@@ -28,9 +28,3 @@ if settings.ENVIRONMENT != 'production':
 	import debug_toolbar
 	
 	urlpatterns.append( path( '__debug__/', include( debug_toolbar.urls ) ) )
-	
-	# Serve media files in local environment.
-	if settings.ENVIRONMENT == 'local':	# pragma: no cover
-		from django.conf.urls.static import static
-		
-		urlpatterns += static( settings.MEDIA_URL, document_root = settings.MEDIA_ROOT )

@@ -18,27 +18,29 @@ services:
         depends_on:
             postgres:
                 condition: service_started
+            minio:
+                condition: service_healthy
         
         environment:
             DJANGO_SETTINGS_MODULE: ${DJANGO_SETTINGS_MODULE-settings.local}
             djangoSecretKey: django
             domain: vaz-pc.lan
-            staticFilesDomain: static-files.vaz-pc.lan
+            staticFilesDomain: vaz-pc.lan
+            s3Endpoint: http://minio:9000
             bucket: ${bucket-local}
             POSTGRES_PASSWORD: &postgresPassword postgres
             ELASTIC_PASSWORD: &elasticsearchPassword elastic
-            AWS_ACCESS_KEY_ID:
-            AWS_SECRET_ACCESS_KEY:
-        
-        volumes: [ media:/home/django/deployment/media ]
+            AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID-minioadmin}
+            AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY-minioadmin}
         
         command:
           - sh
           - -c
           - |-
             ./manage.py migrate --no-input
+            ./manage.py collectstatic --ignore '*/src/*' --no-input
             ./manage.py search_index --populate
-            ./manage.py runserver 0.0.0.0:80
+            ./manage.py runserver 0.0.0.0:80 --nostatic
         
         ports: [ 80:80 ]
     
@@ -53,6 +55,25 @@ services:
         
         network_mode: bridge
         networks: [ default ]
+    
+    
+    minio:
+        image: minio/minio:RELEASE.2022-03-17T06-34-49Z
+        
+        restart: unless-stopped
+        
+        volumes: [ media:/data ]
+        
+        command: server /data --console-address :9001
+        
+        ports:
+          - 9000:9000
+          - 9001:9001
+        
+        healthcheck:
+            test: curl --silent minio:9000/minio/health/live
+            interval: 1s
+            start_period: 10s
     
     
     memcached:

@@ -9,7 +9,6 @@
 import re
 from io import BufferedReader
 
-from django.core.files.storage import FileSystemStorage
 from django.core.exceptions import SuspiciousFileOperation
 from django.conf import settings
 
@@ -108,12 +107,4 @@ class CloudfrontStorage( S3Boto3Storage ):
 
 
 class StaticCloudfrontStorage( StaticStorageMixin, CloudfrontStorage ):
-	pass
-
-
-class OverwriteLocalStorage( OverwriteStorageMixin, FileSystemStorage ):
-	pass
-
-
-class StaticOverwriteLocalStorage( StaticStorageMixin, OverwriteLocalStorage ):
 	pass

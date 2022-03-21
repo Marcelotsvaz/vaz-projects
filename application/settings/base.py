@@ -16,20 +16,27 @@ from django.utils.translation import gettext_lazy as _
 # General
 #---------------------------------------
 BASE_DIR = Path( __file__ ).resolve().parents[1]
-
-ALLOWED_HOSTS = [ environ['domain'] ]
-
 ROOT_URLCONF = 'urls'
 WSGI_APPLICATION = 'wsgi.application'
 
+ALLOWED_HOSTS = [ environ['domain'] ]
 SECRET_KEY = environ['djangoSecretKey']
 
 
 # Static and media files
 #---------------------------------------
-STATICFILES_DIRS = [
-	BASE_DIR / 'deployment/static',
-]
+STATICFILES_STORAGE = 'commonApp.backends.StaticCloudfrontStorage'
+DEFAULT_FILE_STORAGE = 'commonApp.backends.CloudfrontStorage'
+
+AWS_S3_ENDPOINT_URL = environ['s3Endpoint']
+AWS_STORAGE_BUCKET_NAME = environ['bucket']
+AWS_S3_OBJECT_PARAMETERS = { 'CacheControl': 'max-age=3600' }
+AWS_QUERYSTRING_AUTH = False
+
+STATICFILES_DIRS = [ BASE_DIR / 'deployment/static' ]
+STATIC_ROOT = 'static/'
+
+MEDIA_ROOT = 'media/'
 
 
 # Localization
@@ -84,10 +91,11 @@ INSTALLED_APPS = [
 	'siteApp.apps.siteAppConfig',
 	'projectsApp.apps.projectsAppConfig',
 	'blogApp.apps.blogAppConfig',
+	'storages',
 	'taggit',
 	'django_elasticsearch_dsl',
-	'django_cleanup.apps.CleanupConfig',
 	'django_object_actions',
+	'django_cleanup.apps.CleanupConfig',
 ]
 
 

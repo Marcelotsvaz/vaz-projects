@@ -23,6 +23,7 @@ services:
           - djangoSecretKey
           - domain
           - staticFilesDomain
+          - s3Endpoint
           - bucket
           - POSTGRES_PASSWORD
           - ELASTIC_PASSWORD
