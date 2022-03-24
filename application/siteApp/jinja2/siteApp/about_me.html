@@ -15,9 +15,29 @@
 
 {% block content %}
 	<article>
+		<h2>{{ _('Hi there!') }}</h2>
 		<p>
-			{{ _('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras feugiat justo sapien, a cursus justo convallis in. Cras auctor diam ut eros ornare tempus. Nunc a semper lectus. Aliquam elementum aliquet mattis. Nunc tellus dui, ultrices eu ipsum quis, ornare dapibus nulla. Donec commodo lectus sed sem malesuada consequat. Duis facilisis neque nec luctus dapibus. Suspendisse elementum turpis massa, nec interdum purus pretium in.') }}
+			{{ _('I\'m Marcelo Vaz, a DevOps engineer from Brazil.') }}
 		</p>
+		
+		<h3>{{ _('Skills') }}</h3>
+		<p>
+			{{ _('Python | Django | OOP | Amazon Web Services | GitLab CI/CD | Linux | Shell Scripting | Docker | Terraform') }}
+		</p>
+		
+		<h3>{{ _('You can find me on:') }}</h3>
+		<ul>
+			<li><a href="https://vazprojects.com">VAZ Projects</a></li>
+			<li><a href="https://gitlab.com/marcelotsvaz">GitLab</a></li>
+			<li><a href="https://github.com/Marcelotsvaz">GitHub</a></li>
+			<li><a href="https://stackoverflow.com/users/5283604/marcelotsvaz">Stack Overflow</a></li>
+			<li><a href="https://www.codewars.com/users/Marcelotsvaz">Codewars</a></li>
+		</ul>
+		
+		<h3>{{ _('Contact') }}</h3>
+		<ul>
+			<li><a href="mailto:?to=Marcelo Vaz <marcelotsvaz@gmail.com>">marcelotsvaz@gmail.com</a></li>
+		</ul>
 	</article>
 	
 	{{ comments.section( request.path, self.title(), request.build_absolute_uri() ) }}
