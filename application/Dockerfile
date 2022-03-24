@@ -49,7 +49,7 @@ FROM python:3.10-alpine3.15
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-RUN apk add --no-cache libjpeg libpq libmemcached
+RUN apk add --no-cache curl libjpeg libpq libmemcached
 RUN --mount=from=wheelBuilder,source=wheels/,target=wheels/		\
 	pip install --no-cache-dir --upgrade pip					\
 	&& pip install --no-cache-dir wheels/*

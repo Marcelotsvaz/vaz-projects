@@ -18,6 +18,11 @@ services:
         volumes: [ postgres:/var/lib/postgresql/data]
         
         network_mode: host
+        
+        healthcheck:
+            test: pg_isready --username postgres
+            interval: 1s
+            start_period: 5s
     
     
     node-exporter:

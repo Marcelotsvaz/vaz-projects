@@ -17,7 +17,7 @@ services:
         
         depends_on:
             postgres:
-                condition: service_started
+                condition: service_healthy
             minio:
                 condition: service_healthy
         
@@ -27,7 +27,7 @@ services:
             domain: vaz-pc.lan
             staticFilesDomain: vaz-pc.lan
             s3Endpoint: ${s3Endpoint-http://minio:9000}
-            bucket: ${bucket-local}
+            bucket: &bucket ${bucket-local}
             POSTGRES_PASSWORD: &postgresPassword postgres
             ELASTIC_PASSWORD: &elasticsearchPassword elastic
             AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID-minioadmin}
@@ -43,6 +43,11 @@ services:
             ./manage.py runserver 0.0.0.0:80 --nostatic
         
         ports: [ 80:80 ]
+        
+        healthcheck:
+            test: 'curl --silent --header "Host: $${domain}" application'
+            interval: 1s
+            start_period: 10s
     
     
     postgres:
@@ -62,10 +67,13 @@ services:
         
         restart: unless-stopped
         
+        environment:
+            bucket: *bucket
+        
         volumes: [ media:/data ]
         
         entrypoint: [ sh, -c ]
-        command: [ mkdir -p /data/local && minio server /data --console-address :9001 ]
+        command: [ 'mkdir -p /data/$${bucket} && minio server /data --console-address :9001' ]
         
         ports:
           - 9000:9000
@@ -74,7 +82,7 @@ services:
         healthcheck:
             test: curl --silent minio:9000/minio/health/live
             interval: 1s
-            start_period: 10s
+            start_period: 5s
     
     
     memcached:
