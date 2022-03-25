@@ -51,10 +51,11 @@ services:
         restart: unless-stopped
         
         environment:
-            ES_JAVA_OPTS: -Xms128m -Xmx128m
             discovery.type: single-node
             xpack.security.enabled: 'true'
             ELASTIC_PASSWORD:
+        
+        volumes: [ ./config/jvm.options:/usr/share/elasticsearch/config/jvm.options.d/jvm.options:ro ]
         
         healthcheck:
             test: curl --silent elasticsearch:9200/_cluster/health/

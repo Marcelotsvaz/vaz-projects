@@ -1,0 +1,15 @@
+# 
+# VAZ Projects
+# 
+# 
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+# Heap size.
+-Xms128m
+-Xmx128m
+
+# Limit GC log size.
+-Xlog:disable
+-Xlog:all=warning:stderr:utctime,level,tags
