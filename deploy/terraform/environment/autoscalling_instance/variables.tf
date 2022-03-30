@@ -57,8 +57,8 @@ variable "user_data_base64" {
 	default = ""
 }
 
-# variable "default_tags" {
-# 	description = "Tags to be applied to all resources."
-# 	type = map( string )
-# 	default = {}
-# }
+variable "default_tags" {
+	description = "Tags to be applied to all resources."
+	type = map( string )
+	default = {}
+}

@@ -137,7 +137,7 @@ module "app_server" {
 	
 	root_volume_size = 5
 	user_data_base64 = module.app_server_user_data.content_base64
-	# default_tags = local.default_tags
+	default_tags = local.default_tags
 }
 
 

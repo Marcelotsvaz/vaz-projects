@@ -10,19 +10,40 @@
 # Instances.
 #-------------------------------------------------------------------------------
 resource "aws_autoscaling_group" "autoscaling_group" {
-	min_size = 2
-	max_size = 10
+	name = "${var.name} Auto Scaling Group"
 	
 	vpc_zone_identifier = var.subnet_ids
 	
-	launch_template {
-		id = aws_launch_template.launch_template.id
-		# version = "$Latest"
+	min_size = 2
+	max_size = 10
+	
+	launch_template { id = aws_launch_template.launch_template.id }
+	
+	tag {
+		key = "Name"
+		value = "${var.name} Auto Scaling Group"
+		propagate_at_launch = false
 	}
+	
+	tag {
+		key = "TestTag"
+		value = "Test Tag Propagation"
+		propagate_at_launch = false
+	}
+	
+	# dynamic tag {
+	# 	var.default_tags
+		
+	# 	key = "Name"
+	# 	value = "${var.name} Auto Scaling Group"
+	# 	propagate_at_launch = false
+	# }
 }
 
 
 resource "aws_launch_template" "launch_template" {
+	update_default_version = true
+	
 	image_id = data.aws_ami.arch_linux.id
 	instance_type = var.instance_type
 	instance_market_options { market_type = "spot" }
@@ -40,9 +61,17 @@ resource "aws_launch_template" "launch_template" {
 		}
 	}
 	
-	# tags = {
-	# 	Name = "${var.name} Spot Request"
-	# }
+	tags = {
+		Name = "${var.name} Launch Template"
+	}
+	
+	tag_specifications {
+		resource_type = "instance"
+		
+		tags = {
+			Name = var.name
+		}
+	}
 }
 
 
