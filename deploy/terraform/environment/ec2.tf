@@ -119,7 +119,7 @@ data "aws_iam_policy_document" "load_balancer_policy" {
 # Application server.
 #-------------------------------------------------------------------------------
 module "app_server" {
-	source = "./instance"
+	source = "./auto_scalling_instance"
 	
 	name = "${local.project_name} Application Server"
 	instance_type = "t3a.small"
