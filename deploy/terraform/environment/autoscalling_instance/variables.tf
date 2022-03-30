@@ -11,13 +11,18 @@ variable "name" {
 	type = string
 }
 
+variable "unique_identifier" {
+	description = "Unique prefix to be used in auto scaling group, launch template, IAM role and instance profile names."
+	type = string
+}
+
 variable "instance_type" {
 	description = "Instance type. E.g. `t3.micro`."
 	type = string
 }
 
 variable "subnet_ids" {
-	description = "Set of VPC Subnet ID."
+	description = "Set of VPC subnet ID."
 	type = set( string )
 }
 
@@ -35,11 +40,6 @@ variable "vpc_security_group_ids" {
 # 	description = "Hostname for private hosted zone A record."
 # 	type = string
 # }
-
-variable "role_name" {
-	description = "Base name for the IAM role and IAM instance profile."
-	type = string
-}
 
 variable "role_policy" {
 	description = "Policy for the IAM instance profile."

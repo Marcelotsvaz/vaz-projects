@@ -11,6 +11,11 @@ variable "name" {
 	type = string
 }
 
+variable "unique_identifier" {
+	description = "Unique prefix to be used in IAM role and instance profile names."
+	type = string
+}
+
 variable "instance_type" {
 	description = "Instance type. E.g. `t3.micro`."
 	type = string
@@ -39,11 +44,6 @@ variable "private_hosted_zone" {
 
 variable "hostname" {
 	description = "Hostname for private hosted zone A record."
-	type = string
-}
-
-variable "role_name" {
-	description = "Base name for the IAM role and IAM instance profile."
 	type = string
 }
 

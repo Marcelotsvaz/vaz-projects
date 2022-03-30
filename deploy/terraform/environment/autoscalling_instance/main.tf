@@ -10,38 +10,26 @@
 # Instances.
 #-------------------------------------------------------------------------------
 resource "aws_autoscaling_group" "autoscaling_group" {
-	name = "${var.name} Auto Scaling Group"
-	
+	name = "${var.unique_identifier}-autoScalingGroup"
+	launch_template { id = aws_launch_template.launch_template.id }
 	vpc_zone_identifier = var.subnet_ids
-	
 	min_size = 2
 	max_size = 10
 	
-	launch_template { id = aws_launch_template.launch_template.id }
-	
-	tag {
-		key = "Name"
-		value = "${var.name} Auto Scaling Group"
-		propagate_at_launch = false
-	}
-	
-	tag {
-		key = "TestTag"
-		value = "Test Tag Propagation"
-		propagate_at_launch = false
-	}
-	
-	# dynamic tag {
-	# 	var.default_tags
+	dynamic "tag" {
+		for_each = merge( { Name = "${var.name} Auto Scaling Group" }, var.default_tags )
 		
-	# 	key = "Name"
-	# 	value = "${var.name} Auto Scaling Group"
-	# 	propagate_at_launch = false
-	# }
+		content {
+			key = tag.key
+			value = tag.value
+			propagate_at_launch = false
+		}
+	}
 }
 
 
 resource "aws_launch_template" "launch_template" {
+	name = "${var.unique_identifier}-launchTemplate"
 	update_default_version = true
 	
 	image_id = data.aws_ami.arch_linux.id
@@ -61,29 +49,25 @@ resource "aws_launch_template" "launch_template" {
 		}
 	}
 	
-	tags = {
-		Name = "${var.name} Launch Template"
+	tag_specifications {
+		resource_type = "spot-instances-request"
+		tags = merge( { Name = "${var.name} Spot Request" }, var.default_tags )
 	}
 	
 	tag_specifications {
 		resource_type = "instance"
-		
-		tags = {
-			Name = var.name
-		}
+		tags = merge( { Name = var.name }, var.default_tags )
+	}
+	
+	tag_specifications {
+		resource_type = "volume"
+		tags = merge( { Name = "${var.name} Root Volume" }, var.default_tags )
+	}
+	
+	tags = {
+		Name = "${var.name} Launch Template"
 	}
 }
-
-
-# resource "aws_spot_instance_request" "instance" {
-# 	root_block_device {
-# 		tags = local.instance_root_volume_tags
-# 	}
-	
-# 	tags = {
-# 		Name = "${var.name} Spot Request"
-# 	}
-# }
 
 
 data "aws_ami" "arch_linux" {
@@ -95,33 +79,6 @@ data "aws_ami" "arch_linux" {
 		values = [ "Arch Linux AMI" ]
 	}
 }
-
-
-
-# 
-# Instance tags.
-#-------------------------------------------------------------------------------
-# locals {
-# 	instance_root_volume_tags = merge( { Name = "${var.name} Root Volume" }, var.default_tags )
-# }
-
-
-# resource "aws_ec2_tag" "instance_tags" {
-# 	resource_id = aws_spot_instance_request.instance.spot_instance_id
-	
-# 	for_each = merge( { Name = var.name }, var.default_tags )
-# 	key = each.key
-# 	value = each.value
-# }
-
-
-# resource "aws_ec2_tag" "instance_root_volume_tags" {
-# 	resource_id = aws_spot_instance_request.instance.root_block_device.0.volume_id
-	
-# 	for_each = local.instance_root_volume_tags
-# 	key = each.key
-# 	value = each.value
-# }
 
 
 
