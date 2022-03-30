@@ -119,25 +119,25 @@ data "aws_iam_policy_document" "load_balancer_policy" {
 # Application server.
 #-------------------------------------------------------------------------------
 module "app_server" {
-	source = "./auto_scalling_instance"
+	source = "./autoscalling_instance"
 	
 	name = "${local.project_name} Application Server"
 	instance_type = "t3a.small"
 	
-	subnet_id = aws_subnet.subnet_c.id
+	subnet_ids = [ aws_subnet.subnet_c.id ]
 	vpc_security_group_ids = [
 		aws_default_security_group.common.id,
 		aws_security_group.private.id,
 	]
-	private_hosted_zone = aws_route53_zone.private
-	hostname = "application"
+	# private_hosted_zone = aws_route53_zone.private
+	# hostname = "application"
 	
 	role_name = "${local.project_code}-${var.environment}-appServer"
 	role_policy = data.aws_iam_policy_document.app_server_policy
 	
 	root_volume_size = 5
 	user_data_base64 = module.app_server_user_data.content_base64
-	default_tags = local.default_tags
+	# default_tags = local.default_tags
 }
 
 

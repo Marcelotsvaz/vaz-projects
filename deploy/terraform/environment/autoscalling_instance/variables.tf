@@ -16,9 +16,9 @@ variable "instance_type" {
 	type = string
 }
 
-variable "subnet_id" {
-	description = "VPC Subnet ID."
-	type = string
+variable "subnet_ids" {
+	description = "Set of VPC Subnet ID."
+	type = set( string )
 }
 
 variable "vpc_security_group_ids" {
@@ -26,15 +26,15 @@ variable "vpc_security_group_ids" {
 	type = set( string )
 }
 
-variable "private_hosted_zone" {
-	description = "Private hosted zone for instance hostname A record."
-	type = object( { zone_id = string, name = string } )
-}
+# variable "private_hosted_zone" {
+# 	description = "Private hosted zone for instance hostname A record."
+# 	type = object( { zone_id = string, name = string } )
+# }
 
-variable "hostname" {
-	description = "Hostname for private hosted zone A record."
-	type = string
-}
+# variable "hostname" {
+# 	description = "Hostname for private hosted zone A record."
+# 	type = string
+# }
 
 variable "role_name" {
 	description = "Base name for the IAM role and IAM instance profile."
@@ -57,8 +57,8 @@ variable "user_data_base64" {
 	default = ""
 }
 
-variable "default_tags" {
-	description = "Tags to be applied to all resources."
-	type = map( string )
-	default = {}
-}
+# variable "default_tags" {
+# 	description = "Tags to be applied to all resources."
+# 	type = map( string )
+# 	default = {}
+# }

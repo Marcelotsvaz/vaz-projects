@@ -13,7 +13,7 @@ resource "aws_autoscaling_group" "autoscaling_group" {
 	min_size = 2
 	max_size = 10
 	
-	vpc_zone_identifier = [ var.subnet_id ]
+	vpc_zone_identifier = var.subnet_ids
 	
 	launch_template {
 		id = aws_launch_template.launch_template.id
@@ -25,23 +25,11 @@ resource "aws_autoscaling_group" "autoscaling_group" {
 resource "aws_launch_template" "launch_template" {
 	image_id = data.aws_ami.arch_linux.id
 	instance_type = var.instance_type
-	# subnet_id = var.subnet_id
-	
+	instance_market_options { market_type = "spot" }
 	vpc_security_group_ids = var.vpc_security_group_ids
+	iam_instance_profile { arn = aws_iam_instance_profile.instance_profile.arn }
 	user_data = var.user_data_base64
 	ebs_optimized = true
-	
-	iam_instance_profile {
-		arn = aws_iam_instance_profile.instance_profile.arn
-	}
-	
-	instance_market_options {
-		market_type = "spot"
-		
-		spot_options {
-			#OLD instance_interruption_behavior = "stop"
-		}
-	}
 	
 	block_device_mappings {
 		device_name = "/dev/xvda"
@@ -59,21 +47,7 @@ resource "aws_launch_template" "launch_template" {
 
 
 # resource "aws_spot_instance_request" "instance" {
-# 	ami = data.aws_ami.arch_linux.id
-# 	instance_type = var.instance_type
-# 	subnet_id = var.subnet_id
-# 	ipv6_address_count = var.ipv6_address_count
-# 	vpc_security_group_ids = var.vpc_security_group_ids
-# 	iam_instance_profile = aws_iam_instance_profile.instance_profile.name
-# 	user_data_base64 = var.user_data_base64
-# 	ebs_optimized = true
-# 	instance_interruption_behavior = "stop"
-# 	wait_for_fulfillment = true
-	
 # 	root_block_device {
-# 		volume_size = var.root_volume_size
-# 		encrypted = true
-		
 # 		tags = local.instance_root_volume_tags
 # 	}
 	
