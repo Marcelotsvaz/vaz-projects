@@ -96,5 +96,5 @@ resource "aws_route53_record" "a" {
 	name = "${var.hostname}.${var.private_hosted_zone.name}"
 	type = "A"
 	ttl = "10"
-	records = []
+	records = [ "0.0.0.0" ]
 }
