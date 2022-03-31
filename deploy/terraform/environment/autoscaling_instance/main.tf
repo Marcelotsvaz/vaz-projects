@@ -16,6 +16,11 @@ resource "aws_autoscaling_group" "autoscaling_group" {
 	min_size = 2
 	max_size = 10
 	
+	initial_lifecycle_hook {
+		name = "launchHook"
+		lifecycle_transition = "autoscaling:EC2_INSTANCE_LAUNCHING"
+	}
+	
 	dynamic "tag" {
 		for_each = merge( { Name = "${var.name} Auto Scaling Group" }, var.default_tags )
 		
