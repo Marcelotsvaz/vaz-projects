@@ -31,15 +31,15 @@ variable "vpc_security_group_ids" {
 	type = set( string )
 }
 
-# variable "private_hosted_zone" {
-# 	description = "Private hosted zone for instance hostname A record."
-# 	type = object( { zone_id = string, name = string } )
-# }
+variable "private_hosted_zone" {
+	description = "Private hosted zone for instance hostname A record."
+	type = object( { zone_id = string, name = string } )
+}
 
-# variable "hostname" {
-# 	description = "Hostname for private hosted zone A record."
-# 	type = string
-# }
+variable "hostname" {
+	description = "Hostname for private hosted zone A record."
+	type = string
+}
 
 variable "role_policy" {
 	description = "Policy for the IAM instance profile."

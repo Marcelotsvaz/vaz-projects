@@ -85,11 +85,11 @@ data "aws_ami" "arch_linux" {
 # 
 # Private DNS.
 #-------------------------------------------------------------------------------
-# resource "aws_route53_record" "a" {
-# 	zone_id = var.private_hosted_zone.zone_id
+resource "aws_route53_record" "a" {
+	zone_id = var.private_hosted_zone.zone_id
 	
-# 	name = "${var.hostname}.${var.private_hosted_zone.name}"
-# 	type = "A"
-# 	ttl = "60"
-# 	records = [ aws_spot_instance_request.instance.private_ip ]
-# }
+	name = "${var.hostname}.${var.private_hosted_zone.name}"
+	type = "A"
+	ttl = "10"
+	records = []
+}

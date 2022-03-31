@@ -119,7 +119,7 @@ data "aws_iam_policy_document" "load_balancer_policy" {
 # Application server.
 #-------------------------------------------------------------------------------
 module "app_server" {
-	source = "./autoscalling_instance"
+	source = "./autoscaling_instance"
 	
 	name = "${local.project_name} Application Server"
 	unique_identifier = "${local.project_code}-${var.environment}-appServer"
@@ -130,8 +130,8 @@ module "app_server" {
 		aws_default_security_group.common.id,
 		aws_security_group.private.id,
 	]
-	# private_hosted_zone = aws_route53_zone.private
-	# hostname = "application"
+	private_hosted_zone = aws_route53_zone.private
+	hostname = "application"
 	
 	role_policy = data.aws_iam_policy_document.app_server_policy
 	
