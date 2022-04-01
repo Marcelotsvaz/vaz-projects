@@ -7,7 +7,7 @@
 
 
 # 
-# IAM Role.
+# Lambda IAM Role.
 #-------------------------------------------------------------------------------
 resource "aws_iam_role" "autoscaling_lambda_role" {
 	name = "${var.unique_identifier}-autoscalingLambdaRole"
@@ -16,7 +16,7 @@ resource "aws_iam_role" "autoscaling_lambda_role" {
 	inline_policy {
 		name = "${var.unique_identifier}-autoscalingLambdaRolePolicy"
 		
-		policy = data.aws_iam_policy_document.autoscaling_lambda_policy.json
+		policy = data.aws_iam_policy_document.autoscaling_lambda_role_policy.json
 	}
 	
 	tags = {
@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "autoscaling_lambda_assume_role_policy" {
 }
 
 
-data "aws_iam_policy_document" "autoscaling_lambda_policy" {
+data "aws_iam_policy_document" "autoscaling_lambda_role_policy" {
 	statement {
 		sid = "autoscalingCompleteLifecycle"
 		
@@ -57,7 +57,7 @@ data "aws_iam_policy_document" "autoscaling_lambda_policy" {
 resource "aws_lambda_function" "autoscaling_lambda" {
 	function_name = "${var.unique_identifier}-autoscalingLambda"
 	filename = "autoscaling_lambda.zip"
-	handler = "lambda_handler"
+	handler = "autoscaling_lambda.lambda_handler"
 	source_code_hash = data.archive_file.autoscaling_lambda.output_base64sha256
 	runtime = "python3.9"
 	
@@ -76,6 +76,15 @@ data "archive_file" "autoscaling_lambda" {
 }
 
 
+resource "aws_lambda_permission" "autoscaling_lambda_resource_policy" {
+	function_name = aws_lambda_function.autoscaling_lambda.function_name
+	statement_id = "lambdaInvokeFunction"
+	principal = "events.amazonaws.com"
+	action = "lambda:InvokeFunction"
+	source_arn = aws_cloudwatch_event_rule.autoscaling_event_rule.arn
+}
+
+
 
 # 
 # EventBridge.
@@ -85,9 +94,13 @@ resource "aws_cloudwatch_event_rule" "autoscaling_event_rule" {
 	event_pattern = <<EOF
 		{
 			"source": [ "aws.autoscaling" ],
-			"detail-type": [ "EC2 Instance-launch Lifecycle Action" ]
+			"detail-type": [ "EC2 Instance Launch Successful", "EC2 Instance Terminate Successful" ],
+			"detail":
+			{
+				"AutoScalingGroupName": [ "${aws_autoscaling_group.autoscaling_group.name}" ]
+			}
 		}
-EOF
+	EOF
 	
 	tags = {
 		Name = "${var.name} Auto Scaling Event Rule"
