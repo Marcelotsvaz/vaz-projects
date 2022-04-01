@@ -6,6 +6,60 @@
 
 
 
+locals {
+	# Avoid cyclic dependency.
+	autoscaling_lambda_function_name = "${var.unique_identifier}-autoscalingLambda"
+}
+
+
+
+# 
+# Lambda Function.
+#-------------------------------------------------------------------------------
+resource "aws_lambda_function" "autoscaling_lambda" {
+	function_name = local.autoscaling_lambda_function_name
+	role = aws_iam_role.autoscaling_lambda_role.arn
+	
+	runtime = "python3.9"
+	filename = "autoscaling_lambda.zip"
+	source_code_hash = data.archive_file.autoscaling_lambda.output_base64sha256
+	handler = "autoscaling_lambda.lambda_handler"
+	
+	# Make sure the log group is created before the function because we removed the implicit dependency.
+	depends_on = [ aws_cloudwatch_log_group.autoscaling_lambda_log_group ]
+	
+	tags = {
+		Name = "${var.name} Auto Scaling Lambda"
+	}
+}
+
+
+data "archive_file" "autoscaling_lambda" {
+	type = "zip"
+	source_file = "${path.module}/autoscaling_lambda.py"
+	output_path = "autoscaling_lambda.zip"
+}
+
+
+resource "aws_lambda_permission" "autoscaling_lambda_resource_policy" {
+	function_name = aws_lambda_function.autoscaling_lambda.function_name
+	statement_id = "lambdaInvokeFunction"
+	principal = "events.amazonaws.com"
+	action = "lambda:InvokeFunction"
+	source_arn = aws_cloudwatch_event_rule.autoscaling_event_rule.arn
+}
+
+
+resource "aws_cloudwatch_log_group" "autoscaling_lambda_log_group" {
+	name = "/aws/lambda/${local.autoscaling_lambda_function_name}"
+	
+	tags = {
+		Name = "${var.name} Auto Scaling Lambda Log Group"
+	}
+}
+
+
+
 # 
 # Lambda IAM Role.
 #-------------------------------------------------------------------------------
@@ -41,47 +95,15 @@ data "aws_iam_policy_document" "autoscaling_lambda_assume_role_policy" {
 
 data "aws_iam_policy_document" "autoscaling_lambda_role_policy" {
 	statement {
-		sid = "autoscalingCompleteLifecycle"
+		sid = "cloudwatchWriteLogs"
 		
-		actions = [ "autoscaling:CompleteLifecycleAction" ]
+		actions = [
+			"logs:CreateLogStream",
+			"logs:PutLogEvents",
+		]
 		
-		resources = [ aws_autoscaling_group.autoscaling_group.arn ]
+		resources = [ "${aws_cloudwatch_log_group.autoscaling_lambda_log_group.arn}:*" ]
 	}
-}
-
-
-
-# 
-# Lambda Function.
-#-------------------------------------------------------------------------------
-resource "aws_lambda_function" "autoscaling_lambda" {
-	function_name = "${var.unique_identifier}-autoscalingLambda"
-	filename = "autoscaling_lambda.zip"
-	handler = "autoscaling_lambda.lambda_handler"
-	source_code_hash = data.archive_file.autoscaling_lambda.output_base64sha256
-	runtime = "python3.9"
-	
-	role = aws_iam_role.autoscaling_lambda_role.arn
-	
-	tags = {
-		Name = "${var.name} Auto Scaling Lambda"
-	}
-}
-
-
-data "archive_file" "autoscaling_lambda" {
-	type = "zip"
-	source_file = "${path.module}/autoscaling_lambda.py"
-	output_path = "autoscaling_lambda.zip"
-}
-
-
-resource "aws_lambda_permission" "autoscaling_lambda_resource_policy" {
-	function_name = aws_lambda_function.autoscaling_lambda.function_name
-	statement_id = "lambdaInvokeFunction"
-	principal = "events.amazonaws.com"
-	action = "lambda:InvokeFunction"
-	source_arn = aws_cloudwatch_event_rule.autoscaling_event_rule.arn
 }
 
 
