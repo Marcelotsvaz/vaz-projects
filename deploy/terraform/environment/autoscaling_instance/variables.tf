@@ -62,3 +62,10 @@ variable "default_tags" {
 	type = map( string )
 	default = {}
 }
+
+
+
+locals {
+	autoscaling_group_name = "${var.unique_identifier}-autoScalingGroup"	# Avoid cyclic dependency created by depends_on.
+	autoscaling_lambda_function_name = "${var.unique_identifier}-autoscalingLambda"	# Avoid cyclic dependency.
+}

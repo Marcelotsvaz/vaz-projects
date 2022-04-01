@@ -10,11 +10,16 @@
 # Instances.
 #-------------------------------------------------------------------------------
 resource "aws_autoscaling_group" "autoscaling_group" {
-	name = "${var.unique_identifier}-autoScalingGroup"
+	name = local.autoscaling_group_name
 	launch_template { id = aws_launch_template.launch_template.id }
 	vpc_zone_identifier = var.subnet_ids
 	min_size = 2
 	max_size = 10
+	
+	depends_on = [
+		aws_cloudwatch_event_rule.autoscaling_event_rule,
+		aws_lambda_permission.autoscaling_lambda_resource_policy,
+	]
 	
 	dynamic "tag" {
 		for_each = merge( { Name = "${var.name} Auto Scaling Group" }, var.default_tags )

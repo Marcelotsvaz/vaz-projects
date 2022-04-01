@@ -6,13 +6,6 @@
 
 
 
-locals {
-	# Avoid cyclic dependency.
-	autoscaling_lambda_function_name = "${var.unique_identifier}-autoscalingLambda"
-}
-
-
-
 # 
 # Lambda Function.
 #-------------------------------------------------------------------------------
@@ -119,7 +112,7 @@ resource "aws_cloudwatch_event_rule" "autoscaling_event_rule" {
 			"detail-type": [ "EC2 Instance Launch Successful", "EC2 Instance Terminate Successful" ],
 			"detail":
 			{
-				"AutoScalingGroupName": [ "${aws_autoscaling_group.autoscaling_group.name}" ]
+				"AutoScalingGroupName": [ "${local.autoscaling_group_name}" ]
 			}
 		}
 	EOF
