@@ -14,6 +14,7 @@ resource "aws_autoscaling_group" "autoscaling_group" {
 	vpc_zone_identifier = var.subnet_ids
 	min_size = 2
 	max_size = 10
+	instance_refresh { strategy = "Rolling" }
 	
 	launch_template {
 		id = aws_launch_template.launch_template.id
