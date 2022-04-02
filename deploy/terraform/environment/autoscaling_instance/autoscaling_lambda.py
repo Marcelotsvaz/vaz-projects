@@ -54,8 +54,6 @@ def updateDnsRecords( hostedZoneId, recordName, recordType, ttl, ips ):
 
 
 def main( event, context ):
-	logging.info( f'Started function "{functionName}" in response to event "{eventName}".' )
-	
 	# Env vars from Terraform.
 	hostedZoneId = os.environ['hostedZoneId']
 	recordName = os.environ['recordName']
@@ -65,6 +63,8 @@ def main( event, context ):
 	functionName = context.function_name
 	eventName = event['detail-type']
 	instanceId = event['detail']['EC2InstanceId']
+	
+	logging.info( f'Started function "{functionName}" in response to event "{eventName}".' )
 	
 	instancePrivateIp = getInstancePrivateIp( instanceId )
 	ips = getDnsRecords( hostedZoneId, recordName, recordType )
