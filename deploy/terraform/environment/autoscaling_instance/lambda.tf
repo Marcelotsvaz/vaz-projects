@@ -17,6 +17,7 @@ resource "aws_lambda_function" "autoscaling_lambda" {
 	filename = "autoscaling_lambda.zip"
 	source_code_hash = data.archive_file.autoscaling_lambda.output_base64sha256
 	handler = "autoscaling_lambda.main"
+	timeout = 10
 	
 	environment {
 		variables = {
