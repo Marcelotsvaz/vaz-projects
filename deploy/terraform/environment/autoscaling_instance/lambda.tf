@@ -16,7 +16,16 @@ resource "aws_lambda_function" "autoscaling_lambda" {
 	runtime = "python3.9"
 	filename = "autoscaling_lambda.zip"
 	source_code_hash = data.archive_file.autoscaling_lambda.output_base64sha256
-	handler = "autoscaling_lambda.lambda_handler"
+	handler = "autoscaling_lambda.main"
+	
+	environment {
+		variables = {
+			hostedZoneId = aws_route53_record.a.zone_id
+			recordName = aws_route53_record.a.name
+			recordType = aws_route53_record.a.type
+			recordTtl = aws_route53_record.a.ttl
+		}
+	}
 	
 	# Make sure the log group is created before the function because we removed the implicit dependency.
 	depends_on = [ aws_cloudwatch_log_group.autoscaling_lambda_log_group ]

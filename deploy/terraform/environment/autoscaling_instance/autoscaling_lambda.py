@@ -6,35 +6,84 @@
 
 
 
-# import boto3
-# import json
+import os
+import boto3
+import logging
 
 
 
-# hookName = "LifecycleHookName"
-# asgName = "AutoScalingGroupName"
-# instanceId = "EC2InstanceId"
-
-
-def lambda_handler( event, context ):
-	# message = event['detail']
+def getInstancePrivateIp( instanceId ):
+	ec2 = boto3.client( 'ec2' )
 	
-	print( event )
-	print( event['detail'] )
+	response = ec2.describe_instances( InstanceIds = [ instanceId ] )
 	
-	# if hookName in message and asgName in message:
-	# 	life_cycle_hook = message[hookName]
-	# 	auto_scaling_group = message[asgName]
-	# 	instance_id = message[instanceId]
+	return response['Reservations'][0]['Instances'][0]['PrivateIpAddress']
+
+
+
+def getDnsRecords( hostedZoneId, recordName, recordType ):
+	route53 = boto3.client( 'route53' )
+	
+	response = route53.list_resource_record_sets(
+		HostedZoneId = hostedZoneId,
+		StartRecordName = recordName,
+		StartRecordType = recordType
+	)
+	
+	return { record['Value'] for record in response['ResourceRecordSets'][0]['ResourceRecords'] }
+
+
+
+def updateDnsRecords( hostedZoneId, recordName, recordType, ttl, ips ):
+	route53 = boto3.client( 'route53' )
+	
+	route53.change_resource_record_sets( HostedZoneId = hostedZoneId, ChangeBatch = {
+		'Changes': [
+			{
+				'Action': 'UPSERT',
+				'ResourceRecordSet': {
+					'Name': recordName,
+					'Type': recordType,
+					'TTL': ttl,
+					'ResourceRecords': [ { 'Value': ip } for ip in ips ]
+				}
+			}
+		]
+	})
+
+
+
+def main( event, context ):
+	logging.info( f'Started function "{functionName}" in response to event "{eventName}".' )
+	
+	# Env vars from Terraform.
+	hostedZoneId = os.environ['hostedZoneId']
+	recordName = os.environ['recordName']
+	recordType = os.environ['recordType']
+	recordTtl = int( os.environ['recordTtl'] )
+	
+	functionName = context.function_name
+	eventName = event['detail-type']
+	instanceId = event['detail']['EC2InstanceId']
+	
+	instancePrivateIp = getInstancePrivateIp( instanceId )
+	ips = getDnsRecords( hostedZoneId, recordName, recordType )
+	
+	if eventName == 'EC2 Instance Launch Successful':
+		ips.add( instancePrivateIp )
+	elif eventName == 'EC2 Instance Terminate Successful':
+		ips.remove( instancePrivateIp )
+	else:
+		logging.error( f'Invalid event: {eventName}' )
 		
-	# 	asg_client = boto3.client( 'autoscaling' )
-		
-	# 	response = asg_client.complete_lifecycle_action(
-	# 		LifecycleHookName = life_cycle_hook,
-	# 		AutoScalingGroupName = auto_scaling_group,
-	# 		LifecycleActionResult = 'CONTINUE',
-	# 		InstanceId = instance_id
-	# 	)
-		
-	# 	if response['ResponseMetadata']['HTTPStatusCode'] == 200:
-	# 		pass
+		return
+	
+	# Can't have an empty record.
+	if len( ips ) == 0:
+		ips.add( '0.0.0.0' )
+	else:
+		ips.discard( '0.0.0.0' )
+	
+	logging.info( f'Instance ips: {ips}' )
+	
+	updateDnsRecords( hostedZoneId, recordName, recordType, recordTtl, ips )
