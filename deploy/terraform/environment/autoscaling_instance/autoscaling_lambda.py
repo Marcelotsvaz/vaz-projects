@@ -64,6 +64,7 @@ def main( event, context ):
 	eventName = event['detail-type']
 	instanceId = event['detail']['EC2InstanceId']
 	
+	logging.basicConfig( level = logging.INFO )
 	logging.info( f'Started function "{functionName}" in response to event "{eventName}".' )
 	
 	instancePrivateIp = getInstancePrivateIp( instanceId )
