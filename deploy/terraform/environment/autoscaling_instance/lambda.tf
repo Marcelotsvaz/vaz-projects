@@ -102,12 +102,6 @@ data "aws_iam_policy_document" "autoscaling_lambda_role_policy" {
 		actions = [ "ec2:DescribeInstances" ]
 		
 		resources = [ "*" ]
-		
-		condition {
-			test = "StringEquals"
-			variable = "aws:ResourceTag/aws:autoscaling:groupName"
-			values = [ local.autoscaling_group_name ]
-		}
 	}
 	
 	statement {
