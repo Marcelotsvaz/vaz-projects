@@ -98,5 +98,7 @@ resource "aws_route53_record" "a" {
 	ttl = "10"
 	records = [ "0.0.0.0" ]
 	
-	# TODO: Create but not change.
+	lifecycle {
+		ignore_changes = [ records ]	# This record is managed by a Lambda function.
+	}
 }
