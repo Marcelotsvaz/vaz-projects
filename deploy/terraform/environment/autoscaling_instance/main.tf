@@ -15,6 +15,7 @@ resource "aws_autoscaling_group" "autoscaling_group" {
 	vpc_zone_identifier = var.subnet_ids
 	min_size = 2
 	max_size = 10
+	instance_refresh { strategy = "Rolling" }
 	
 	depends_on = [
 		aws_cloudwatch_event_rule.autoscaling_event_rule,
