@@ -97,6 +97,31 @@ data "aws_iam_policy_document" "autoscaling_lambda_assume_role_policy" {
 
 data "aws_iam_policy_document" "autoscaling_lambda_role_policy" {
 	statement {
+		sid = "ec2DescribeInstances"
+		
+		actions = [ "ec2:DescribeInstances" ]
+		
+		resources = [ "*" ]
+		
+		condition {
+			test = "StringEquals"
+			variable = "aws:ResourceTag/aws:autoscaling:groupName"
+			values = [ local.autoscaling_group_name ]
+		}
+	}
+	
+	statement {
+		sid = "route53ChangeRecordSets"
+		
+		actions = [
+			"route53:ListResourceRecordSets",
+			"route53:ChangeResourceRecordSets",
+		]
+		
+		resources = [ var.private_hosted_zone.arn ]
+	}
+	
+	statement {
 		sid = "cloudwatchWriteLogs"
 		
 		actions = [

@@ -33,7 +33,7 @@ variable "vpc_security_group_ids" {
 
 variable "private_hosted_zone" {
 	description = "Private hosted zone for instance hostname A record."
-	type = object( { zone_id = string, name = string } )
+	type = object( { arn = string, zone_id = string, name = string } )
 }
 
 variable "hostname" {
