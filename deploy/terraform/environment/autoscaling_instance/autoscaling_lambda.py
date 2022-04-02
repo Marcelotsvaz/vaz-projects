@@ -12,25 +12,21 @@ import logging
 
 
 
-def getInstancePrivateIp( instanceId ):
+def getInstanceIds( autoScalingGroupName ):
+	autoscaling = boto3.client( 'autoscaling' )
+	
+	response = autoscaling.describe_auto_scaling_groups( AutoScalingGroupNames = [ autoScalingGroupName ] )
+	
+	return [ instance['InstanceId'] for instance in response['AutoScalingGroups'][0]['Instances'] if instance['LifecycleState'] == 'InService' ]
+
+
+
+def getPrivateIps( instanceIds ):
 	ec2 = boto3.client( 'ec2' )
 	
-	response = ec2.describe_instances( InstanceIds = [ instanceId ] )
+	response = ec2.describe_instances( InstanceIds = instanceIds )
 	
-	return response['Reservations'][0]['Instances'][0]['PrivateIpAddress']
-
-
-
-def getDnsRecords( hostedZoneId, recordName, recordType ):
-	route53 = boto3.client( 'route53' )
-	
-	response = route53.list_resource_record_sets(
-		HostedZoneId = hostedZoneId,
-		StartRecordName = recordName,
-		StartRecordType = recordType
-	)
-	
-	return { record['Value'] for record in response['ResourceRecordSets'][0]['ResourceRecords'] }
+	return [ reservation['Instances'][0]['PrivateIpAddress'] for reservation in response['Reservations'] ]
 
 
 
@@ -54,6 +50,8 @@ def updateDnsRecords( hostedZoneId, recordName, recordType, ttl, ips ):
 
 
 def main( event, context ):
+	logging.getLogger().setLevel( logging.INFO )
+	
 	# Env vars from Terraform.
 	hostedZoneId = os.environ['hostedZoneId']
 	recordName = os.environ['recordName']
@@ -62,29 +60,14 @@ def main( event, context ):
 	
 	functionName = context.function_name
 	eventName = event['detail-type']
-	instanceId = event['detail']['EC2InstanceId']
+	autoScalingGroupName = event['detail']['AutoScalingGroupName']
 	
-	logging.basicConfig( level = logging.INFO )
 	logging.info( f'Started function "{functionName}" in response to event "{eventName}".' )
 	
-	instancePrivateIp = getInstancePrivateIp( instanceId )
-	ips = getDnsRecords( hostedZoneId, recordName, recordType )
+	instanceIds = getInstanceIds( autoScalingGroupName )
+	logging.info( f'Instances: {instanceIds}' )
 	
-	if eventName == 'EC2 Instance Launch Successful':
-		ips.add( instancePrivateIp )
-	elif eventName == 'EC2 Instance Terminate Successful':
-		ips.remove( instancePrivateIp )
-	else:
-		logging.error( f'Invalid event: {eventName}' )
-		
-		return
-	
-	# Can't have an empty record.
-	if len( ips ) == 0:
-		ips.add( '0.0.0.0' )
-	else:
-		ips.discard( '0.0.0.0' )
-	
+	ips = getPrivateIps( instanceIds ) or [ '0.0.0.0' ]	# Can't have an empty record.
 	logging.info( f'Instance ips: {ips}' )
 	
 	updateDnsRecords( hostedZoneId, recordName, recordType, recordTtl, ips )

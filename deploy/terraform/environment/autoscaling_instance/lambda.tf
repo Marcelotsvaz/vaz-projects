@@ -97,6 +97,14 @@ data "aws_iam_policy_document" "autoscaling_lambda_assume_role_policy" {
 
 data "aws_iam_policy_document" "autoscaling_lambda_role_policy" {
 	statement {
+		sid = "autoscalingDescribeAutoScalingGroups"
+		
+		actions = [ "autoscaling:DescribeAutoScalingGroups" ]
+		
+		resources = [ "*" ]
+	}
+	
+	statement {
 		sid = "ec2DescribeInstances"
 		
 		actions = [ "ec2:DescribeInstances" ]
