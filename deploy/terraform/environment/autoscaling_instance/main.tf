@@ -11,11 +11,14 @@
 #-------------------------------------------------------------------------------
 resource "aws_autoscaling_group" "autoscaling_group" {
 	name = local.autoscaling_group_name
-	launch_template { id = aws_launch_template.launch_template.id }
 	vpc_zone_identifier = var.subnet_ids
 	min_size = 2
 	max_size = 10
-	instance_refresh { strategy = "Rolling" }
+	
+	launch_template {
+		id = aws_launch_template.launch_template.id
+		version = aws_launch_template.launch_template.latest_version
+	}
 	
 	depends_on = [
 		aws_cloudwatch_event_rule.autoscaling_event_rule,
