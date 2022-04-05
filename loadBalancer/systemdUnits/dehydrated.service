@@ -8,8 +8,8 @@
 
 [Unit]
 Description = Dehydrated
-StartLimitIntervalSec = 6h
-StartLimitBurst = 5
+StartLimitIntervalSec = 3h
+StartLimitBurst = 2
 
 [Service]
 Type = oneshot
@@ -20,5 +20,6 @@ Restart = on-failure
 RestartSec = 1h
 
 EnvironmentFile = /etc/environment
+WorkingDirectory = /home/nginx/loadBalancer
 ExecStart = /home/nginx/loadBalancer/config/tls/dehydrated.sh
-ExecStartPost = +systemctl reload nginx
+ExecStartPost = +docker compose restart nginx

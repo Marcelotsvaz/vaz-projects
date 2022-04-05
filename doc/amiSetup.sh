@@ -56,7 +56,7 @@ pacstrap -c ${mountPoint} \
 base linux grub \
 openssh sudo aws-cli gdisk \
 nano \
-docker docker-compose nginx dehydrated
+docker docker-compose dehydrated
 
 # Fstab.
 genfstab -U ${mountPoint} >> ${mountPoint}/etc/fstab
