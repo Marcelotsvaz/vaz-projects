@@ -12,9 +12,11 @@
 resource "aws_autoscaling_group" "autoscaling_group" {
 	name = local.autoscaling_group_name
 	vpc_zone_identifier = var.subnet_ids
-	min_size = 2
+	min_size = 1
 	max_size = 10
+	default_cooldown = 120
 	instance_refresh { strategy = "Rolling" }
+	capacity_rebalance = true
 	
 	launch_template {
 		id = aws_launch_template.launch_template.id
@@ -34,6 +36,19 @@ resource "aws_autoscaling_group" "autoscaling_group" {
 			value = tag.value
 			propagate_at_launch = false
 		}
+	}
+}
+
+
+resource "aws_autoscaling_policy" "scale_down" {
+	name = "CPU Tracking Policy"
+	autoscaling_group_name = aws_autoscaling_group.autoscaling_group.name
+	estimated_instance_warmup = 60
+	policy_type = "TargetTrackingScaling"
+	
+	target_tracking_configuration {
+		target_value = "80"
+		predefined_metric_specification { predefined_metric_type = "ASGAverageCPUUtilization" }
 	}
 }
 
