@@ -12,7 +12,7 @@ variable "name" {
 }
 
 variable "unique_identifier" {
-	description = "Unique prefix to be used in IAM role and instance profile names."
+	description = "Unique prefix to be used in auto scaling group, launch template, IAM role and instance profile names."
 	type = string
 }
 
@@ -21,15 +21,9 @@ variable "instance_type" {
 	type = string
 }
 
-variable "subnet_id" {
-	description = "VPC Subnet ID."
-	type = string
-}
-
-variable "ipv6_address_count" {
-	description = "IPv6 address count."
-	type = number
-	default = 1
+variable "subnet_ids" {
+	description = "Set of VPC subnet ID."
+	type = set( string )
 }
 
 variable "vpc_security_group_ids" {
@@ -39,7 +33,7 @@ variable "vpc_security_group_ids" {
 
 variable "private_hosted_zone" {
 	description = "Private hosted zone for instance hostname A record."
-	type = object( { zone_id = string, name = string } )
+	type = object( { arn = string, zone_id = string, name = string } )
 }
 
 variable "hostname" {
@@ -67,4 +61,11 @@ variable "default_tags" {
 	description = "Tags to be applied to all resources."
 	type = map( string )
 	default = {}
+}
+
+
+
+locals {
+	autoscaling_group_name = "${var.unique_identifier}-autoScalingGroup"	# Avoid cyclic dependency created by depends_on.
+	autoscaling_lambda_function_name = "${var.unique_identifier}-autoscalingLambda"	# Avoid cyclic dependency.
 }

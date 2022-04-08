@@ -13,6 +13,7 @@ module "load_balancer" {
 	source = "./instance"
 	
 	name = "${local.project_name} Load Balancer"
+	unique_identifier = "${local.project_code}-${var.environment}-loadBalancer"
 	instance_type = "t3a.nano"
 	
 	subnet_id = aws_subnet.subnet_c.id
@@ -24,7 +25,6 @@ module "load_balancer" {
 	private_hosted_zone = aws_route53_zone.private
 	hostname = "load-balancer"
 	
-	role_name = "${local.project_code}-${var.environment}-loadBalancer"
 	role_policy = data.aws_iam_policy_document.load_balancer_policy
 	
 	root_volume_size = 5
@@ -119,12 +119,13 @@ data "aws_iam_policy_document" "load_balancer_policy" {
 # Application server.
 #-------------------------------------------------------------------------------
 module "app_server" {
-	source = "./instance"
+	source = "./autoscaling_instance"
 	
 	name = "${local.project_name} Application Server"
+	unique_identifier = "${local.project_code}-${var.environment}-appServer"
 	instance_type = "t3a.small"
 	
-	subnet_id = aws_subnet.subnet_c.id
+	subnet_ids = [ aws_subnet.subnet_c.id ]
 	vpc_security_group_ids = [
 		aws_default_security_group.common.id,
 		aws_security_group.private.id,
@@ -132,7 +133,6 @@ module "app_server" {
 	private_hosted_zone = aws_route53_zone.private
 	hostname = "application"
 	
-	role_name = "${local.project_code}-${var.environment}-appServer"
 	role_policy = data.aws_iam_policy_document.app_server_policy
 	
 	root_volume_size = 5
@@ -209,6 +209,7 @@ module "database_server" {
 	source = "./instance"
 	
 	name = "${local.project_name} Database Server"
+	unique_identifier = "${local.project_code}-${var.environment}-databaseServer"
 	instance_type = "t3a.nano"
 	
 	subnet_id = aws_subnet.subnet_c.id
@@ -219,7 +220,6 @@ module "database_server" {
 	private_hosted_zone = aws_route53_zone.private
 	hostname = "postgres"
 	
-	role_name = "${local.project_code}-${var.environment}-databaseServer"
 	role_policy = data.aws_iam_policy_document.database_server_policy
 	
 	root_volume_size = 5
@@ -306,6 +306,7 @@ module "monitoring_server" {
 	source = "./instance"
 	
 	name = "${local.project_name} Monitoring Server"
+	unique_identifier = "${local.project_code}-${var.environment}-monitoringServer"
 	instance_type = "t3a.nano"
 	
 	subnet_id = aws_subnet.subnet_c.id
@@ -316,7 +317,6 @@ module "monitoring_server" {
 	private_hosted_zone = aws_route53_zone.private
 	hostname = "monitoring"
 	
-	role_name = "${local.project_code}-${var.environment}-monitoringServer"
 	role_policy = data.aws_iam_policy_document.monitoring_server_policy
 	
 	root_volume_size = 5
