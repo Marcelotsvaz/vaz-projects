@@ -92,7 +92,6 @@ deploy-production:
     extends: .deploy
     environment:
         name: production
-        on_stop: cleanup-production
     rules:
       - when: manual
 
