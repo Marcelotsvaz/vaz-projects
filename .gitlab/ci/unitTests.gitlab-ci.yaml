@@ -14,6 +14,8 @@
     
     image: ${composeImage}
     
+    interruptible: true
+    
     script:
       - echo ${CI_REGISTRY_PASSWORD} | docker login --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
       - docker compose up --no-build --detach --quiet-pull
