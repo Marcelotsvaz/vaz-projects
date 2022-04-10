@@ -20,7 +20,6 @@ stages:
   - deploy-staging
   - cleanup-staging
   - deploy-production
-  - cleanup-production
 
 
 variables:
@@ -86,7 +85,7 @@ cleanup-staging:
 
 
 # 
-# Production jobs
+# Production jobs.
 #-----------------------------------------------------------------------------------------------------------------------
 deploy-production:
     stage: deploy-production
@@ -104,10 +103,3 @@ staticFiles-production:
     environment:
         name: production
     needs: [ deploy-production ]
-
-
-cleanup-production:
-    stage: cleanup-production
-    extends: .cleanup
-    environment:
-        name: production
