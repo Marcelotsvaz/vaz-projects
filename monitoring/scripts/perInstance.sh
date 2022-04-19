@@ -39,29 +39,32 @@ echo "${swapFile} none swap defaults 0 0" >> /etc/fstab
 #---------------------------------------
 dataDisk="/dev/disk/by-id/nvme-Amazon_Elastic_Block_Store_${dataVolumeId/-/}"
 dataPartition="${dataDisk}-part1"
+partitionName='Docker Volumes'
 
-# Wait for volume to be mounted.
+# Wait for volume to be available.
 while [[ ! -b ${dataDisk} ]]; do
-	sleep 1
+	sleep 0.1
 done
 
-# Make sure partitions are loaded.
-partx -u ${dataDisk}
-
-# Format volume if there's no partitions.
-if [[ ! -b ${dataPartition} ]]; then
+# Format volume if partition doesn't exist.
+if [[ $(partx --show --nr 1 --output name --noheadings ${dataDisk}) != "${partitionName}" ]]; then
 	echo Formatting new volume...
 	
 	sgdisk --clear ${dataDisk}
-	sgdisk --new 1:0:0 --change-name 1:'Docker Volumes' ${dataDisk}
+	sgdisk --new 1:0:0 --change-name 1:"${partitionName}" ${dataDisk}
 	
 	# Wait for partition to be available.
 	while [[ ! -b ${dataPartition} ]]; do
-		sleep 1
+		sleep 0.1
 	done
 	
 	mkfs.ext4 ${dataPartition}
 fi
+
+# Wait for partition to be available.
+while [[ ! -b ${dataPartition} ]]; do
+	sleep 0.1
+done
 
 echo "${dataPartition}	/var/lib/docker/volumes	ext4	X-mount.mkdir	0	2" >> /etc/fstab
 mount ${dataPartition}
