@@ -45,6 +45,9 @@ while [[ ! -b ${dataDisk} ]]; do
 	sleep 1
 done
 
+# Make sure partitions are loaded.
+partx -u ${dataDisk}
+
 # Format volume if there's no partitions.
 if [[ ! -b ${dataPartition} ]]; then
 	echo Formatting new volume...
