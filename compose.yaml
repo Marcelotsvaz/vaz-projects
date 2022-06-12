@@ -26,12 +26,12 @@ services:
             djangoSecretKey: django
             domain: vaz-pc.lan
             staticFilesDomain: vaz-pc.lan
-            s3Endpoint: ${s3Endpoint-http://minio:9000}
+            s3Endpoint: &s3Endpoint ${s3Endpoint-http://minio:9000}
             bucket: &bucket ${bucket-local}
             POSTGRES_PASSWORD: &postgresPassword postgres
             ELASTIC_PASSWORD: &elasticsearchPassword elastic
-            AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID-minioadmin}
-            AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY-minioadmin}
+            AWS_ACCESS_KEY_ID: &AWS_ACCESS_KEY_ID ${AWS_ACCESS_KEY_ID-minioadmin}
+            AWS_SECRET_ACCESS_KEY: &AWS_SECRET_ACCESS_KEY ${AWS_SECRET_ACCESS_KEY-minioadmin}
         
         command:
           - sh
@@ -83,6 +83,26 @@ services:
             test: curl --silent minio:9000/minio/health/live
             interval: 1s
             start_period: 5s
+    
+    
+    setBucketAccess:
+        image: minio/mc
+        
+        depends_on:
+            minio:
+                condition: service_healthy
+        
+        environment:
+            s3Endpoint: *s3Endpoint
+            bucket: *bucket
+            AWS_ACCESS_KEY_ID: *AWS_ACCESS_KEY_ID
+            AWS_SECRET_ACCESS_KEY: *AWS_SECRET_ACCESS_KEY
+        
+        entrypoint: [ sh, -c ]
+        command:
+          - |-
+            mc alias set minio $${s3Endpoint} $${AWS_ACCESS_KEY_ID} $${AWS_SECRET_ACCESS_KEY}
+            mc policy set public minio/$${bucket}
     
     
     memcached:

@@ -16,14 +16,6 @@
 			"label": "Compose",
 			"type": "shell",
 			"command": "docker compose ${input:composeCommand}",
-			"options":
-			{
-				"env":
-				{
-					"DOCKER_BUILDKIT": "1",
-					"COMPOSE_DOCKER_CLI_BUILD": "1",
-				}
-			},
 			"problemMatcher": [],
 		},
 		
