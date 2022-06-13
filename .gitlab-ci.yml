@@ -26,7 +26,6 @@ variables:
     DOCKER_TLS_CERTDIR: /certs/client   # Enable TLS to Docker host. Silence warning in GitLab CI/CD.
     repositorySnapshot: ${CI_PROJECT_URL}/-/archive/${CI_COMMIT_SHA}/vaz-projects.tar.gz
     applicationImage: ${CI_REGISTRY_IMAGE}/application:${CI_COMMIT_SHORT_SHA}
-    composeImage: ${CI_REGISTRY_IMAGE}/compose:2.2
 
 
 

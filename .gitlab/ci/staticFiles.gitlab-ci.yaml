@@ -14,7 +14,7 @@
     
     services: [ docker:20.10-dind ]
     
-    image: ${composeImage}
+    image: docker:20.10
     
     script:
       - echo ${CI_REGISTRY_PASSWORD} | docker login --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}

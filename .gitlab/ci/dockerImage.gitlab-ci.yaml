@@ -12,11 +12,12 @@
 .dockerImage:
     services: [ docker:20.10-dind ]
     
-    image: ${composeImage}
+    image: docker:20.10
     
     interruptible: true
     
     script:
       - echo ${CI_REGISTRY_PASSWORD} | docker login --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
+      - docker buildx install
       - docker build --pull --tag ${applicationImage} application
       - docker push --quiet ${applicationImage}
