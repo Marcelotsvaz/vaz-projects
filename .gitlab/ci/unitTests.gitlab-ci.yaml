@@ -30,4 +30,6 @@
     artifacts:
         reports:
             junit: unitTests.xml
-            cobertura: coverage.xml
+            coverage_report:
+                coverage_format: cobertura
+                path: coverage.xml
