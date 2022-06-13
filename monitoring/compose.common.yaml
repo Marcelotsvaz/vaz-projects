@@ -21,7 +21,7 @@ services:
     
     
     promtail:
-        image: grafana/promtail:2.4.2
+        image: grafana/promtail:2.5.0
         
         restart: unless-stopped
         
