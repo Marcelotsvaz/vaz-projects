@@ -13,11 +13,19 @@
 // 
 // General stuff.
 //------------------------------------------------------------------------------
-$( document ).ready( documentReady );
-function documentReady()
+function init()
 {
-	$( 'div.imageGallery > a' ).on( 'click', showFigure );
-	$( 'div.imageGallery > div' ).on( 'click', hideFigure );
+	document.querySelectorAll( 'div.imageGallery > a' ).forEach( elem => elem.onclick = showFigure );
+	document.querySelectorAll( 'div.imageGallery > div' ).forEach( elem => elem.onclick = hideFigure );
+}
+
+if ( document.readyState === 'loading' )
+{
+	document.addEventListener( 'DOMContentLoaded', init );
+}
+else
+{
+	init();
 }
 
 
@@ -26,7 +34,7 @@ function documentReady()
 //------------------------------------------------------------------------------
 function showFigure( event )
 {
-	$( event.currentTarget ).next().show();
+	event.currentTarget.nextElementSibling.style.display = 'initial';
 	
 	event.preventDefault();
 }
@@ -37,9 +45,9 @@ function showFigure( event )
 //------------------------------------------------------------------------------
 function hideFigure( event )
 {
-	if( $( event.target ).is( 'div, button' ) )
+	if( event.target.matches( 'div, button' ) )
 	{
-		$( event.currentTarget ).hide();
+		event.currentTarget.style.display = 'none';
 	}
 }
 
