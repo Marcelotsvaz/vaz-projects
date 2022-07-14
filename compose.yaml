@@ -63,7 +63,7 @@ services:
     
     
     minio:
-        image: minio/minio:RELEASE.2022-03-17T06-34-49Z
+        image: minio/minio:RELEASE.2022-07-06T20-29-49Z
         
         restart: unless-stopped
         
@@ -86,7 +86,7 @@ services:
     
     
     setBucketAccess:
-        image: minio/mc
+        image: minio/mc:RELEASE.2022-07-06T14-54-36Z
         
         depends_on:
             minio:

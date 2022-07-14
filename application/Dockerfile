@@ -10,7 +10,7 @@
 # 
 # Build wheels.
 #-------------------------------------------------------------------------------
-FROM python:3.10-alpine3.15 as wheelBuilder
+FROM python:3.10-alpine3.16 as wheelBuilder
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
@@ -26,7 +26,7 @@ RUN pip install --no-cache-dir --upgrade pip wheel	\
 # 
 # Compile LESS.
 #-------------------------------------------------------------------------------
-FROM alpine:3.15 as lessBuilder
+FROM alpine:3.16 as lessBuilder
 
 RUN apk add --no-cache npm findutils	\
 	&& npm install --global less
@@ -44,7 +44,7 @@ RUN --mount=source=./,target=source/																	\
 # 
 # Image.
 #-------------------------------------------------------------------------------
-FROM python:3.10-alpine3.15
+FROM python:3.10-alpine3.16
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1

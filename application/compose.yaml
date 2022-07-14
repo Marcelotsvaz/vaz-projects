@@ -40,13 +40,13 @@ services:
     
     
     memcached:
-        image: memcached:1.6-bullseye
+        image: memcached:1.6-alpine3.16
         
         restart: unless-stopped
     
     
     elasticsearch:
-        image: elasticsearch:7.17.0
+        image: elasticsearch:8.3.2
         
         restart: unless-stopped
         

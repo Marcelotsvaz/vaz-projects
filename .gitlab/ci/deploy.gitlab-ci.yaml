@@ -14,7 +14,7 @@
         action: start
     
     image:
-        name: hashicorp/terraform:1.1.5
+        name: hashicorp/terraform:1.2.5
         entrypoint: [ '' ]
     
     cache:
