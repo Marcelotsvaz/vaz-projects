@@ -13,7 +13,7 @@
 			<h2><a href="{{ post.get_absolute_url() }}">{{ post.title }}</a></h2>
 			
 			<a href="{{ post.get_absolute_url() }}">
-				<img src="{{ post.thumbnail.url }}" alt="{{ _('Thumbnail for post: {0}.').format( post.title ) }}"/>
+				<img src="{{ post.thumbnail.url }}" alt="{{ _('Thumbnail for post: {0}.').format( post.title ) }}">
 			</a>
 			
 			<div>{{ post.render_content( beforeBreak = True ) | safe }}</div>

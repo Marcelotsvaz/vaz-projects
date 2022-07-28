@@ -3,16 +3,16 @@
 <html lang="{% block language %}{{ request.LANGUAGE_CODE }}{% endblock %}">
 	<head>
 		{# CSS #}
-		<link rel="stylesheet" href="{{ static( 'commonApp/css/modern-normalize.min.css' ) }}"/>
-		<link rel="stylesheet" href="{{ static( 'siteApp/css/siteApp.css' ) }}"/>
+		<link rel="stylesheet" href="{{ static( 'commonApp/css/modern-normalize.min.css' ) }}">
+		<link rel="stylesheet" href="{{ static( 'siteApp/css/siteApp.css' ) }}">
 		
 		{# Javascript #}
 		<script src="{{ static( 'siteApp/javascript/siteApp.js' ) }}"></script>
 		{% block extraScripts %}{% endblock %}
 		
 		{# Favicon #}
-		<link rel="icon" href="{{ static( 'siteApp/images/favicon.png' ) }}"/>
-		<link rel="apple-touch-icon" href="{{ static( 'siteApp/images/favicon.png' ) }}"/>
+		<link rel="icon" href="{{ static( 'siteApp/images/favicon.png' ) }}">
+		<link rel="apple-touch-icon" href="{{ static( 'siteApp/images/favicon.png' ) }}">
 		
 		{# Preload #}
 		<link rel="preload" href="{{ static( 'siteApp/images/logo.svg' ) }}" as="image">
@@ -24,7 +24,7 @@
 		<title>{% block title %}{{ _('VAZ Projects') }}{% endblock %}</title>
 		<meta name="description" content="{{ _('TODO: Meta description.') }}">
 		<meta name="viewport" content="width=device-width, viewport-fit=cover, initial-scale=1">
-		<meta charset="UTF-8"/>
+		<meta charset="UTF-8">
 	</head>
 	
 	<body class="{% block pageName required %}{% endblock %}">
@@ -77,7 +77,7 @@
 			<p>
 				{{ _('©2022 VAZ Projects') }}
 				<a rel="license" href="https://creativecommons.org/publicdomain/zero/1.0/">
-					<img src="{{ static( 'siteApp/images/CC0.svg' ) }}" alt="CC0"/>
+					<img src="{{ static( 'siteApp/images/CC0.svg' ) }}" alt="CC0">
 				</a>
 			</p>
 			
