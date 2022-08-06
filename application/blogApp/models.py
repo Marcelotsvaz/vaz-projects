@@ -59,14 +59,14 @@ class BlogPost( models.Model ):
 	banner				= ImageSpecField(
 		source = 'banner_original',
 		processors = [ ResizeToFill( 1920, 750 ) ],
-		format = 'JPEG',
-		options = settings.IMAGE_OPTIONS['JPEG'],
+		format = 'WEBP',
+		options = settings.IMAGE_OPTIONS['WEBP'],
 	)
 	thumbnail			= ImageSpecField(
 		source = 'banner_original',
 		processors = [ ResizeToFill( 1000, 350 ) ],
-		format = 'JPEG',
-		options = settings.IMAGE_OPTIONS['JPEG'],
+		format = 'WEBP',
+		options = settings.IMAGE_OPTIONS['WEBP'],
 	)
 	content				= MarkdownField(	_('content') )
 	user_images			= GenericRelation(	UserImage, for_concrete_model = False )

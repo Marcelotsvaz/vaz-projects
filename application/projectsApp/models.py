@@ -88,15 +88,15 @@ class Project( models.Model ):
 	banner				= ImageSpecField(
 		source = 'banner_original',
 		processors = [ ResizeToFill( 2000, 750 ) ],
-		format = 'JPEG',
-		options = settings.IMAGE_OPTIONS['JPEG'],
+		format = 'WEBP',
+		options = settings.IMAGE_OPTIONS['WEBP'],
 	)
 	thumbnail_original	= ImageField(		_('thumbnail'), upload_to = getUploadFolder( 'thumbnail-original' ) )
 	thumbnail			= ImageSpecField(
 		source = 'thumbnail_original',
 		processors = [ ResizeToFill( 300, 300 ) ],
-		format = 'JPEG',
-		options = settings.IMAGE_OPTIONS['JPEG'],
+		format = 'WEBP',
+		options = settings.IMAGE_OPTIONS['WEBP'],
 	)
 	description			= TextField(		_('description') )
 	content				= MarkdownField(	_('content') )
@@ -210,15 +210,15 @@ class Page( models.Model ):
 	banner				= ImageSpecField(
 		source = 'banner_original',
 		processors = [ ResizeToFill( 2000, 750 ) ],
-		format = 'JPEG',
-		options = settings.IMAGE_OPTIONS['JPEG'],
+		format = 'WEBP',
+		options = settings.IMAGE_OPTIONS['WEBP'],
 	)
 	thumbnail_original	= ImageField(			_('thumbnail'), upload_to = getUploadFolder( 'thumbnail-original' ) )
 	thumbnail			= ImageSpecField(
 		source = 'thumbnail_original',
 		processors = [ ResizeToFill( 300, 300 ) ],
-		format = 'JPEG',
-		options = settings.IMAGE_OPTIONS['JPEG'],
+		format = 'WEBP',
+		options = settings.IMAGE_OPTIONS['WEBP'],
 	)
 	description			= TextField(			_('description') )
 	content				= MarkdownField(		_('content') )

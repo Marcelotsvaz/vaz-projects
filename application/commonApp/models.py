@@ -91,14 +91,14 @@ class UserImage( models.Model ):
 	image_small		= ImageSpecField(
 		source = 'image_original',
 		processors = [ ResizeToFit( 250 ) ],
-		format = 'JPEG',
-		options = settings.IMAGE_OPTIONS['JPEG'],
+		format = 'WEBP',
+		options = settings.IMAGE_OPTIONS['WEBP'],
 	)
 	image_large		= ImageSpecField(
 		source = 'image_original',
 		processors = [ ResizeToFit( 1000 ) ],
-		format = 'JPEG',
-		options = settings.IMAGE_OPTIONS['JPEG'],
+		format = 'WEBP',
+		options = settings.IMAGE_OPTIONS['WEBP'],
 	)
 	
 	
