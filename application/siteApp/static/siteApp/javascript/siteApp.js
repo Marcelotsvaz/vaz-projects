@@ -13,18 +13,15 @@
 // 
 // General stuff.
 //------------------------------------------------------------------------------
-function init()
-{
-	document.querySelectorAll( 'div.imageGallery > a' ).forEach( elem => elem.onclick = showFigure );
-	document.querySelectorAll( 'div.imageGallery > div' ).forEach( elem => elem.onclick = hideFigure );
+function init() {
+	document.querySelectorAll( '.imageGallery > a' ).forEach( elem => elem.onclick = showFigure );
+	document.querySelectorAll( '.imageGallery > div' ).forEach( elem => elem.onclick = hideFigure );
 }
 
-if ( document.readyState === 'loading' )
-{
+if ( document.readyState === 'loading' ) {
 	document.addEventListener( 'DOMContentLoaded', init );
 }
-else
-{
+else {
 	init();
 }
 
@@ -32,21 +29,18 @@ else
 // 
 // Show the image gallery modal.
 //------------------------------------------------------------------------------
-function showFigure( event )
-{
-	event.currentTarget.nextElementSibling.style.display = 'initial';
-	
+function showFigure( event ) {
 	event.preventDefault();
+	
+	event.currentTarget.nextElementSibling.style.display = 'initial';
 }
 
 
 // 
 // Hide the image gallery modal.
 //------------------------------------------------------------------------------
-function hideFigure( event )
-{
-	if( event.target.matches( 'div, button' ) )
-	{
+function hideFigure( event ) {
+	if( event.target.matches( 'div, button' ) ) {
 		event.currentTarget.style.display = 'none';
 	}
 }
@@ -58,8 +52,7 @@ function hideFigure( event )
 var disqus_container_id = 'disqusThread';
 
 
-function disqus_config()
-{
+function disqus_config() {
 	const disqusDiv = document.getElementById( disqus_container_id );
 	
 	this.page.identifier = disqusDiv.dataset.identifier;
