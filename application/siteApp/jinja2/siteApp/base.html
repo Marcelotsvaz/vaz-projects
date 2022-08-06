@@ -9,6 +9,7 @@
 		<meta charset="UTF-8">
 		
 		{# Preload #}
+		<link rel="preload" href="{{ static( 'siteApp/fonts/lucidaSansUnicode.woff2' ) }}" as="font" crossorigin>
 		{% if self.bannerImage() %}
 			<link rel="preload" href="{{ self.bannerImage() }}" as="image">
 		{% endif %}
