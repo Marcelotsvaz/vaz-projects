@@ -28,7 +28,7 @@ class Favicon( RedirectView ):
 	our instance and we can't set this URL in the HTML.
 	'''
 	
-	url = settings.STATIC_URL + 'siteApp/images/favicon.png'
+	url = settings.STATIC_URL + 'siteApp/images/favicon.svg'
 	
 	
 	def get( self, *args, **kwargs ):

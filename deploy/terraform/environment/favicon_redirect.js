@@ -10,7 +10,7 @@ function handler( event )
 {
 	var request = event.request;
 	
-	request.uri = '/siteApp/images/favicon.png';
+	request.uri = '/siteApp/images/favicon.svg';
 	
 	return request;
 }
