@@ -2,6 +2,18 @@
 
 <html lang="{% block language %}{{ request.LANGUAGE_CODE }}{% endblock %}">
 	<head>
+		{# Meta #}
+		<title>{% block title %}{{ _('VAZ Projects') }}{% endblock %}</title>
+		<meta name="description" content="{{ _('TODO: Meta description.') }}">
+		<meta name="viewport" content="width=device-width, viewport-fit=cover, initial-scale=1">
+		<meta charset="UTF-8">
+		
+		{# Preload #}
+		{% if self.bannerImage() %}
+			<link rel="preload" href="{{ self.bannerImage() }}" as="image">
+		{% endif %}
+		<link rel="preload" href="{{ static( 'siteApp/images/logo.svg' ) }}" as="image">
+		
 		{# CSS #}
 		<link rel="stylesheet" href="{{ static( 'siteApp/css/siteApp.css' ) }}">
 		
@@ -12,18 +24,6 @@
 		{# Favicon #}
 		<link rel="icon" href="{{ static( 'siteApp/images/favicon.png' ) }}">
 		<link rel="apple-touch-icon" href="{{ static( 'siteApp/images/favicon.png' ) }}">
-		
-		{# Preload #}
-		<link rel="preload" href="{{ static( 'siteApp/images/logo.svg' ) }}" as="image">
-		{% if self.bannerImage() %}
-			<link rel="preload" href="{{ self.bannerImage() }}" as="image">
-		{% endif %}
-		
-		{# Meta #}
-		<title>{% block title %}{{ _('VAZ Projects') }}{% endblock %}</title>
-		<meta name="description" content="{{ _('TODO: Meta description.') }}">
-		<meta name="viewport" content="width=device-width, viewport-fit=cover, initial-scale=1">
-		<meta charset="UTF-8">
 	</head>
 	
 	<body class="{% block pageName required %}{% endblock %}">
