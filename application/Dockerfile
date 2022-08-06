@@ -28,16 +28,10 @@ RUN pip install --no-cache-dir --upgrade pip wheel	\
 #-------------------------------------------------------------------------------
 FROM alpine:3.16 as lessBuilder
 
-RUN apk add --no-cache npm findutils	\
+RUN apk add --no-cache bash npm findutils	\
 	&& npm install --global less
 
-RUN --mount=source=./,target=source/																	\
-	lessc																								\
-		--no-color																						\
-		--source-map																					\
-		--include-path="$(find source/*App/static/*App/css/src/ -prune -printf '%p:' | sed 's/:$//')"	\
-		source/siteApp/static/siteApp/css/src/siteApp.less												\
-		siteApp.css
+RUN --mount=source=./,target=application/ application/scripts/less.sh
 
 
 
@@ -59,6 +53,6 @@ USER django
 WORKDIR /home/django
 
 COPY --chown=django:django . .
-COPY --chown=django:django --from=lessBuilder siteApp.css deployment/static/siteApp/css/siteApp.css
+COPY --chown=django:django --from=lessBuilder deployment/static/siteApp/css/siteApp.css deployment/static/siteApp/css/siteApp.css
 
 EXPOSE 3031

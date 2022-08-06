@@ -7,7 +7,7 @@
 
 
 
-include=$(find application/*App/static/*App/css/src/ -prune -printf '%p:' | sed 's/:$//')
+include=$(find application/*App/static/*App/css/{,src/} -prune -printf '%p:' | sed 's/:$//')
 lessc														\
 	--no-color												\
 	--source-map											\
