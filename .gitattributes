@@ -1,0 +1,11 @@
+# 
+# VAZ Projects
+# 
+# 
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+*.env.tpl linguist-language=Shell
+modern-normalize.min.css linguist-vendored
+**/jet/css/themes/*/*.css linguist-generated
