@@ -56,7 +56,7 @@
 				},
 				{
 					"label": "tests",
-					"value": "run --rm application 'coverage run ./manage.py test && coverage report'"
+					"value": "run --rm application 'coverage run manage.py test && coverage report'"
 				},
 			],
 		},
