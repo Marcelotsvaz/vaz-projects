@@ -34,8 +34,6 @@ services:
             AWS_SECRET_ACCESS_KEY: &AWS_SECRET_ACCESS_KEY ${AWS_SECRET_ACCESS_KEY-minioadmin}
         
         command:
-          - sh
-          - -c
           - |-
             ./manage.py migrate --no-input
             ./manage.py collectstatic --ignore '*/src/*' --no-input
@@ -72,7 +70,7 @@ services:
         
         volumes: [ media:/data ]
         
-        entrypoint: [ sh, -c ]
+        entrypoint: [ /bin/sh, -c ]
         command: [ 'mkdir -p /data/$${bucket} && minio server /data --console-address :9001' ]
         
         ports:
@@ -98,7 +96,7 @@ services:
             AWS_ACCESS_KEY_ID: *AWS_ACCESS_KEY_ID
             AWS_SECRET_ACCESS_KEY: *AWS_SECRET_ACCESS_KEY
         
-        entrypoint: [ sh, -c ]
+        entrypoint: [ /bin/sh, -c ]
         command:
           - |-
             mc alias set minio $${s3Endpoint} $${AWS_ACCESS_KEY_ID} $${AWS_SECRET_ACCESS_KEY}

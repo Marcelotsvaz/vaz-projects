@@ -55,4 +55,5 @@ WORKDIR /home/django
 COPY --chown=django:django . .
 COPY --chown=django:django --from=lessBuilder deployment/static/siteApp/css/siteApp.css deployment/static/siteApp/css/siteApp.css
 
+ENTRYPOINT [ "/bin/sh", "-c" ]
 EXPOSE 3031

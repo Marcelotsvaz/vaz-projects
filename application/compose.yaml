@@ -29,8 +29,6 @@ services:
           - ELASTIC_PASSWORD
         
         command:
-          - sh
-          - -c
           - |-
             ./manage.py migrate --no-input
             ./manage.py search_index --populate
