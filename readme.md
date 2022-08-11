@@ -26,7 +26,7 @@ cd vaz-projects
 docker compose up --detach --build
 
 # Create account for Django admin.
-docker compose run --rm application ./manage.py createsuperuser
+docker compose run --rm application './manage.py createsuperuser'
 ```
 
 The following URLs will be available:
@@ -38,7 +38,7 @@ The following URLs will be available:
 ### Running tests
 ```sh
 # Run unit tests and generate coverage report.
-docker compose run --rm application sh -c 'coverage run ./manage.py test; coverage report'
+docker compose run --rm application 'coverage run ./manage.py test && coverage report'
 ```
 
 
