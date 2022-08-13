@@ -13,7 +13,7 @@ data "external" "user_data" {
 		<<-EOF
 			input_dir='${path.cwd}/${var.input_dir}'
 			output_dir='${path.cwd}/${var.output_dir}'
-			template_extension='.tpl'
+			template_extension='.tftpl'
 			files=( ${join( " ", [ for file in var.files : "'${file}'" ] )} )
 			templates=( ${join( " ", [ for template in var.templates : "'${template}'" ] )} )
 			contents=( ${join( " ", [ for content in local.contents : "'${content}'" ] )} )
