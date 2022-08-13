@@ -14,7 +14,7 @@ variable "files" {
 
 variable "templates" {
 	description = "Templates that will be rendered and added to the archive."
-	type = map( string )
+	type = set( string )
 }
 
 
@@ -35,4 +35,10 @@ variable "output_dir" {
 	description = "Directory where rendered templates will be saved."
 	type = string
 	default = "/tmp/terraform"
+}
+
+
+
+locals {
+	contents = [ for template in var.templates : base64encode( templatefile( "${var.input_dir}/${template}", var.context ) ) ]
 }

@@ -49,8 +49,7 @@ module "load_balancer_user_data" {
 	output_dir = "../../../deployment/loadBalancer"
 	
 	files = [ "perInstance.sh" ]
-	
-	templates = { "environment.env.tpl": "environment.env" }
+	templates = [ "environment.env.tpl" ]
 	
 	context = {
 		hostname = "load-balancer"
@@ -148,8 +147,7 @@ module "app_server_user_data" {
 	output_dir = "../../../deployment/application"
 	
 	files = [ "perInstance.sh" ]
-	
-	templates = { "environment.env.tpl": "environment.env" }
+	templates = [ "environment.env.tpl" ]
 	
 	context = {
 		hostname = "application"
@@ -255,8 +253,7 @@ module "database_server_user_data" {
 	output_dir = "../../../deployment/database"
 	
 	files = [ "perInstance.sh" ]
-	
-	templates = { "environment.env.tpl": "environment.env" }
+	templates = [ "environment.env.tpl" ]
 	
 	context = {
 		hostname = "postgres"
@@ -352,8 +349,7 @@ module "monitoring_server_user_data" {
 	output_dir = "../../../deployment/monitoring"
 	
 	files = [ "perInstance.sh" ]
-	
-	templates = { "environment.env.tpl": "environment.env" }
+	templates = [ "environment.env.tpl" ]
 	
 	context = {
 		hostname = "monitoring"

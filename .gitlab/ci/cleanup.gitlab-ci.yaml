@@ -25,5 +25,5 @@
         paths: [ deployment/ ]
     
     script:
-      - apk add --no-cache bash jq
+      - apk add --no-cache bash
       - deploy/deploy.sh destroyEnvironment ${CI_ENVIRONMENT_TIER}

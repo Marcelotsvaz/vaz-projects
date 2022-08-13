@@ -6,34 +6,28 @@
 
 
 
-resource "local_file" "templated_file" {
-	for_each = var.templates
-	
-	content = templatefile( "${var.input_dir}/${each.key}", var.context )
-	filename = "${var.output_dir}/${each.value}"
-}
-
-
 data "external" "user_data" {
-	query = {
-		files = join( "#", var.files )
-		templated_files = join( "#", [ for templated_file in var.templates : templated_file ] )
-		input_dir = "${path.cwd}/${var.input_dir}"
-		output_dir = "${path.cwd}/${var.output_dir}"
-	}
-	
 	program = [
 		"bash",
 		"-c",
 		<<-EOF
-			args=$(jq -r '[ "-C", .input_dir, .files, "-C", .output_dir, .templated_files ] | join( "#" )')
+			input_dir='${path.cwd}/${var.input_dir}'
+			output_dir='${path.cwd}/${var.output_dir}'
+			template_extension='.tpl'
+			files=( ${join( " ", [ for file in var.files : "'${file}'" ] )} )
+			templates=( ${join( " ", [ for template in var.templates : "'${template}'" ] )} )
+			contents=( ${join( " ", [ for content in local.contents : "'${content}'" ] )} )
 			
-			IFS='#'
-			content_base64=$(tar -cz $args | base64 -w 0)
+			mkdir -p "$${output_dir}"
+			templates=( "$${templates[@]%$${template_extension}}" )	# Remove extension.
 			
-			jq -n "{ content_base64: \"$content_base64\" }"
+			for index in $${!templates[@]}; do
+				echo $${contents[$index]} | base64 --decode > "$${output_dir}/$${templates[$index]}"
+				chmod --reference="$${input_dir}/$${templates[$index]}$${template_extension}" "$${output_dir}/$${templates[$index]}"
+			done
+			
+			content_base64=$(tar -cz --mtime='UTC 2000-01-01' -C "$${input_dir}" "$${files[@]}" -C "$${output_dir}" "$${templates[@]}" | base64 -w 0)
+			echo '{"content_base64":"'$${content_base64}'"}'
 		EOF
 	]
-	
-	depends_on = [ local_file.templated_file ]
 }
