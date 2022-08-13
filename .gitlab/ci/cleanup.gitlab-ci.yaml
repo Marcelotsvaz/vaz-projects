@@ -22,7 +22,7 @@
         entrypoint: [ '' ]
     
     cache:
-        paths: [ deployment/ ]
+        paths: [ deployment/terraform/ ]
     
     script:
       - apk add --no-cache bash

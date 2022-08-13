@@ -18,7 +18,7 @@
         entrypoint: [ '' ]
     
     cache:
-        paths: [ deployment/ ]
+        paths: [ deployment/terraform/ ]
     
     script:
       - apk add --no-cache bash tar
@@ -28,5 +28,5 @@
         paths:
           - deployment/application/environment.env
         reports:
-            terraform: deployment/terraform/changes.json
+            terraform: deployment/terraformChanges.json
         name: ${CI_ENVIRONMENT_TIER}

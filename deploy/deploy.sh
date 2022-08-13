@@ -19,8 +19,8 @@ local=${3}
 terraformRoot='deploy/terraform'
 TF_IN_AUTOMATION='True'
 TF_DATA_DIR='../../../deployment/terraform'
-terraformPlan=${TF_DATA_DIR}/plan.cache
-terraformChanges=${TF_DATA_DIR}/changes.json
+terraformPlan=${TF_DATA_DIR}/../terraformPlan.cache
+terraformChanges=${TF_DATA_DIR}/../terraformChanges.json
 
 # Setup environment when running outside CI.
 if [[ ${local} ]]; then
