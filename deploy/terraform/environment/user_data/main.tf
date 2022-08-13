@@ -22,7 +22,7 @@ data "external" "user_data" {
 			templates=( "$${templates[@]%$${template_extension}}" )	# Remove extension.
 			
 			for index in $${!templates[@]}; do
-				echo $${contents[$index]} | base64 --decode > "$${output_dir}/$${templates[$index]}"
+				echo $${contents[$index]} | base64 -d > "$${output_dir}/$${templates[$index]}"
 				chmod --reference="$${input_dir}/$${templates[$index]}$${template_extension}" "$${output_dir}/$${templates[$index]}"
 			done
 			
