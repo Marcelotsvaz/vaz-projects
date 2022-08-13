@@ -58,7 +58,7 @@ services:
         healthcheck:
             test: curl --silent elasticsearch:9200/_cluster/health/
             interval: 1s
-            start_period: 60s
+            start_period: 90s
     
     
     node-exporter:
