@@ -11,8 +11,8 @@ data "external" "user_data" {
 		"bash",
 		"-c",
 		<<-EOF
-			input_dir='${path.cwd}/${var.input_dir}'
-			output_dir='${path.cwd}/${var.output_dir}'
+			input_dir='${abspath( var.input_dir )}'
+			output_dir='${abspath( var.output_dir )}'
 			template_extension='.tftpl'
 			files=( ${join( " ", [ for file in var.files : "'${file}'" ] )} )
 			templates=( ${join( " ", [ for template in var.templates : "'${template}'" ] )} )
