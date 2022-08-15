@@ -14,7 +14,7 @@ resource "aws_lambda_function" "autoscaling_lambda" {
 	role = aws_iam_role.autoscaling_lambda_role.arn
 	
 	runtime = "python3.9"
-	filename = "autoscaling_lambda.zip"
+	filename = data.archive_file.autoscaling_lambda.output_path
 	source_code_hash = data.archive_file.autoscaling_lambda.output_base64sha256
 	handler = "autoscaling_lambda.main"
 	timeout = 10
@@ -40,7 +40,7 @@ resource "aws_lambda_function" "autoscaling_lambda" {
 data "archive_file" "autoscaling_lambda" {
 	type = "zip"
 	source_file = "${path.module}/autoscaling_lambda.py"
-	output_path = "autoscaling_lambda.zip"
+	output_path = "../../../deployment/autoscaling_lambda.zip"
 }
 
 
