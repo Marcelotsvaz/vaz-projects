@@ -25,7 +25,7 @@ body
 					"...			footer			footer			..."			auto
 	/ [all-start]	var(--margin)	1fr				auto			var(--margin)	[all-end];
 	
-	background-color: @headerBackgroundColor;
+	background-color: @contentBackgroundColor;
 	
 	color: @headerTextColor;
 }
@@ -35,6 +35,8 @@ body
 .header
 {
 	grid-area: header;
+	
+	z-index: 1;	// Put .header above ::before, because ::before is sticky.
 	
 	padding: 25px;
 	
@@ -55,6 +57,9 @@ body
 	
 	grid-area: menu;
 	
+	position: sticky;
+	top: 0px;
+	
 	display: flex;
 	
 	a
@@ -72,6 +77,24 @@ body
 		
 		@media ( max-width: @compactBreakpoint ) { padding: 10px 10px; }
 	}
+}
+
+
+
+// Use pseudo-element for .header and .menu background and box-shadow.
+body::before
+{
+	.boxShadow( bottom, 5px );
+	
+	grid-row: header / menu;
+	grid-column: all;
+	
+	content: "";
+	
+	position: sticky;
+	top: -100px;	// Height of .header.
+	
+	background-color: @headerBackgroundColor;
 }
 
 
@@ -126,30 +149,16 @@ body
 		}
 	}
 	
-	// Use pseudo-element for banner box-shadow.
+	// Use pseudo-element for .banner box-shadow.
 	&::after
 	{
-		grid-area: banner / all / bannerHeader;
+		.boxShadow( bottom, 5px );
 		
-		.boxShadow( top );
+		grid-row: banner / bannerHeader;
+		grid-column: all;
 		
 		content: "";
 	}
-}
-
-
-
-// Use pseudo-element for main.content background.
-body::before
-{
-	.boxShadow( both );
-	
-	grid-row: content;
-	grid-column: all;
-	
-	content: "";
-	
-	background-color: @contentBackgroundColor;
 }
 
 
@@ -238,4 +247,21 @@ body::before
 		
 		background-image: linear-gradient( to right, hsla( 0, 0, 0, 0 ), @headerTextColor 25% 75%, hsla( 0, 0, 0, 0 ) );
 	}
+}
+
+
+
+// Use pseudo-element for .footer background and box-shadow.
+body::after
+{
+	.boxShadow( top, 5px );
+	
+	grid-row: footer;
+	grid-column: all;
+	
+	content: "";
+	
+	z-index: -1;	// Put ::after behind .footer.
+	
+	background-color: @headerBackgroundColor;
 }
