@@ -51,9 +51,11 @@ body
 
 
 
+// TODO: Get rid of background stuff after fixing logo.
 .menu
 {
-	@compactBreakpoint: 550px;
+	@compactBreakpoint: 500px;
+	@hamburgerBreakpoint: 400px;
 	
 	grid-area: menu;
 	
@@ -61,8 +63,41 @@ body
 	top: 0px;
 	
 	display: flex;
+	// justify-content: space-between;
 	
-	a
+	// transition: background-position-x 0.5s;
+	
+	.safeAreaPadding( 0px );
+	
+	// background-image: linear-gradient( 115deg, @contentBackgroundColor 0vw 25vw, @headerBackgroundColor 50vw 100vw );
+	// background-origin: border-box;
+	// background-size: 150vw;
+	
+	.logoSmall
+	{
+		transition: opacity 0.5s, padding 0.5s step-start, visibility 0.5s step-start;
+		
+		img { height: 20px; }
+	}
+	
+	&:not( .sticky )
+	{
+		// background-position-x: -50vw;
+		
+		.logoSmall
+		{
+			opacity: 0%;
+			visibility: hidden;
+			
+			transition-timing-function: ease, step-end, step-end;
+			
+			// WebKit doesn't support visibility: collapse.
+			width: 0px;
+			padding: 0px;
+		}
+	}
+	
+	.menuItem, .menuButtons > *
 	{
 		padding: 10px 20px;
 		
@@ -73,9 +108,68 @@ body
 		text-decoration: none;
 		white-space: nowrap;
 		
-		&:hover { background-color: darken( @headerBackgroundColor, 10% ); }
-		
 		@media ( max-width: @compactBreakpoint ) { padding: 10px 10px; }
+	}
+	
+	.hamburgerButton
+	{
+		flex-grow: 1;
+		
+		cursor: pointer;
+		
+		font-size: 20px;
+		font-weight: normal;
+		text-align: right;
+		user-select: none;
+		
+		@media not all and ( max-width: @hamburgerBreakpoint ) { display: none; }
+	}
+	
+	.menuButtons
+	{
+		display: flex;
+		
+		a:hover { background-color: darken( @headerBackgroundColor, 10% ); }
+		
+		@media ( max-width: @hamburgerBreakpoint )
+		{
+			position: absolute;
+			top: 100%;
+			right: 0px;
+			z-index: -2;
+			
+			flex-direction: column;
+			
+			clip-path: inset( 0px 0px -10px -10px );
+			
+			box-shadow: 0px 0px 5px 0px @headerTextColor;
+			border-bottom-left-radius: 10px;
+			
+			background-color: @headerBackgroundColor;
+			
+			a
+			{
+				border-bottom: 1px solid darken( @headerBackgroundColor, 20% );
+				.safeAreaPadding( 10px, 50px );
+				padding-left: 50px;	// Only right side is on the screen's edge.
+				
+				&:last-child
+				{
+					border-bottom: none;
+					border-bottom-left-radius: inherit;
+				}
+			}
+		}
+	}
+	
+	input[type=checkbox]
+	{
+		display: none;
+		
+		@media ( max-width: @hamburgerBreakpoint )
+		{
+			&:not( :checked ) + .menuButtons { display: none; }
+		}
 	}
 }
 

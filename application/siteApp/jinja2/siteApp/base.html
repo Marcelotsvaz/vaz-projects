@@ -33,11 +33,21 @@
 		</header>
 		
 		<nav class="menu">
-			<a href="{{ url( 'siteApp:home' ) }}">{{ _('Home') }}</a>
-			<a href="{{ url( 'projectsApp:projects' ) }}">{{ _('Projects') }}</a>
-			<a rel="noopener" href="https://gitlab.com/marcelotsvaz">{{ _('Code') }}</a>
-			<a href="{{ url( 'blogApp:blog' ) }}">{{ _('Blog') }}</a>
-			<a href="{{ url( 'siteApp:about_me' ) }}">{{ _('About me') }}</a>
+			<a class="menuItem logoSmall" href="{{ url( 'siteApp:home' ) }}">
+				<img src="{{ static( 'siteApp/images/logo3.svg' ) }}" alt="{{ _('Logo.') }}">
+			</a>
+			
+			<label class="menuItem hamburgerButton" for="hamburgerCheckbox">☰</label>
+			
+			<input type="checkbox" id="hamburgerCheckbox">
+			
+			<div class="menuButtons">
+				<a href="{{ url( 'siteApp:home' ) }}">{{ _('Home') }}</a>
+				<a href="{{ url( 'projectsApp:projects' ) }}">{{ _('Projects') }}</a>
+				<a rel="noopener" href="https://gitlab.com/marcelotsvaz">{{ _('Code') }}</a>
+				<a href="{{ url( 'blogApp:blog' ) }}">{{ _('Blog') }}</a>
+				<a href="{{ url( 'siteApp:about_me' ) }}">{{ _('About me') }}</a>
+			</div>
 		</nav>
 		
 		{% if self.bannerTitle() %}
