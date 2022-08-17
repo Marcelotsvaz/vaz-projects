@@ -59,12 +59,11 @@ JET_SIDE_MENU_COMPACT = True
 
 # Email
 #---------------------------------------
-# TODO: Fix email.
-EMAIL_HOST = 'email-ssl.com.br'
-EMAIL_PORT = 465
-EMAIL_USE_SSL = True
+# EMAIL_HOST = ''
+# EMAIL_PORT = 465
+# EMAIL_USE_SSL = True
 
-SERVER_EMAIL = 'UTL Server <server@utlturismo.com.br>'
+SERVER_EMAIL = 'VAZ Projects <server@vazprojects.com>'
 ADMINS = [ ( 'Marcelo Vaz', 'marcelotsvaz@gmail.com' ) ]
 
 
