@@ -28,4 +28,3 @@
             --rm
             application
             'manage.py collectstatic --ignore "*/src/*" --no-input'
-    #   - aws cloudfront create-invalidation --distribution-id ${cloudfrontId} --paths '/*'    # TODO: Cloudfront invalidation.

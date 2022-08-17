@@ -23,7 +23,7 @@ class OverwriteStorageMixin():
 	Mixin that overrides the get_available_name method so that it deletes the
 	existing file and returns the same name.
 	'''
-	# TODO: Is this still necessary?
+	
 	def get_available_name( self, name, max_length = None ):
 		if max_length and len( name ) > max_length:
 			raise SuspiciousFileOperation(
