@@ -64,10 +64,7 @@
 			</header>
 		{% endif %}
 		
-		<main class="content">
-			{% block content required %}{% endblock %}
-		</main>
-		
+		{# Put .sidebar before .content due to CSS selector limitations. #}
 		{% if self.sidebar() %}
 			<nav class="sidebar">
 				<section class="search">
@@ -82,6 +79,10 @@
 				{% block sidebar %}{% endblock %}
 			</nav>
 		{% endif %}
+		
+		<main class="content">
+			{% block content required %}{% endblock %}
+		</main>
 		
 		<footer class="footer">
 			<p>

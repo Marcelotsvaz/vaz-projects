@@ -38,7 +38,7 @@ body
 	
 	z-index: 1;	// Put .header above ::before, because ::before is sticky.
 	
-	padding: 25px;
+	.safeAreaPadding( 25px );
 	
 	a
 	{
@@ -151,7 +151,7 @@ body
 			{
 				border-bottom: 1px solid darken( @headerBackgroundColor, 20% );
 				.safeAreaPadding( 10px, 50px );
-				padding-left: 50px;	// Only right side is on the screen's edge.
+				padding-left: 50px;	// Remove safe-area padding from side that is not touching the screen's edge.
 				
 				&:last-child
 				{
@@ -223,7 +223,7 @@ body::before
 	{
 		grid-area: bannerHeader;
 		
-		padding: 25px 50px;
+		.safeAreaPadding( 25px, 50px );
 		
 		color: hsl( 0, 0, 95% );
 		
@@ -261,9 +261,13 @@ body::before
 {
 	grid-area: content;
 	
-	padding: 25px 50px;
+	.safeAreaPadding( 25px, 50px );
 	
 	color: @contentTextColor;
+	
+	// Remove safe-area padding from side that is not touching the screen's edge, only when the sidebar is visible.
+	// .sidebar is put before .content in the HTML for this to work.
+	.sidebar + & { padding-right: 50px; }
 }
 
 
@@ -273,8 +277,8 @@ body::before
 	grid-area: sidebar;
 	
 	width: 250px;
-	padding: 25px;
-	padding-left: 0px;
+	.safeAreaPadding( 25px );
+	padding-left: 0px;	// Rely on .content padding-right and remove safe-area padding from side that is not touching the screen's edge.
 	
 	color: @contentTextColor;
 	
@@ -320,7 +324,7 @@ body::before
 {
 	grid-area: footer;
 	
-	padding: 25px;
+	.safeAreaPadding( 25px );
 	
 	text-align: center;
 	
