@@ -8,13 +8,13 @@
 
 // Mixins.
 //-----------------------------------------------------------------------------
-.boxShadow( @position, @lenght )
+.boxShadow( @position, @lenght, @inset: ~'' )
 {
 	@offset: 2 * @lenght;
+	@insetMultiplier: if( @inset = inset, -1, 1 );
 	
-	// "* @offset * @offset" is used so the box shadow extends to the edges of the page.
-	@topShadow:		0px @offset @lenght @offset @headerTextColor;
-	@bottomShadow:	0px -@offset @lenght @offset @headerTextColor;
+	@topShadow:		@inset 0px @offset @lenght @insetMultiplier * @offset @headerTextColor;
+	@bottomShadow:	@inset 0px -@offset @lenght @insetMultiplier * @offset @headerTextColor;
 	
 	& when( @position = top )		{ box-shadow: @topShadow; }
 	& when( @position = bottom )	{ box-shadow: @bottomShadow; }

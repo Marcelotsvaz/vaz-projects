@@ -136,7 +136,6 @@ body
 			position: absolute;
 			top: 100%;
 			right: 0px;
-			z-index: -2;
 			
 			flex-direction: column;
 			
@@ -152,6 +151,8 @@ body
 				border-bottom: 1px solid darken( @headerBackgroundColor, 20% );
 				.safeAreaPadding( 10px, 50px );
 				padding-left: 50px;	// Remove safe-area padding from side that is not touching the screen's edge.
+				
+				&:first-child { .boxShadow( top, 5px, inset ); }
 				
 				&:last-child
 				{
