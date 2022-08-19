@@ -17,6 +17,7 @@ You might need to manually install Buildx and enable it by default with `docker 
 
 ### Start Compose project
 Make sure you have ports 80, 9000 and 9001 available.
+
 ```sh
 # Clone the repository.
 git clone https://gitlab.com/marcelotsvaz/vaz-projects.git
@@ -30,9 +31,9 @@ docker compose run --rm application 'manage.py createsuperuser'
 ```
 
 The following URLs will be available:
-- Website: http://vaz-pc.lan
-- Django admin: http://vaz-pc.lan/admin
-- MinIO console: http://vaz-pc.lan:9001
+- Website: http://localhost
+- Django admin: http://localhost/admin
+- MinIO console: http://localhost:9001
 
 
 ### Running tests
