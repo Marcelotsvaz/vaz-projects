@@ -13,19 +13,13 @@ set -aex
 # Parameters.
 command=${1}
 environment=${2}
-local=${3}
 
 # Variables.
-terraformRoot='deploy/terraform'
 TF_IN_AUTOMATION='True'
 TF_DATA_DIR='../../../deployment/terraform'
+terraformRoot='deploy/terraform'
 terraformPlan=${TF_DATA_DIR}/../terraformPlan.cache
 terraformChanges=${TF_DATA_DIR}/../terraformChanges.json
-
-# Setup environment when running outside CI.
-if [[ ${local} ]]; then
-	source 'deployment/local.env'
-fi
 
 
 

@@ -7,15 +7,20 @@
 
 
 {
+	"terminal.integrated.automationProfile.linux": {
+		"path": "/usr/bin/bash",
+		"args": [ "-c", "set -a; source '${workspaceFolder}/deployment/local.env'; bash -c \"${1}\"" ],
+	},
+	
 	"terminal.integrated.profiles.linux": {
 		"bash": {
 			"path": "/usr/bin/bash",
-			"args": [ "-c", "set -a; source '${workspaceFolder}/deploy/local.env'; bash" ],
+			"args": [ "-c", "set -a; source '${workspaceFolder}/deployment/local.env'; bash" ],
 		},
 		"fish": {
 			"path": "/usr/bin/fish",
-			"args": [ "-c", "sourceEnv '${workspaceFolder}/deploy/local.env'" ],
-		}
+			"args": [ "-c", "sourceEnv '${workspaceFolder}/deployment/local.env'" ],
+		},
 	},
 	
 	"runOnSave.commands": [
@@ -24,7 +29,7 @@
 			"match": "\\.less$",
 			"command": "application/scripts/less.sh",
 			"runIn": "backend",
-			"finishStatusMessage": "LESS compiled"
+			"finishStatusMessage": "LESS compiled",
 		},
-	]
+	],
 }
