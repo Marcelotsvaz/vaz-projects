@@ -59,9 +59,3 @@ services:
             test: curl --silent elasticsearch:9200/_cluster/health/
             interval: 1s
             start_period: 90s
-    
-    
-    promtail:
-        extends:
-            service: promtail
-            file: ../monitoring/compose.common.yaml

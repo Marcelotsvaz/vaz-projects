@@ -21,23 +21,8 @@ services:
         volumes:
             - ./config/nginx.conf:/etc/nginx/templates/default.conf.template:ro
             - ../deployment/tls:/etc/nginx/tls:ro
-            - nginxLogs:/mnt/logs/nginx
+            - /var/log/nginx:/mnt/logs/nginx
         
         ports:
             - 80:80
             - 443:443
-    
-    
-    promtail:
-        extends:
-            service: promtail
-            file: ../monitoring/compose.common.yaml
-        
-        volumes:
-          - ./config/promtail.yaml:/etc/promtail/config.yml:ro
-          - nginxLogs:/mnt/logs/nginx
-
-
-
-volumes:
-    nginxLogs:

@@ -15,7 +15,7 @@ services:
         environment:
           - POSTGRES_PASSWORD
         
-        volumes: [ postgres:/var/lib/postgresql/data]
+        volumes: [ postgres:/var/lib/postgresql/data ]
         
         network_mode: host
         
@@ -23,12 +23,6 @@ services:
             test: pg_isready --username postgres
             interval: 1s
             start_period: 5s
-    
-    
-    promtail:
-        extends:
-            service: promtail
-            file: ../monitoring/compose.common.yaml
 
 
 

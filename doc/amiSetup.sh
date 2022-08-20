@@ -56,7 +56,7 @@ pacstrap -c ${mountPoint} \
 base linux grub \
 openssh sudo aws-cli gdisk \
 nano \
-docker docker-compose prometheus-node-exporter \
+docker docker-compose prometheus-node-exporter promtail \
 dehydrated
 
 # Fstab.
@@ -303,8 +303,37 @@ systemctl disable systemd-firstboot
 systemctl enable instanceScriptsSetup per{Instance,Boot,Shutdown}
 
 
+# Promtail
+#-------------------------------------------------------------------------------
+cat > /etc/loki/promtail.yaml << 'EOF'
+server:
+    http_listen_port: 9080
+    grpc_listen_port: 0
+
+
+clients:
+  - url: http://monitoring:3100/loki/api/v1/push
+
+
+scrape_configs:
+  - job_name: journal
+    journal:
+        path: /var/log/journal
+        json: true
+        labels:
+            job: systemd-journal
+    
+  - job_name: nginx
+    static_configs:
+      - labels:
+            job: nginx
+            __path__: /var/log/nginx/*.log
+EOF
+#-------------------------------------------------------------------------------
+
+
 # Services.
-systemctl enable sshd docker prometheus-node-exporter
+systemctl enable sshd docker prometheus-node-exporter promtail
 
 
 
@@ -344,8 +373,3 @@ newImageId=$(aws ec2 register-image \
     --block-device-mappings '[{"DeviceName": "/dev/xvda","Ebs":{"SnapshotId":"'${snapshotId}'","VolumeType":"gp3"}}]' \
     --query 'ImageId'
 )
-
-# Share with UTL and Venditore account.
-aws ec2 modify-image-attribute \
-    --image-id ${newImageId} \
-    --launch-permission "Add=[ { UserId = 883778058666 }, { UserId = 756912632867 } ]"
