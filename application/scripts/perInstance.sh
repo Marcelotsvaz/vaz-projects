@@ -30,7 +30,6 @@ aws s3 cp s3://${bucket}/deployment/secrets.env deployment/ --no-progress
 EOF
 
 cd application
-systemctl enable --now docker
 docker compose --env-file ../deployment/secrets.env up --detach --quiet-pull
 
 

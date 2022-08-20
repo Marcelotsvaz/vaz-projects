@@ -45,16 +45,10 @@ services:
         ports: [ 3100:3100 ]
     
     
-    node-exporter:
-        extends:
-            service: node-exporter
-            file: &commonFile ../monitoring/compose.common.yaml
-    
-    
     promtail:
         extends:
             service: promtail
-            file: *commonFile
+            file: ../monitoring/compose.common.yaml
 
 
 

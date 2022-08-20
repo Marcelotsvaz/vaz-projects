@@ -6,20 +6,7 @@
 
 
 
-services:
-    node-exporter:
-        image: prom/node-exporter:v1.3.1
-        
-        restart: unless-stopped
-        
-        volumes: [ '/:/mnt/host:ro,rslave' ]
-        
-        pid: host
-        network_mode: host
-        
-        command: [ --path.rootfs=/mnt/host ]
-    
-    
+services: 
     promtail:
         image: grafana/promtail:2.6.0
         

@@ -30,7 +30,6 @@ aws s3 sync s3://${bucket}/deployment/ deployment/ --no-progress
 EOF
 
 cd loadBalancer
-systemctl enable --now docker
 docker compose up --detach --quiet-pull
 
 systemctl enable /home/${user}/loadBalancer/systemdUnits/*

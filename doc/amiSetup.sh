@@ -56,7 +56,8 @@ pacstrap -c ${mountPoint} \
 base linux grub \
 openssh sudo aws-cli gdisk \
 nano \
-docker docker-compose dehydrated
+docker docker-compose prometheus-node-exporter \
+dehydrated
 
 # Fstab.
 genfstab -U ${mountPoint} >> ${mountPoint}/etc/fstab
@@ -299,7 +300,12 @@ EOF
 #-------------------------------------------------------------------------------
 
 systemctl disable systemd-firstboot
-systemctl enable sshd instanceScriptsSetup perInstance perBoot perShutdown
+systemctl enable instanceScriptsSetup per{Instance,Boot,Shutdown}
+
+
+# Services.
+systemctl enable sshd docker prometheus-node-exporter
+
 
 
 # Clean up.
