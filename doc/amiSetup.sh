@@ -315,6 +315,10 @@ clients:
   - url: http://monitoring:3100/loki/api/v1/push
 
 
+positions:
+    filename: /var/lib/promtail/positions.yaml
+
+
 scrape_configs:
   - job_name: journal
     journal:
@@ -322,6 +326,7 @@ scrape_configs:
         json: true
         labels:
             job: systemd-journal
+            hostname: ${hostname}
     
   - job_name: nginx
     static_configs:
@@ -330,6 +335,17 @@ scrape_configs:
             __path__: /var/log/nginx/*.log
 EOF
 #-------------------------------------------------------------------------------
+
+mkdir /usr/local/lib/systemd/system/promtail.service.d
+#-------------------------------------------------------------------------------
+cat > ${_}/override.conf << 'EOF'
+[Service]
+EnvironmentFile = -/etc/environment
+ExecStart =
+ExecStart = /usr/bin/promtail -config.file /etc/loki/promtail.yaml -config.expand-env true
+EOF
+#-------------------------------------------------------------------------------
+
 
 
 # Services.
