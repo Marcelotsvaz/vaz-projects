@@ -181,9 +181,9 @@ EOF
 
 
 # Docker
-#-------------------------------------------------------------------------------
 mkdir -p /usr/local/lib/systemd/system
 mkdir /etc/docker
+#-------------------------------------------------------------------------------
 cat > /etc/docker/daemon.json << 'EOF'
 {
     "dns-opts": [ "ndots:1" ],
@@ -202,6 +202,24 @@ mkdir /usr/local/lib/systemd/system/run-docker-.mount.d
 cat > ${_}/silence.conf << 'EOF'
 [Mount]
 LogLevelMax = notice
+EOF
+#-------------------------------------------------------------------------------
+
+# cAdvisor
+curl https://github.com/google/cadvisor/releases/download/v0.45.0/cadvisor-v0.45.0-linux-amd64 -sLo /usr/local/lib/cadvisor && chmod +x ${_}
+#-------------------------------------------------------------------------------
+cat > /usr/local/lib/systemd/system/cadvisor.service << 'EOF'
+[Unit]
+Description = cAdvisor
+Documentation = https://github.com/google/cadvisor
+Requires = docker.service
+After = docker.service
+
+[Service]
+ExecStart = /usr/local/lib/cadvisor
+
+[Install]
+WantedBy = multi-user.target
 EOF
 #-------------------------------------------------------------------------------
 
@@ -362,7 +380,7 @@ EOF
 
 
 # Services.
-systemctl enable sshd docker prometheus-node-exporter promtail
+systemctl enable sshd docker prometheus-node-exporter cadvisor promtail
 
 
 
