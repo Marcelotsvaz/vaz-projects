@@ -358,6 +358,7 @@ module "monitoring_server_user_data" {
 		bucket = aws_s3_bucket.bucket.id
 		region = local.region
 		monitoring_domain = local.monitoring_domain
+		environment = var.environment
 	}
 }
 
@@ -386,6 +387,18 @@ data "aws_iam_policy_document" "monitoring_server_policy" {
 		sid = "ec2DescribeVolume"
 		
 		actions = [ "ec2:DescribeVolumes" ]
+		
+		resources = [ "*" ]
+	}
+	
+	// Used by Prometheus EC2 service discovery.
+	statement {
+		sid = "ec2DescribeInstances"
+		
+		actions = [
+			"ec2:DescribeInstances",
+			"ec2:DescribeAvailabilityZones",
+		]
 		
 		resources = [ "*" ]
 	}

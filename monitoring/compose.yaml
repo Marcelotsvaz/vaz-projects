@@ -27,7 +27,7 @@ services:
         restart: unless-stopped
         
         volumes:
-          - ./config/prometheus.yaml:/etc/prometheus/prometheus.yml:ro
+          - ../deployment/prometheus.yaml:/etc/prometheus/prometheus.yml:ro
           - prometheus:/prometheus
             
         ports: [ 9090:9090 ]

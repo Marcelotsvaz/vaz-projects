@@ -81,6 +81,7 @@ aws s3 cp s3://${bucket}/deployment/secrets.env deployment/ --no-progress
 EOF
 
 cd monitoring
+cat config/prometheus.yaml | envsubst > ../deployment/prometheus.yaml
 docker compose --env-file ../deployment/secrets.env up --detach --quiet-pull
 
 

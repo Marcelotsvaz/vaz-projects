@@ -19,8 +19,13 @@ scrape_configs:
     
     
   - job_name: node
-    static_configs:
-      - targets: [ load-balancer:9100 ]
-      - targets: [ application:9100 ]
-      - targets: [ postgres:9100 ]
-      - targets: [ monitoring:9100 ]
+    ec2_sd_configs:
+      - port: 9100
+        filters:
+          - name: tag:Environment
+            values: [ ${environment} ]
+    relabel_configs:
+      - source_labels: [ __meta_ec2_tag_Name ]
+        target_label: instance
+      - source_labels: [ __meta_ec2_instance_id ]
+        target_label: instance_id
