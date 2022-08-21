@@ -182,6 +182,7 @@ EOF
 
 # Docker
 #-------------------------------------------------------------------------------
+mkdir -p /usr/local/lib/systemd/system
 mkdir /etc/docker
 cat > /etc/docker/daemon.json << 'EOF'
 {
@@ -194,10 +195,17 @@ EOF
 # If we specify any DNS option Docker stops handling DNS servers listening on 127.0.0.0/8 like systemd-resolved
 # stub resolver so we use /run/systemd/resolve/resolv.conf instead of stub-resolv.conf.
 
+# Silence Docker spam.
+mkdir /usr/local/lib/systemd/system/run-docker-.mount.d
+#-------------------------------------------------------------------------------
+cat > ${_}/silence.conf << 'EOF'
+[Mount]
+LogLevelMax = notice
+EOF
+#-------------------------------------------------------------------------------
+
 
 # Init scripts.
-mkdir -p /usr/local/lib/systemd/system
-
 #-------------------------------------------------------------------------------
 cat > /usr/local/lib/instanceScriptsSetup.sh << 'EOF'
 #!/bin/bash
