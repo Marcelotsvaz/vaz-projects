@@ -253,8 +253,8 @@ EOF
 cat > /usr/local/lib/systemd/system/perInstance.service << 'EOF'
 [Unit]
 Description = Instance Configuration Script
-Requires = instanceScriptsSetup.service network-online.target
-After = instanceScriptsSetup.service network-online.target
+Requires = instanceScriptsSetup.service
+After = instanceScriptsSetup.service
 ConditionFirstBoot = yes
 
 [Service]
@@ -272,8 +272,8 @@ EOF
 cat > /usr/local/lib/systemd/system/perBoot.service << 'EOF'
 [Unit]
 Description = Boot Script
-Requires = perInstance.service network-online.target
-After = perInstance.service network-online.target
+Requires = perInstance.service
+After = perInstance.service
 ConditionFileIsExecutable = /usr/local/lib/perBoot.sh
 
 [Service]
@@ -291,8 +291,8 @@ EOF
 cat > /usr/local/lib/systemd/system/perShutdown.service << 'EOF'
 [Unit]
 Description = Shutdown Script
-Requires = perInstance.service network-online.target
-After = perInstance.service network-online.target
+Requires = perInstance.service
+After = perInstance.service
 ConditionFileIsExecutable = /usr/local/lib/perShutdown.sh
 
 [Service]
@@ -347,6 +347,10 @@ EOF
 mkdir /usr/local/lib/systemd/system/promtail.service.d
 #-------------------------------------------------------------------------------
 cat > ${_}/override.conf << 'EOF'
+[Unit]
+Requires = perInstance.service
+After = perInstance.service
+
 [Service]
 EnvironmentFile = -/etc/environment
 ExecStart =
