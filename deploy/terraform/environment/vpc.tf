@@ -136,10 +136,18 @@ resource "aws_default_security_group" "common" {
 	}
 	
 	ingress {
-		description = "Prometheus Metrics"
+		description = "Node Exporter Metrics"
 		protocol = "tcp"
 		from_port = 9100
 		to_port = 9100
+		self = true
+	}
+	
+	ingress {
+		description = "Docker Engine Metrics"
+		protocol = "tcp"
+		from_port = 9323
+		to_port = 9323
 		self = true
 	}
 	

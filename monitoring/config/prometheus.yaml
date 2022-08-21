@@ -13,19 +13,26 @@ global:
 
 
 scrape_configs:
-  - job_name: prometheus
+  - job_name: Prometheus
     static_configs:
       - targets: [ localhost:9090 ]
     
     
-  - job_name: node
+  - job_name: Node Exporter
     ec2_sd_configs:
       - port: 9100
-        filters:
+        filters: &filterEnvironment
           - name: tag:Environment
             values: [ ${environment} ]
-    relabel_configs:
+    relabel_configs: &ec2Labels
       - source_labels: [ __meta_ec2_tag_Name ]
         target_label: instance
       - source_labels: [ __meta_ec2_instance_id ]
         target_label: instance_id
+    
+    
+  - job_name: Docker Engine
+    ec2_sd_configs:
+      - port: 9323 
+        filters: *filterEnvironment
+    relabel_configs: *ec2Labels

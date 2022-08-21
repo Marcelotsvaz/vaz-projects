@@ -186,7 +186,8 @@ mkdir -p /usr/local/lib/systemd/system
 mkdir /etc/docker
 cat > /etc/docker/daemon.json << 'EOF'
 {
-    "dns-opts": [ "ndots:1" ]
+    "dns-opts": [ "ndots:1" ],
+    "metrics-addr" : "0.0.0.0:9323"
 }
 EOF
 #-------------------------------------------------------------------------------
