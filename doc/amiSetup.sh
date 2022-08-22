@@ -338,28 +338,37 @@ server:
     grpc_listen_port: 0
 
 
+
 clients:
   - url: http://monitoring:3100/loki/api/v1/push
+
 
 
 positions:
     filename: /var/lib/promtail/positions.yaml
 
 
+
 scrape_configs:
-  - job_name: journal
+  - job_name: systemd Journal
     journal:
-        path: /var/log/journal
         json: true
         labels:
-            job: systemd-journal
+            job: systemd Journal
             hostname: ${hostname}
     
-  - job_name: nginx
-    static_configs:
-      - labels:
-            job: nginx
-            __path__: /var/log/nginx/*.log
+    
+  - job_name: Docker Containers
+    docker_sd_configs:
+      - host: unix:///var/run/docker.sock
+    pipeline_stages:
+      - static_labels:
+          job: Docker Containers
+    relabel_configs:
+      - source_labels: [ __meta_docker_container_label_com_docker_compose_project ]
+        target_label: project
+      - source_labels: [ __meta_docker_container_label_com_docker_compose_service ]
+        target_label: service
 EOF
 #-------------------------------------------------------------------------------
 
@@ -371,6 +380,8 @@ Requires = perInstance.service
 After = perInstance.service
 
 [Service]
+User = root
+
 EnvironmentFile = -/etc/environment
 ExecStart =
 ExecStart = /usr/bin/promtail -config.file /etc/loki/promtail.yaml -config.expand-env true
