@@ -356,6 +356,11 @@ scrape_configs:
         labels:
             job: systemd Journal
             hostname: ${hostname}
+    relabel_configs:
+      - source_labels: [ __journal__systemd_unit ]
+        target_label: unit
+      - source_labels: [ __journal__transport ]
+        target_label: transport
     
     
   - job_name: Docker Containers
