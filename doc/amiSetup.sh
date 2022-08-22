@@ -59,6 +59,9 @@ nano \
 docker docker-compose prometheus-node-exporter promtail \
 dehydrated
 
+# Manual installs.
+curl https://github.com/google/cadvisor/releases/download/v0.45.0/cadvisor-v0.45.0-linux-amd64 -sLo ${mountPoint}/usr/local/lib/cadvisor && chmod +x ${_}
+
 # Fstab.
 genfstab -U ${mountPoint} >> ${mountPoint}/etc/fstab
 
@@ -206,7 +209,6 @@ EOF
 #-------------------------------------------------------------------------------
 
 # cAdvisor
-curl https://github.com/google/cadvisor/releases/download/v0.45.0/cadvisor-v0.45.0-linux-amd64 -sLo /usr/local/lib/cadvisor && chmod +x ${_}
 #-------------------------------------------------------------------------------
 cat > /usr/local/lib/systemd/system/cadvisor.service << 'EOF'
 [Unit]
