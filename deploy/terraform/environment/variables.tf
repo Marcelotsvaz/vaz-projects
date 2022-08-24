@@ -29,13 +29,15 @@ locals {
 	project_name = "VAZ Projects"
 	project_code = "vazProjects"
 	environment_name = title( var.environment )
+	region = "sa-east-1"
 	
 	domain = var.environment == "production" ? "vazprojects.com" : "${var.environment}.vazprojects.com"
 	static_files_domain = "static-files.${local.domain}"
 	monitoring_domain = "monitoring.${local.domain}"
 	private_domain = "private.${local.domain}"
 	
-	region = "sa-east-1"
+	ssh_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH7gGmj7aRlkjoPKKM35M+dG6gMkgD9IEZl2UVp6JYPs VAZ Projects SSH Key"
+	
 	default_tags = {
 		Project = local.project_name
 		Environment = var.environment

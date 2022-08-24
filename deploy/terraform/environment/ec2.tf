@@ -49,19 +49,20 @@ module "load_balancer_user_data" {
 	output_dir = "../../../deployment/loadBalancer"
 	
 	files = [ "perInstance.sh" ]
-	templates = [ "environment.env.tftpl" ]
 	
-	context = {
+	environment = {
+		sshKey = local.ssh_key
 		hostname = "load-balancer"
-		repository_snapshot = var.repository_snapshot
+		user = "nginx"
+		repositorySnapshot = var.repository_snapshot
 		bucket = aws_s3_bucket.bucket.id
-		region = local.region
+		AWS_DEFAULT_REGION = local.region
 		domain = local.domain
-		static_files_domain = local.static_files_domain
-		monitoring_domain = local.monitoring_domain
-		private_domain = local.private_domain
-		hosted_zone_id = data.aws_route53_zone.hosted_zone.zone_id
-		cloudfront_certificate_arn = data.aws_acm_certificate.cloudfront.arn
+		staticFilesDomain = local.static_files_domain
+		monitoringDomain = local.monitoring_domain
+		privateDomain = local.private_domain
+		hostedZoneId = data.aws_route53_zone.hosted_zone.zone_id
+		cloudfrontCertificateArn = data.aws_acm_certificate.cloudfront.arn
 	}
 }
 
@@ -147,17 +148,18 @@ module "app_server_user_data" {
 	output_dir = "../../../deployment/application"
 	
 	files = [ "perInstance.sh" ]
-	templates = [ "environment.env.tftpl" ]
 	
-	context = {
+	environment = {
+		sshKey = local.ssh_key
 		hostname = "application"
-		region = local.region
-		repository_snapshot = var.repository_snapshot
-		application_image = var.application_image
-		environment = var.environment
+		user = "django"
+		repositorySnapshot = var.repository_snapshot
+		AWS_DEFAULT_REGION = local.region
+		applicationImage = var.application_image
+		DJANGO_SETTINGS_MODULE = "settings.${var.environment}"
 		domain = local.domain
-		static_files_domain = local.static_files_domain
-		s3_endpoint = replace( aws_s3_bucket.bucket.bucket_regional_domain_name, "${aws_s3_bucket.bucket.bucket}.", "https://" )
+		staticFilesDomain = local.static_files_domain
+		s3Endpoint = replace( aws_s3_bucket.bucket.bucket_regional_domain_name, "${aws_s3_bucket.bucket.bucket}.", "https://" )
 		bucket = aws_s3_bucket.bucket.id
 	}
 }
@@ -253,14 +255,15 @@ module "database_server_user_data" {
 	output_dir = "../../../deployment/database"
 	
 	files = [ "perInstance.sh" ]
-	templates = [ "environment.env.tftpl" ]
 	
-	context = {
+	environment = {
+		sshKey = local.ssh_key
 		hostname = "postgres"
-		data_volume_id = aws_ebs_volume.database_volume.id
-		repository_snapshot = var.repository_snapshot
+		user = "postgres"
+		dataVolumeId = aws_ebs_volume.database_volume.id
+		repositorySnapshot = var.repository_snapshot
 		bucket = aws_s3_bucket.bucket.id
-		region = local.region
+		AWS_DEFAULT_REGION = local.region
 	}
 }
 
@@ -349,15 +352,16 @@ module "monitoring_server_user_data" {
 	output_dir = "../../../deployment/monitoring"
 	
 	files = [ "perInstance.sh" ]
-	templates = [ "environment.env.tftpl" ]
 	
-	context = {
+	environment = {
+		sshKey = local.ssh_key
 		hostname = "monitoring"
-		data_volume_id = aws_ebs_volume.monitoring_volume.id
-		repository_snapshot = var.repository_snapshot
+		user = "grafana"
+		dataVolumeId = aws_ebs_volume.monitoring_volume.id
+		repositorySnapshot = var.repository_snapshot
 		bucket = aws_s3_bucket.bucket.id
-		region = local.region
-		monitoring_domain = local.monitoring_domain
+		AWS_DEFAULT_REGION = local.region
+		monitoringDomain = local.monitoring_domain
 		environment = var.environment
 	}
 }
