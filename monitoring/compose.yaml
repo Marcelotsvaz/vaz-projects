@@ -27,10 +27,15 @@ services:
         restart: unless-stopped
         
         volumes:
-          - ../deployment/prometheus.yaml:/etc/prometheus/prometheus.yml:ro
+          - ../deployment/prometheus.yaml:/etc/prometheus/prometheus.yaml:ro
           - prometheus:/prometheus
             
         ports: [ 9090:9090 ]
+        
+        command:
+          - --config.file=/etc/prometheus/prometheus.yaml
+          - --storage.tsdb.path=/prometheus
+          - --storage.tsdb.retention.size=2GB
     
     
     loki:
