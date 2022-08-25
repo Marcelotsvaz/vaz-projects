@@ -13,13 +13,13 @@ StartLimitBurst = 2
 
 [Service]
 Type = oneshot
-User = nginx
-Group = nginx
+User = load-balancer
+Group = load-balancer
 
 Restart = on-failure
 RestartSec = 1h
 
 EnvironmentFile = /etc/environment
-WorkingDirectory = /home/nginx/loadBalancer
-ExecStart = /home/nginx/loadBalancer/config/tls/dehydrated.sh
+WorkingDirectory = /home/load-balancer/loadBalancer
+ExecStart = /home/load-balancer/loadBalancer/config/tls/dehydrated.sh
 ExecStartPost = +docker compose restart nginx

@@ -44,6 +44,7 @@ module "user_data" {
 	
 	environment = merge( var.environment, {
 		hostname = var.hostname
+		user = var.hostname
 	} )
 }
 

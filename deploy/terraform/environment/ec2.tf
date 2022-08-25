@@ -35,7 +35,6 @@ module "load_balancer" {
 	role_policy = data.aws_iam_policy_document.load_balancer_policy
 	environment = {
 		sshKey = local.ssh_key
-		user = "nginx"
 		repositorySnapshot = var.repository_snapshot
 		bucket = aws_s3_bucket.bucket.id
 		AWS_DEFAULT_REGION = local.region
@@ -137,7 +136,6 @@ module "app_server" {
 	role_policy = data.aws_iam_policy_document.app_server_policy
 	environment = {
 		sshKey = local.ssh_key
-		user = "django"
 		repositorySnapshot = var.repository_snapshot
 		AWS_DEFAULT_REGION = local.region
 		applicationImage = var.application_image
@@ -218,7 +216,6 @@ module "database_server" {
 	role_policy = data.aws_iam_policy_document.database_server_policy
 	environment = {
 		sshKey = local.ssh_key
-		user = "postgres"
 		dataVolumeId = aws_ebs_volume.database_volume.id
 		repositorySnapshot = var.repository_snapshot
 		bucket = aws_s3_bucket.bucket.id
@@ -309,7 +306,6 @@ module "monitoring_server" {
 	role_policy = data.aws_iam_policy_document.monitoring_server_policy
 	environment = {
 		sshKey = local.ssh_key
-		user = "grafana"
 		dataVolumeId = aws_ebs_volume.monitoring_volume.id
 		repositorySnapshot = var.repository_snapshot
 		bucket = aws_s3_bucket.bucket.id
