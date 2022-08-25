@@ -104,6 +104,7 @@ module "user_data" {
 	files = [ "perInstance.sh" ]
 	
 	environment = merge( var.environment, {
+		instanceName = var.name
 		hostname = var.hostname
 		user = var.hostname
 	} )

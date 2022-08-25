@@ -357,7 +357,7 @@ scrape_configs:
         json: true
         labels:
             job: systemd Journal
-            hostname: ${hostname}
+            instance: ${instanceName}
     relabel_configs:
       - source_labels: [ __journal__systemd_unit ]
         target_label: unit
@@ -371,6 +371,7 @@ scrape_configs:
     pipeline_stages:
       - static_labels:
           job: Docker Containers
+          instance: ${instanceName}
     relabel_configs:
       - source_labels: [ __meta_docker_container_label_com_docker_compose_project ]
         target_label: project
