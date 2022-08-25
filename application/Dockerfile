@@ -48,13 +48,14 @@ RUN --mount=from=wheelBuilder,source=wheels/,target=wheels/		\
 	pip install --no-cache-dir --upgrade pip					\
 	&& pip install --no-cache-dir wheels/*
 
-RUN addgroup -S django && adduser -Ss /sbin/nologin -G django django
-USER django
-WORKDIR /home/django
+ENV dockerUser=django
+RUN addgroup -S ${dockerUser} && adduser -Ss /sbin/nologin -G ${dockerUser} ${dockerUser}
+USER ${dockerUser}
+WORKDIR /home/${dockerUser}
 
-COPY --chown=django:django . .
-COPY --chown=django:django --from=lessBuilder deployment/static/siteApp/css/siteApp.css deployment/static/siteApp/css/siteApp.css
+COPY --chown=${dockerUser}:${dockerUser} . .
+COPY --chown=${dockerUser}:${dockerUser} --from=lessBuilder deployment/static/siteApp/css/siteApp.css deployment/static/siteApp/css/siteApp.css
 
-ENV PATH="${PATH}:/home/django"
+ENV PATH="${PATH}:/home/${dockerUser}"
 ENTRYPOINT [ "/bin/sh", "-c" ]
 EXPOSE 3031
