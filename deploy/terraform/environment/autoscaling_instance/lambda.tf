@@ -40,7 +40,7 @@ resource "aws_lambda_function" "autoscaling_lambda" {
 data "archive_file" "autoscaling_lambda" {
 	type = "zip"
 	source_file = "${path.module}/autoscaling_lambda.py"
-	output_path = "../../../deployment/${var.unique_identifier}/autoscaling_lambda.zip"
+	output_path = "../../../deployment/${var.prefix}/${var.identifier}/autoscaling_lambda.zip"
 }
 
 
@@ -67,11 +67,11 @@ resource "aws_cloudwatch_log_group" "autoscaling_lambda_log_group" {
 # Lambda IAM Role.
 #-------------------------------------------------------------------------------
 resource "aws_iam_role" "autoscaling_lambda_role" {
-	name = "${var.unique_identifier}-autoscalingLambdaRole"
+	name = "${var.prefix}-${var.identifier}-autoscalingLambdaRole"
 	assume_role_policy = data.aws_iam_policy_document.autoscaling_lambda_assume_role_policy.json
 	
 	inline_policy {
-		name = "${var.unique_identifier}-autoscalingLambdaRolePolicy"
+		name = "${var.prefix}-${var.identifier}-autoscalingLambdaRolePolicy"
 		
 		policy = data.aws_iam_policy_document.autoscaling_lambda_role_policy.json
 	}
@@ -142,7 +142,7 @@ data "aws_iam_policy_document" "autoscaling_lambda_role_policy" {
 # EventBridge.
 #-------------------------------------------------------------------------------
 resource "aws_cloudwatch_event_rule" "autoscaling_event_rule" {
-	name = "${var.unique_identifier}-autoscalingEventRule"
+	name = "${var.prefix}-${var.identifier}-autoscalingEventRule"
 	event_pattern = <<EOF
 		{
 			"source": [ "aws.autoscaling" ],

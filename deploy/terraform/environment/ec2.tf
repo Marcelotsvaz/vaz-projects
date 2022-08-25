@@ -12,10 +12,17 @@
 module "load_balancer" {
 	source = "./instance"
 	
+	# Name.
 	name = "${local.project_name} Load Balancer"
-	unique_identifier = "${local.project_code}-${var.environment}-loadBalancer"
-	instance_type = "t3a.nano"
+	identifier = "loadBalancer"
+	hostname = "load-balancer"
+	prefix = "${local.project_code}-${var.environment}"
 	
+	# Configuration.
+	instance_type = "t3a.nano"
+	root_volume_size = 5
+	
+	# Network.
 	subnet_id = aws_subnet.subnet_c.id
 	ipv6_address_count = 1
 	vpc_security_group_ids = [
@@ -23,36 +30,11 @@ module "load_balancer" {
 		aws_security_group.public.id,
 	]
 	private_hosted_zone = aws_route53_zone.private
-	hostname = "load-balancer"
 	
+	# Environment.
 	role_policy = data.aws_iam_policy_document.load_balancer_policy
-	
-	root_volume_size = 5
-	user_data_base64 = module.load_balancer_user_data.content_base64
-	default_tags = local.default_tags
-}
-
-
-resource "aws_eip" "load_balancer_ip" {
-	instance = module.load_balancer.id
-	
-	tags = {
-		Name = "${local.project_name} Load Balancer Elastic IP"
-	}
-}
-
-
-module "load_balancer_user_data" {
-	source = "./user_data"
-	
-	input_dir = "../../../loadBalancer/scripts"
-	output_dir = "../../../deployment/loadBalancer"
-	
-	files = [ "perInstance.sh" ]
-	
 	environment = {
 		sshKey = local.ssh_key
-		hostname = "load-balancer"
 		user = "nginx"
 		repositorySnapshot = var.repository_snapshot
 		bucket = aws_s3_bucket.bucket.id
@@ -63,6 +45,18 @@ module "load_balancer_user_data" {
 		privateDomain = local.private_domain
 		hostedZoneId = data.aws_route53_zone.hosted_zone.zone_id
 		cloudfrontCertificateArn = data.aws_acm_certificate.cloudfront.arn
+	}
+	
+	# Tags.
+	default_tags = local.default_tags
+}
+
+
+resource "aws_eip" "load_balancer_ip" {
+	instance = module.load_balancer.id
+	
+	tags = {
+		Name = "${local.project_name} Load Balancer Elastic IP"
 	}
 }
 
@@ -121,37 +115,28 @@ data "aws_iam_policy_document" "load_balancer_policy" {
 module "app_server" {
 	source = "./autoscaling_instance"
 	
+	# Name.
 	name = "${local.project_name} Application Server"
-	unique_identifier = "${local.project_code}-${var.environment}-appServer"
-	instance_type = "t3a.small"
+	identifier = "application"
+	hostname = "application"
+	prefix = "${local.project_code}-${var.environment}"
 	
+	# Configuration.
+	instance_type = "t3a.small"
+	root_volume_size = 5
+	
+	# Network.
 	subnet_ids = [ aws_subnet.subnet_c.id ]
 	vpc_security_group_ids = [
 		aws_default_security_group.common.id,
 		aws_security_group.private.id,
 	]
 	private_hosted_zone = aws_route53_zone.private
-	hostname = "application"
 	
+	# Environment.
 	role_policy = data.aws_iam_policy_document.app_server_policy
-	
-	root_volume_size = 5
-	user_data_base64 = module.app_server_user_data.content_base64
-	default_tags = local.default_tags
-}
-
-
-module "app_server_user_data" {
-	source = "./user_data"
-	
-	input_dir = "../../../application/scripts"
-	output_dir = "../../../deployment/application"
-	
-	files = [ "perInstance.sh" ]
-	
 	environment = {
 		sshKey = local.ssh_key
-		hostname = "application"
 		user = "django"
 		repositorySnapshot = var.repository_snapshot
 		AWS_DEFAULT_REGION = local.region
@@ -162,6 +147,9 @@ module "app_server_user_data" {
 		s3Endpoint = replace( aws_s3_bucket.bucket.bucket_regional_domain_name, "${aws_s3_bucket.bucket.bucket}.", "https://" )
 		bucket = aws_s3_bucket.bucket.id
 	}
+	
+	# Tags.
+	default_tags = local.default_tags
 }
 
 
@@ -208,22 +196,36 @@ data "aws_iam_policy_document" "app_server_policy" {
 module "database_server" {
 	source = "./instance"
 	
+	# Name.
 	name = "${local.project_name} Database Server"
-	unique_identifier = "${local.project_code}-${var.environment}-databaseServer"
-	instance_type = "t3a.nano"
+	identifier = "database"
+	hostname = "postgres"
+	prefix = "${local.project_code}-${var.environment}"
 	
+	# Configuration.
+	instance_type = "t3a.nano"
+	root_volume_size = 5
+	
+	# Network.
 	subnet_id = aws_subnet.subnet_c.id
 	vpc_security_group_ids = [
 		aws_default_security_group.common.id,
 		aws_security_group.private.id,
 	]
 	private_hosted_zone = aws_route53_zone.private
-	hostname = "postgres"
 	
+	# Environment.
 	role_policy = data.aws_iam_policy_document.database_server_policy
+	environment = {
+		sshKey = local.ssh_key
+		user = "postgres"
+		dataVolumeId = aws_ebs_volume.database_volume.id
+		repositorySnapshot = var.repository_snapshot
+		bucket = aws_s3_bucket.bucket.id
+		AWS_DEFAULT_REGION = local.region
+	}
 	
-	root_volume_size = 5
-	user_data_base64 = module.database_server_user_data.content_base64
+	# Tags.
 	default_tags = local.default_tags
 }
 
@@ -245,26 +247,6 @@ resource "aws_volume_attachment" "database_volume_attachment" {
 	instance_id = module.database_server.id
 	device_name = "/dev/xvdg"
 	stop_instance_before_detaching = true
-}
-
-
-module "database_server_user_data" {
-	source = "./user_data"
-	
-	input_dir = "../../../database/scripts"
-	output_dir = "../../../deployment/database"
-	
-	files = [ "perInstance.sh" ]
-	
-	environment = {
-		sshKey = local.ssh_key
-		hostname = "postgres"
-		user = "postgres"
-		dataVolumeId = aws_ebs_volume.database_volume.id
-		repositorySnapshot = var.repository_snapshot
-		bucket = aws_s3_bucket.bucket.id
-		AWS_DEFAULT_REGION = local.region
-	}
 }
 
 
@@ -305,22 +287,38 @@ data "aws_iam_policy_document" "database_server_policy" {
 module "monitoring_server" {
 	source = "./instance"
 	
+	# Name.
 	name = "${local.project_name} Monitoring Server"
-	unique_identifier = "${local.project_code}-${var.environment}-monitoringServer"
-	instance_type = "t3a.nano"
+	identifier = "monitoring"
+	hostname = "monitoring"
+	prefix = "${local.project_code}-${var.environment}"
 	
+	# Configuration.
+	instance_type = "t3a.nano"
+	root_volume_size = 5
+	
+	# Network.
 	subnet_id = aws_subnet.subnet_c.id
 	vpc_security_group_ids = [
 		aws_default_security_group.common.id,
 		aws_security_group.private.id,
 	]
 	private_hosted_zone = aws_route53_zone.private
-	hostname = "monitoring"
 	
+	# Environment.
 	role_policy = data.aws_iam_policy_document.monitoring_server_policy
+	environment = {
+		sshKey = local.ssh_key
+		user = "grafana"
+		dataVolumeId = aws_ebs_volume.monitoring_volume.id
+		repositorySnapshot = var.repository_snapshot
+		bucket = aws_s3_bucket.bucket.id
+		AWS_DEFAULT_REGION = local.region
+		monitoringDomain = local.monitoring_domain
+		environment = var.environment
+	}
 	
-	root_volume_size = 5
-	user_data_base64 = module.monitoring_server_user_data.content_base64
+	# Tags.
 	default_tags = local.default_tags
 }
 
@@ -342,28 +340,6 @@ resource "aws_volume_attachment" "monitoring_volume_attachment" {
 	instance_id = module.monitoring_server.id
 	device_name = "/dev/xvdg"
 	stop_instance_before_detaching = true
-}
-
-
-module "monitoring_server_user_data" {
-	source = "./user_data"
-	
-	input_dir = "../../../monitoring/scripts"
-	output_dir = "../../../deployment/monitoring"
-	
-	files = [ "perInstance.sh" ]
-	
-	environment = {
-		sshKey = local.ssh_key
-		hostname = "monitoring"
-		user = "grafana"
-		dataVolumeId = aws_ebs_volume.monitoring_volume.id
-		repositorySnapshot = var.repository_snapshot
-		bucket = aws_s3_bucket.bucket.id
-		AWS_DEFAULT_REGION = local.region
-		monitoringDomain = local.monitoring_domain
-		environment = var.environment
-	}
 }
 
 

@@ -54,7 +54,7 @@ resource "aws_autoscaling_policy" "scale_down" {
 
 
 resource "aws_launch_template" "launch_template" {
-	name = "${var.unique_identifier}-launchTemplate"
+	name = "${var.prefix}-${var.identifier}-launchTemplate"
 	update_default_version = true
 	
 	image_id = data.aws_ami.arch_linux.id
@@ -62,7 +62,7 @@ resource "aws_launch_template" "launch_template" {
 	instance_market_options { market_type = "spot" }
 	vpc_security_group_ids = var.vpc_security_group_ids
 	iam_instance_profile { arn = aws_iam_instance_profile.instance_profile.arn }
-	user_data = var.user_data_base64
+	user_data = module.user_data.content_base64
 	ebs_optimized = true
 	
 	block_device_mappings {
@@ -92,6 +92,20 @@ resource "aws_launch_template" "launch_template" {
 	tags = {
 		Name = "${var.name} Launch Template"
 	}
+}
+
+
+module "user_data" {
+	source = "../user_data"
+	
+	input_dir = "../../../${var.identifier}/scripts"
+	output_dir = "../../../deployment/${var.prefix}/${var.identifier}"
+	
+	files = [ "perInstance.sh" ]
+	
+	environment = merge( var.environment, {
+		hostname = var.hostname
+	} )
 }
 
 

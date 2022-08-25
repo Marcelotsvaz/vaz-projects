@@ -16,7 +16,7 @@ resource "aws_spot_instance_request" "instance" {
 	ipv6_address_count = var.ipv6_address_count
 	vpc_security_group_ids = var.vpc_security_group_ids
 	iam_instance_profile = aws_iam_instance_profile.instance_profile.name
-	user_data_base64 = var.user_data_base64
+	user_data_base64 = module.user_data.content_base64
 	ebs_optimized = true
 	instance_interruption_behavior = "stop"
 	wait_for_fulfillment = true
@@ -31,6 +31,20 @@ resource "aws_spot_instance_request" "instance" {
 	tags = {
 		Name = "${var.name} Spot Request"
 	}
+}
+
+
+module "user_data" {
+	source = "../user_data"
+	
+	input_dir = "../../../${var.identifier}/scripts"
+	output_dir = "../../../deployment/${var.prefix}/${var.identifier}"
+	
+	files = [ "perInstance.sh" ]
+	
+	environment = merge( var.environment, {
+		hostname = var.hostname
+	} )
 }
 
 
