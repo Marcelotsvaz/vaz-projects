@@ -1,0 +1,17 @@
+# 
+# VAZ Projects
+# 
+# 
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+apiVersion: 1
+
+
+
+providers:
+  - name: Default
+    options:
+        path: /etc/grafana/dashboards
+        foldersFromFilesStructure: true

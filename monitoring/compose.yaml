@@ -13,10 +13,12 @@ services:
         restart: unless-stopped
         
         environment:
-            GF_SERVER_ROOT_URL: https://${monitoringDomain}
+            monitoringDomain:
             GF_SECURITY_ADMIN_PASSWORD:
         
-        volumes: [ grafana:/var/lib/grafana ]
+        volumes:
+          - ./config/grafana:/etc/grafana
+          - grafana:/var/lib/grafana
         
         ports: [ 80:3000 ]
     
