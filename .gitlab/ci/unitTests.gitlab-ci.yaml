@@ -12,7 +12,7 @@
 .unitTests:
     services: [ docker:20.10-dind ]
     
-    image: docker:20.10
+    image: docker:20.10.16  # TODO: Revert when https://github.com/docker/compose/issues/9789 is fixed.
     
     interruptible: true
     
