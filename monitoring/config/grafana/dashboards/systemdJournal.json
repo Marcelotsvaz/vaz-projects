@@ -1,0 +1,211 @@
+{
+	"__inputs": [
+		{
+			"name": "DS_LOKI",
+			"label": "Loki",
+			"description": "",
+			"type": "datasource",
+			"pluginId": "loki",
+			"pluginName": "Loki"
+		},
+		{
+			"name": "VAR_JOB",
+			"type": "constant",
+			"label": "Job",
+			"value": "systemd Journal",
+			"description": ""
+		}
+	],
+	"__elements": [],
+	"__requires": [
+		{
+			"type": "grafana",
+			"id": "grafana",
+			"name": "Grafana",
+			"version": "9.0.2"
+		},
+		{
+			"type": "panel",
+			"id": "logs",
+			"name": "Logs",
+			"version": ""
+		},
+		{
+			"type": "datasource",
+			"id": "loki",
+			"name": "Loki",
+			"version": "1.0.0"
+		}
+	],
+	"annotations": {
+		"list": [
+			{
+				"builtIn": 1,
+				"datasource": {
+					"type": "grafana",
+					"uid": "-- Grafana --"
+				},
+				"enable": true,
+				"hide": true,
+				"iconColor": "rgba(0, 211, 255, 1)",
+				"name": "Annotations & Alerts",
+				"target": {
+					"limit": 100,
+					"matchAny": false,
+					"tags": [],
+					"type": "dashboard"
+				},
+				"type": "dashboard"
+			}
+		]
+	},
+	"editable": true,
+	"fiscalYearStartMonth": 0,
+	"graphTooltip": 0,
+	"id": null,
+	"iteration": 1661646831220,
+	"links": [],
+	"liveNow": false,
+	"panels": [
+		{
+			"datasource": {
+				"type": "loki",
+				"uid": "${DS_LOKI}"
+			},
+			"description": "",
+			"gridPos": {
+				"h": 20,
+				"w": 24,
+				"x": 0,
+				"y": 0
+			},
+			"id": 2,
+			"options": {
+				"dedupStrategy": "none",
+				"enableLogDetails": true,
+				"prettifyLogMessage": false,
+				"showCommonLabels": false,
+				"showLabels": false,
+				"showTime": true,
+				"sortOrder": "Descending",
+				"wrapLogMessage": false
+			},
+			"pluginVersion": "9.0.2",
+			"targets": [
+				{
+					"datasource": {
+						"type": "loki",
+						"uid": "${DS_LOKI}"
+					},
+					"editorMode": "code",
+					"expr": "{ job = \"$job\", instance = \"$instance\", unit =~ \"$unit\", transport =~ \"$transport\" } | json | label_format level = \"{{.PRIORITY}}\" | line_format \"{{.unit}}[{{._PID}}]: {{.MESSAGE}}\"",
+					"hide": false,
+					"queryType": "range",
+					"refId": "Main"
+				}
+			],
+			"title": "systemd Journal",
+			"transformations": [],
+			"type": "logs"
+		}
+	],
+	"schemaVersion": 36,
+	"style": "dark",
+	"tags": [],
+	"templating": {
+		"list": [
+			{
+				"hide": 2,
+				"label": "Job",
+				"name": "job",
+				"query": "${VAR_JOB}",
+				"skipUrlSync": false,
+				"type": "constant",
+				"current": {
+					"value": "${VAR_JOB}",
+					"text": "${VAR_JOB}",
+					"selected": false
+				},
+				"options": [
+					{
+						"value": "${VAR_JOB}",
+						"text": "${VAR_JOB}",
+						"selected": false
+					}
+				]
+			},
+			{
+				"current": {},
+				"datasource": {
+					"type": "loki",
+					"uid": "${DS_LOKI}"
+				},
+				"definition": "label_values({job=\"$job\"}, instance)",
+				"hide": 0,
+				"includeAll": false,
+				"label": "Instance",
+				"multi": false,
+				"name": "instance",
+				"options": [],
+				"query": "label_values({job=\"$job\"}, instance)",
+				"refresh": 1,
+				"regex": "",
+				"skipUrlSync": false,
+				"sort": 0,
+				"type": "query"
+			},
+			{
+				"allValue": ".*",
+				"current": {},
+				"datasource": {
+					"type": "loki",
+					"uid": "${DS_LOKI}"
+				},
+				"definition": "label_values({job=\"$job\"}, unit)",
+				"hide": 0,
+				"includeAll": true,
+				"label": "Unit",
+				"multi": false,
+				"name": "unit",
+				"options": [],
+				"query": "label_values({job=\"$job\"}, unit)",
+				"refresh": 1,
+				"regex": "",
+				"skipUrlSync": false,
+				"sort": 0,
+				"type": "query"
+			},
+			{
+				"allValue": ".*",
+				"current": {},
+				"datasource": {
+					"type": "loki",
+					"uid": "${DS_LOKI}"
+				},
+				"definition": "label_values({job=\"$job\"}, transport)",
+				"hide": 0,
+				"includeAll": true,
+				"label": "Transport",
+				"multi": false,
+				"name": "transport",
+				"options": [],
+				"query": "label_values({job=\"$job\"}, transport)",
+				"refresh": 1,
+				"regex": "",
+				"skipUrlSync": false,
+				"sort": 0,
+				"type": "query"
+			}
+		]
+	},
+	"time": {
+		"from": "now-6h",
+		"to": "now"
+	},
+	"timepicker": {},
+	"timezone": "",
+	"title": "systemd Journal",
+	"uid": "rFaW2aZVz",
+	"version": 6,
+	"weekStart": ""
+}
