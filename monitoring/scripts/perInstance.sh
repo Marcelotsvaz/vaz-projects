@@ -66,10 +66,8 @@ while [[ ! -b ${dataPartition} ]]; do
 	sleep 0.1
 done
 
-systemctl stop docker
 echo "${dataPartition}	/var/lib/docker/volumes	ext4	X-mount.mkdir	0	2" >> /etc/fstab
 mount ${dataPartition}
-systemctl start docker
 
 
 

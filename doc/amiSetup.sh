@@ -399,7 +399,7 @@ EOF
 
 
 # Services.
-systemctl enable sshd docker prometheus-node-exporter cadvisor promtail
+systemctl enable sshd prometheus-node-exporter cadvisor promtail
 
 
 
