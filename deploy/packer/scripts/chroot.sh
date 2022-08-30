@@ -7,72 +7,7 @@
 
 
 
-# Dependencies
-#---------------------------------------
-pacman -Syu --noconfirm arch-install-scripts reflector
-reflector --protocol https --latest 50 --sort rate --save /etc/pacman.d/mirrorlist
-
-
-
-# Variables
-#---------------------------------------
-export AWS_DEFAULT_OUTPUT=text
-instanceId=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
-availabilityZone=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)
-mountPoint=/mnt/new
-
-
-
-# Create Volume
-#---------------------------------------
-volumeId=$(aws ec2 create-volume --size 2 --availability-zone ${availabilityZone} --volume-type gp3 --no-encrypted --query 'VolumeId')
-aws ec2 wait volume-available --volume-ids ${volumeId}
-aws ec2 attach-volume --volume-id ${volumeId} --instance-id ${instanceId} --device /dev/sdf
-
-# Wait for volume to be mounted.
-while [[ -z ${disk} ]]; do
-	export disk=$(lsblk -nro SERIAL,PATH | grep ${volumeId/-/} | cut -d ' ' -f2)    # Get attached EBS volume device path.
-	sleep 1
-done
-
-
-
-# Partitioning and Filesystem
-#---------------------------------------
-sgdisk --clear ${disk}
-sgdisk --new 1:0:+1M --change-name 1:'Boot' --typecode 1:ef02 ${disk}
-sgdisk --new 2:0:0 --change-name 2:'Root' ${disk}
-
-mkfs.ext4 ${disk}p2
-
-mkdir ${mountPoint}
-mount ${disk}p2 ${mountPoint}
-
-
-
-# Install Arch Linux
-#---------------------------------------
-pacstrap -c ${mountPoint} \
-base linux grub \
-openssh sudo aws-cli gdisk \
-nano \
-docker docker-compose prometheus-node-exporter promtail \
-dehydrated
-
-# Manual installs.
-curl https://github.com/google/cadvisor/releases/download/v0.45.0/cadvisor-v0.45.0-linux-amd64 -sLo ${mountPoint}/usr/local/lib/cadvisor && chmod +x ${_}
-
-# Fstab.
-genfstab -U ${mountPoint} >> ${mountPoint}/etc/fstab
-
-
-
-# Chroot
-#---------------------------------------
-mount --bind /dev ${mountPoint}/dev
-mount --bind /sys ${mountPoint}/sys
-mount --bind /proc ${mountPoint}/proc
-chroot ${mountPoint}
+set -ex
 
 
 
@@ -99,7 +34,6 @@ DHCP = yes
 UseDomains = yes
 EOF
 #-------------------------------------------------------------------------------
-ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
 systemctl enable systemd-{networkd,resolved,timesyncd}
 
 # Bootloader.
@@ -209,6 +143,7 @@ EOF
 #-------------------------------------------------------------------------------
 
 # cAdvisor
+curl https://github.com/google/cadvisor/releases/download/v0.45.0/cadvisor-v0.45.0-linux-amd64 -sLo /usr/local/lib/cadvisor && chmod +x ${_}
 #-------------------------------------------------------------------------------
 cat > /usr/local/lib/systemd/system/cadvisor.service << 'EOF'
 [Unit]
@@ -246,6 +181,7 @@ resize2fs ${partition}
 # Download user data.
 mkdir /tmp/deploy && cd ${_}
 curl -s http://169.254.169.254/latest/user-data | tar -xz
+# TODO: Make Optional.
 mv per*.sh /usr/local/lib/
 mv environment.env /etc/environment
 EOF
@@ -400,42 +336,3 @@ EOF
 
 # Services.
 systemctl enable sshd prometheus-node-exporter cadvisor promtail
-
-
-
-# Clean up.
-exit
-rm ${mountPoint}/{root/.bash_history,var/log/pacman.log}
-rm ${mountPoint}/etc/machine-id
-
-
-
-# Create AMI
-#---------------------------------------
-umount -R ${mountPoint}
-rm -r ${mountPoint}
-aws ec2 detach-volume --volume-id ${volumeId}
-
-# Create AMI snapshot.
-snapshotId=$(aws ec2 create-snapshot \
-    --volume-id ${volumeId} \
-    --tag-specifications 'ResourceType=snapshot,Tags=[{Key=Name,Value=Arch Linux AMI Snapshot}]' \
-    --query 'SnapshotId')
-
-# Clean up.
-imageId=$(aws ec2 describe-images --filters 'Name=name,Values=Arch Linux AMI' --query 'Images[0].ImageId')
-aws ec2 deregister-image --image-id ${imageId}
-aws ec2 wait volume-available --volume-ids ${volumeId}
-aws ec2 delete-volume --volume-id ${volumeId}
-
-# Register AMI.
-aws ec2 wait snapshot-completed --snapshot-ids ${snapshotId}
-newImageId=$(aws ec2 register-image \
-    --name 'Arch Linux AMI' \
-    --architecture x86_64 \
-    --virtualization-type hvm \
-    --ena-support \
-    --root-device-name /dev/xvda \
-    --block-device-mappings '[{"DeviceName": "/dev/xvda","Ebs":{"SnapshotId":"'${snapshotId}'","VolumeType":"gp3"}}]' \
-    --query 'ImageId'
-)
