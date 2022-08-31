@@ -8,11 +8,6 @@
 
 locals {
 	ami_name = "Arch Linux AMI"
-	mount_point = "/mnt/new"
-	env = {
-		mountPoint = local.mount_point
-		disk = "/dev/nvme1n1"
-	}
 }
 
 
@@ -114,40 +109,8 @@ source "amazon-ebssurrogate" "arch_linux" {
 build {
 	sources = [ "source.amazon-ebssurrogate.arch_linux" ]
 	
-	provisioner "shell" {
-		execute_command = "sudo {{.Vars}} {{.Path}}"
-		
-		env = local.env
-		
-		scripts = [
-			"scripts/pre.sh"
-		]
-	}
-	
-	provisioner "shell" {
-		execute_command = "sudo cp {{.Path}} ${local.mount_point} && sudo {{.Vars}} arch-chroot ${local.mount_point} /{{split .Path \"/\" 2}}"
-		remote_file = "script.sh"
-		
-		env = local.env
-		
-		scripts = [
-			"scripts/chroot.sh"
-		]
-	}
-	
-	provisioner "shell" {
-		inline = [
-			"sudo rm ${local.mount_point}/script.sh"
-		]
-	}
-	
-	provisioner "shell" {
-		execute_command = "sudo {{.Vars}} {{.Path}}"
-		
-		env = local.env
-		
-		scripts = [
-			"scripts/pos.sh"
-		]
+	provisioner "ansible" {
+		playbook_file = "playbook.yaml"
+		use_proxy = false
 	}
 }
