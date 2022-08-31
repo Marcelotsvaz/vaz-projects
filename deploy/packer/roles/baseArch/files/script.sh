@@ -11,19 +11,6 @@ set -ex
 
 
 
-# Partitioning and Filesystem
-#---------------------------------------
-sgdisk --clear ${disk}
-sgdisk --new 1:0:+1M --change-name 1:'Boot' --typecode 1:ef02 ${disk}
-sgdisk --new 2:0:0 --change-name 2:'Root' ${disk}
-
-mkfs.ext4 ${disk}p2
-
-mkdir ${mountPoint}
-mount ${disk}p2 ${mountPoint}
-
-
-
 # Install Arch Linux
 #---------------------------------------
 pacstrap -c ${mountPoint} --noprogressbar \

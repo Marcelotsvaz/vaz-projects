@@ -1,0 +1,11 @@
+# 
+# VAZ Projects
+# 
+# 
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+  - name: Run script.sh
+    become: true
+    ansible.builtin.script: script.sh

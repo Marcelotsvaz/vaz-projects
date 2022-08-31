@@ -1,0 +1,29 @@
+# 
+# VAZ Projects
+# 
+# 
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+  - name: Run script.sh
+    become: true
+    ansible.builtin.script: script.sh
+
+
+  - name: Copy chroot.sh
+    become: true
+    ansible.builtin.copy:
+        src: chroot.sh
+        dest: '{{ mountPoint }}'
+        mode: preserve
+
+
+  - name: Run chroot.sh
+    become: true
+    ansible.builtin.command: arch-chroot {{ mountPoint }} /chroot.sh
+
+
+  - name: Delete chroot.sh
+    become: true
+    ansible.builtin.command: rm {{ mountPoint }}/chroot.sh

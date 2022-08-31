@@ -6,31 +6,16 @@
 
 
 
-  - name: Arch Linux Setup
+  - name: VAZ Projects AMI Build
     hosts: default
-    become: true
-    
     
     vars: &vars
         disk: /dev/nvme1n1
         mountPoint: /mnt/new
     
-    
     environment: *vars
     
-    
-    tasks:
-      - name: Run pre.sh
-        ansible.builtin.script: scripts/pre.sh
-        
-      - name: Copy chroot.sh script
-        ansible.builtin.copy:
-            src: scripts/chroot.sh
-            dest: '{{ mountPoint }}'
-            mode: preserve
-        
-      - name: Run chroot.sh
-        ansible.builtin.command: arch-chroot {{ mountPoint }} /chroot.sh
-        
-      - name: Run pos.sh
-        ansible.builtin.script: scripts/pos.sh
+    roles:
+      - ext4
+      - baseArch
+      - cleanup
