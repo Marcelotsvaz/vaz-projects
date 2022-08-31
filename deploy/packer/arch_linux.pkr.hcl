@@ -90,6 +90,9 @@ source "amazon-ebssurrogate" "arch_linux" {
 	ami_virtualization_type = "hvm"
 	ena_support = true
 	
+	force_deregister = true
+	force_delete_snapshot = true
+	
 	ami_root_device {
 		source_device_name = "/dev/xvdf"
 		device_name = "/dev/xvda"
