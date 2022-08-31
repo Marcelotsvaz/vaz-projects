@@ -1,0 +1,19 @@
+# 
+# VAZ Projects
+# 
+# 
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+[Unit]
+Description = cAdvisor
+Documentation = https://github.com/google/cadvisor
+Requires = docker.service
+After = docker.service
+
+[Service]
+ExecStart = /usr/local/lib/cadvisor
+
+[Install]
+WantedBy = multi-user.target

@@ -1,0 +1,50 @@
+# 
+# VAZ Projects
+# 
+# 
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+server:
+    http_listen_port: 9080
+    grpc_listen_port: 0
+
+
+
+clients:
+  - url: http://monitoring:3100/loki/api/v1/push
+
+
+
+positions:
+    filename: /var/lib/promtail/positions.yaml
+
+
+
+scrape_configs:
+  - job_name: systemd Journal
+    journal:
+        json: true
+        labels:
+            job: systemd Journal
+            instance: ${instanceName}
+    relabel_configs:
+      - source_labels: [ __journal__systemd_unit ]
+        target_label: unit
+      - source_labels: [ __journal__transport ]
+        target_label: transport
+    
+    
+  - job_name: Docker Containers
+    docker_sd_configs:
+      - host: unix:///var/run/docker.sock
+    pipeline_stages:
+      - static_labels:
+          job: Docker Containers
+          instance: ${instanceName}
+    relabel_configs:
+      - source_labels: [ __meta_docker_container_label_com_docker_compose_project ]
+        target_label: project
+      - source_labels: [ __meta_docker_container_label_com_docker_compose_service ]
+        target_label: service

@@ -1,0 +1,32 @@
+# 
+# VAZ Projects
+# 
+# 
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+  - name: Copy files
+    become: true
+    ansible.builtin.copy:
+        src: '{{ item.file }}'
+        dest: '{{ mountPoint }}/{{ item.dir }}'
+        mode: preserve
+    loop:
+      - { file: cadvisor.service, dir: /usr/local/lib/systemd/system/ }
+      - { file: promtail.yaml, dir: /etc/loki/ }
+      - { file: override.conf, dir: /usr/local/lib/systemd/system/promtail.service.d/ }
+
+
+  - name: Fetch cAdvisor
+    become: true
+    ansible.builtin.get_url:
+        url: https://github.com/google/cadvisor/releases/download/v0.45.0/cadvisor-v0.45.0-linux-amd64
+        dest: '{{ mountPoint }}/usr/local/lib/cadvisor'
+        mode: +x
+        checksum: sha256:9a2a0b69f58d932855c0af23b847cb9de8f8c32264f66f9fb5dcc8f359f34ccd
+
+
+  - name: Enable services
+    become: true
+    ansible.builtin.command: arch-chroot {{ mountPoint }} systemctl enable prometheus-node-exporter cadvisor promtail
