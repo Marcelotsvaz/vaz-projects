@@ -142,6 +142,7 @@ LogLevelMax = notice
 EOF
 #-------------------------------------------------------------------------------
 
+
 # cAdvisor
 curl https://github.com/google/cadvisor/releases/download/v0.45.0/cadvisor-v0.45.0-linux-amd64 -sLo /usr/local/lib/cadvisor && chmod +x ${_}
 #-------------------------------------------------------------------------------
@@ -159,115 +160,6 @@ ExecStart = /usr/local/lib/cadvisor
 WantedBy = multi-user.target
 EOF
 #-------------------------------------------------------------------------------
-
-
-# Init scripts.
-#-------------------------------------------------------------------------------
-cat > /usr/local/lib/instanceScriptsSetup.sh << 'EOF'
-#!/usr/bin/bash
-# Grow root partition.
-disk="/dev/$(lsblk -nro MOUNTPOINT,PKNAME | grep '^/ ' | cut -d ' ' -f2)"
-partition="/dev/$(lsblk -nro MOUNTPOINT,KNAME | grep '^/ ' | cut -d ' ' -f2)"
-
-# Resize root partition.
-sgdisk --move-second-header ${disk}
-sgdisk --delete 2 ${disk}
-sgdisk --new 2:0:0 --change-name 2:'Root' ${disk}
-
-# Reload partitions.
-partx -u ${disk}
-
-# Resize filesystem.
-resize2fs ${partition}
-
-
-# Download user data.
-mkdir /tmp/deploy && cd ${_}
-curl -s http://169.254.169.254/latest/user-data | tar -xz
-mv per*.sh /usr/local/lib/
-test -f environment.env && mv environment.env /etc/environment || true
-EOF
-#-------------------------------------------------------------------------------
-chmod +x /usr/local/lib/instanceScriptsSetup.sh
-
-#-------------------------------------------------------------------------------
-cat > /usr/local/lib/systemd/system/instanceScriptsSetup.service << 'EOF'
-[Unit]
-Description = Setup Instance Scripts
-Requires = network-online.target
-After = network-online.target
-ConditionFirstBoot = yes
-
-[Service]
-Type = oneshot
-
-ExecStart = /usr/local/lib/instanceScriptsSetup.sh
-
-[Install]
-WantedBy = multi-user.target
-EOF
-#-------------------------------------------------------------------------------
-
-#-------------------------------------------------------------------------------
-cat > /usr/local/lib/systemd/system/perInstance.service << 'EOF'
-[Unit]
-Description = Instance Configuration Script
-Requires = instanceScriptsSetup.service
-After = instanceScriptsSetup.service
-ConditionFirstBoot = yes
-
-[Service]
-Type = oneshot
-
-EnvironmentFile = -/etc/environment
-ExecStart = /usr/local/lib/perInstance.sh
-
-[Install]
-WantedBy = multi-user.target
-EOF
-#-------------------------------------------------------------------------------
-
-#-------------------------------------------------------------------------------
-cat > /usr/local/lib/systemd/system/perBoot.service << 'EOF'
-[Unit]
-Description = Boot Script
-Requires = perInstance.service
-After = perInstance.service
-ConditionFileIsExecutable = /usr/local/lib/perBoot.sh
-
-[Service]
-Type = oneshot
-
-EnvironmentFile = -/etc/environment
-ExecStart = /usr/local/lib/perBoot.sh
-
-[Install]
-WantedBy = multi-user.target
-EOF
-#-------------------------------------------------------------------------------
-
-#-------------------------------------------------------------------------------
-cat > /usr/local/lib/systemd/system/perShutdown.service << 'EOF'
-[Unit]
-Description = Shutdown Script
-Requires = perInstance.service
-After = perInstance.service
-ConditionFileIsExecutable = /usr/local/lib/perShutdown.sh
-
-[Service]
-Type = oneshot
-RemainAfterExit = true
-
-EnvironmentFile = -/etc/environment
-ExecStop = /usr/local/lib/perShutdown.sh
-
-[Install]
-WantedBy = multi-user.target
-EOF
-#-------------------------------------------------------------------------------
-
-systemctl disable systemd-firstboot
-systemctl enable instanceScriptsSetup per{Instance,Boot,Shutdown}
 
 
 # Promtail

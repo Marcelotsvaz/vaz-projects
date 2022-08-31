@@ -1,0 +1,21 @@
+# 
+# VAZ Projects
+# 
+# 
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+[Unit]
+Description = Setup Instance Scripts
+Requires = network-online.target
+After = network-online.target
+ConditionFirstBoot = yes
+
+[Service]
+Type = oneshot
+
+ExecStart = /usr/local/lib/instanceScriptsSetup.sh
+
+[Install]
+WantedBy = multi-user.target

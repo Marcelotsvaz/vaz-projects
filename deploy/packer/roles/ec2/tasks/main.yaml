@@ -1,0 +1,34 @@
+# 
+# VAZ Projects
+# 
+# 
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+  - name: Copy units
+    become: true
+    ansible.builtin.copy:
+        src: '{{ item }}'
+        dest: '{{ mountPoint }}/usr/local/lib/systemd/system/'
+        mode: preserve
+    with_fileglob: '*.service'
+
+
+  - name: Copy scripts
+    become: true
+    ansible.builtin.copy:
+        src: instanceScriptsSetup.sh
+        dest: '{{ mountPoint }}/usr/local/lib/'
+        mode: preserve
+
+
+  - name: Disable systemd-firstboot
+    become: true
+    ansible.builtin.command: arch-chroot {{ mountPoint }} systemctl disable systemd-firstboot
+
+
+  - name: Enable services
+    become: true
+    ansible.builtin.command: arch-chroot {{ mountPoint }} systemctl enable {{ item | basename }}
+    with_fileglob: '*.service'

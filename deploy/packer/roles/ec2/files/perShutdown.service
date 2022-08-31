@@ -1,0 +1,23 @@
+# 
+# VAZ Projects
+# 
+# 
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+[Unit]
+Description = Shutdown Script
+Requires = perInstance.service
+After = perInstance.service
+ConditionFileIsExecutable = /usr/local/lib/perShutdown.sh
+
+[Service]
+Type = oneshot
+RemainAfterExit = true
+
+EnvironmentFile = -/etc/environment
+ExecStop = /usr/local/lib/perShutdown.sh
+
+[Install]
+WantedBy = multi-user.target

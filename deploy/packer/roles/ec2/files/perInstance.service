@@ -1,0 +1,22 @@
+# 
+# VAZ Projects
+# 
+# 
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+[Unit]
+Description = Instance Configuration Script
+Requires = instanceScriptsSetup.service
+After = instanceScriptsSetup.service
+ConditionFirstBoot = yes
+
+[Service]
+Type = oneshot
+
+EnvironmentFile = -/etc/environment
+ExecStart = /usr/local/lib/perInstance.sh
+
+[Install]
+WantedBy = multi-user.target

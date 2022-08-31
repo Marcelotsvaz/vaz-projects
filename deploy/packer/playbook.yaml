@@ -18,4 +18,5 @@
     roles:
       - ext4
       - baseArch
+      - ec2
       - cleanup

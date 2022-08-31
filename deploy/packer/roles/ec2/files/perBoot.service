@@ -1,0 +1,22 @@
+# 
+# VAZ Projects
+# 
+# 
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+[Unit]
+Description = Boot Script
+Requires = perInstance.service
+After = perInstance.service
+ConditionFileIsExecutable = /usr/local/lib/perBoot.sh
+
+[Service]
+Type = oneshot
+
+EnvironmentFile = -/etc/environment
+ExecStart = /usr/local/lib/perBoot.sh
+
+[Install]
+WantedBy = multi-user.target
