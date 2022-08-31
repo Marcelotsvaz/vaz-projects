@@ -6,6 +6,14 @@
 
 
 
-  - name: Run script.sh
+  - name: Enable systemd ConditionFirstBoot
     become: true
-    ansible.builtin.script: script.sh
+    ansible.builtin.command: rm {{ mountPoint }}/etc/machine-id
+
+
+  - name: Unmount the root partition
+    become: true
+    ansible.posix.mount:
+        path: '{{ mountPoint }}'
+        state: unmounted
+        fstab: /tmp/tmp.fstab

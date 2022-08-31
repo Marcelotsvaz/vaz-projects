@@ -6,9 +6,34 @@
 
 
 
-  - name: Run script.sh
+  - name: Run pacstrap
     become: true
-    ansible.builtin.script: script.sh
+    ansible.builtin.command: pacstrap -c {{ mountPoint }} --noprogressbar {{ packages | join( ' ' ) }}
+    vars:
+        packages:
+          - base
+          - linux
+          - grub
+          - openssh
+          - sudo
+          - aws-cli
+          - gdisk
+          - nano
+          - docker
+          - docker-compose
+          - prometheus-node-exporter
+          - promtail
+          - dehydrated
+
+
+  - name: Setup DNS
+    become: true
+    ansible.builtin.command: ln -sf /run/systemd/resolve/resolv.conf {{ mountPoint }}/etc/resolv.conf
+
+
+  - name: Generate fstab
+    become: true
+    ansible.builtin.shell: genfstab -U {{ mountPoint }} >> {{ mountPoint }}/etc/fstab
 
 
   - name: Copy chroot.sh
