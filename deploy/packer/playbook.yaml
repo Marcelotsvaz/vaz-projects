@@ -18,6 +18,7 @@
     roles:
       - ext4
       - baseArch
+      - customArch
       - ec2
       - monitoring
       - cleanup
