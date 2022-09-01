@@ -6,6 +6,8 @@
 
 
 
+    # Create base system.
+    #---------------------------------------------------------------------------
   - name: Run pacstrap
     become: true
     ansible.builtin.command: pacstrap -c {{ mountPoint }} --noprogressbar {{ packages | join( ' ' ) }}
@@ -36,19 +38,77 @@
     ansible.builtin.shell: genfstab -U {{ mountPoint }} >> {{ mountPoint }}/etc/fstab
 
 
-  - name: Copy chroot.sh
+
+    # Basic configuration.
+    #---------------------------------------------------------------------------
+  - name: Set time zone
+    become: true
+    ansible.builtin.command: ln -sf /usr/share/zoneinfo/America/Sao_Paulo {{ mountPoint }}/etc/localtime
+
+
+  - name: Enable locales
+    become: true
+    ansible.builtin.lineinfile:
+        path: '{{ mountPoint }}/etc/locale.gen'
+        regex: ^#?({{ item }})
+        line: '\1'
+        backrefs: true
+    loop:
+      - 'en_US\.UTF-8 UTF-8'
+      - 'pt_BR\.UTF-8 UTF-8'
+
+
+  - name: Generate locales
+    become: true
+    ansible.builtin.command: arch-chroot {{ mountPoint }} locale-gen
+
+
+  - name: Set locale
     become: true
     ansible.builtin.copy:
-        src: chroot.sh
-        dest: '{{ mountPoint }}'
+        content: LANG=en_US.UTF-8
+        dest: '{{ mountPoint }}/etc/locale.conf'
+
+
+  - name: Copy network unit
+    become: true
+    ansible.builtin.copy:
+        src: main.network
+        dest: '{{ mountPoint }}/etc/systemd/network/'
         mode: preserve
 
 
-  - name: Run chroot.sh
+  - name: Enable services
     become: true
-    ansible.builtin.command: arch-chroot {{ mountPoint }} /chroot.sh
+    ansible.builtin.shell: arch-chroot {{ mountPoint }} systemctl enable systemd-{networkd,resolved,timesyncd} sshd
 
 
-  - name: Delete chroot.sh
+  - name: Add wheel group to sudoers
     become: true
-    ansible.builtin.command: rm {{ mountPoint }}/chroot.sh
+    ansible.builtin.copy:
+        content: '%wheel ALL=(ALL) NOPASSWD: ALL'
+        dest: '{{ mountPoint }}/etc/sudoers.d/wheel'
+
+
+
+    # Install bootloader.
+    #---------------------------------------------------------------------------
+  - name: Install GRUB
+    become: true
+    ansible.builtin.command: arch-chroot {{ mountPoint }} grub-install {{ disk }}
+
+
+  - name: Change GRUB config
+    become: true
+    ansible.builtin.lineinfile:
+        path: '{{ mountPoint }}/etc/default/grub'
+        regex: ^{{ item.var }}=
+        line: '{{ item.var }}={{ item.value }}'
+    loop:
+      - { var: 'GRUB_CMDLINE_LINUX_DEFAULT', value: "'nomodeset console=ttyS0,9600n8 earlyprintk=serial,ttyS0,9600 loglevel=6'" }
+      - { var: 'GRUB_TIMEOUT', value: 0 }
+
+
+  - name: Generate GRUB config file
+    become: true
+    ansible.builtin.command: arch-chroot {{ mountPoint }} grub-mkconfig -o /boot/grub/grub.cfg

@@ -1,0 +1,16 @@
+# 
+# VAZ Projects
+# 
+# 
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+[Match]
+Name = en*
+
+[Network]
+DHCP = yes
+
+[DHCPv4]
+UseDomains = yes
