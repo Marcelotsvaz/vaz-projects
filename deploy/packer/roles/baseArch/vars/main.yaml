@@ -1,0 +1,18 @@
+# 
+# VAZ Projects
+# 
+# 
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+baseArch_packages:
+  - base
+  - linux
+  - grub
+  - sudo
+  - openssh
+  - nano
+  - aws-cli
+  - docker
+  - docker-compose

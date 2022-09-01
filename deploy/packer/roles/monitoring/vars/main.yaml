@@ -1,0 +1,11 @@
+# 
+# VAZ Projects
+# 
+# 
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+monitoring_packages:
+  - prometheus-node-exporter
+  - promtail

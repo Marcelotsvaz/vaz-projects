@@ -9,11 +9,11 @@
   - name: VAZ Projects AMI Build
     hosts: default
     
-    vars: &vars
+    vars:
         disk: /dev/nvme1n1
         mountPoint: /mnt/new
-    
-    environment: *vars
+        vazProjects_packages:
+          - dehydrated
     
     roles:
       - ext4
