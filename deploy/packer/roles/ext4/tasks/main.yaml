@@ -6,31 +6,29 @@
 
 
 
-  - name: Create partition table
+  - name: Create partitions and filesystems
     become: true
-    ansible.builtin.command: sgdisk --clear {{ disk }}
-
-
-  - name: Create boot partition
-    become: true
-    ansible.builtin.command: sgdisk --new 1:0:+1M --change-name 1:'Boot' --typecode 1:ef02 {{ disk }}
-
-
-  - name: Create root partition
-    become: true
-    ansible.builtin.command: sgdisk --new 2:0:0 --change-name 2:'Root' {{ disk }}
-
-
-  - name: Create Ext4 filesystem
-    become: true
-    ansible.builtin.command: mkfs.ext4 {{ disk }}p2
-
-
-  - name: Mount the root partition
-    become: true
-    ansible.posix.mount:
-        src: '{{ disk }}p2'
-        path: '{{ mountPoint }}'
-        state: mounted
-        fstype: ext4
-        fstab: /tmp/tmp.fstab
+    block:
+      - name: Create partition table
+        command: sgdisk --clear {{ disk }}
+        
+        
+      - name: Create boot partition
+        command: sgdisk --new 1:0:+1M --change-name 1:'Boot' --typecode 1:ef02 {{ disk }}
+        
+        
+      - name: Create root partition
+        command: sgdisk --new 2:0:0 --change-name 2:'Root' {{ disk }}
+        
+        
+      - name: Create Ext4 filesystem
+        command: mkfs.ext4 {{ disk }}p2
+        
+        
+      - name: Mount the root partition
+        ansible.posix.mount:
+            src: '{{ disk }}p2'
+            path: '{{ mountPoint }}'
+            state: mounted
+            fstype: ext4
+            fstab: /tmp/tmp.fstab

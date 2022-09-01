@@ -6,55 +6,51 @@
 
 
 
-# Docker adds ndots:0 to container's /etc/resolv.conf, which disables search domains in musl.
-# 
-# If we specify any DNS option Docker stops handling DNS servers listening on 127.0.0.0/8 like systemd-resolved
-# stub resolver so we use /run/systemd/resolve/resolv.conf instead of stub-resolv.conf.
-  - name: Copy files
+  - name: Arch Linux custom configuration
     become: true
-    ansible.builtin.copy:
-        src: '{{ item.file }}'
-        dest: '{{ mountPoint }}/{{ item.dir }}'
-        mode: preserve
-    loop:
-      - { file: custom.cnf, dir: /etc/ssl/ }
-      - { file: daemon.json, dir: /etc/docker/ }
-      - { file: silence.conf, dir: /usr/local/lib/systemd/system/run-docker-.mount.d/ }
-
-
-  - name: Append to files
-    become: true
-    ansible.builtin.blockinfile:
-        path: '{{ mountPoint }}/{{ item.dir }}/{{ item.file }}'
-        block: '{{ lookup( "ansible.builtin.file", item.file ) }}'
-    loop:
-      - { file: sshd_config, dir: /etc/ssh/ }
-      - { file: bash.bashrc, dir: /etc/ }
-
-
-  - name: Add ".include custom.cnf" to OpenSSL config
-    become: true
-    ansible.builtin.lineinfile:
-        path: '{{ mountPoint }}/etc/ssl/openssl.cnf'
-        insertbefore: '^\[ new_oids \]$'
-        line: .include custom.cnf
-
-
-  - name: Make SSH dir
-    become: true
-    ansible.builtin.command: mkdir -m 700 {{ mountPoint }}/etc/skel/.ssh
-
-
-  - name: Create authorized_keys
-    become: true
-    ansible.builtin.command: touch {{ mountPoint }}/etc/skel/.ssh/authorized_keys
-
-
-  - name: Remove bash stuff
-    become: true
-    ansible.builtin.shell: rm {{ mountPoint }}/etc/skel/.bash*
-
-
-  - name: Add admin user
-    become: true
-    ansible.builtin.command: arch-chroot {{ mountPoint }} useradd -mG wheel marcelotsvaz
+    block:
+      - name: Copy files
+        copy:
+            src: '{{ item.file }}'
+            dest: '{{ mountPoint }}/{{ item.dir }}'
+            mode: preserve
+        loop:
+          - { file: custom.cnf, dir: /etc/ssl/ }
+          - { file: daemon.json, dir: /etc/docker/ }
+          - { file: silence.conf, dir: /usr/local/lib/systemd/system/run-docker-.mount.d/ }
+        # Docker adds ndots:0 to container's /etc/resolv.conf, which disables search domains in musl.
+        # 
+        # If we specify any DNS option Docker stops handling DNS servers listening on 127.0.0.0/8 like systemd-resolved
+        # stub resolver so we use /run/systemd/resolve/resolv.conf instead of stub-resolv.conf.
+        
+        
+      - name: Append to files
+        blockinfile:
+            path: '{{ mountPoint }}/{{ item.dir }}/{{ item.file }}'
+            block: '{{ lookup( "file", item.file ) }}'
+        loop:
+          - { file: sshd_config, dir: /etc/ssh/ }
+          - { file: bash.bashrc, dir: /etc/ }
+        
+        
+      - name: Add ".include custom.cnf" to OpenSSL config
+        lineinfile:
+            path: '{{ mountPoint }}/etc/ssl/openssl.cnf'
+            insertbefore: '^\[ new_oids \]$'
+            line: .include custom.cnf
+        
+        
+      - name: Make SSH dir
+        command: mkdir -m 700 {{ mountPoint }}/etc/skel/.ssh
+        
+        
+      - name: Create authorized_keys
+        command: touch {{ mountPoint }}/etc/skel/.ssh/authorized_keys
+        
+        
+      - name: Remove bash stuff
+        shell: rm {{ mountPoint }}/etc/skel/.bash*
+        
+        
+      - name: Add admin user
+        command: arch-chroot {{ mountPoint }} useradd -mG wheel marcelotsvaz
