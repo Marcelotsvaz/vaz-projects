@@ -6,6 +6,8 @@
 
 
 
+*.yaml linguist-detectable
+*.yml linguist-detectable
 *.env.tftpl linguist-language=Shell
 modern-normalize.min.css linguist-vendored
 **/jet/css/themes/*/*.css linguist-generated
