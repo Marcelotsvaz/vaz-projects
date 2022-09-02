@@ -8,11 +8,13 @@
 
   - name: Setup monitoring
     become: true
+    connection: community.general.chroot
+    
     block:
       - name: Copy files
         copy:
             src: '{{ item.file }}'
-            dest: '{{ mountPoint }}/{{ item.dir }}'
+            dest: '{{ item.dir }}'
             mode: preserve
         loop:
           - { file: cadvisor.service, dir: /usr/local/lib/systemd/system/ }
@@ -23,10 +25,10 @@
       - name: Fetch cAdvisor
         get_url:
             url: https://github.com/google/cadvisor/releases/download/v0.45.0/cadvisor-v0.45.0-linux-amd64
-            dest: '{{ mountPoint }}/usr/local/lib/cadvisor'
+            dest: /usr/local/lib/cadvisor
             mode: +x
             checksum: sha256:9a2a0b69f58d932855c0af23b847cb9de8f8c32264f66f9fb5dcc8f359f34ccd
         
         
       - name: Enable services
-        command: arch-chroot {{ mountPoint }} systemctl enable prometheus-node-exporter cadvisor promtail
+        command: systemctl enable prometheus-node-exporter cadvisor promtail

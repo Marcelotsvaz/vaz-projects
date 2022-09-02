@@ -8,11 +8,13 @@
 
   - name: Arch Linux custom configuration
     become: true
+    connection: community.general.chroot
+    
     block:
       - name: Copy files
         copy:
             src: '{{ item.file }}'
-            dest: '{{ mountPoint }}/{{ item.dir }}'
+            dest: '{{ item.dir }}'
             mode: preserve
         loop:
           - { file: custom.cnf, dir: /etc/ssl/ }
@@ -26,7 +28,7 @@
         
       - name: Append to files
         blockinfile:
-            path: '{{ mountPoint }}/{{ item.dir }}/{{ item.file }}'
+            path: '{{ item.dir }}/{{ item.file }}'
             block: '{{ lookup( "file", item.file ) }}'
         loop:
           - { file: sshd_config, dir: /etc/ssh/ }
@@ -35,22 +37,22 @@
         
       - name: Add ".include custom.cnf" to OpenSSL config
         lineinfile:
-            path: '{{ mountPoint }}/etc/ssl/openssl.cnf'
+            path: /etc/ssl/openssl.cnf
             insertbefore: '^\[ new_oids \]$'
             line: .include custom.cnf
         
         
       - name: Make SSH dir
-        command: mkdir -m 700 {{ mountPoint }}/etc/skel/.ssh
+        command: mkdir -m 700 /etc/skel/.ssh
         
         
       - name: Create authorized_keys
-        command: touch {{ mountPoint }}/etc/skel/.ssh/authorized_keys
+        command: touch /etc/skel/.ssh/authorized_keys
         
         
       - name: Remove bash stuff
-        shell: rm {{ mountPoint }}/etc/skel/.bash*
+        shell: rm /etc/skel/.bash*
         
         
       - name: Add admin user
-        command: arch-chroot {{ mountPoint }} useradd -mG wheel marcelotsvaz
+        command: useradd -mG wheel marcelotsvaz

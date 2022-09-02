@@ -8,11 +8,13 @@
 
   - name: EC2 instance configuration
     become: true
+    connection: community.general.chroot
+    
     block:
       - name: Copy units
         copy:
             src: '{{ item }}'
-            dest: '{{ mountPoint }}/usr/local/lib/systemd/system/'
+            dest: /usr/local/lib/systemd/system/
             mode: preserve
         with_fileglob: '*.service'
         
@@ -20,14 +22,14 @@
       - name: Copy scripts
         copy:
             src: instanceScriptsSetup.sh
-            dest: '{{ mountPoint }}/usr/local/lib/'
+            dest: /usr/local/lib/
             mode: preserve
         
         
       - name: Disable systemd-firstboot
-        command: arch-chroot {{ mountPoint }} systemctl disable systemd-firstboot
+        command: systemctl disable systemd-firstboot
         
         
       - name: Enable services
-        command: arch-chroot {{ mountPoint }} systemctl enable {{ item | basename }}
+        command: systemctl enable {{ item | basename }}
         with_fileglob: '*.service'

@@ -7,11 +7,13 @@
 
 
   - name: VAZ Projects AMI Build
-    hosts: default
+    hosts: 127.0.0.1
     
     vars:
         disk: /dev/nvme1n1
         mountPoint: /mnt/new
+        ansible_chroot_exe: arch-chroot
+        ansible_host: '{{ mountPoint }}'
         vazProjects_packages:
           - dehydrated
     

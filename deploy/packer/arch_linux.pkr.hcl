@@ -112,8 +112,10 @@ source "amazon-ebssurrogate" "arch_linux" {
 build {
 	sources = [ "source.amazon-ebssurrogate.arch_linux" ]
 	
-	provisioner "ansible" {
+	provisioner "ansible-local" {
+		command = "./sudoAnsiblePlaybook.sh"
+		
+		playbook_dir = "."
 		playbook_file = "playbook.yaml"
-		use_proxy = false
 	}
 }

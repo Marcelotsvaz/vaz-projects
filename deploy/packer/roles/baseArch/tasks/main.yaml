@@ -8,10 +8,8 @@
 
   - name: Arch Linux base install
     become: true
+    
     block:
-        
-        # Create base system.
-        #---------------------------------------------------------------------------
       - name: Get packages from all roles
         set_fact:
             packages: '{{ packages | default( [] ) + lookup( "vars", item ) }}'
@@ -28,18 +26,21 @@
         
       - name: Generate fstab
         shell: genfstab -U {{ mountPoint }} >> {{ mountPoint }}/etc/fstab
-        
-        
-        
-        # Basic configuration.
-        #---------------------------------------------------------------------------
+    
+    
+    
+  - name: Arch Linux base configuration
+    become: true
+    connection: community.general.chroot
+    
+    block:
       - name: Set time zone
-        command: ln -sf /usr/share/zoneinfo/America/Sao_Paulo {{ mountPoint }}/etc/localtime
+        command: ln -sf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
         
         
       - name: Enable locales
         lineinfile:
-            path: '{{ mountPoint }}/etc/locale.gen'
+            path: /etc/locale.gen
             regex: ^#?({{ item }})
             line: '\1'
             backrefs: true
@@ -49,42 +50,42 @@
         
         
       - name: Generate locales
-        command: arch-chroot {{ mountPoint }} locale-gen
+        command: locale-gen
         
         
       - name: Set locale
         copy:
             content: LANG=en_US.UTF-8
-            dest: '{{ mountPoint }}/etc/locale.conf'
+            dest: /etc/locale.conf
         
         
       - name: Copy network unit
         copy:
             src: main.network
-            dest: '{{ mountPoint }}/etc/systemd/network/'
+            dest: /etc/systemd/network/
             mode: preserve
         
         
       - name: Enable services
-        shell: arch-chroot {{ mountPoint }} systemctl enable systemd-{networkd,resolved,timesyncd} sshd
+        shell: systemctl enable systemd-{networkd,resolved,timesyncd} sshd
         
         
       - name: Add wheel group to sudoers
         copy:
             content: '%wheel ALL=(ALL) NOPASSWD: ALL'
-            dest: '{{ mountPoint }}/etc/sudoers.d/wheel'
+            dest: /etc/sudoers.d/wheel
         
         
         
         # Install bootloader.
         #---------------------------------------------------------------------------
       - name: Install GRUB
-        command: arch-chroot {{ mountPoint }} grub-install {{ disk }}
+        command: grub-install {{ disk }}
         
         
       - name: Change GRUB config
         lineinfile:
-            path: '{{ mountPoint }}/etc/default/grub'
+            path: /etc/default/grub
             regex: ^{{ item.var }}=
             line: '{{ item.var }}={{ item.value }}'
         loop:
@@ -93,4 +94,4 @@
         
         
       - name: Generate GRUB config file
-        command: arch-chroot {{ mountPoint }} grub-mkconfig -o /boot/grub/grub.cfg
+        command: grub-mkconfig -o /boot/grub/grub.cfg
