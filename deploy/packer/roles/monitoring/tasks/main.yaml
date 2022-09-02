@@ -31,4 +31,10 @@
         
         
       - name: Enable services
-        command: systemctl enable prometheus-node-exporter cadvisor promtail
+        systemd:
+            enabled: true
+            name: '{{ item }}'
+        loop:
+          - prometheus-node-exporter
+          - cadvisor
+          - promtail

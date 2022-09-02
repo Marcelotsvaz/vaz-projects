@@ -8,13 +8,10 @@
 
   - name: Arch Linux install cleanup
     become: true
+    
     block:
-      - name: Enable systemd ConditionFirstBoot
-        command: rm {{ mountPoint }}/etc/machine-id
-        
-        
       - name: Unmount the root partition
         ansible.posix.mount:
-            path: '{{ mountPoint }}'
             state: unmounted
+            path: '{{ mountPoint }}'
             fstab: /tmp/tmp.fstab

@@ -8,6 +8,7 @@
 
   - name: Create partitions and filesystems
     become: true
+    
     block:
       - name: Create partition table
         command: sgdisk --clear {{ disk }}
@@ -22,13 +23,15 @@
         
         
       - name: Create Ext4 filesystem
-        command: mkfs.ext4 {{ disk }}p2
+        community.general.filesystem:
+            dev: '{{ disk }}p2'
+            fstype: ext4
         
         
       - name: Mount the root partition
         ansible.posix.mount:
+            state: mounted
             src: '{{ disk }}p2'
             path: '{{ mountPoint }}'
-            state: mounted
             fstype: ext4
             fstab: /tmp/tmp.fstab

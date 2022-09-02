@@ -21,7 +21,11 @@
         
         
       - name: Setup DNS
-        command: ln -sf /run/systemd/resolve/resolv.conf {{ mountPoint }}/etc/resolv.conf
+        file:
+            state: link
+            path: '{{ mountPoint }}/etc/resolv.conf'
+            src: /run/systemd/resolve/resolv.conf
+            force: true
         
         
       - name: Generate fstab
@@ -35,7 +39,11 @@
     
     block:
       - name: Set time zone
-        command: ln -sf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
+        file:
+            state: link
+            path: /etc/localtime
+            src: /usr/share/zoneinfo/America/Sao_Paulo
+            force: true
         
         
       - name: Enable locales
@@ -67,7 +75,14 @@
         
         
       - name: Enable services
-        shell: systemctl enable systemd-{networkd,resolved,timesyncd} sshd
+        systemd:
+            enabled: true
+            name: '{{ item }}'
+        loop:
+          - systemd-networkd
+          - systemd-resolved
+          - systemd-timesyncd
+          - sshd
         
         
       - name: Add wheel group to sudoers

@@ -7,7 +7,7 @@
 
 
   - name: VAZ Projects AMI Build
-    hosts: 127.0.0.1
+    hosts: [ 127.0.0.1 ]
     
     vars:
         disk: /dev/nvme1n1

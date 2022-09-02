@@ -27,9 +27,19 @@
         
         
       - name: Disable systemd-firstboot
-        command: systemctl disable systemd-firstboot
+        systemd:
+            enabled: false
+            name: systemd-firstboot
+        
+        
+      - name: Enable systemd ConditionFirstBoot
+        file:
+            state: absent
+            path: /etc/machine-id
         
         
       - name: Enable services
-        command: systemctl enable {{ item | basename }}
+        systemd:
+            enabled: true
+            name: '{{ item | basename }}'
         with_fileglob: '*.service'
