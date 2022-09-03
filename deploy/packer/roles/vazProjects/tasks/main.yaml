@@ -11,7 +11,7 @@
     connection: community.general.chroot
     
     block:
-      - name: Copy files
+      - name: Copy Docker configuration
         copy:
             src: '{{ item.file }}'
             dest: '{{ item.dir }}'
@@ -23,3 +23,9 @@
         # 
         # If we specify any DNS option Docker stops handling DNS servers listening on 127.0.0.0/8 like systemd-resolved
         # stub resolver so we use /run/systemd/resolve/resolv.conf instead of stub-resolv.conf.
+        
+        
+      - name: Enable Docker socket
+        systemd:
+            enabled: true
+            name: docker.socket

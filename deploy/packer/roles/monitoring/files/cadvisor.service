@@ -9,8 +9,8 @@
 [Unit]
 Description = cAdvisor
 Documentation = https://github.com/google/cadvisor
-Requires = docker.service
-After = docker.service
+# Don't trigger docker.socket before perBoot.service has runned.
+After = perBoot.service
 
 [Service]
 ExecStart = /usr/local/lib/cadvisor
