@@ -26,16 +26,15 @@
             mode: preserve
         
         
-      - name: Disable systemd-firstboot
-        systemd:
-            enabled: false
-            name: systemd-firstboot
-        
-        
+        # See https://systemd.io/BUILDING_IMAGES/.
       - name: Enable systemd ConditionFirstBoot
         file:
             state: absent
-            path: /etc/machine-id
+            path: '{{ item }}'
+        loop:
+          - /etc/machine-id
+          - /var/lib/systemd/random-seed
+          - /var/lib/systemd/credential.secret
         
         
       - name: Enable services
