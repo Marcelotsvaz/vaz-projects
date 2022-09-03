@@ -117,7 +117,7 @@ data "aws_ami" "arch_linux" {
 	
 	filter {
 		name = "name"
-		values = [ "Arch Linux AMI" ]
+		values = [ "VAZ Projects AMI" ]
 	}
 }
 

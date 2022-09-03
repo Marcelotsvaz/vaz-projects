@@ -6,7 +6,7 @@
 
 
 
-  - name: VAZ Projects AMI Build
+  - name: VAZ Projects AMI
     hosts: [ 127.0.0.1 ]
     
     vars:

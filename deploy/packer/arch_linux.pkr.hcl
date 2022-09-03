@@ -6,8 +6,16 @@
 
 
 
-locals {
-	ami_name = "Arch Linux AMI"
+variable "ami_name" {
+	type =  string
+	default = "VAZ Projects AMI"
+}
+
+
+
+variable "playbook" {
+	type =  string
+	default = "amiPlaybook.yaml"
 }
 
 
@@ -67,26 +75,26 @@ source "amazon-ebssurrogate" "arch_linux" {
 		owners = [ "self" ]
 		
 		filters = {
-			name = "Arch Linux AMI Builder AMI"
+			name = "VAZ Projects Builder AMI"
 		}
 	}
 	
 	run_tags = {
-		Name: "${local.ami_name} Builder"
+		Name: "${var.ami_name} Builder"
 	}
 	
 	run_volume_tags = {
-		Name: "${local.ami_name} Builder Volume"
+		Name: "${var.ami_name} Builder Volume"
 	}
 	
 	spot_tags = {
-		Name: "${local.ami_name} Builder Spot Request"
+		Name: "${var.ami_name} Builder Spot Request"
 	}
 	
 	
 	# AMI options.
 	#---------------------------------------------------------------------------
-	ami_name = local.ami_name
+	ami_name = var.ami_name
 	ami_virtualization_type = "hvm"
 	ena_support = true
 	
@@ -99,11 +107,11 @@ source "amazon-ebssurrogate" "arch_linux" {
 	}
 	
 	tags = {
-		Name: local.ami_name
+		Name: var.ami_name
 	}
 	
 	snapshot_tags = {
-		Name: "${local.ami_name} Snapshot"
+		Name: "${var.ami_name} Snapshot"
 	}
 }
 
@@ -116,6 +124,6 @@ build {
 		command = "./sudoAnsiblePlaybook.sh"
 		
 		playbook_dir = "."
-		playbook_file = "playbook.yaml"
+		playbook_file = var.playbook
 	}
 }
