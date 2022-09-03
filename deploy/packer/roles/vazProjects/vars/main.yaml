@@ -1,0 +1,12 @@
+# 
+# VAZ Projects
+# 
+# 
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+vazProjects_packages:
+  - docker
+  - docker-compose
+  - dehydrated

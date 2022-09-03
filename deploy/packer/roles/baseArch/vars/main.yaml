@@ -9,10 +9,9 @@
 baseArch_packages:
   - base
   - linux
+  - mkinitcpio
   - grub
   - sudo
   - openssh
   - nano
   - aws-cli
-  - docker
-  - docker-compose

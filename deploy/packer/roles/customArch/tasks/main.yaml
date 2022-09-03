@@ -13,17 +13,9 @@
     block:
       - name: Copy files
         copy:
-            src: '{{ item.file }}'
-            dest: '{{ item.dir }}'
+            src: custom.cnf
+            dest: /etc/ssl/
             mode: preserve
-        loop:
-          - { file: custom.cnf, dir: /etc/ssl/ }
-          - { file: daemon.json, dir: /etc/docker/ }
-          - { file: silence.conf, dir: /usr/local/lib/systemd/system/run-docker-.mount.d/ }
-        # Docker adds ndots:0 to container's /etc/resolv.conf, which disables search domains in musl.
-        # 
-        # If we specify any DNS option Docker stops handling DNS servers listening on 127.0.0.0/8 like systemd-resolved
-        # stub resolver so we use /run/systemd/resolve/resolv.conf instead of stub-resolv.conf.
         
         
       - name: Append to files
@@ -31,8 +23,9 @@
             path: '{{ item.dir }}/{{ item.file }}'
             block: '{{ lookup( "file", item.file ) }}'
         loop:
-          - { file: sshd_config, dir: /etc/ssh/ }
+          - { file: pacman.conf, dir: /etc/ }
           - { file: bash.bashrc, dir: /etc/ }
+          - { file: sshd_config, dir: /etc/ssh/ }
         
         
       - name: Add ".include custom.cnf" to OpenSSL config

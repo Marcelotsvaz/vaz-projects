@@ -1,0 +1,25 @@
+# 
+# VAZ Projects
+# 
+# 
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+  - name: vazProjects setup
+    become: true
+    connection: community.general.chroot
+    
+    block:
+      - name: Copy files
+        copy:
+            src: '{{ item.file }}'
+            dest: '{{ item.dir }}'
+            mode: preserve
+        loop:
+          - { file: daemon.json, dir: /etc/docker/ }
+          - { file: silence.conf, dir: /usr/local/lib/systemd/system/run-docker-.mount.d/ }
+        # Docker adds ndots:0 to container's /etc/resolv.conf, which disables search domains in musl.
+        # 
+        # If we specify any DNS option Docker stops handling DNS servers listening on 127.0.0.0/8 like systemd-resolved
+        # stub resolver so we use /run/systemd/resolve/resolv.conf instead of stub-resolv.conf.
