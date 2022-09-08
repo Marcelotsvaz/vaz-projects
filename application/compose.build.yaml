@@ -1,0 +1,17 @@
+# 
+# VAZ Projects
+# 
+# 
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+services:
+    application:
+        image: &applicationImage ${CI_REGISTRY_IMAGE}/application:latest
+        build:
+            context: .
+            cache_from:
+                - *applicationImage
+            args:
+                BUILDKIT_INLINE_CACHE: 1

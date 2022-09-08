@@ -19,5 +19,7 @@
     script:
       - echo ${CI_REGISTRY_PASSWORD} | docker login --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
       - docker buildx install
-      - docker build --pull --tag ${applicationImage} application
-      - docker push --quiet ${applicationImage}
+      - cd application
+      - docker compose -f compose.build.yaml build
+      - docker tag ${CI_REGISTRY_IMAGE}/application:latest ${applicationImage}
+      - docker push --all-tags --quiet ${CI_REGISTRY_IMAGE}/application
