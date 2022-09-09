@@ -48,7 +48,7 @@ RUN --mount=from=wheelBuilder,source=wheels/,target=wheels/		\
 	pip install --no-cache-dir --upgrade pip					\
 	&& pip install --no-cache-dir wheels/*
 
-ENV dockerUser=django
+ARG dockerUser=django
 RUN addgroup -S ${dockerUser} && adduser -Ss /sbin/nologin -G ${dockerUser} ${dockerUser}
 USER ${dockerUser}
 WORKDIR /home/${dockerUser}
