@@ -12,7 +12,7 @@ services:
         build:
             context: .
             x-bake:
-                output: type=image,compression=zstd,push=true
+                output: type=image,push=true
                 cache-from:
                   - type=local,src=../deployment/buildkitCache/
                 cache-to:
