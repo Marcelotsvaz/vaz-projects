@@ -21,5 +21,7 @@
     
     script:
       - echo ${CI_REGISTRY_PASSWORD} | docker login --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
-      - docker buildx create --driver docker-container --use
-      - docker buildx bake --file application/compose.build.yaml
+      - docker context create gitlab  # docker buildx create needs explicit context instead of env vars.
+      - docker buildx create gitlab --driver docker-container --use
+      - cd application/
+      - docker buildx bake --file compose.build.yaml
