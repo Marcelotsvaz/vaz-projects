@@ -16,10 +16,10 @@
     
     interruptible: true
     
+    cache:
+        paths: [ deployment/buildkitCache/ ]
+    
     script:
       - echo ${CI_REGISTRY_PASSWORD} | docker login --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
-      - docker buildx install
-      - cd application
-      - docker compose -f compose.build.yaml build
-      - docker tag ${CI_REGISTRY_IMAGE}/application:latest ${applicationImage}
-      - docker push --all-tags --quiet ${CI_REGISTRY_IMAGE}/application
+      - docker buildx create --driver docker-container --use
+      - docker buildx bake --file application/compose.build.yaml

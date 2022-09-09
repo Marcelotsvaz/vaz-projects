@@ -8,10 +8,12 @@
 
 services:
     application:
-        image: &applicationImage ${CI_REGISTRY_IMAGE}/application:latest
+        image: ${applicationImage}
         build:
             context: .
-            cache_from:
-                - *applicationImage
-            args:
-                BUILDKIT_INLINE_CACHE: 1
+            x-bake:
+                output: type=image,compression=zstd,push=true
+                cache-from:
+                  - type=local,src=../deployment/buildkitCache/
+                cache-to:
+                  - type=local,mode=max,compression=zstd,dest=../deployment/buildkitCache/
