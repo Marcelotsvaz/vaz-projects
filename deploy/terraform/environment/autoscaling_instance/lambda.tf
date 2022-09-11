@@ -97,6 +97,7 @@ data "aws_iam_policy_document" "autoscaling_lambda_assume_role_policy" {
 
 
 data "aws_iam_policy_document" "autoscaling_lambda_role_policy" {
+	# Used in autoscaling_lambda.py.
 	statement {
 		sid = "autoscalingDescribeAutoScalingGroups"
 		
@@ -105,6 +106,7 @@ data "aws_iam_policy_document" "autoscaling_lambda_role_policy" {
 		resources = [ "*" ]
 	}
 	
+	# Used in autoscaling_lambda.py.
 	statement {
 		sid = "ec2DescribeInstances"
 		
@@ -113,6 +115,7 @@ data "aws_iam_policy_document" "autoscaling_lambda_role_policy" {
 		resources = [ "*" ]
 	}
 	
+	# Used in autoscaling_lambda.py.
 	statement {
 		sid = "route53ChangeRecordSets"
 		
@@ -124,6 +127,7 @@ data "aws_iam_policy_document" "autoscaling_lambda_role_policy" {
 		resources = [ var.private_hosted_zone.arn ]
 	}
 	
+	# Used by Lambda.
 	statement {
 		sid = "cloudwatchWriteLogs"
 		

@@ -61,6 +61,7 @@ resource "aws_eip" "load_balancer_ip" {
 
 
 data "aws_iam_policy_document" "load_balancer_policy" {
+	# Used in perInstance.sh.
 	statement {
 		sid = "s3ListBucket"
 		
@@ -69,6 +70,8 @@ data "aws_iam_policy_document" "load_balancer_policy" {
 		resources = [ aws_s3_bucket.bucket.arn ]
 	}
 	
+	# Used in perInstance.sh.
+	# Used by dehydrated.
 	statement {
 		sid = "s3WriteDeployment"
 		
@@ -83,6 +86,7 @@ data "aws_iam_policy_document" "load_balancer_policy" {
 		resources = [ "${aws_s3_bucket.bucket.arn}/deployment/*" ]
 	}
 	
+	# Used by dehydrated.
 	statement {
 		sid = "route53ChangeRecordSets"
 		
@@ -97,6 +101,7 @@ data "aws_iam_policy_document" "load_balancer_policy" {
 		]
 	}
 	
+	# Used by dehydrated.
 	statement {
 		sid = "acmImportCertificate"
 		
@@ -152,6 +157,7 @@ module "app_server" {
 
 
 data "aws_iam_policy_document" "app_server_policy" {
+	# Used in perInstance.sh.
 	statement {
 		sid = "s3ListBucket"
 		
@@ -160,6 +166,7 @@ data "aws_iam_policy_document" "app_server_policy" {
 		resources = [ aws_s3_bucket.bucket.arn ]
 	}
 	
+	# Used in perInstance.sh.
 	statement {
 		sid = "s3GetDeployment"
 		
@@ -171,6 +178,7 @@ data "aws_iam_policy_document" "app_server_policy" {
 		resources = [ "${aws_s3_bucket.bucket.arn}/deployment/*" ]
 	}
 	
+	# Used by Django S3 storage backend.
 	statement {
 		sid = "s3WriteMedia"
 		
@@ -248,6 +256,7 @@ resource "aws_volume_attachment" "database_volume_attachment" {
 
 
 data "aws_iam_policy_document" "database_server_policy" {
+	# Used in perInstance.sh.
 	statement {
 		sid = "s3ListBucket"
 		
@@ -256,6 +265,7 @@ data "aws_iam_policy_document" "database_server_policy" {
 		resources = [ aws_s3_bucket.bucket.arn ]
 	}
 	
+	# Used in perInstance.sh.
 	statement {
 		sid = "s3GetDeployment"
 		
@@ -265,14 +275,6 @@ data "aws_iam_policy_document" "database_server_policy" {
 		]
 		
 		resources = [ "${aws_s3_bucket.bucket.arn}/deployment/*" ]
-	}
-	
-	statement {
-		sid = "ec2DescribeVolume"
-		
-		actions = [ "ec2:DescribeVolumes" ]
-		
-		resources = [ "*" ]
 	}
 }
 
@@ -340,6 +342,7 @@ resource "aws_volume_attachment" "monitoring_volume_attachment" {
 
 
 data "aws_iam_policy_document" "monitoring_server_policy" {
+	# Used in perInstance.sh.
 	statement {
 		sid = "s3ListBucket"
 		
@@ -348,6 +351,7 @@ data "aws_iam_policy_document" "monitoring_server_policy" {
 		resources = [ aws_s3_bucket.bucket.arn ]
 	}
 	
+	# Used in perInstance.sh.
 	statement {
 		sid = "s3GetDeployment"
 		
@@ -359,15 +363,7 @@ data "aws_iam_policy_document" "monitoring_server_policy" {
 		resources = [ "${aws_s3_bucket.bucket.arn}/deployment/*" ]
 	}
 	
-	statement {
-		sid = "ec2DescribeVolume"
-		
-		actions = [ "ec2:DescribeVolumes" ]
-		
-		resources = [ "*" ]
-	}
-	
-	// Used by Prometheus EC2 service discovery.
+	# Used by Prometheus EC2 service discovery.
 	statement {
 		sid = "ec2DescribeInstances"
 		
