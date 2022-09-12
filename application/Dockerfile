@@ -31,7 +31,9 @@ FROM alpine:3.16 as lessBuilder
 RUN apk add --no-cache bash npm findutils	\
 	&& npm install --global less
 
-RUN --mount=source=./,target=application/ application/scripts/less.sh
+COPY scripts/less.sh application/scripts/
+COPY *App/static/ application/allApp/static/
+RUN application/scripts/less.sh
 
 
 

@@ -12,5 +12,5 @@ lessc														\
 	--no-color												\
 	--source-map											\
 	--include-path="${include}"								\
-	application/siteApp/static/siteApp/css/src/siteApp.less	\
+	application/*App/static/siteApp/css/src/siteApp.less	\
 	deployment/static/siteApp/css/siteApp.css
