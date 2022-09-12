@@ -1,0 +1,12 @@
+# 
+# VAZ Projects
+# 
+# 
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+Dockerfile
+.dockerignore
+compose*.yaml
+*App/static/*App/images/src/
