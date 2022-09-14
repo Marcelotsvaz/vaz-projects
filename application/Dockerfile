@@ -55,16 +55,16 @@ RUN --mount=from=wheelBuilder,source=wheels/,target=wheels/ <<EOF
 	pip install --no-cache-dir wheels/*
 EOF
 
-ARG dockerUser=django
+ARG dockerUser=django dockerUid=500
 RUN <<EOF
-	addgroup -S ${dockerUser}
-	adduser -Ss /sbin/nologin -G ${dockerUser} ${dockerUser}
+	addgroup ${dockerUser} --system --gid ${dockerUid}
+	adduser ${dockerUser} --system --uid ${dockerUid} --ingroup ${dockerUser}
 EOF
 USER ${dockerUser}
 WORKDIR /home/${dockerUser}
 
-COPY --link --chown=1000:1000 . .
-COPY --link --chown=1000:1000 --from=lessBuilder deployment/static/siteApp/css/siteApp.css deployment/static/siteApp/css/
+COPY --link --chown=${dockerUid}:${dockerUid} . .
+COPY --link --chown=${dockerUid}:${dockerUid} --from=lessBuilder deployment/static/siteApp/css/siteApp.css deployment/static/siteApp/css/
 
 ENV PATH="${PATH}:/home/${dockerUser}"
 ENTRYPOINT [ "/bin/sh", "-c" ]
