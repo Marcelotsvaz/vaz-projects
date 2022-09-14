@@ -11,9 +11,9 @@ services:
         image: ${applicationImage}
         build:
             context: .
+            cache_from:
+              - type=local,src=../deployment/buildkitCache/
+            cache_to:
+              - type=local,mode=max,compression=zstd,dest=../deployment/buildkitCache/
             x-bake:
                 output: type=image,push=true
-                cache-from:
-                  - type=local,src=../deployment/buildkitCache/
-                cache-to:
-                  - type=local,mode=max,compression=zstd,dest=../deployment/buildkitCache/
