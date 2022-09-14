@@ -63,8 +63,8 @@ EOF
 USER ${dockerUser}
 WORKDIR /home/${dockerUser}
 
-COPY --link --chown=${dockerUser}:${dockerUser} . .
-COPY --link --chown=${dockerUser}:${dockerUser} --from=lessBuilder deployment/static/siteApp/css/siteApp.css deployment/static/siteApp/css/
+COPY --link --chown=1000:1000 . .
+COPY --link --chown=1000:1000 --from=lessBuilder deployment/static/siteApp/css/siteApp.css deployment/static/siteApp/css/
 
 ENV PATH="${PATH}:/home/${dockerUser}"
 ENTRYPOINT [ "/bin/sh", "-c" ]
