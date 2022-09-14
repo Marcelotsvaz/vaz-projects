@@ -9,10 +9,10 @@ This is the repository for [VAZ Projects](https://vazprojects.com).
 ### Install Docker Compose
 ```sh
 # Install Docker, Buildx and Docker Compose.
-pacman -Syu docker docker-compose	# On Arch Linux.
+pacman -S docker docker-buildx docker-compose	# On Arch Linux.
 ```
 
-You might need to manually install Buildx and enable it by default with `docker buildx install`.
+You might need to enable buildx by default with `docker buildx install`.
 
 
 ### Start Compose project
