@@ -7,4 +7,4 @@
 
 
 ec2_packages:
-  - gdisk
+  - gptfdisk
