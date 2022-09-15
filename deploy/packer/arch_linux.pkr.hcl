@@ -96,6 +96,7 @@ source "amazon-ebssurrogate" "arch_linux" {
 	#---------------------------------------------------------------------------
 	ami_name = var.ami_name
 	ami_virtualization_type = "hvm"
+	boot_mode = "uefi"
 	ena_support = true
 	
 	force_deregister = true

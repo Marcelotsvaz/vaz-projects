@@ -17,6 +17,7 @@
         builderAmi_packages:
           - ansible
           - python-packaging
+          - dosfstools
           - reflector
           - arch-install-scripts
     

@@ -92,21 +92,26 @@
         
         
         
-        # Install bootloader.
-        #---------------------------------------------------------------------------
-      - name: Install GRUB
-        command: grub-install {{ disk }}
+        # Create unified kernel image.
+        #-------------------------------------------------------------------------------
+      - name: Write kernel parameters
+        copy:
+            content: root=/dev/nvme0n1p2 rw nomodeset console=ttyS0,9600n8 earlyprintk=serial,ttyS0,9600 loglevel=6
+            dest: /etc/kernel/cmdline
         
         
-      - name: Change GRUB config
-        lineinfile:
-            path: /etc/default/grub
-            regex: ^{{ item.var }}=
-            line: '{{ item.var }}={{ item.value }}'
-        loop:
-          - { var: 'GRUB_CMDLINE_LINUX_DEFAULT', value: "'nomodeset console=ttyS0,9600n8 earlyprintk=serial,ttyS0,9600 loglevel=6'" }
-          - { var: 'GRUB_TIMEOUT', value: 0 }
+      - name: Create folder for default UEFI executable
+        file:
+            state: directory
+            path: /boot/efi/efi/boot/
         
         
-      - name: Generate GRUB config file
-        command: grub-mkconfig -o /boot/grub/grub.cfg
+      - name: Create unified kernel image
+        shell: objcopy
+            --change-section-vma .osrel=0x20000     --add-section .osrel='/usr/lib/os-release'
+            --change-section-vma .cmdline=0x30000   --add-section .cmdline='/etc/kernel/cmdline'
+            --change-section-vma .splash=0x40000    --add-section .splash='/usr/share/systemd/bootctl/splash-arch.bmp'
+            --change-section-vma .linux=0x2000000   --add-section .linux='/boot/vmlinuz-linux'
+            --change-section-vma .initrd=0x3000000  --add-section .initrd='/boot/initramfs-linux.img'
+            '/usr/lib/systemd/boot/efi/linuxx64.efi.stub'
+            '/boot/efi/efi/boot/bootX64.efi'

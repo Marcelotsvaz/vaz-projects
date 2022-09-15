@@ -10,7 +10,7 @@ baseArch_packages:
   - base
   - linux
   - mkinitcpio
-  - grub
+  - efibootmgr
   - sudo
   - openssh
   - nano

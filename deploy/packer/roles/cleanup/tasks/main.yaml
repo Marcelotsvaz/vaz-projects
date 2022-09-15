@@ -10,7 +10,14 @@
     become: true
     
     block:
-      - name: Unmount the root partition
+      - name: Unmount EFI partition
+        ansible.posix.mount:
+            state: unmounted
+            path: '{{ mountPoint }}/boot/efi'
+            fstab: /tmp/tmp.fstab
+        
+        
+      - name: Unmount root partition
         ansible.posix.mount:
             state: unmounted
             path: '{{ mountPoint }}'
