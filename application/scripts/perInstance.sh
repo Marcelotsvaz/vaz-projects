@@ -27,6 +27,7 @@ cd /home/${user}/
 sudo -Eu ${user} bash << EOF
 curl -s ${repositorySnapshot} | tar -xz --strip-components 1
 aws s3 cp s3://${bucket}/deployment/secrets.env deployment/ --no-progress
+chmod 600 deployment/secrets.env
 EOF
 
 cd application
