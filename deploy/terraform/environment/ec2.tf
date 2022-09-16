@@ -293,7 +293,7 @@ module "monitoring_server" {
 	prefix = "${local.project_code}-${var.environment}"
 	
 	# Configuration.
-	instance_type = "t3a.nano"
+	instance_type = "t3a.micro"
 	root_volume_size = 5
 	
 	# Network.
