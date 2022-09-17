@@ -100,7 +100,7 @@
 						"type": "prometheus",
 						"uid": "${DS_PROMETHEUS}"
 					},
-					"expr": "time() - node_boot_time{instance=~\"$instance\"}",
+					"expr": "time() - node_boot_time_seconds{instance=~\"$instance\"}",
 					"hide": false,
 					"intervalFactor": 2,
 					"legendFormat": "",
@@ -261,7 +261,7 @@
 						"type": "prometheus",
 						"uid": "${DS_PROMETHEUS}"
 					},
-					"expr": "min((node_filesystem_size{fstype=~\"xfs|ext4\",instance=~\"$instance\"} - node_filesystem_free{fstype=~\"xfs|ext4\",instance=~\"$instance\"} )/ node_filesystem_size{fstype=~\"xfs|ext4\",instance=~\"$instance\"})",
+					"expr": "min((node_filesystem_size_bytes{fstype=~\"xfs|ext4\",instance=~\"$instance\"} - node_filesystem_free_bytes{fstype=~\"xfs|ext4\",instance=~\"$instance\"} )/ node_filesystem_size_bytes{fstype=~\"xfs|ext4\",instance=~\"$instance\"})",
 					"hide": false,
 					"intervalFactor": 2,
 					"refId": "A",
@@ -344,7 +344,7 @@
 						"type": "prometheus",
 						"uid": "${DS_PROMETHEUS}"
 					},
-					"expr": "((node_memory_MemTotal{instance=~\"$instance\"} - node_memory_MemAvailable{instance=~\"$instance\"}) / node_memory_MemTotal{instance=~\"$instance\"}) * 100",
+					"expr": "((node_memory_MemTotal_bytes{instance=~\"$instance\"} - node_memory_MemAvailable_bytes{instance=~\"$instance\"}) / node_memory_MemTotal_bytes{instance=~\"$instance\"}) * 100",
 					"intervalFactor": 2,
 					"refId": "A",
 					"step": 1800
@@ -425,7 +425,7 @@
 						"type": "prometheus",
 						"uid": "${DS_PROMETHEUS}"
 					},
-					"expr": "(node_memory_SwapTotal{instance=~\"$instance\"} - node_memory_SwapFree{instance=~\"$instance\"})",
+					"expr": "(node_memory_SwapTotal_bytes{instance=~\"$instance\"} - node_memory_SwapFree_bytes{instance=~\"$instance\"})",
 					"intervalFactor": 2,
 					"legendFormat": "",
 					"refId": "A",
@@ -509,7 +509,7 @@
 						"type": "prometheus",
 						"uid": "${DS_PROMETHEUS}"
 					},
-					"expr": "node_load1{instance=~\"$instance\"} / count by(job, instance)(count by(job, instance, cpu)(node_cpu{instance=~\"$instance\"}))",
+					"expr": "node_load1{instance=~\"$instance\"} / count by(job, instance)(count by(job, instance, cpu)(node_cpu_seconds_total{instance=~\"$instance\"}))",
 					"intervalFactor": 2,
 					"refId": "A",
 					"step": 1800
@@ -772,40 +772,6 @@
 			}
 		},
 		{
-			"alert": {
-				"conditions": [
-					{
-						"evaluator": {
-							"params": [
-								1.25
-							],
-							"type": "gt"
-						},
-						"query": {
-							"params": [
-								"A",
-								"5m",
-								"now"
-							]
-						},
-						"reducer": {
-							"params": [],
-							"type": "avg"
-						},
-						"type": "query"
-					}
-				],
-				"executionErrorState": "alerting",
-				"frequency": "60s",
-				"handler": 1,
-				"name": "Panel Title alert",
-				"noDataState": "keep_state",
-				"notifications": [
-					{
-						"id": 1
-					}
-				]
-			},
 			"aliasColors": {},
 			"bars": false,
 			"dashLength": 10,
@@ -905,40 +871,6 @@
 			}
 		},
 		{
-			"alert": {
-				"conditions": [
-					{
-						"evaluator": {
-							"params": [
-								850000000000
-							],
-							"type": "gt"
-						},
-						"query": {
-							"params": [
-								"A",
-								"5m",
-								"now"
-							]
-						},
-						"reducer": {
-							"params": [],
-							"type": "avg"
-						},
-						"type": "query"
-					}
-				],
-				"executionErrorState": "alerting",
-				"frequency": "60s",
-				"handler": 1,
-				"name": "Free/Used Disk Space alert",
-				"noDataState": "keep_state",
-				"notifications": [
-					{
-						"id": 1
-					}
-				]
-			},
 			"aliasColors": {
 				"Belegete Festplatte": "#BF1B00",
 				"Free Disk Space": "#7EB26D",
@@ -1052,40 +984,6 @@
 			}
 		},
 		{
-			"alert": {
-				"conditions": [
-					{
-						"evaluator": {
-							"params": [
-								10000000000
-							],
-							"type": "gt"
-						},
-						"query": {
-							"params": [
-								"A",
-								"5m",
-								"now"
-							]
-						},
-						"reducer": {
-							"params": [],
-							"type": "avg"
-						},
-						"type": "query"
-					}
-				],
-				"executionErrorState": "alerting",
-				"frequency": "60s",
-				"handler": 1,
-				"name": "Available Memory alert",
-				"noDataState": "keep_state",
-				"notifications": [
-					{
-						"id": 1
-					}
-				]
-			},
 			"aliasColors": {
 				"Available Memory": "#7EB26D",
 				"Unavailable Memory": "#7EB26D"
@@ -1427,7 +1325,7 @@
 						"type": "prometheus",
 						"uid": "${DS_PROMETHEUS}"
 					},
-					"expr": "-sum(rate(node_disk_bytes_read[$interval])) by (device)",
+					"expr": "-sum(rate(node_disk_read_bytes_total[$interval])) by (device)",
 					"hide": false,
 					"intervalFactor": 2,
 					"legendFormat": "OUT on /{{device}}",
@@ -1440,7 +1338,7 @@
 						"type": "prometheus",
 						"uid": "${DS_PROMETHEUS}"
 					},
-					"expr": "sum(rate(node_disk_bytes_written[$interval])) by (device)",
+					"expr": "sum(rate(node_disk_written_bytes_total[$interval])) by (device)",
 					"intervalFactor": 2,
 					"legendFormat": "IN on /{{device}}",
 					"metric": "",
@@ -2007,93 +1905,24 @@
 			}
 		},
 		{
-			"columns": [
-				{
-					"text": "Current",
-					"value": "current"
-				}
-			],
 			"datasource": {
 				"type": "prometheus",
 				"uid": "${DS_PROMETHEUS}"
 			},
-			"editable": true,
-			"error": false,
-			"fontSize": "100%",
 			"gridPos": {
-				"h": 10,
-				"w": 8,
-				"x": 16,
+				"h": 7,
+				"w": 12,
+				"x": 12,
 				"y": 24
 			},
-			"id": 36,
-			"links": [],
-			"scroll": true,
-			"showHeader": true,
-			"sort": {
-				"col": 0,
-				"desc": true
+			"id": 39,
+			"options": {
+				"content": "",
+				"mode": "markdown"
 			},
-			"styles": [
-				{
-					"align": "auto",
-					"colors": [
-						"rgba(245, 54, 54, 0.9)",
-						"rgba(237, 129, 40, 0.89)",
-						"rgba(50, 172, 45, 0.97)"
-					],
-					"decimals": 2,
-					"pattern": "/.*/",
-					"thresholds": [
-						"10000000",
-						" 25000000"
-					],
-					"type": "number",
-					"unit": "decbytes"
-				}
-			],
-			"targets": [
-				{
-					"datasource": {
-						"type": "prometheus",
-						"uid": "${DS_PROMETHEUS}"
-					},
-					"expr": "sum(container_spec_memory_limit_bytes{name=~\".+\"} - container_memory_usage_bytes{name=~\".+\"}) by (name) ",
-					"hide": true,
-					"intervalFactor": 2,
-					"legendFormat": "{{name}}",
-					"metric": "",
-					"refId": "A",
-					"step": 240
-				},
-				{
-					"datasource": {
-						"type": "prometheus",
-						"uid": "${DS_PROMETHEUS}"
-					},
-					"expr": "sum(container_spec_memory_limit_bytes{name=~\".+\"}) by (name) ",
-					"hide": false,
-					"intervalFactor": 2,
-					"legendFormat": "{{name}}",
-					"refId": "B",
-					"step": 240
-				},
-				{
-					"datasource": {
-						"type": "prometheus",
-						"uid": "${DS_PROMETHEUS}"
-					},
-					"expr": "container_memory_usage_bytes{name=~\".+\"}",
-					"hide": true,
-					"intervalFactor": 2,
-					"legendFormat": "{{name}}",
-					"refId": "C",
-					"step": 240
-				}
-			],
-			"title": "Limit memory",
-			"transform": "timeseries_aggregations",
-			"type": "table-old"
+			"pluginVersion": "9.0.2",
+			"title": "Spacer",
+			"type": "text"
 		},
 		{
 			"columns": [
@@ -2272,6 +2101,95 @@
 			"title": "Remaining memory",
 			"transform": "timeseries_aggregations",
 			"type": "table-old"
+		},
+		{
+			"columns": [
+				{
+					"text": "Current",
+					"value": "current"
+				}
+			],
+			"datasource": {
+				"type": "prometheus",
+				"uid": "${DS_PROMETHEUS}"
+			},
+			"editable": true,
+			"error": false,
+			"fontSize": "100%",
+			"gridPos": {
+				"h": 10,
+				"w": 8,
+				"x": 16,
+				"y": 31
+			},
+			"id": 36,
+			"links": [],
+			"scroll": true,
+			"showHeader": true,
+			"sort": {
+				"col": 0,
+				"desc": true
+			},
+			"styles": [
+				{
+					"align": "auto",
+					"colors": [
+						"rgba(245, 54, 54, 0.9)",
+						"rgba(237, 129, 40, 0.89)",
+						"rgba(50, 172, 45, 0.97)"
+					],
+					"decimals": 2,
+					"pattern": "/.*/",
+					"thresholds": [
+						"10000000",
+						" 25000000"
+					],
+					"type": "number",
+					"unit": "decbytes"
+				}
+			],
+			"targets": [
+				{
+					"datasource": {
+						"type": "prometheus",
+						"uid": "${DS_PROMETHEUS}"
+					},
+					"expr": "sum(container_spec_memory_limit_bytes{name=~\".+\"} - container_memory_usage_bytes{name=~\".+\"}) by (name) ",
+					"hide": true,
+					"intervalFactor": 2,
+					"legendFormat": "{{name}}",
+					"metric": "",
+					"refId": "A",
+					"step": 240
+				},
+				{
+					"datasource": {
+						"type": "prometheus",
+						"uid": "${DS_PROMETHEUS}"
+					},
+					"expr": "sum(container_spec_memory_limit_bytes{name=~\".+\"}) by (name) ",
+					"hide": false,
+					"intervalFactor": 2,
+					"legendFormat": "{{name}}",
+					"refId": "B",
+					"step": 240
+				},
+				{
+					"datasource": {
+						"type": "prometheus",
+						"uid": "${DS_PROMETHEUS}"
+					},
+					"expr": "container_memory_usage_bytes{name=~\".+\"}",
+					"hide": true,
+					"intervalFactor": 2,
+					"legendFormat": "{{name}}",
+					"refId": "C",
+					"step": 240
+				}
+			],
+			"title": "Limit memory",
+			"transform": "timeseries_aggregations",
+			"type": "table-old"
 		}
 	],
 	"refresh": "5m",
@@ -2442,7 +2360,7 @@
 		]
 	},
 	"time": {
-		"from": "now-24h",
+		"from": "now-1h",
 		"to": "now"
 	},
 	"timepicker": {
@@ -2466,7 +2384,7 @@
 		]
 	},
 	"timezone": "browser",
-	"title": "Docker and system monitoring",
+	"title": "Docker",
 	"uid": "HWIrnS74k",
 	"version": 1,
 	"weekStart": ""
