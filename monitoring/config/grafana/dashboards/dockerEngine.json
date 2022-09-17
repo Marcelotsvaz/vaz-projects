@@ -37,6 +37,12 @@
 				"uid": "${DS_PROMETHEUS}"
 			},
 			"description": "",
+			"gridPos": {
+				"h": 1,
+				"w": 6,
+				"x": 0,
+				"y": 0
+			},
 			"id": 2,
 			"links": [],
 			"options": {
@@ -100,7 +106,7 @@
 				"h": 3,
 				"w": 6,
 				"x": 0,
-				"y": 3
+				"y": 1
 			},
 			"id": 7,
 			"links": [],
@@ -127,10 +133,14 @@
 						"type": "prometheus",
 						"uid": "${DS_PROMETHEUS}"
 					},
+					"editorMode": "code",
+					"exemplar": false,
 					"expr": "engine_daemon_engine_cpus_cpus{instance=~'$instance'}",
+					"instant": true,
 					"intervalFactor": 2,
 					"legendFormat": "",
 					"metric": "engine_daemon_engine_cpus_cpus",
+					"range": false,
 					"refId": "A",
 					"step": 60
 				}
@@ -154,7 +164,7 @@
 				"h": 7,
 				"w": 6,
 				"x": 0,
-				"y": 6
+				"y": 4
 			},
 			"hiddenSeries": false,
 			"id": 14,
@@ -278,7 +288,7 @@
 				"h": 7,
 				"w": 6,
 				"x": 0,
-				"y": 13
+				"y": 11
 			},
 			"hiddenSeries": false,
 			"id": 15,
@@ -370,7 +380,7 @@
 				"h": 7,
 				"w": 6,
 				"x": 0,
-				"y": 20
+				"y": 18
 			},
 			"hiddenSeries": false,
 			"id": 22,
@@ -494,7 +504,7 @@
 				"h": 7,
 				"w": 6,
 				"x": 0,
-				"y": 27
+				"y": 25
 			},
 			"hiddenSeries": false,
 			"id": 19,
@@ -586,7 +596,7 @@
 				"h": 7,
 				"w": 6,
 				"x": 0,
-				"y": 34
+				"y": 32
 			},
 			"hiddenSeries": false,
 			"id": 21,
@@ -711,7 +721,7 @@
 				"h": 7,
 				"w": 6,
 				"x": 0,
-				"y": 41
+				"y": 39
 			},
 			"hiddenSeries": false,
 			"id": 20,
@@ -801,7 +811,7 @@
 				"h": 7,
 				"w": 6,
 				"x": 0,
-				"y": 48
+				"y": 46
 			},
 			"hiddenSeries": false,
 			"id": 23,
@@ -893,9 +903,7 @@
 	"schemaVersion": 36,
 	"style": "dark",
 	"tags": [
-		"docker",
-		"docker metrics",
-		"docker engine"
+		"docker"
 	],
 	"templating": {
 		"list": [
@@ -1035,7 +1043,7 @@
 		]
 	},
 	"time": {
-		"from": "now-7d",
+		"from": "now-1h",
 		"to": "now"
 	},
 	"timepicker": {
@@ -1059,8 +1067,8 @@
 		]
 	},
 	"timezone": "browser",
-	"title": "Docker Engine Metrics2",
+	"title": "Docker Engine",
 	"uid": "kiD6GSn4k",
-	"version": 1,
+	"version": 2,
 	"weekStart": ""
 }
