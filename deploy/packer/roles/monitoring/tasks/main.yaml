@@ -17,6 +17,7 @@
             dest: '{{ item.dir }}'
             mode: preserve
         loop:
+          - { file: prometheus-node-exporter, dir: /etc/conf.d/ }
           - { file: cadvisor.service, dir: /usr/local/lib/systemd/system/ }
           - { file: promtail.yaml, dir: /etc/loki/ }
           - { file: override.conf, dir: /usr/local/lib/systemd/system/promtail.service.d/ }
