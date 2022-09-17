@@ -21,7 +21,6 @@ services:
         volumes:
             - ./config/nginx.conf:/etc/nginx/templates/default.conf.template:ro
             - ../deployment/tls:/etc/nginx/tls:ro
-            - /var/log/nginx:/mnt/logs/nginx
         
         ports:
             - 80:80
