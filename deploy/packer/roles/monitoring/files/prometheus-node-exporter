@@ -6,4 +6,4 @@
 
 
 
-NODE_EXPORTER_ARGS='–collector.systemd –collector.processes'
+NODE_EXPORTER_ARGS='--collector.systemd --collector.processes'
