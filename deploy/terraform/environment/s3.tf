@@ -11,6 +11,7 @@
 #-------------------------------------------------------------------------------
 resource "aws_s3_bucket" "bucket" {
 	bucket = lower( "${local.project_code}-${var.environment}" )
+	force_destroy = var.environment != "production"	# force_destroy only on staging environment.
 	
 	tags = {
 		Name: "${local.project_name} Bucket"
@@ -98,6 +99,7 @@ resource "aws_s3_bucket_logging" "bucket" {
 #-------------------------------------------------------------------------------
 resource "aws_s3_bucket" "logs_bucket" {
 	bucket = lower( "${local.project_code}-${var.environment}-logs" )
+	force_destroy = var.environment != "production"	# force_destroy only on staging environment.
 	
 	tags = {
 		Name: "${local.project_name} Logs Bucket"
