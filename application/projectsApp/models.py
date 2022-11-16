@@ -124,7 +124,7 @@ class Project( models.Model ):
 		return self.name
 	
 	def get_absolute_url( self ):
-		return reverse( 'projectsApp:project', kwargs = { 'project_slug': self.slug } )
+		return reverse( 'projectsApp:project', kwargs = { 'slug': self.slug } )
 	
 	@property
 	def all_pages( self ):
@@ -247,7 +247,7 @@ class Page( models.Model ):
 		return f'<{self.project}> {self.full_name}'
 	
 	def get_absolute_url( self ):
-		return reverse( 'projectsApp:page', kwargs = { 'project_slug': self.project.slug, 'page_number': self.number } )
+		return reverse( 'projectsApp:page', kwargs = { 'slug': self.project.slug, 'page_number': self.number } )
 	
 	@property
 	def full_name( self ):

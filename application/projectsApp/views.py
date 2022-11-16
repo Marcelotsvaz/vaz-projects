@@ -6,8 +6,8 @@
 
 
 
-from django.views.generic import ListView
-from django.shortcuts import render, get_object_or_404
+from django.views.generic import ListView, DetailView
+from django.shortcuts import get_object_or_404
 
 from .models import Project
 
@@ -23,46 +23,46 @@ class Projects( ListView ):
 	context_object_name = 'projects'
 
 
-def project( httpRequest, project_slug ):
+class ProjectView( DetailView ):
 	'''
 	Project view.
 	'''
 	
-	# Hide drafts unless user is staff.
-	if httpRequest.user.is_staff:
-		projectQueryset = Project.all_objects
-	else:
-		projectQueryset = Project.objects
+	model = Project
+	template_name = 'projectsApp/project.html'
+	context_object_name = 'project'
 	
-	project = get_object_or_404( projectQueryset, slug = project_slug )
 	
-	if httpRequest.user.is_staff:
-		pages = project.all_pages.all()
-	else:
-		pages = project.pages.all()
+	def get_queryset( self ):
+		# Hide drafts unless user is staff.
+		if self.request.user.is_staff:
+			return Project.all_objects.all()
+		else:
+			return super().get_queryset()
 	
-	return render( httpRequest, 'projectsApp/project.html', { 'project': project, 'pages': pages } )
+	def get_context_data( self, **kwargs ):
+		context = super().get_context_data( **kwargs )
+		
+		# Hide page drafts unless user is staff.
+		if self.request.user.is_staff:
+			context['pages'] = self.object.all_pages.all()
+		else:
+			context['pages'] = self.object.pages.all()
+		
+		return context
 
 
-def page( httpRequest, project_slug, page_number ):
+class PageView( ProjectView ):
 	'''
 	Project Page view.
 	'''
 	
-	# Hide drafts unless user is staff.
-	if httpRequest.user.is_staff:
-		projectQueryset = Project.all_objects
-	else:
-		projectQueryset = Project.objects
+	template_name = 'projectsApp/page.html'
 	
-	project = get_object_or_404( projectQueryset, slug = project_slug )
 	
-	if httpRequest.user.is_staff:
-		pageQueryset = project.all_pages
-	else:
-		pageQueryset = project.pages
-	
-	pages = pageQueryset.all()
-	currentPage = get_object_or_404( pageQueryset, number = page_number )
-	
-	return render( httpRequest, 'projectsApp/page.html', { 'project': project, 'currentPage': currentPage, 'pages': pages } )
+	def get_context_data( self, **kwargs ):
+		context = super().get_context_data( **kwargs )
+		
+		context['currentPage'] = get_object_or_404( context['pages'], number = self.kwargs['page_number'] )
+		
+		return context

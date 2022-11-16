@@ -15,7 +15,7 @@ from . import views
 app_name = 'projectsApp'
 
 urlpatterns = [
-	path( 'projects',												views.Projects.as_view(),	name = 'projects' ),
-	path( 'projects/<slug:project_slug>',							views.project,				name = 'project' ),
-	path( 'projects/<slug:project_slug>/page/<int:page_number>',	views.page,					name = 'page' ),
+	path( 'projects',										views.Projects.as_view(),		name = 'projects' ),
+	path( 'projects/<slug:slug>',							views.ProjectView.as_view(),	name = 'project' ),
+	path( 'projects/<slug:slug>/page/<int:page_number>',	views.PageView.as_view(),		name = 'page' ),
 ]
