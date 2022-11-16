@@ -9,6 +9,8 @@
 from django.views.generic import ListView, DetailView
 from django.shortcuts import get_object_or_404
 
+from django.utils.translation import gettext_lazy as _
+
 from .models import Project
 
 
@@ -49,6 +51,27 @@ class ProjectView( DetailView ):
 		else:
 			context['pages'] = self.object.pages.all()
 		
+		# Sidebar content.
+		
+		# Project index.
+		context['sidebarItems'] = [
+			{
+				'title': _('Project Index'),
+				'url': self.object.get_absolute_url(),
+				'draft': self.object.draft,
+			}
+		]
+		
+		# Project pages.
+		for page in context['pages']:
+			context['sidebarItems'].append( {
+				'title': page.full_name,
+				'url': page.get_absolute_url(),
+				'draft': page.draft,
+			} )
+		
+		context['currentUrl'] = self.object.get_absolute_url()
+		
 		return context
 
 
@@ -64,5 +87,6 @@ class PageView( ProjectView ):
 		context = super().get_context_data( **kwargs )
 		
 		context['currentPage'] = get_object_or_404( context['pages'], number = self.kwargs['page_number'] )
+		context['currentUrl'] = context['currentPage'].get_absolute_url()
 		
 		return context

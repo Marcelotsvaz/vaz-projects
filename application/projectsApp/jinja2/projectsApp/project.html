@@ -31,16 +31,15 @@
 {% block sidebar %}
 	{% if not project.single_page %}
 		<h3>{{ _('Project navigation') }}</h3>
-		
 		<ul>
-			<li>
-				<strong>{{ _('Project Index') }}</strong>
-			</li>
-			
-			{% for page in pages %}
-				<li>
-					<a href="{{ page.get_absolute_url() }}">{{ page.full_name }}</a>
-					{% if page.draft %}{{ _('(Draft)') }}{% endif %}
+			{% for item in sidebarItems %}
+				{% if item.url == currentUrl %}
+					<li class="current">{{ item.title }}
+				{% else %}
+					<li><a href="{{ item.url }}">{{ item.title }}</a>
+				{% endif %}
+				
+				{% if item.draft %}{{ _('(Draft)') }}{% endif %}
 				</li>
 			{% endfor %}
 		</ul>
