@@ -91,5 +91,16 @@ class SitemapViewTests( TestCase ):
 		Test if the sitemap.xml is valid XML by running it through a parser.
 		'''
 		
+		project = ProjectTestUtils.createProject()
+		page = ProjectTestUtils.createPages( project, 5 )
+		project.publish( publishPages = True )
+		
+		post = BlogPostTestUtils.createPost()
+		post.publish()
+		
 		response = Client().get( reverse( 'siteApp:sitemap' ) )
+		
 		ElementTree.fromstring( response.content )
+		self.assertContains( response, project.get_absolute_url() )
+		self.assertContains( response, page.get_absolute_url() )
+		self.assertContains( response, post.get_absolute_url() )

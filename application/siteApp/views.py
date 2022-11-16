@@ -105,15 +105,28 @@ class SitemapView( TemplateView ):
 	def get_context_data( self, **kwargs ):
 		context = super().get_context_data( **kwargs )
 		
-		context['urls'] = []
-		
+		# Non-model views.
 		views = [
 			'siteApp:home',
 			'siteApp:about_me',
 			'projectsApp:projects',
+			'blogApp:blog',
 		]
 		
-		for view in views:
-			context['urls'].append( self.request.build_absolute_uri( reverse( view ) ) )
+		# Reverse view names.
+		context['urls'] = list( map( reverse, views ) )
+		
+		# Get URL of all models.
+		for project in Project.objects.all():
+			context['urls'].append( project.get_absolute_url() )
+			
+			for page in project.pages.all():
+				context['urls'].append( page.get_absolute_url() )
+		
+		for post in BlogPost.objects.all():
+			context['urls'].append( post.get_absolute_url() )
+		
+		# Make all URLs absolute.
+		context['urls'] = list( map( self.request.build_absolute_uri, context['urls'] ) )
 		
 		return context
