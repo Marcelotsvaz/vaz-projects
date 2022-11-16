@@ -205,6 +205,9 @@ class ProjectViewTests( TestCase ):
 		
 		self.assertNotContains( response, TestUtils.projectName, status_code = 404 )
 	
+
+
+class PageViewTests( TestCase ):
 	
 	def testPublishedPage( self ):
 		'''
@@ -215,7 +218,7 @@ class ProjectViewTests( TestCase ):
 		lastPage = TestUtils.createPages( project, 5 )
 		project.publish( publishPages = True )
 		
-		response = Client().get( reverse( 'projectsApp:project', args = [ TestUtils.projectSlug, lastPage.number ] ) )
+		response = Client().get( reverse( 'projectsApp:page', args = [ TestUtils.projectSlug, lastPage.number ] ) )
 		
 		self.assertContains( response, TestUtils.pageName )
 	
@@ -230,6 +233,6 @@ class ProjectViewTests( TestCase ):
 		project.publish( publishPages = True )
 		lastPage = TestUtils.createPages( project, 5 )
 		
-		response = Client().get( reverse( 'projectsApp:project', args = [ TestUtils.projectSlug, lastPage.number ] ) )
+		response = Client().get( reverse( 'projectsApp:page', args = [ TestUtils.projectSlug, lastPage.number ] ) )
 		
 		self.assertNotContains( response, TestUtils.pageName, status_code = 404 )

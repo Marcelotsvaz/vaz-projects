@@ -17,30 +17,12 @@
 
 
 {% block content %}
-	{% if not currentPage %}	{# Project index or single page. #}
-		<article>
-			{{ project.render_content() | safe }}
-		</article>
-		
-		{% if not project.draft %}
-			{{ comments.section( project.get_absolute_url(), self.title(), request.build_absolute_uri() ) }}
-		{% endif %}
-	{% else %}					{# Project page. #}
-		<article>
-			{{ currentPage.render_content() | safe }}
-		</article>
-		
-		{% if previousPage %}
-			<a href="{{ previousPage.get_absolute_url() }}">{{ _('Previous: {0}').format( previousPage.full_name ) }}</a>
-		{% endif %}
-		
-		{% if nextPage %}
-			<a href="{{ nextPage.get_absolute_url() }}">{{ _('Next: {0}').format( nextPage.full_name ) }}</a>
-		{% endif %}
-		
-		{% if not currentPage.draft %}
-			{{ comments.section( currentPage.get_absolute_url(), self.title(), request.build_absolute_uri() ) }}
-		{% endif %}
+	<article>
+		{{ project.render_content() | safe }}
+	</article>
+	
+	{% if not project.draft %}
+		{{ comments.section( project.get_absolute_url(), self.title(), request.build_absolute_uri() ) }}
 	{% endif %}
 {% endblock %}
 
@@ -52,21 +34,12 @@
 		
 		<ul>
 			<li>
-				{% if not currentPage %}	{# Project index. #}
-					<strong>{{ _('Project Index') }}</strong>
-				{% else %}
-					<a href="{{ project.get_absolute_url() }}">{{ _('Project Index') }}</a>
-				{% endif %}
+				<strong>{{ _('Project Index') }}</strong>
 			</li>
 			
 			{% for page in pages %}
 				<li>
-					{% if page.number == currentPage.number %}
-						<strong>{{ page.full_name }}</strong>
-					{% else %}
-						<a href="{{ page.get_absolute_url() }}">{{ page.full_name }}</a>
-					{% endif %}
-					
+					<a href="{{ page.get_absolute_url() }}">{{ page.full_name }}</a>
 					{% if page.draft %}{{ _('(Draft)') }}{% endif %}
 				</li>
 			{% endfor %}

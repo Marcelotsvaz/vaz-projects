@@ -17,5 +17,5 @@ app_name = 'projectsApp'
 urlpatterns = [
 	path( 'projects',												views.Projects.as_view(),	name = 'projects' ),
 	path( 'projects/<slug:project_slug>',							views.project,				name = 'project' ),
-	path( 'projects/<slug:project_slug>/page/<int:page_number>',	views.project,				name = 'project' ),
+	path( 'projects/<slug:project_slug>/page/<int:page_number>',	views.page,					name = 'page' ),
 ]
