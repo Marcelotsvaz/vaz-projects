@@ -11,7 +11,7 @@ from django.conf import settings
 
 
 
-class Robots( TemplateView ):
+class RobotsView( TemplateView ):
 	'''
 	robots.txt
 	'''
@@ -20,7 +20,7 @@ class Robots( TemplateView ):
 	content_type = 'text/plain'
 
 
-class Favicon( RedirectView ):
+class FaviconView( RedirectView ):
 	'''
 	favicon.ico
 	

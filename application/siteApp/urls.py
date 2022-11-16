@@ -14,9 +14,9 @@ from . import views
 app_name = 'siteApp'
 
 urlpatterns = [
-	path( '',							views.Home.as_view(),		name = 'home' ),
-	path( 'about-me',					views.About_me.as_view(),	name = 'about_me' ),
-	path( 'search',						views.Search.as_view(),		name = 'search' ),
-	path( 'search/page/<int:page>',		views.Search.as_view(),		name = 'search' ),
-	path( 'sitemap.xml',				views.Sitemap.as_view(),	name = 'sitemap' ),
+	path( '',							views.HomeView.as_view(),		name = 'home' ),
+	path( 'about-me',					views.AboutMeView.as_view(),	name = 'about_me' ),
+	path( 'search',						views.SearchView.as_view(),		name = 'search' ),
+	path( 'search/page/<int:page>',		views.SearchView.as_view(),		name = 'search' ),
+	path( 'sitemap.xml',				views.SitemapView.as_view(),	name = 'sitemap' ),
 ]

@@ -15,9 +15,9 @@ from . import views
 app_name = 'blogApp'
 
 urlpatterns = [
-	path( 'blog',										views.Blog.as_view(),		name = 'blog' ),
-	path( 'blog/page/<int:page>',						views.Blog.as_view(),		name = 'blog' ),
-	path( 'blog/tags/<slug:tag_slug>',					views.BlogByTag.as_view(),	name = 'blog' ),
-	path( 'blog/tags/<slug:tag_slug>/page/<int:page>',	views.BlogByTag.as_view(),	name = 'blog' ),
-	path( 'blog/<slug:slug>',							views.Post.as_view(),		name = 'post' ),
+	path( 'blog',										views.BlogView.as_view(),		name = 'blog' ),
+	path( 'blog/page/<int:page>',						views.BlogView.as_view(),		name = 'blog' ),
+	path( 'blog/tags/<slug:tag_slug>',					views.BlogByTagView.as_view(),	name = 'blog' ),
+	path( 'blog/tags/<slug:tag_slug>/page/<int:page>',	views.BlogByTagView.as_view(),	name = 'blog' ),
+	path( 'blog/<slug:slug>',							views.PostView.as_view(),		name = 'post' ),
 ]

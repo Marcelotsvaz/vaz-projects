@@ -19,7 +19,7 @@ from projectsApp.documents import ProjectDocument, PageDocument
 
 
 
-class Home( TemplateView ):
+class HomeView( TemplateView ):
 	'''
 	Home view.
 	'''
@@ -36,7 +36,7 @@ class Home( TemplateView ):
 		return context
 
 
-class About_me( TemplateView ):
+class AboutMeView( TemplateView ):
 	'''
 	About me view.
 	'''
@@ -44,7 +44,7 @@ class About_me( TemplateView ):
 	template_name = 'siteApp/about_me.html'
 
 
-class Search( ListView ):
+class SearchView( ListView ):
 	'''
 	Site-wide search.
 	'''
@@ -93,7 +93,7 @@ class Search( ListView ):
 		return context
 
 
-class Sitemap( TemplateView ):
+class SitemapView( TemplateView ):
 	'''
 	sitemap.xml.
 	'''

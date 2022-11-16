@@ -13,7 +13,7 @@ from .models import Project
 
 
 
-class Projects( ListView ):
+class ProjectsView( ListView ):
 	'''
 	Projects view.
 	'''

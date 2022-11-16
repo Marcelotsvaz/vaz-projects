@@ -15,7 +15,7 @@ from .models import BlogPost
 
 
 
-class Blog( ListView ):
+class BlogView( ListView ):
 	'''
 	Blog view.
 	'''
@@ -60,7 +60,7 @@ class Blog( ListView ):
 
 
 
-class BlogByTag( Blog ):
+class BlogByTagView( BlogView ):
 	'''
 	Blog view filtered by tag.
 	'''
@@ -84,7 +84,7 @@ class BlogByTag( Blog ):
 
 
 
-class Post( DetailView ):
+class PostView( DetailView ):
 	'''
 	Blog Post view.
 	'''
