@@ -8,7 +8,7 @@
 
 from unittest.mock import patch
 
-from django.test import TestCase, Client
+from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 
@@ -42,7 +42,7 @@ class TestUtils():
 
 class BlogViewTests( TestCase ):
 	
-	@patch( 'blogApp.models.getDisqusCommentCount', autospec = True, return_value = 0 )
+	@patch( 'blogApp.models.getDisqusCommentCount', return_value = 0 )
 	def testPublishedBlogPost( self, mock ):
 		'''
 		Published posts should appear in the blog page.
@@ -50,7 +50,7 @@ class BlogViewTests( TestCase ):
 		
 		TestUtils.createPost().publish()
 		
-		response = Client().get( reverse( 'blogApp:blog' ) )
+		response = self.client.get( reverse( 'blogApp:blog' ) )
 		
 		self.assertContains( response, TestUtils.postSlug )
 		self.assertContains( response, TestUtils.postTitle )
@@ -63,7 +63,7 @@ class BlogViewTests( TestCase ):
 		
 		TestUtils.createPost()
 		
-		response = Client().get( reverse( 'blogApp:blog' ) )
+		response = self.client.get( reverse( 'blogApp:blog' ) )
 		
 		self.assertNotContains( response, TestUtils.postSlug )
 		self.assertNotContains( response, TestUtils.postTitle )
@@ -79,7 +79,7 @@ class BlogPostViewTests( TestCase ):
 		
 		TestUtils.createPost().publish()
 		
-		response = Client().get( reverse( 'blogApp:post', args = [ TestUtils.postSlug ] ) )
+		response = self.client.get( reverse( 'blogApp:post', args = [ TestUtils.postSlug ] ) )
 		
 		self.assertContains( response, TestUtils.postTitle )
 	
@@ -91,6 +91,6 @@ class BlogPostViewTests( TestCase ):
 		
 		TestUtils.createPost()
 		
-		response = Client().get( reverse( 'blogApp:post', args = [ TestUtils.postSlug ] ) )
+		response = self.client.get( reverse( 'blogApp:post', args = [ TestUtils.postSlug ] ) )
 		
 		self.assertNotContains( response, TestUtils.postTitle, status_code = 404 )

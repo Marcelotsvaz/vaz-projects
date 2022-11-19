@@ -8,7 +8,7 @@
 
 from unittest.mock import patch
 
-from django.test import TestCase, Client
+from django.test import TestCase
 from django.urls import reverse
 from django.db.models import Max
 from django.contrib.auth import get_user_model
@@ -152,7 +152,7 @@ class ProjectModelTests( TestCase ):
 
 class ProjectsViewTests( TestCase ):
 	
-	@patch( 'projectsApp.models.getDisqusCommentCount', autospec = True, return_value = 0 )
+	@patch( 'projectsApp.models.getDisqusCommentCount', return_value = 0 )
 	def testPublishedProject( self, mock ):
 		'''
 		Published projects should appear in the projects page.
@@ -160,7 +160,7 @@ class ProjectsViewTests( TestCase ):
 		
 		TestUtils.createProject().publish()
 		
-		response = Client().get( reverse( 'projectsApp:projects' ) )
+		response = self.client.get( reverse( 'projectsApp:projects' ) )
 		
 		self.assertContains( response, TestUtils.projectSlug )
 		self.assertContains( response, TestUtils.projectName )
@@ -173,7 +173,7 @@ class ProjectsViewTests( TestCase ):
 		
 		TestUtils.createProject()
 		
-		response = Client().get( reverse( 'projectsApp:projects' ) )
+		response = self.client.get( reverse( 'projectsApp:projects' ) )
 		
 		self.assertNotContains( response, TestUtils.projectSlug )
 		self.assertNotContains( response, TestUtils.projectName )
@@ -189,7 +189,7 @@ class ProjectViewTests( TestCase ):
 		
 		TestUtils.createProject().publish()
 		
-		response = Client().get( reverse( 'projectsApp:project', args = [ TestUtils.projectSlug ] ) )
+		response = self.client.get( reverse( 'projectsApp:project', args = [ TestUtils.projectSlug ] ) )
 		
 		self.assertContains( response, TestUtils.projectName )
 	
@@ -201,7 +201,7 @@ class ProjectViewTests( TestCase ):
 		
 		TestUtils.createProject()
 		
-		response = Client().get( reverse( 'projectsApp:project', args = [ TestUtils.projectSlug ] ) )
+		response = self.client.get( reverse( 'projectsApp:project', args = [ TestUtils.projectSlug ] ) )
 		
 		self.assertNotContains( response, TestUtils.projectName, status_code = 404 )
 	
@@ -218,7 +218,7 @@ class PageViewTests( TestCase ):
 		lastPage = TestUtils.createPages( project, 5 )
 		project.publish( publishPages = True )
 		
-		response = Client().get( reverse( 'projectsApp:page', args = [ TestUtils.projectSlug, lastPage.number ] ) )
+		response = self.client.get( reverse( 'projectsApp:page', args = [ TestUtils.projectSlug, lastPage.number ] ) )
 		
 		self.assertContains( response, TestUtils.pageName )
 	
@@ -233,6 +233,6 @@ class PageViewTests( TestCase ):
 		project.publish( publishPages = True )
 		lastPage = TestUtils.createPages( project, 5 )
 		
-		response = Client().get( reverse( 'projectsApp:page', args = [ TestUtils.projectSlug, lastPage.number ] ) )
+		response = self.client.get( reverse( 'projectsApp:page', args = [ TestUtils.projectSlug, lastPage.number ] ) )
 		
 		self.assertNotContains( response, TestUtils.pageName, status_code = 404 )

@@ -8,7 +8,7 @@
 
 from xml.etree import ElementTree
 
-from django.test import TestCase, Client
+from django.test import TestCase
 from django.urls import reverse
 
 from projectsApp.tests import TestUtils as ProjectTestUtils
@@ -25,7 +25,7 @@ class HomeViewTests( TestCase ):
 		
 		ProjectTestUtils.createProject( highlight = True ).publish()
 		
-		response = Client().get( reverse( 'siteApp:home' ) )
+		response = self.client.get( reverse( 'siteApp:home' ) )
 		
 		self.assertContains( response, ProjectTestUtils.projectSlug )
 		self.assertContains( response, ProjectTestUtils.projectName )
@@ -38,7 +38,7 @@ class HomeViewTests( TestCase ):
 		
 		ProjectTestUtils.createProject().publish()
 		
-		response = Client().get( reverse( 'siteApp:home' ) )
+		response = self.client.get( reverse( 'siteApp:home' ) )
 		
 		self.assertNotContains( response, ProjectTestUtils.projectSlug )
 		self.assertNotContains( response, ProjectTestUtils.projectName )
@@ -51,7 +51,7 @@ class HomeViewTests( TestCase ):
 		
 		ProjectTestUtils.createProject( highlight = True )
 		
-		response = Client().get( reverse( 'siteApp:home' ) )
+		response = self.client.get( reverse( 'siteApp:home' ) )
 		
 		self.assertNotContains( response, ProjectTestUtils.projectSlug )
 		self.assertNotContains( response, ProjectTestUtils.projectName )
@@ -64,7 +64,7 @@ class HomeViewTests( TestCase ):
 		
 		BlogPostTestUtils.createPost().publish()
 		
-		response = Client().get( reverse( 'siteApp:home' ) )
+		response = self.client.get( reverse( 'siteApp:home' ) )
 		
 		self.assertContains( response, BlogPostTestUtils.postSlug )
 		self.assertContains( response, BlogPostTestUtils.postTitle )
@@ -77,7 +77,7 @@ class HomeViewTests( TestCase ):
 		
 		BlogPostTestUtils.createPost()
 		
-		response = Client().get( reverse( 'siteApp:home' ) )
+		response = self.client.get( reverse( 'siteApp:home' ) )
 		
 		self.assertNotContains( response, BlogPostTestUtils.postSlug )
 		self.assertNotContains( response, BlogPostTestUtils.postTitle )
@@ -98,7 +98,7 @@ class SitemapViewTests( TestCase ):
 		post = BlogPostTestUtils.createPost()
 		post.publish()
 		
-		response = Client().get( reverse( 'siteApp:sitemap' ) )
+		response = self.client.get( reverse( 'siteApp:sitemap' ) )
 		
 		ElementTree.fromstring( response.content )
 		self.assertContains( response, project.get_absolute_url() )
