@@ -93,6 +93,7 @@ INSTALLED_APPS = [
 	'storages',
 	'taggit',
 	'django_elasticsearch_dsl',
+	'rest_framework',
 	'django_object_actions',
 	'django_cleanup.apps.CleanupConfig',
 ]

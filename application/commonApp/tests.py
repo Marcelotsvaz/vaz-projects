@@ -6,9 +6,12 @@
 
 
 
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 from django.test import TestCase
+from django.urls import reverse
+
+from rest_framework.test import APITestCase
 
 from markdown_it import MarkdownIt
 
@@ -199,3 +202,24 @@ class MarkdownImageGalleryTests( TestCase ):
 		renderedOutput = renderer.render( inputText )
 		
 		self.assertInHTML( f'<img src="{image2.image_small.url}" alt="{image2.alt}">', renderedOutput )
+
+
+
+class CommentsCountApiTests( APITestCase ):
+	
+	@patch( 'commonApp.views.getDisqusCommentCount', side_effect = [ 0, 1, 2, 3 ] )
+	def testCommentsCountApi( self, mock ):
+		'''
+		Test if CommentsCountApi returns the expected values.
+		'''
+		
+		data = {
+			'identifier0': 0,
+			'identifier1': 1,
+			'identifier2': 2,
+			'identifier3': 3,
+		}
+		
+		response = self.client.get( reverse( 'commonApp:comments_count' ), data = { 'identifiers': data.keys() } )
+		
+		self.assertEqual( response.data, data )
