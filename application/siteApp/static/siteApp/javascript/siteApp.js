@@ -70,13 +70,17 @@ async function updateCommentsCount() {
 		tags[tag.dataset.identifier] = tag;
 	}
 	
+	if ( Object.keys( tags ).length == 0 ) {
+		return;
+	}
+	
 	try {
 		const parameters = new URLSearchParams( Object.keys( tags ).map( identifier => [ 'identifiers', identifier ] ) );
 		const response = await fetch( '/api/comments-count?' + parameters );
 		
-		// if ( ![ 200, 422, 429 ].includes( response.status ) ) {
-		// 	throw new Error( `Unexpected response, server answered with status code ${response.status}.` );
-		// }
+		if ( response.status != 200 ) {
+			throw new Error( `Error, server answered with status code ${response.status}.` );
+		}
 		
 		const commentsCount = await response.json();
 		
