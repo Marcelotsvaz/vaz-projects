@@ -70,7 +70,7 @@ async function updateCommentsCount() {
 		tags[tag.dataset.identifier] = tag;
 	}
 	
-	if ( Object.keys( tags ).length == 0 ) {
+	if ( Object.keys( tags ).length === 0 ) {
 		return;
 	}
 	
