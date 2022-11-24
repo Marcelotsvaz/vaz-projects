@@ -86,7 +86,7 @@ async function updateCommentsCount() {
 		
 		for ( const [ identifier, commentCount ] of Object.entries( commentsCount ) ) {
 			// TODO: Handle plural.
-			tags[identifier].textContent = tags[identifier].textContent.replace( /\d+/, commentCount );
+			tags[identifier].textContent = tags[identifier].textContent.replace( /-?\d+/, commentCount );
 		}
 	}
 	catch ( error ) {

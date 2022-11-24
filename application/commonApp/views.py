@@ -12,7 +12,7 @@ from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .misc import getDisqusCommentCount
+from .misc import getDisqusCommentsCount
 
 
 
@@ -22,12 +22,9 @@ class CommentsCountApi( APIView ):
 	'''
 	
 	def get( self, request ):
-		commentsCount = {}
+		identifiers = request.query_params.getlist( 'identifiers' )
 		
-		for identifier in request.query_params.getlist( 'identifiers' ):
-			commentsCount[identifier] = getDisqusCommentCount( identifier )
-		
-		return Response( commentsCount )
+		return Response( getDisqusCommentsCount( identifiers, refresh = True ) )
 
 
 class RobotsView( TemplateView ):

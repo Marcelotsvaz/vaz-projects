@@ -6,8 +6,6 @@
 
 
 
-from unittest.mock import patch
-
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.db.models import Max
@@ -152,8 +150,7 @@ class ProjectModelTests( TestCase ):
 
 class ProjectsViewTests( TestCase ):
 	
-	@patch( 'projectsApp.models.getDisqusCommentCount', autospec = True, return_value = 0 )
-	def testPublishedProject( self, mock ):
+	def testPublishedProject( self ):
 		'''
 		Published projects should appear in the projects page.
 		'''

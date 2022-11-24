@@ -6,7 +6,7 @@
 
 
 
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 
 from django.test import TestCase
 from django.urls import reverse
@@ -207,17 +207,16 @@ class MarkdownImageGalleryTests( TestCase ):
 
 class CommentsCountApiTests( APITestCase ):
 	
-	@patch( 'commonApp.views.getDisqusCommentCount', side_effect = [ 0, 1, 2, 3 ] )
-	def testCommentsCountApi( self, mock ):
+	def testCommentsCountApi( self ):
 		'''
 		Test if CommentsCountApi returns the expected values.
 		'''
 		
 		data = {
 			'identifier0': 0,
-			'identifier1': 1,
-			'identifier2': 2,
-			'identifier3': 3,
+			'identifier1': 0,
+			'identifier2': 0,
+			'identifier3': 0,
 		}
 		
 		response = self.client.get( reverse( 'commonApp:comments_count' ), data = { 'identifiers': data.keys() } )

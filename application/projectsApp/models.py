@@ -27,7 +27,7 @@ from imagekit.processors import ResizeToFill
 
 from commonApp.fields import TextField, MarkdownField
 from commonApp.models import getUploadFolder, UserImage
-from commonApp.misc import getDisqusCommentCount
+from commonApp.misc import getDisqusCommentsCount
 
 
 
@@ -150,9 +150,10 @@ class Project( models.Model ):
 		Get the number of comments in the threads associated with this post and all of its pages.
 		'''
 		
-		pageCommentCount = sum( page.comment_count for page in self.pages.all() )
+		identifiers = [ page.get_absolute_url() for page in self.pages.all() ]
+		identifiers.append( self.get_absolute_url() )
 		
-		return getDisqusCommentCount( self.get_absolute_url() ) + pageCommentCount
+		return sum( getDisqusCommentsCount( identifiers ).values() ) 
 			
 	def getMarkdownImages( self ):
 		'''
@@ -263,7 +264,9 @@ class Page( models.Model ):
 		Get the number of comments in the thread associated with this page.
 		'''
 		
-		return getDisqusCommentCount( self.get_absolute_url() )
+		identifier = self.get_absolute_url()
+		
+		return getDisqusCommentsCount( [ identifier ] )[identifier]
 	
 	def getMarkdownImages( self ):
 		'''

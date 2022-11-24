@@ -27,7 +27,7 @@ from taggit.managers import TaggableManager
 
 from commonApp.fields import MarkdownField
 from commonApp.models import getUploadFolder, UserImage
-from commonApp.misc import getDisqusCommentCount
+from commonApp.misc import getDisqusCommentsCount
 
 
 
@@ -108,7 +108,9 @@ class BlogPost( models.Model ):
 		Get the number of comments in the thread associated with this post.
 		'''
 		
-		return getDisqusCommentCount( self.get_absolute_url() )
+		identifier = self.get_absolute_url()
+		
+		return getDisqusCommentsCount( [ identifier ] )[identifier]
 	
 	def publish( self ):
 		'''
