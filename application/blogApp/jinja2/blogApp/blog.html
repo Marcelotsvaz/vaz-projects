@@ -36,7 +36,7 @@
 				</div>
 				
 				<div>
-					<a href="{{ post.get_absolute_url() }}#comments">
+					<a class="commentCount" data-identifier="{{ post.get_absolute_url() }}" href="{{ post.get_absolute_url() }}#comments">
 						{{ ngettext( '{0} comment', '{0} comments', post.comment_count ).format( post.comment_count ) }}
 					</a>
 				</div>

@@ -9,6 +9,22 @@
 from django.views.generic import TemplateView, RedirectView
 from django.conf import settings
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
+from .misc import getDisqusCommentsCount
+
+
+
+class CommentsCountApi( APIView ):
+	'''
+	Comments count API.
+	'''
+	
+	def get( self, request ):
+		identifiers = request.query_params.getlist( 'identifiers' )
+		
+		return Response( getDisqusCommentsCount( identifiers, refresh = True ) )
 
 
 class RobotsView( TemplateView ):

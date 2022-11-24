@@ -6,8 +6,6 @@
 
 
 
-from unittest.mock import patch
-
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
@@ -42,8 +40,7 @@ class TestUtils():
 
 class BlogViewTests( TestCase ):
 	
-	@patch( 'blogApp.models.getDisqusCommentCount', return_value = 0 )
-	def testPublishedBlogPost( self, mock ):
+	def testPublishedBlogPost( self ):
 		'''
 		Published posts should appear in the blog page.
 		'''

@@ -14,6 +14,7 @@ from . import views
 app_name = 'commonApp'
 
 urlpatterns = [
-	path( 'robots.txt',		views.RobotsView.as_view(),		name = 'robots' ),
-	path( 'favicon.ico',	views.FaviconView.as_view(),	name = 'favicon' ),
+	path( 'api/comments-count',	views.CommentsCountApi.as_view(),	name = 'comments_count' ),
+	path( 'robots.txt',			views.RobotsView.as_view(),			name = 'robots' ),
+	path( 'favicon.ico',		views.FaviconView.as_view(),		name = 'favicon' ),
 ]

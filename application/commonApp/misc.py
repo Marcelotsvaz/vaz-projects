@@ -44,35 +44,39 @@ def showDebugToolbar( request ):
 
 # Disqus
 #-------------------------------------------------------------------------------
-def getDisqusCommentCount( identifier, refresh = False ):
+def getDisqusCommentsCount( identifiers, refresh = False ):
 	'''
-	Return the post count for a Disqus thread by `identifier`. Results are cached.
+	Return the post count for a list of Disqus threads from the cache or updated from the Disqus API.
 	'''
 	
-	cacheKey = f'getDisqusCommentCount:{identifier}'
-	commentCount = cache.get( cacheKey )
+	cacheKeyPrefix = 'getDisqusCommentsCount:'
+	commentsCount = { identifier: cache.get( cacheKeyPrefix + identifier ) or 0 for identifier in identifiers }
 	
-	if commentCount is None or refresh:
-		url = 'https://disqus.com/api/3.0/threads/list.json'
-		parameters = {
-			'api_key': settings.DISQUS_API_PUBLIC_KEY,
-			'forum': settings.DISQUS_SHORTNAME,
-			'thread': 'ident:' + identifier,
-			'limit': 1,
-		}
-		
-		request = requests.get( url, params = parameters )
-		thread = request.json()['response'][0]
-		
-		if request.status_code != 200:
-			return 0
-		
-		# An invalid identifier returns all threads in the forum instead of returning an error.
-		if identifier in thread['identifiers']:
-			commentCount = thread['posts']
-		else:
-			commentCount = 0	# Thread not created yet.
-		
-		cache.set( cacheKey, commentCount )
+	if not refresh:
+		return commentsCount
 	
-	return commentCount
+	url = 'https://disqus.com/api/3.0/threads/list.json'
+	parameters = {
+		'api_key': settings.DISQUS_API_PUBLIC_KEY,
+		'forum': settings.DISQUS_SHORTNAME,
+		'thread': ( 'ident:' + identifier for identifier in identifiers ),
+	}
+	request = requests.get( url, params = parameters )
+	
+	if request.status_code != 200:
+		try:
+			errorMessage = request.json()['response']
+		except requests.exceptions.JSONDecodeError as error:
+			raise Exception( f'Disqus API answered with status code {request.status_code} and no error message.' ) from error
+		
+		raise Exception( f'Disqus API error: {errorMessage}.' )
+	
+	updatedCommentsCount = { thread['identifiers'][0]: thread['posts'] for thread in request.json()['response'] }
+	
+	for identifier in identifiers:
+		count = updatedCommentsCount.get( identifier, 0 )
+		
+		cache.set( cacheKeyPrefix + identifier, count )
+		commentsCount[identifier] = count
+	
+	return commentsCount
