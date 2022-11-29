@@ -39,7 +39,7 @@ The following URLs will be available:
 ### Running tests
 ```sh
 # Run unit tests and generate coverage report.
-docker compose run --rm application 'coverage run manage.py test && coverage report'
+docker compose run --rm --build application 'coverage run manage.py test && coverage report'
 ```
 
 
