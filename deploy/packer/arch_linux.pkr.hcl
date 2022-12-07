@@ -36,7 +36,6 @@ source "amazon-ebssurrogate" "arch_linux" {
 	#---------------------------------------------------------------------------
 	spot_price = 0.01
 	spot_instance_types = [
-		"t3a.nano",
 		"t3a.micro",
 		"t3a.small",
 	]
