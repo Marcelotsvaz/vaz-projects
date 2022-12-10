@@ -23,7 +23,7 @@ variable "playbook" {
 packer {
 	required_plugins {
 		amazon = {
-			version = " >= 1.1.3"
+			version = " >= 1.1.6"
 			source = "github.com/hashicorp/amazon"
 		}
 	}
@@ -96,6 +96,8 @@ source "amazon-ebssurrogate" "arch_linux" {
 	ami_name = var.ami_name
 	ami_virtualization_type = "hvm"
 	boot_mode = "uefi"
+	# Add UEFI boot entry to File(\linux.efi).
+	uefi_data = "QU1aTlVFRkma4sWCAAAAAHj5a7fZ92OC2sQJpUGDbv5FKalFTHBHoFvODp1mgSk3AAIrpAk2OQZHoOOSgS0iBQYf8MrBUvAsJguLFEMMeMUdREQPWO6kAXmQliE2WwB/sh9R"
 	ena_support = true
 	
 	force_deregister = true
