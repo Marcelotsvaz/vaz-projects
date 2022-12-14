@@ -57,7 +57,7 @@ resource "aws_launch_template" "launch_template" {
 	name = "${var.prefix}-${var.identifier}-launchTemplate"
 	update_default_version = true
 	
-	image_id = data.aws_ami.arch_linux.id
+	image_id = var.ami_id
 	instance_type = var.instance_type
 	instance_market_options { market_type = "spot" }
 	vpc_security_group_ids = var.vpc_security_group_ids
@@ -108,17 +108,6 @@ module "user_data" {
 		hostname = var.hostname
 		user = var.hostname
 	} )
-}
-
-
-data "aws_ami" "arch_linux" {
-	most_recent = true
-	owners = [ "self" ]
-	
-	filter {
-		name = "name"
-		values = [ "VAZ Projects AMI" ]
-	}
 }
 
 

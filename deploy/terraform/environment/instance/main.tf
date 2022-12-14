@@ -10,7 +10,7 @@
 # Instances.
 #-------------------------------------------------------------------------------
 resource "aws_spot_instance_request" "instance" {
-	ami = data.aws_ami.arch_linux.id
+	ami = var.ami_id
 	instance_type = var.instance_type
 	subnet_id = var.subnet_id
 	ipv6_address_count = var.ipv6_address_count
@@ -47,17 +47,6 @@ module "user_data" {
 		hostname = var.hostname
 		user = var.hostname
 	} )
-}
-
-
-data "aws_ami" "arch_linux" {
-	most_recent = true
-	owners = [ "self" ]
-	
-	filter {
-		name = "name"
-		values = [ "VAZ Projects AMI" ]
-	}
 }
 
 

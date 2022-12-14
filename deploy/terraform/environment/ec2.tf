@@ -7,6 +7,21 @@
 
 
 # 
+# Common.
+#-------------------------------------------------------------------------------
+data "aws_ami" "ami" {
+	most_recent = true
+	owners = [ "self" ]
+	
+	filter {
+		name = "name"
+		values = [ "VAZ Projects AMI" ]
+	}
+}
+
+
+
+# 
 # Load balancer server.
 #-------------------------------------------------------------------------------
 module "load_balancer" {
@@ -19,6 +34,7 @@ module "load_balancer" {
 	prefix = "${local.project_code}-${var.environment}"
 	
 	# Configuration.
+	ami_id = data.aws_ami.ami.id
 	instance_type = "t3a.nano"
 	root_volume_size = 5
 	
@@ -126,6 +142,7 @@ module "app_server" {
 	prefix = "${local.project_code}-${var.environment}"
 	
 	# Configuration.
+	ami_id = data.aws_ami.ami.id
 	instance_type = "t3a.small"
 	root_volume_size = 5
 	
@@ -209,6 +226,7 @@ module "database_server" {
 	prefix = "${local.project_code}-${var.environment}"
 	
 	# Configuration.
+	ami_id = data.aws_ami.ami.id
 	instance_type = "t3a.nano"
 	root_volume_size = 5
 	
@@ -293,6 +311,7 @@ module "monitoring_server" {
 	prefix = "${local.project_code}-${var.environment}"
 	
 	# Configuration.
+	ami_id = data.aws_ami.ami.id
 	instance_type = "t3a.micro"
 	root_volume_size = 5
 	

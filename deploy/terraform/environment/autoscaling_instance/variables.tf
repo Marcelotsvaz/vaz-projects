@@ -14,7 +14,7 @@ variable "name" {
 }
 
 variable "identifier" {
-	description = ""
+	description = "Unique identifier used in resources that need a unique name."
 	type = string
 }
 
@@ -31,6 +31,11 @@ variable "prefix" {
 
 # Configuration.
 #-------------------------------------------------------------------------------
+variable "ami_id" {
+	description = "AMI ID."
+	type = string
+}
+
 variable "instance_type" {
 	description = "Instance type. E.g. `t3.micro`."
 	type = string
