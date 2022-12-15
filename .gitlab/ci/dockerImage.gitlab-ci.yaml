@@ -17,6 +17,7 @@
     interruptible: true
     
     cache:
+        key: ${CI_COMMIT_REF_SLUG}-buildkit # Per-branch BuildKit cache.
         paths: [ deployment/buildkitCache/ ]
     
     script:

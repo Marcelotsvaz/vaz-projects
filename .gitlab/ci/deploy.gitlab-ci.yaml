@@ -18,7 +18,8 @@
         entrypoint: [ '' ]
     
     cache:
-        paths: [ deployment/terraform/ ]
+        key: ${CI_COMMIT_REF_SLUG}-terraform    # Per-branch Terraform cache.
+        paths: [ deployment/terraform/providers/ ]
     
     script:
       - apk add --no-cache bash tar
@@ -26,8 +27,7 @@
       - cp deployment/vazProjects-${CI_ENVIRONMENT_TIER}/application/environment.env deployment/applicationEnvironment.env
     
     artifacts:
-        paths:
-          - deployment/applicationEnvironment.env
+        paths: [ deployment/applicationEnvironment.env ]
         reports:
             terraform: deployment/terraformChanges.json
         name: ${CI_ENVIRONMENT_TIER}

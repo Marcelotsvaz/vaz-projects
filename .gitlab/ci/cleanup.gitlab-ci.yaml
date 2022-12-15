@@ -22,7 +22,8 @@
         entrypoint: [ '' ]
     
     cache:
-        paths: [ deployment/terraform/ ]
+        key: ${CI_COMMIT_REF_SLUG}-terraform    # Per-branch Terraform cache.
+        paths: [ deployment/terraform/providers/ ]
     
     script:
       - apk add --no-cache bash
