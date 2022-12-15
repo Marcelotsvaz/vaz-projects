@@ -10,7 +10,7 @@ terraform {
 	required_providers {
 		aws = {
 			source = "hashicorp/aws"
-			version = "~> 4.25"
+			version = "~> 4.46"
 		}
 	}
 	
@@ -20,7 +20,7 @@ terraform {
 		retry_wait_min = 5
 	}
 	
-	required_version = ">= 0.14.9"
+	required_version = ">= 1.3.6"
 }
 
 

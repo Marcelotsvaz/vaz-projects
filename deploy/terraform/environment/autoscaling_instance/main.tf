@@ -57,10 +57,9 @@ resource "aws_launch_template" "launch_template" {
 	name = "${var.prefix}-${var.identifier}-launchTemplate"
 	update_default_version = true
 	
+	instance_market_options { market_type = "spot" }
 	image_id = var.ami_id
 	instance_type = var.instance_type
-	instance_market_options { market_type = "spot" }
-	vpc_security_group_ids = var.vpc_security_group_ids
 	iam_instance_profile { arn = aws_iam_instance_profile.instance_profile.arn }
 	user_data = module.user_data.content_base64
 	ebs_optimized = true
@@ -72,6 +71,11 @@ resource "aws_launch_template" "launch_template" {
 			volume_size = var.root_volume_size
 			encrypted = true
 		}
+	}
+	
+	network_interfaces {
+		ipv6_address_count = var.ipv6_address_count
+		security_groups = var.vpc_security_group_ids
 	}
 	
 	tag_specifications {

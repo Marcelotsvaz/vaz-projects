@@ -7,29 +7,76 @@
 
 
 # 
-# Instances.
+# Instance.
 #-------------------------------------------------------------------------------
-resource "aws_spot_instance_request" "instance" {
-	ami = var.ami_id
-	instance_type = var.instance_type
-	subnet_id = var.subnet_id
-	ipv6_address_count = var.ipv6_address_count
-	vpc_security_group_ids = var.vpc_security_group_ids
-	iam_instance_profile = aws_iam_instance_profile.instance_profile.name
-	user_data_base64 = module.user_data.content_base64
-	ebs_optimized = true
-	instance_interruption_behavior = "stop"
-	wait_for_fulfillment = true
+resource "aws_ec2_fleet" "fleet" {
+	target_capacity_specification {
+		default_target_capacity_type = "spot"
+		total_target_capacity = 1
+	}
 	
-	root_block_device {
-		volume_size = var.root_volume_size
-		encrypted = true
-		
-		tags = local.instance_root_volume_tags
+	spot_options { instance_interruption_behavior = "stop" }
+	terminate_instances = true
+	
+	launch_template_config {
+		launch_template_specification {
+			launch_template_id = aws_launch_template.launch_template.id
+			version = aws_launch_template.launch_template.latest_version
+		}
+	}
+	
+	lifecycle {
+		replace_triggered_by = [ aws_launch_template.launch_template ]	# Force instance replacement.
 	}
 	
 	tags = {
-		Name = "${var.name} Spot Request"
+		Name = "${var.name} Fleet"
+	}
+}
+
+
+resource "aws_launch_template" "launch_template" {
+	name = "${var.prefix}-${var.identifier}-launchTemplate"
+	update_default_version = true
+	
+	image_id = var.ami_id
+	instance_type = var.instance_type
+	iam_instance_profile { arn = aws_iam_instance_profile.instance_profile.arn }
+	user_data = module.user_data.content_base64
+	ebs_optimized = true
+	
+	block_device_mappings {
+		device_name = "/dev/xvda"
+		
+		ebs {
+			volume_size = var.root_volume_size
+			encrypted = true
+		}
+	}
+	
+	network_interfaces {
+		subnet_id = var.subnet_id
+		ipv6_address_count = var.ipv6_address_count
+		security_groups = var.vpc_security_group_ids
+	}
+	
+	tag_specifications {
+		resource_type = "spot-instances-request"
+		tags = merge( { Name = "${var.name} Spot Request" }, var.default_tags )
+	}
+	
+	tag_specifications {
+		resource_type = "instance"
+		tags = merge( { Name = var.name }, var.default_tags )
+	}
+	
+	tag_specifications {
+		resource_type = "volume"
+		tags = merge( { Name = "${var.name} Root Volume" }, var.default_tags )
+	}
+	
+	tags = {
+		Name = "${var.name} Launch Template"
 	}
 }
 
@@ -50,30 +97,8 @@ module "user_data" {
 }
 
 
-
-# 
-# Instance tags.
-#-------------------------------------------------------------------------------
-locals {
-	instance_root_volume_tags = merge( { Name = "${var.name} Root Volume" }, var.default_tags )
-}
-
-
-resource "aws_ec2_tag" "instance_tags" {
-	resource_id = aws_spot_instance_request.instance.spot_instance_id
-	
-	for_each = merge( { Name = var.name }, var.default_tags )
-	key = each.key
-	value = each.value
-}
-
-
-resource "aws_ec2_tag" "instance_root_volume_tags" {
-	resource_id = aws_spot_instance_request.instance.root_block_device.0.volume_id
-	
-	for_each = local.instance_root_volume_tags
-	key = each.key
-	value = each.value
+data "aws_instance" "instance" {
+	instance_tags = { "aws:ec2:fleet-id" = aws_ec2_fleet.fleet.id }
 }
 
 
@@ -87,5 +112,5 @@ resource "aws_route53_record" "a" {
 	name = "${var.hostname}.${var.private_hosted_zone.name}"
 	type = "A"
 	ttl = "60"
-	records = [ aws_spot_instance_request.instance.private_ip ]
+	records = [ data.aws_instance.instance.private_ip ]
 }

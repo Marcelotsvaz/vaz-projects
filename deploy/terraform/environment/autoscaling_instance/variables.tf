@@ -54,6 +54,12 @@ variable "subnet_ids" {
 	type = set( string )
 }
 
+variable "ipv6_address_count" {
+	description = "IPv6 address count."
+	type = number
+	default = 0
+}
+
 variable "vpc_security_group_ids" {
 	description = "Set of security group IDs"
 	type = set( string )
