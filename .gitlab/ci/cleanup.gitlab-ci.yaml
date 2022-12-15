@@ -24,6 +24,7 @@
     cache:
         key: ${CI_COMMIT_REF_SLUG}-terraform    # Per-branch Terraform cache.
         paths: [ deployment/terraform/providers/ ]
+        policy: pull
     
     script:
       - apk add --no-cache bash
