@@ -269,7 +269,6 @@ resource "aws_volume_attachment" "database_volume_attachment" {
 	volume_id = aws_ebs_volume.database_volume.id
 	instance_id = module.database_server.id
 	device_name = "/dev/xvdg"
-	stop_instance_before_detaching = true
 }
 
 
@@ -356,7 +355,6 @@ resource "aws_volume_attachment" "monitoring_volume_attachment" {
 	volume_id = aws_ebs_volume.monitoring_volume.id
 	instance_id = module.monitoring_server.id
 	device_name = "/dev/xvdg"
-	stop_instance_before_detaching = true
 }
 
 
