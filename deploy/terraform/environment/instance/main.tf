@@ -9,28 +9,21 @@
 # 
 # Instance.
 #-------------------------------------------------------------------------------
-resource "aws_ec2_fleet" "fleet" {
-	target_capacity_specification {
-		default_target_capacity_type = "spot"
-		total_target_capacity = 1
-	}
-	
-	spot_options { instance_interruption_behavior = "stop" }
-	terminate_instances = true
+resource "aws_spot_fleet_request" "fleet" {
+	target_capacity = 1
+	instance_interruption_behaviour = "stop"
+	terminate_instances_on_delete = true
+	iam_fleet_role = "arn:aws:iam::983585628015:role/aws-ec2-spot-fleet-tagging-role"	# TODO
 	
 	launch_template_config {
 		launch_template_specification {
-			launch_template_id = aws_launch_template.launch_template.id
+			id = aws_launch_template.launch_template.id
 			version = aws_launch_template.launch_template.latest_version
 		}
 	}
 	
-	lifecycle {
-		replace_triggered_by = [ aws_launch_template.launch_template ]	# Force instance replacement.
-	}
-	
 	tags = {
-		Name = "${var.name} Fleet"
+		Name = "${var.name} Spot Fleet Request"
 	}
 }
 
@@ -98,7 +91,7 @@ module "user_data" {
 
 
 data "aws_instance" "instance" {
-	instance_tags = { "aws:ec2:fleet-id" = aws_ec2_fleet.fleet.id }
+	instance_tags = { "aws:ec2spot:fleet-request-id" = aws_spot_fleet_request.fleet.id }
 }
 
 
