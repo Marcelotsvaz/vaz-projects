@@ -47,7 +47,7 @@
 			"options": [
 				{
 					"label": "up",
-					"value": "-f compose.yaml -f compose.development.yaml up --detach --build",
+					"value": "-f compose.yaml -f development.compose.yaml up --detach --build",
 				},
 				{
 					"label": "down",

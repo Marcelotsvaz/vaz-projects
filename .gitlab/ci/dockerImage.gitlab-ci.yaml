@@ -25,4 +25,4 @@
       - docker context create gitlab  # docker buildx create needs explicit context instead of env vars.
       - docker buildx create gitlab --driver docker-container --driver-opt image=moby/buildkit:v0.10.4 --use
       - cd application/
-      - docker buildx bake --file compose.build.yaml
+      - docker buildx bake --file build.compose.yaml

@@ -46,7 +46,7 @@ docker compose run --rm --build application 'coverage run manage.py test && cove
 ### Development
 ```sh
 # Mount the application folder and the compiled LESS file to the container so you can make changes without rebuilding the image.
-docker compose -f compose.yaml -f compose.development.yaml up --detach --build
+docker compose -f compose.yaml -f development.compose.yaml up --detach --build
 ```
 
 

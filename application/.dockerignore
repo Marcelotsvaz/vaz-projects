@@ -8,5 +8,5 @@
 
 Dockerfile
 .dockerignore
-compose*.yaml
+*compose.yaml
 *App/static/*App/images/src/
