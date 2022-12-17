@@ -22,7 +22,7 @@
         paths: [ deployment/terraform/providers/ ]
     
     script:
-      - apk add --no-cache bash tar
+      - apk add --no-cache bash tar aws-cli
       - deploy/deploy.sh deployEnvironment ${CI_ENVIRONMENT_TIER}
       - cp deployment/vazProjects-${CI_ENVIRONMENT_TIER}/application/environment.env deployment/applicationEnvironment.env
     

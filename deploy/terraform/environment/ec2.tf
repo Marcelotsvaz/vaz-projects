@@ -265,10 +265,22 @@ resource "aws_ebs_volume" "database_volume" {
 }
 
 
+# Wait for the volume to be detached since we use skip_destroy on the aws_volume_attachment. Otherwise we need to stop
+# the instance before detaching which is not supported by aws_spot_fleet_request.
+resource "null_resource" "wait_database_volume" {
+	triggers = { instance_id = module.database_server.id }
+	
+	provisioner "local-exec" {
+		command = "aws ec2 wait volume-available --volume-ids ${aws_ebs_volume.database_volume.id}"
+	}
+}
+
+
 resource "aws_volume_attachment" "database_volume_attachment" {
 	volume_id = aws_ebs_volume.database_volume.id
 	instance_id = module.database_server.id
 	device_name = "/dev/xvdg"
+	skip_destroy = true
 }
 
 
@@ -351,10 +363,22 @@ resource "aws_ebs_volume" "monitoring_volume" {
 }
 
 
+# Wait for the volume to be detached since we use skip_destroy on the aws_volume_attachment. Otherwise we need to stop
+# the instance before detaching which is not supported by aws_spot_fleet_request.
+resource "null_resource" "wait_monitoring_volume" {
+	triggers = { instance_id = module.monitoring_server.id }
+	
+	provisioner "local-exec" {
+		command = "aws ec2 wait volume-available --volume-ids ${aws_ebs_volume.monitoring_volume.id}"
+	}
+}
+
+
 resource "aws_volume_attachment" "monitoring_volume_attachment" {
 	volume_id = aws_ebs_volume.monitoring_volume.id
 	instance_id = module.monitoring_server.id
 	device_name = "/dev/xvdg"
+	skip_destroy = true
 }
 
 
