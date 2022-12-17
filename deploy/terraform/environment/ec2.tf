@@ -271,6 +271,7 @@ resource "null_resource" "wait_database_volume" {
 	triggers = { instance_id = module.database_server.id }
 	
 	provisioner "local-exec" {
+		environment = { AWS_DEFAULT_REGION = local.region }
 		command = "aws ec2 wait volume-available --volume-ids ${aws_ebs_volume.database_volume.id}"
 	}
 }
@@ -369,6 +370,7 @@ resource "null_resource" "wait_monitoring_volume" {
 	triggers = { instance_id = module.monitoring_server.id }
 	
 	provisioner "local-exec" {
+		environment = { AWS_DEFAULT_REGION = local.region }
 		command = "aws ec2 wait volume-available --volume-ids ${aws_ebs_volume.monitoring_volume.id}"
 	}
 }
