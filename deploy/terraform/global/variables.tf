@@ -16,9 +16,11 @@ variable "environment" {
 locals {
 	project_name = "VAZ Projects"
 	project_code = "vazProjects"
-	domain = "vazprojects.com"
 	environment_name = title( var.environment )
 	region = "sa-east-1"
+	
+	domain = "vazprojects.com"
+	
 	default_tags = {
 		Project = local.project_name
 		Environment = var.environment
