@@ -92,6 +92,11 @@ module "user_data" {
 
 data "aws_instance" "instance" {
 	instance_tags = { "aws:ec2spot:fleet-request-id" = aws_spot_fleet_request.fleet.id }
+	
+	filter {
+		name = "instance-state-name"
+		values = [ "running" ]
+	}
 }
 
 
