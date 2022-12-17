@@ -9,21 +9,15 @@
 # 
 # vazprojects.com hosted zone.
 #-------------------------------------------------------------------------------
-resource "aws_route53_delegation_set" "production" {
-	
-}
-
-
 resource "aws_route53_zone" "production" {
 	name = local.domain
-	delegation_set_id = aws_route53_delegation_set.production.id
 	
 	provisioner "local-exec" {
 		command = <<-EOF
 			aws route53domains update-domain-nameservers	\
 				--region us-east-1							\
 				--domain-name ${local.domain}				\
-				--nameservers ${join( " ", [ for ns in aws_route53_delegation_set.production.name_servers : "Name=${ns}"] )}
+				--nameservers ${join( " ", [ for ns in aws_route53_zone.production.name_servers : "Name=${ns}"] )}
 		EOF
 	}
 	
@@ -40,7 +34,7 @@ resource "aws_route53_record" "production_soa" {
 	name = aws_route53_zone.production.name
 	type = "SOA"
 	ttl = "3600"
-	records = [ "${aws_route53_delegation_set.production.name_servers[0]} awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400" ]
+	records = [ "${aws_route53_zone.production.primary_name_server} awsdns-hostmaster.amazon.com 1 ${2 * 3600} ${0.25 * 3600} ${14 * 24 * 3600} ${24 * 3600}" ]
 }
 
 
@@ -51,7 +45,7 @@ resource "aws_route53_record" "production_ns" {
 	name = aws_route53_zone.production.name
 	type = "NS"
 	ttl = "3600"
-	records = aws_route53_delegation_set.production.name_servers
+	records = aws_route53_zone.production.name_servers
 }
 
 
@@ -61,7 +55,7 @@ resource "aws_route53_record" "production_staging_ns" {
 	name = aws_route53_zone.staging.name
 	type = "NS"
 	ttl = "3600"
-	records = aws_route53_delegation_set.staging.name_servers
+	records = aws_route53_zone.staging.name_servers
 }
 
 
@@ -71,7 +65,7 @@ resource "aws_route53_record" "production_portfolio_ns" {
 	name = aws_route53_zone.portfolio.name
 	type = "NS"
 	ttl = "3600"
-	records = aws_route53_delegation_set.portfolio.name_servers
+	records = aws_route53_zone.portfolio.name_servers
 }
 
 
@@ -79,14 +73,8 @@ resource "aws_route53_record" "production_portfolio_ns" {
 # 
 # staging.vazprojects.com hosted zone.
 #-------------------------------------------------------------------------------
-resource "aws_route53_delegation_set" "staging" {
-	
-}
-
-
 resource "aws_route53_zone" "staging" {
 	name = "staging.${aws_route53_zone.production.name}"
-	delegation_set_id = aws_route53_delegation_set.staging.id
 	
 	tags = {
 		Name: "${local.project_name} Hosted Zone"
@@ -101,7 +89,7 @@ resource "aws_route53_record" "staging_soa" {
 	name = aws_route53_zone.staging.name
 	type = "SOA"
 	ttl = "3600"
-	records = [ "${aws_route53_delegation_set.staging.name_servers[0]} awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400" ]
+	records = [ "${aws_route53_zone.staging.primary_name_server} awsdns-hostmaster.amazon.com 1 ${2 * 3600} ${0.25 * 3600} ${14 * 24 * 3600} ${24 * 3600}" ]
 }
 
 
@@ -112,7 +100,7 @@ resource "aws_route53_record" "staging_ns" {
 	name = aws_route53_zone.staging.name
 	type = "NS"
 	ttl = "3600"
-	records = aws_route53_delegation_set.staging.name_servers
+	records = aws_route53_zone.staging.name_servers
 }
 
 
@@ -120,14 +108,8 @@ resource "aws_route53_record" "staging_ns" {
 # 
 # portfolio.vazprojects.com hosted zone.
 #-------------------------------------------------------------------------------
-resource "aws_route53_delegation_set" "portfolio" {
-	
-}
-
-
 resource "aws_route53_zone" "portfolio" {
 	name = "portfolio.${aws_route53_zone.production.name}"
-	delegation_set_id = aws_route53_delegation_set.portfolio.id
 	
 	tags = {
 		Name: "Portfolio Hosted Zone"
@@ -143,7 +125,7 @@ resource "aws_route53_record" "portfolio_soa" {
 	name = aws_route53_zone.portfolio.name
 	type = "SOA"
 	ttl = "3600"
-	records = [ "${aws_route53_delegation_set.portfolio.name_servers[0]} awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400" ]
+	records = [ "${aws_route53_zone.portfolio.primary_name_server} awsdns-hostmaster.amazon.com 1 ${2 * 3600} ${0.25 * 3600} ${14 * 24 * 3600} ${24 * 3600}" ]
 }
 
 
@@ -154,5 +136,5 @@ resource "aws_route53_record" "portfolio_ns" {
 	name = aws_route53_zone.portfolio.name
 	type = "NS"
 	ttl = "3600"
-	records = aws_route53_delegation_set.portfolio.name_servers
+	records = aws_route53_zone.portfolio.name_servers
 }

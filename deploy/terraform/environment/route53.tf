@@ -20,26 +20,26 @@ resource "aws_route53_zone" "private" {
 }
 
 
-# resource "aws_route53_record" "private_soa" {
-# 	zone_id = aws_route53_zone.private.zone_id
-# 	allow_overwrite = true
+resource "aws_route53_record" "private_soa" {
+	zone_id = aws_route53_zone.private.zone_id
+	allow_overwrite = true
 	
-# 	name = aws_route53_zone.private.name
-# 	type = "SOA"
-# 	ttl = "3600"
-# 	records = [ "${aws_route53_zone.private.name_servers[0]} awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400" ]
-# }
+	name = aws_route53_zone.private.name
+	type = "SOA"
+	ttl = "3600"
+	records = [ "${aws_route53_zone.private.primary_name_server} awsdns-hostmaster.amazon.com 1 ${2 * 3600} ${0.25 * 3600} ${14 * 24 * 3600} ${24 * 3600}" ]
+}
 
 
-# resource "aws_route53_record" "private_ns" {
-# 	zone_id = aws_route53_zone.private.zone_id
-# 	allow_overwrite = true
+resource "aws_route53_record" "private_ns" {
+	zone_id = aws_route53_zone.private.zone_id
+	allow_overwrite = true
 	
-# 	name = aws_route53_zone.private.name
-# 	type = "NS"
-# 	ttl = "3600"
-# 	records = aws_route53_zone.private.name_servers
-# }
+	name = aws_route53_zone.private.name
+	type = "NS"
+	ttl = "3600"
+	records = aws_route53_zone.private.name_servers
+}
 
 
 
