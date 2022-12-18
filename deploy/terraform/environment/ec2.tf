@@ -282,6 +282,8 @@ resource "aws_volume_attachment" "database_volume_attachment" {
 	instance_id = module.database_server.id
 	device_name = "/dev/xvdg"
 	skip_destroy = true
+	
+	depends_on = [ null_resource.wait_database_volume ]
 }
 
 
@@ -381,6 +383,8 @@ resource "aws_volume_attachment" "monitoring_volume_attachment" {
 	instance_id = module.monitoring_server.id
 	device_name = "/dev/xvdg"
 	skip_destroy = true
+	
+	depends_on = [ null_resource.wait_monitoring_volume ]
 }
 
 
