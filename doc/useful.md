@@ -5,7 +5,7 @@
 
 ```sh
 cd deploy/packer/
-packer build -var "ami_name=VAZ Projects Builder AMI" -var "playbook=builderAmiPlaybook.yaml" .
+packer build -var "ami_name=VAZ Projects Builder AMI" -var "playbook=builderAmiPlaybook.yaml" -var "disk_size=3" .
 ```
 
 

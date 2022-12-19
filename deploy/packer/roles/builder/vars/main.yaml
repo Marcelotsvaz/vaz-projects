@@ -1,0 +1,15 @@
+# 
+# VAZ Projects
+# 
+# 
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+builder_packages:
+  - ansible
+  - python-packaging
+  - gptfdisk
+  - dosfstools
+  - reflector
+  - arch-install-scripts

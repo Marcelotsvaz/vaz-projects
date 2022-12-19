@@ -6,6 +6,6 @@
 
 
 
-ec2_packages:
-  - gptfdisk
-  - aws-cli
+gitlabRunner_packages:
+  - gitlab-runner
+  - docker

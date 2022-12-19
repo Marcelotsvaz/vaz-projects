@@ -14,17 +14,12 @@
         mountPoint: /mnt/new
         ansible_chroot_exe: arch-chroot
         ansible_host: '{{ mountPoint }}'
-        builderAmi_packages:
-          - ansible
-          - python-packaging
-          - gptfdisk
-          - dosfstools
-          - reflector
-          - arch-install-scripts
     
     roles:
       - ext4
       - baseArch
       - customArch
       - ec2
+      - builder
+      - gitlabRunner
       - cleanup

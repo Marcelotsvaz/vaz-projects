@@ -14,4 +14,3 @@ baseArch_packages:
   - sudo
   - openssh
   - nano
-  - aws-cli

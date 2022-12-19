@@ -1,0 +1,17 @@
+# 
+# VAZ Projects
+# 
+# 
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+  - name: GitLab Runner setup
+    become: true
+    connection: community.general.chroot
+    
+    block:
+      - name: Enable Docker socket
+        systemd:
+            enabled: true
+            name: docker.socket

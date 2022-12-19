@@ -11,11 +11,14 @@ variable "ami_name" {
 	default = "VAZ Projects AMI"
 }
 
-
-
 variable "playbook" {
 	type =  string
 	default = "amiPlaybook.yaml"
+}
+
+variable "disk_size" {
+	type =  number
+	default = 2
 }
 
 
@@ -63,7 +66,7 @@ source "amazon-ebssurrogate" "arch_linux" {
 	# Image root.
 	launch_block_device_mappings {
 		device_name = "/dev/xvdf"
-		volume_size = 2
+		volume_size = var.disk_size
 		volume_type = "gp3"
 		encrypted = true
 		delete_on_termination = true
