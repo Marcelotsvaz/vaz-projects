@@ -42,30 +42,6 @@ function terraformInit()
 
 
 # 
-# Deploy AWS infrastructure common to all environments.
-#-------------------------------------------------------------------------------
-function deployAws()
-{
-	cd ${terraformRoot}/global
-	terraformInit global
-	terraform apply -auto-approve
-}
-
-
-
-# 
-# Destroy AWS infrastructure common to all environments.
-#-------------------------------------------------------------------------------
-function destroyAws()
-{
-	cd ${terraformRoot}/global
-	terraformInit global
-	terraform destroy -auto-approve
-}
-
-
-
-# 
 # Deploy environment-specific AWS resources.
 #-------------------------------------------------------------------------------
 function deployEnvironment()
@@ -93,10 +69,34 @@ function destroyEnvironment()
 	cd ${terraformRoot}/environment
 	terraformInit ${environment}
 	terraform destroy										\
-		-auto-approve										\
 		-var="environment=${environment}"					\
 		-var="repository_snapshot=${repositorySnapshot}"	\
-		-var="application_image=${applicationImage}"
+		-var="application_image=${applicationImage}"		\
+		-auto-approve
+}
+
+
+
+# 
+# Deploy AWS infrastructure common to all environments.
+#-------------------------------------------------------------------------------
+function deployGlobal()
+{
+	cd ${terraformRoot}/global
+	terraformInit global
+	terraform apply -auto-approve
+}
+
+
+
+# 
+# Destroy AWS infrastructure common to all environments.
+#-------------------------------------------------------------------------------
+function destroyGlobal()
+{
+	cd ${terraformRoot}/global
+	terraformInit global
+	terraform destroy -auto-approve
 }
 
 
@@ -104,7 +104,7 @@ function destroyEnvironment()
 # 
 # Run command.
 #-------------------------------------------------------------------------------
-if [[ "${command}" =~ ^(deployAws|destroyAws|deployEnvironment|destroyEnvironment)$ ]]; then
+if [[ "${command}" =~ ^(deployEnvironment|destroyEnvironment|deployGlobal|destroyGlobal)$ ]]; then
 	${command}
 else
 	echo 'Invalid command.'

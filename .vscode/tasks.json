@@ -13,7 +13,7 @@
 	
 	"tasks": [
 		{
-			"label": "Compose",
+			"label": "Docker Compose",
 			"type": "shell",
 			"command": "docker compose ${input:composeCommand}",
 			"icon": {
@@ -27,7 +27,7 @@
 		{
 			"label": "Deploy",
 			"type": "shell",
-			"command": "deploy/deploy.sh ${input:deployCommand} ${input:deployEnvironment}",
+			"command": "deploy/deploy.sh ${input:deployArguments}",
 			"icon": {
 				"id": "rocket",
 				"color": "terminal.ansiMagenta",
@@ -43,7 +43,6 @@
 			"id": "composeCommand",
 			"type": "pickString",
 			"description": "Select operation",
-			"default": "up",
 			"options": [
 				{
 					"label": "up",
@@ -66,48 +65,33 @@
 		
 		
 		{
-			"id": "deployCommand",
+			"id": "deployArguments",
 			"type": "pickString",
 			"description": "Select operation",
-			"default": "deployEnvironment",
 			"options": [
 				{
-					"label": "Deploy Environment",
-					"value": "deployEnvironment"
+					"label": "Deploy Staging",
+					"value": "deployEnvironment staging",
 				},
 				{
-					"label": "Destroy Environment",
-					"value": "destroyEnvironment"
+					"label": "Deploy Production",
+					"value": "deployEnvironment production",
 				},
 				{
-					"label": "Deploy AWS",
-					"value": "deployAws"
+					"label": "Deploy Global",
+					"value": "deployGlobal",
 				},
 				{
-					"label": "Destroy AWS",
-					"value": "destroyAws"
-				},
-			],
-		},
-		
-		
-		{
-			"id": "deployEnvironment",
-			"type": "pickString",
-			"description": "Select environment",
-			"default": "staging",
-			"options": [
-				{
-					"label": "Staging",
-					"value": "staging"
+					"label": "Destroy Staging",
+					"value": "destroyEnvironment staging",
 				},
 				{
-					"label": "Production",
-					"value": "production"
+					"label": "Destroy Production",
+					"value": "destroyEnvironment production",
 				},
 				{
-					"label": "Global",
-					"value": "global"
+					"label": "Destroy Global",
+					"value": "destroyGlobal",
 				},
 			],
 		},
