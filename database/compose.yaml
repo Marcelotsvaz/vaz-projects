@@ -22,7 +22,7 @@ services:
         healthcheck:
             test: pg_isready --username postgres
             interval: 1s
-            start_period: 5s
+            start_period: 10s
 
 
 
