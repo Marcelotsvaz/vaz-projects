@@ -48,9 +48,7 @@ function deployAws()
 {
 	cd ${terraformRoot}/global
 	terraformInit global
-	terraform apply		\
-		-auto-approve	\
-		-var="environment=global"
+	terraform apply -auto-approve
 }
 
 
@@ -62,9 +60,7 @@ function destroyAws()
 {
 	cd ${terraformRoot}/global
 	terraformInit global
-	terraform destroy	\
-		-auto-approve	\
-		-var="environment=global"
+	terraform destroy -auto-approve
 }
 
 
