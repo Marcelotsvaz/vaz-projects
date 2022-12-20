@@ -43,9 +43,6 @@ source "amazon-ebssurrogate" "arch_linux" {
 		"t3a.small",
 	]
 	
-	region = "sa-east-1"
-	subnet_id = "subnet-0171a8aa91d068ed7"
-	
 	# perInstance.sh file that just add the SSH key.
 	user_data = "H4sIAAAAAAAAA+3QwWqDQBAGYM99ii095FAaXe2u5FIISUisGKRpA/VSNrpo1GjY1UI89Nljekqh0FNoC/93mWVmYGdmL5VX6UZUsRzqzLgIq+cydorUZdZ5/GTfU8NyLcfpH9zq85Rxzg1iXWacr9p+eUWIsRMqlmXd6HfRfdf3U/2furk2W63MzbYyN0JnVzLOajLQOruTic0YHZFxb+IsOzGhZTT16PJ5xk45b+Gm813uiqeyyOvQ9wOHBbfJnKdBkU5H3iwq7Zf1nj++hpqsxxEJVZ3LuNFktVoQXx4G5IF8nJ/VHPb/mqJtslptO5m8FfKgf/tAAAAAAAAAAAAAAAAAAAAAAAAAf9QRk0aIXwAoAAA="
 	ebs_optimized = true
@@ -54,6 +51,29 @@ source "amazon-ebssurrogate" "arch_linux" {
 	ssh_username = "marcelotsvaz"
 	ssh_interface = "public_ip"
 	ssh_pty = true
+	
+	subnet_filter {
+		filters = {
+			"tag:Name": "VAZ Projects Subnet C"
+			"tag:Environment": "global"
+		}
+	}
+	
+	security_group_filter {
+		filters = {
+			"tag:Name": "VAZ Projects Common Security Group"
+			"tag:Environment": "global"
+		}
+	}
+	
+	source_ami_filter {
+		most_recent = true
+		owners = [ "self" ]
+		
+		filters = {
+			name = "VAZ Projects Builder AMI"
+		}
+	}
 	
 	# Builder root.
 	launch_block_device_mappings {
@@ -70,15 +90,6 @@ source "amazon-ebssurrogate" "arch_linux" {
 		volume_type = "gp3"
 		encrypted = true
 		delete_on_termination = true
-	}
-	
-	source_ami_filter {
-		most_recent = true
-		owners = [ "self" ]
-		
-		filters = {
-			name = "VAZ Projects Builder AMI"
-		}
 	}
 	
 	run_tags = {
