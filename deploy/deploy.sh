@@ -17,10 +17,11 @@ environment=${2}
 
 
 # Variables.
-if [[ -n "${GITLAB_CI}" ]]; then	# Running in GitLab CI/CD.
+if [[ "${GITLAB_CI}" ]]; then	# Running in GitLab CI/CD.
 	echo 'Running in CI/CD.'
 	
 	commitSha="${CI_COMMIT_SHA}"
+	terraformAutoApprove='-auto-approve'
 	
 	set -x	# Echo commands.
 else
@@ -72,6 +73,15 @@ function deployEnvironment()
 	terraform show -no-color ${terraformPlan}																						\
 		| sed -En 's/^Plan: ([0-9]+) to add, ([0-9]+) to change, ([0-9]+) to destroy\.$/{"create":\1,"update":\2,"delete":\3}/p'	\
 		> ${terraformChanges}
+	
+	if [[ ! "${terraformAutoApprove}" ]]; then
+		read -p "Do you want to perform these actions? " approved
+		
+		if [[ "${approved}" != 'yes' ]]; then
+			exit 1
+		fi
+	fi
+	
 	terraform apply ${terraformPlan}
 }
 
@@ -88,7 +98,7 @@ function destroyEnvironment()
 		-var="environment=${environment}"					\
 		-var="repository_snapshot=${repositorySnapshot}"	\
 		-var="application_image=${applicationImage}"		\
-		-auto-approve
+		${terraformAutoApprove}
 }
 
 
@@ -100,7 +110,7 @@ function deployGlobal()
 {
 	cd ${terraformRoot}/global
 	terraformInit global
-	terraform apply -auto-approve
+	terraform apply ${terraformAutoApprove}
 }
 
 
@@ -112,7 +122,7 @@ function destroyGlobal()
 {
 	cd ${terraformRoot}/global
 	terraformInit global
-	terraform destroy -auto-approve
+	terraform destroy ${terraformAutoApprove}
 }
 
 
