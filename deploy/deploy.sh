@@ -7,19 +7,35 @@
 
 
 
-# Export variables, abort on error end echo commands.
-set -aex
+# Export variables and abort on error.
+set -ae
+
 
 # Parameters.
 command=${1}
 environment=${2}
 
+
 # Variables.
+if [[ -n "${GITLAB_CI}" ]]; then	# Running in GitLab CI/CD.
+	echo 'Running in CI/CD.'
+	
+	commitSha="${CI_COMMIT_SHA}"
+	
+	set -x	# Echo commands.
+else
+	echo 'Running outside CI/CD.'
+	
+	commitSha="$(git rev-parse remotes/gitlab/production)"	# TODO: Get PR branch when support for multiple staging environments is implemented.
+	applicationImage="registry.gitlab.com/marcelotsvaz/vaz-projects/application:${commitSha}"
+fi
+
 TF_IN_AUTOMATION='True'
 TF_DATA_DIR='../../../deployment/terraform'
 terraformRoot='deploy/terraform'
 terraformPlan=${TF_DATA_DIR}/../terraformPlan.cache
 terraformChanges=${TF_DATA_DIR}/../terraformChanges.json
+repositorySnapshot="https://gitlab.com/marcelotsvaz/vaz-projects/-/archive/${commitSha}/vaz-projects.tar.gz"
 
 
 
