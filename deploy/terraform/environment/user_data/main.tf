@@ -34,7 +34,16 @@ data "external" "user_data" {
 			
 			echo $${environment_rendered} | base64 -d > "$${output_dir}/$${environment_file}"
 			
-			content_base64=$(tar -cz --mtime='UTC 2000-01-01' -C "$${input_dir}" "$${files[@]}" -C "$${output_dir}" "$${templates[@]}" "$${environment_file}" | base64 -w 0)
+			content_base64=$(tar												\
+				-cz																\
+				--mtime='UTC 2000-01-01'										\
+				--owner=root													\
+				--group=root													\
+				-C "$${input_dir}" "$${files[@]}"								\
+				-C "$${output_dir}" "$${templates[@]}" "$${environment_file}"	\
+				| base64 -w 0
+			)
+			
 			echo '{"content_base64":"'$${content_base64}'"}'
 		EOF
 	]
