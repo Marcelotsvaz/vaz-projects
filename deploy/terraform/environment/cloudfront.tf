@@ -28,16 +28,14 @@ resource "aws_cloudfront_distribution" "distribution" {
 		origin_id = "${local.origin_id}-static"
 		domain_name = aws_s3_bucket.bucket.bucket_regional_domain_name
 		origin_path = "/static"
-		
-		s3_origin_config { origin_access_identity = aws_cloudfront_origin_access_identity.identity.cloudfront_access_identity_path }
+		origin_access_control_id = aws_cloudfront_origin_access_control.access_control.id
 	}
 	
 	origin {
 		origin_id = "${local.origin_id}-media"
 		domain_name = aws_s3_bucket.bucket.bucket_regional_domain_name
 		origin_path = "/media"
-		
-		s3_origin_config { origin_access_identity = aws_cloudfront_origin_access_identity.identity.cloudfront_access_identity_path }
+		origin_access_control_id = aws_cloudfront_origin_access_control.access_control.id
 	}
 	
 	origin_group {
@@ -91,8 +89,12 @@ resource "aws_cloudfront_distribution" "distribution" {
 }
 
 
-resource "aws_cloudfront_origin_access_identity" "identity" {
-	comment = "${local.project_name} Origin Access Identity"
+resource "aws_cloudfront_origin_access_control" "access_control" {
+	name = "${local.project_name} Origin Access Control"
+	description = "${local.project_name} Origin Access Control"
+	origin_access_control_origin_type = "s3"
+	signing_behavior = "always"
+	signing_protocol = "sigv4"
 }
 
 
