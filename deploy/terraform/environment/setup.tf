@@ -10,7 +10,22 @@ terraform {
 	required_providers {
 		aws = {
 			source = "hashicorp/aws"
-			version = "~> 4.47"
+			version = "~> 4.48"
+		}
+		
+		archive = {
+			source = "hashicorp/archive"
+			version = "~> 2.2"
+		}
+		
+		external = {
+			source = "hashicorp/external"
+			version = "~> 2.2"
+		}
+		
+		null = {
+			source = "hashicorp/null"
+			version = "~> 3.2"
 		}
 	}
 	
@@ -31,6 +46,7 @@ provider "aws" {
 }
 
 
+# For aws_acm_certificate.cloudfront.
 provider "aws" {
 	alias = "us_east_1"
 	
