@@ -26,6 +26,7 @@ variables:
     # Fix wrong permissions for application image and instance user data due to runner setting "umask 0000" before
     # cloning the repository.
     FF_DISABLE_UMASK_FOR_DOCKER_EXECUTOR: 'true'
+    GIT_STRATEGY: clone
     DOCKER_TLS_CERTDIR: /certs   # Enable TLS for Docker-in-Docker. Silences warning in GitLab CI/CD.
     applicationImage: ${CI_REGISTRY_IMAGE}/application:${CI_COMMIT_SHA}
 
