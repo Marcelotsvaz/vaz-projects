@@ -26,6 +26,10 @@
       - deploy/deploy.sh deployEnvironment ${CI_ENVIRONMENT_TIER}
       - cp deployment/vazProjects-${CI_ENVIRONMENT_TIER}/application/environment.env deployment/applicationEnvironment.env
     
+    retry:
+        when: script_failure
+        max: 1
+    
     artifacts:
         paths: [ deployment/applicationEnvironment.env ]
         reports:
