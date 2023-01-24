@@ -9,7 +9,7 @@
 # 
 # Instances.
 #-------------------------------------------------------------------------------
-resource "aws_autoscaling_group" "autoscaling_group" {
+resource aws_autoscaling_group autoscaling_group {
 	name = local.autoscaling_group_name
 	vpc_zone_identifier = var.subnet_ids
 	min_size = 1
@@ -28,7 +28,7 @@ resource "aws_autoscaling_group" "autoscaling_group" {
 		aws_lambda_permission.autoscaling_lambda_resource_policy,
 	]
 	
-	dynamic "tag" {
+	dynamic tag {
 		for_each = merge( { Name = "${var.name} Auto Scaling Group" }, var.default_tags )
 		
 		content {
@@ -40,7 +40,7 @@ resource "aws_autoscaling_group" "autoscaling_group" {
 }
 
 
-resource "aws_autoscaling_policy" "scale_down" {
+resource aws_autoscaling_policy scale_down {
 	name = "CPU Tracking Policy"
 	autoscaling_group_name = aws_autoscaling_group.autoscaling_group.name
 	estimated_instance_warmup = 60
@@ -53,7 +53,7 @@ resource "aws_autoscaling_policy" "scale_down" {
 }
 
 
-resource "aws_launch_template" "launch_template" {
+resource aws_launch_template launch_template {
 	name = "${var.prefix}-${var.identifier}-launchTemplate"
 	update_default_version = true
 	
@@ -99,7 +99,7 @@ resource "aws_launch_template" "launch_template" {
 }
 
 
-module "user_data" {
+module user_data {
 	source = "../user_data"
 	
 	input_dir = "../../../${var.identifier}/scripts"
@@ -119,7 +119,7 @@ module "user_data" {
 # 
 # Private DNS.
 #-------------------------------------------------------------------------------
-resource "aws_route53_record" "a" {
+resource aws_route53_record a {
 	zone_id = var.private_hosted_zone.zone_id
 	
 	name = "${var.hostname}.${var.private_hosted_zone.name}"

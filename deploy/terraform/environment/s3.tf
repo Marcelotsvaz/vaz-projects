@@ -9,7 +9,7 @@
 # 
 # Main bucket.
 #-------------------------------------------------------------------------------
-resource "aws_s3_bucket" "bucket" {
+resource aws_s3_bucket bucket {
 	bucket = lower( "${local.project_code}-${var.environment}" )
 	force_destroy = var.environment != "production"	# force_destroy only on staging environment.
 	
@@ -19,7 +19,7 @@ resource "aws_s3_bucket" "bucket" {
 }
 
 
-resource "aws_s3_bucket_server_side_encryption_configuration" "bucket" {
+resource aws_s3_bucket_server_side_encryption_configuration bucket {
 	bucket = aws_s3_bucket.bucket.id
 	
 	rule {
@@ -30,7 +30,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "bucket" {
 }
 
 
-resource "aws_s3_bucket_versioning" "bucket" {
+resource aws_s3_bucket_versioning bucket {
 	bucket = aws_s3_bucket.bucket.id
 	
 	versioning_configuration {
@@ -39,7 +39,7 @@ resource "aws_s3_bucket_versioning" "bucket" {
 }
 
 
-resource "aws_s3_bucket_public_access_block" "bucket" {
+resource aws_s3_bucket_public_access_block bucket {
 	bucket = aws_s3_bucket.bucket.id
 	
 	block_public_acls = true
@@ -49,13 +49,13 @@ resource "aws_s3_bucket_public_access_block" "bucket" {
 }
 
 
-resource "aws_s3_bucket_policy" "bucket_policy" {
+resource aws_s3_bucket_policy bucket_policy {
 	bucket = aws_s3_bucket.bucket.id
 	policy = data.aws_iam_policy_document.bucket_policy.json
 }
 
 
-data "aws_iam_policy_document" "bucket_policy" {
+data aws_iam_policy_document bucket_policy {
 	# Used by CloudFront.
 	statement {
 		sid = "cloudfrontAccess"
@@ -81,7 +81,7 @@ data "aws_iam_policy_document" "bucket_policy" {
 }
 
 
-resource "aws_s3_bucket_cors_configuration" "bucket" {
+resource aws_s3_bucket_cors_configuration bucket {
 	bucket = aws_s3_bucket.bucket.id
 	
 	cors_rule {
@@ -91,7 +91,7 @@ resource "aws_s3_bucket_cors_configuration" "bucket" {
 }
 
 
-resource "aws_s3_bucket_logging" "bucket" {
+resource aws_s3_bucket_logging bucket {
 	bucket = aws_s3_bucket.bucket.id
 	
 	target_bucket = aws_s3_bucket.logs_bucket.id
@@ -103,7 +103,7 @@ resource "aws_s3_bucket_logging" "bucket" {
 # 
 # Logs bucket.
 #-------------------------------------------------------------------------------
-resource "aws_s3_bucket" "logs_bucket" {
+resource aws_s3_bucket logs_bucket {
 	bucket = lower( "${local.project_code}-${var.environment}-logs" )
 	force_destroy = var.environment != "production"	# force_destroy only on staging environment.
 	
@@ -113,7 +113,7 @@ resource "aws_s3_bucket" "logs_bucket" {
 }
 
 
-resource "aws_s3_bucket_server_side_encryption_configuration" "logs_bucket" {
+resource aws_s3_bucket_server_side_encryption_configuration logs_bucket {
 	bucket = aws_s3_bucket.logs_bucket.id
 	
 	rule {
@@ -124,7 +124,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "logs_bucket" {
 }
 
 
-resource "aws_s3_bucket_public_access_block" "logs_bucket" {
+resource aws_s3_bucket_public_access_block logs_bucket {
 	bucket = aws_s3_bucket.logs_bucket.id
 	
 	block_public_acls = true
@@ -134,7 +134,7 @@ resource "aws_s3_bucket_public_access_block" "logs_bucket" {
 }
 
 
-resource "aws_s3_bucket_acl" "logs_bucket" {
+resource aws_s3_bucket_acl logs_bucket {
 	bucket = aws_s3_bucket.logs_bucket.id
 	
 	acl = "log-delivery-write"

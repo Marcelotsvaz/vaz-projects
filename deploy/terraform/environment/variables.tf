@@ -6,19 +6,19 @@
 
 
 
-variable "environment" {
+variable environment {
 	description = "Deployment environment."
 	type = string
 }
 
 
-variable "repository_snapshot" {
+variable repository_snapshot {
 	description = "Link to Git repository archive containing application code."
 	type = string
 }
 
 
-variable "application_image" {
+variable application_image {
 	description = "Application Docker image."
 	type = string
 }

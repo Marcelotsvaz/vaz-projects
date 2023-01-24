@@ -14,7 +14,7 @@ terraform {
 		}
 	}
 	
-	backend "http" {
+	backend http {
 		lock_method = "POST"
 		unlock_method = "DELETE"
 		retry_wait_min = 5
@@ -24,7 +24,7 @@ terraform {
 }
 
 
-provider "aws" {
+provider aws {
 	region = local.region
 	
 	default_tags { tags = local.default_tags }

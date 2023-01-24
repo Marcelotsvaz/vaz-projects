@@ -29,7 +29,7 @@ terraform {
 		}
 	}
 	
-	backend "http" {
+	backend http {
 		lock_method = "POST"
 		unlock_method = "DELETE"
 		retry_wait_min = 5
@@ -39,7 +39,7 @@ terraform {
 }
 
 
-provider "aws" {
+provider aws {
 	region = local.region
 	
 	default_tags { tags = local.default_tags }
@@ -47,7 +47,7 @@ provider "aws" {
 
 
 # For aws_acm_certificate.cloudfront.
-provider "aws" {
+provider aws {
 	alias = "us_east_1"
 	
 	region = "us-east-1"

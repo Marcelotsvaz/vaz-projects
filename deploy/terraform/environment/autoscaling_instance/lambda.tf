@@ -9,7 +9,7 @@
 # 
 # Lambda Function.
 #-------------------------------------------------------------------------------
-resource "aws_lambda_function" "autoscaling_lambda" {
+resource aws_lambda_function autoscaling_lambda {
 	function_name = local.autoscaling_lambda_function_name
 	role = aws_iam_role.autoscaling_lambda_role.arn
 	
@@ -37,14 +37,14 @@ resource "aws_lambda_function" "autoscaling_lambda" {
 }
 
 
-data "archive_file" "autoscaling_lambda" {
+data archive_file autoscaling_lambda {
 	type = "zip"
 	source_file = "${path.module}/autoscaling_lambda.py"
 	output_path = "../../../deployment/${var.prefix}/${var.identifier}/autoscaling_lambda.zip"
 }
 
 
-resource "aws_lambda_permission" "autoscaling_lambda_resource_policy" {
+resource aws_lambda_permission autoscaling_lambda_resource_policy {
 	function_name = aws_lambda_function.autoscaling_lambda.function_name
 	statement_id = "lambdaInvokeFunction"
 	principal = "events.amazonaws.com"
@@ -53,7 +53,7 @@ resource "aws_lambda_permission" "autoscaling_lambda_resource_policy" {
 }
 
 
-resource "aws_cloudwatch_log_group" "autoscaling_lambda_log_group" {
+resource aws_cloudwatch_log_group autoscaling_lambda_log_group {
 	name = "/aws/lambda/${local.autoscaling_lambda_function_name}"
 	
 	tags = {
@@ -66,7 +66,7 @@ resource "aws_cloudwatch_log_group" "autoscaling_lambda_log_group" {
 # 
 # Lambda IAM Role.
 #-------------------------------------------------------------------------------
-resource "aws_iam_role" "autoscaling_lambda_role" {
+resource aws_iam_role autoscaling_lambda_role {
 	name = "${var.prefix}-${var.identifier}-autoscalingLambdaRole"
 	assume_role_policy = data.aws_iam_policy_document.autoscaling_lambda_assume_role_policy.json
 	
@@ -82,7 +82,7 @@ resource "aws_iam_role" "autoscaling_lambda_role" {
 }
 
 
-data "aws_iam_policy_document" "autoscaling_lambda_assume_role_policy" {
+data aws_iam_policy_document autoscaling_lambda_assume_role_policy {
 	statement {
 		sid = "lambdaAssumeRole"
 		
@@ -96,7 +96,7 @@ data "aws_iam_policy_document" "autoscaling_lambda_assume_role_policy" {
 }
 
 
-data "aws_iam_policy_document" "autoscaling_lambda_role_policy" {
+data aws_iam_policy_document autoscaling_lambda_role_policy {
 	# Used in autoscaling_lambda.py.
 	statement {
 		sid = "autoscalingDescribeAutoScalingGroups"
@@ -145,7 +145,7 @@ data "aws_iam_policy_document" "autoscaling_lambda_role_policy" {
 # 
 # EventBridge.
 #-------------------------------------------------------------------------------
-resource "aws_cloudwatch_event_rule" "autoscaling_event_rule" {
+resource aws_cloudwatch_event_rule autoscaling_event_rule {
 	name = "${var.prefix}-${var.identifier}-autoscalingEventRule"
 	event_pattern = <<EOF
 		{
@@ -164,7 +164,7 @@ resource "aws_cloudwatch_event_rule" "autoscaling_event_rule" {
 }
 
 
-resource "aws_cloudwatch_event_target" "autoscaling_event_target" {
+resource aws_cloudwatch_event_target autoscaling_event_target {
 	rule = aws_cloudwatch_event_rule.autoscaling_event_rule.name
 	arn = aws_lambda_function.autoscaling_lambda.arn
 }

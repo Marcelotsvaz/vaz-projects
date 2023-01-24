@@ -6,7 +6,7 @@
 
 
 
-resource "aws_vpc" "vpc" {
+resource aws_vpc vpc {
 	cidr_block = "10.0.0.0/16"
 	assign_generated_ipv6_cidr_block = true
 	enable_dns_hostnames = true
@@ -17,7 +17,7 @@ resource "aws_vpc" "vpc" {
 }
 
 
-resource "aws_vpc_dhcp_options" "dhcp_options" {
+resource aws_vpc_dhcp_options dhcp_options {
 	domain_name_servers = [ "AmazonProvidedDNS" ]
 	
 	tags = {
@@ -26,13 +26,13 @@ resource "aws_vpc_dhcp_options" "dhcp_options" {
 }
 
 
-resource "aws_vpc_dhcp_options_association" "dns_resolver" {
+resource aws_vpc_dhcp_options_association dns_resolver {
 	vpc_id = aws_vpc.vpc.id
 	dhcp_options_id = aws_vpc_dhcp_options.dhcp_options.id
 }
 
 
-resource "aws_internet_gateway" "gateway" {
+resource aws_internet_gateway gateway {
 	vpc_id = aws_vpc.vpc.id
 	
 	tags = {
@@ -41,7 +41,7 @@ resource "aws_internet_gateway" "gateway" {
 }
 
 
-resource "aws_default_route_table" "route_table" {
+resource aws_default_route_table route_table {
 	default_route_table_id = aws_vpc.vpc.default_route_table_id
 	
 	route {
@@ -60,7 +60,7 @@ resource "aws_default_route_table" "route_table" {
 }
 
 
-resource "aws_subnet" "subnet_c" {
+resource aws_subnet subnet_c {
 	vpc_id = aws_vpc.vpc.id
 	availability_zone = "sa-east-1c"
 	cidr_block = cidrsubnet( aws_vpc.vpc.cidr_block, 8, 3 )
@@ -76,7 +76,7 @@ resource "aws_subnet" "subnet_c" {
 }
 
 
-resource "aws_default_network_acl" "acl" {
+resource aws_default_network_acl acl {
 	default_network_acl_id = aws_vpc.vpc.default_network_acl_id
 	subnet_ids = [ aws_subnet.subnet_c.id ]
 	
@@ -122,7 +122,7 @@ resource "aws_default_network_acl" "acl" {
 }
 
 
-resource "aws_default_security_group" "common" {
+resource aws_default_security_group common {
 	vpc_id = aws_vpc.vpc.id
 	
 	egress {

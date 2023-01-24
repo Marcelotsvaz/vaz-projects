@@ -9,7 +9,7 @@
 # 
 # Common.
 #-------------------------------------------------------------------------------
-data "aws_ami" "ami" {
+data aws_ami ami {
 	most_recent = true
 	owners = [ "self" ]
 	
@@ -24,7 +24,7 @@ data "aws_ami" "ami" {
 # 
 # Load balancer server.
 #-------------------------------------------------------------------------------
-module "load_balancer" {
+module load_balancer {
 	source = "./instance"
 	
 	# Name.
@@ -67,7 +67,7 @@ module "load_balancer" {
 }
 
 
-resource "aws_eip" "load_balancer_ip" {
+resource aws_eip load_balancer_ip {
 	instance = module.load_balancer.id
 	
 	tags = {
@@ -76,7 +76,7 @@ resource "aws_eip" "load_balancer_ip" {
 }
 
 
-data "aws_iam_policy_document" "load_balancer_policy" {
+data aws_iam_policy_document load_balancer_policy {
 	# Used in perInstance.sh.
 	statement {
 		sid = "s3ListBucket"
@@ -132,7 +132,7 @@ data "aws_iam_policy_document" "load_balancer_policy" {
 # 
 # Application server.
 #-------------------------------------------------------------------------------
-module "app_server" {
+module app_server {
 	source = "./autoscaling_instance"
 	
 	# Name.
@@ -173,7 +173,7 @@ module "app_server" {
 }
 
 
-data "aws_iam_policy_document" "app_server_policy" {
+data aws_iam_policy_document app_server_policy {
 	# Used in perInstance.sh.
 	statement {
 		sid = "s3ListBucket"
@@ -216,7 +216,7 @@ data "aws_iam_policy_document" "app_server_policy" {
 # 
 # Database server.
 #-------------------------------------------------------------------------------
-module "database_server" {
+module database_server {
 	source = "./instance"
 	
 	# Name.
@@ -253,7 +253,7 @@ module "database_server" {
 }
 
 
-resource "aws_ebs_volume" "database_volume" {
+resource aws_ebs_volume database_volume {
 	availability_zone = aws_subnet.subnet_c.availability_zone
 	size = 1
 	type = "gp3"
@@ -267,17 +267,17 @@ resource "aws_ebs_volume" "database_volume" {
 
 # Wait for the volume to be detached since we use skip_destroy on the aws_volume_attachment. Otherwise we need to stop
 # the instance before detaching which is not supported by aws_spot_fleet_request.
-resource "null_resource" "wait_database_volume" {
+resource null_resource wait_database_volume {
 	triggers = { instance_id = module.database_server.id }
 	
-	provisioner "local-exec" {
+	provisioner local-exec {
 		environment = { AWS_DEFAULT_REGION = local.region }
 		command = "aws ec2 wait volume-available --volume-ids ${aws_ebs_volume.database_volume.id}"
 	}
 }
 
 
-resource "aws_volume_attachment" "database_volume_attachment" {
+resource aws_volume_attachment database_volume_attachment {
 	volume_id = aws_ebs_volume.database_volume.id
 	instance_id = module.database_server.id
 	device_name = "/dev/xvdg"
@@ -287,7 +287,7 @@ resource "aws_volume_attachment" "database_volume_attachment" {
 }
 
 
-data "aws_iam_policy_document" "database_server_policy" {
+data aws_iam_policy_document database_server_policy {
 	# Used in perInstance.sh.
 	statement {
 		sid = "s3ListBucket"
@@ -315,7 +315,7 @@ data "aws_iam_policy_document" "database_server_policy" {
 # 
 # Monitoring server.
 #-------------------------------------------------------------------------------
-module "monitoring_server" {
+module monitoring_server {
 	source = "./instance"
 	
 	# Name.
@@ -354,7 +354,7 @@ module "monitoring_server" {
 }
 
 
-resource "aws_ebs_volume" "monitoring_volume" {
+resource aws_ebs_volume monitoring_volume {
 	availability_zone = aws_subnet.subnet_c.availability_zone
 	size = 5
 	type = "gp3"
@@ -368,17 +368,17 @@ resource "aws_ebs_volume" "monitoring_volume" {
 
 # Wait for the volume to be detached since we use skip_destroy on the aws_volume_attachment. Otherwise we need to stop
 # the instance before detaching which is not supported by aws_spot_fleet_request.
-resource "null_resource" "wait_monitoring_volume" {
+resource null_resource wait_monitoring_volume {
 	triggers = { instance_id = module.monitoring_server.id }
 	
-	provisioner "local-exec" {
+	provisioner local-exec {
 		environment = { AWS_DEFAULT_REGION = local.region }
 		command = "aws ec2 wait volume-available --volume-ids ${aws_ebs_volume.monitoring_volume.id}"
 	}
 }
 
 
-resource "aws_volume_attachment" "monitoring_volume_attachment" {
+resource aws_volume_attachment monitoring_volume_attachment {
 	volume_id = aws_ebs_volume.monitoring_volume.id
 	instance_id = module.monitoring_server.id
 	device_name = "/dev/xvdg"
@@ -388,7 +388,7 @@ resource "aws_volume_attachment" "monitoring_volume_attachment" {
 }
 
 
-data "aws_iam_policy_document" "monitoring_server_policy" {
+data aws_iam_policy_document monitoring_server_policy {
 	# Used in perInstance.sh.
 	statement {
 		sid = "s3ListBucket"

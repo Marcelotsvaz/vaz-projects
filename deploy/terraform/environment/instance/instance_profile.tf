@@ -6,7 +6,7 @@
 
 
 
-resource "aws_iam_instance_profile" "instance_profile" {
+resource aws_iam_instance_profile instance_profile {
 	name = "${var.prefix}-${var.identifier}-instanceProfile"
 	role = aws_iam_role.instance_role.name
 	
@@ -16,7 +16,7 @@ resource "aws_iam_instance_profile" "instance_profile" {
 }
 
 
-resource "aws_iam_role" "instance_role" {
+resource aws_iam_role instance_role {
 	name = "${var.prefix}-${var.identifier}-role"
 	assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
 	
@@ -32,7 +32,7 @@ resource "aws_iam_role" "instance_role" {
 }
 
 
-data "aws_iam_policy_document" "assume_role_policy" {
+data aws_iam_policy_document assume_role_policy {
 	statement {
 		sid = "ec2AssumeRole"
 		

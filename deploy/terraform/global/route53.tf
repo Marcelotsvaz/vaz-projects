@@ -9,10 +9,10 @@
 # 
 # vazprojects.com hosted zone.
 #-------------------------------------------------------------------------------
-resource "aws_route53_zone" "production" {
+resource aws_route53_zone production {
 	name = local.domain
 	
-	provisioner "local-exec" {
+	provisioner local-exec {
 		command = <<-EOF
 			aws route53domains update-domain-nameservers	\
 				--region us-east-1							\
@@ -27,7 +27,7 @@ resource "aws_route53_zone" "production" {
 }
 
 
-resource "aws_route53_record" "production_soa" {
+resource aws_route53_record production_soa {
 	zone_id = aws_route53_zone.production.zone_id
 	allow_overwrite = true
 	
@@ -38,7 +38,7 @@ resource "aws_route53_record" "production_soa" {
 }
 
 
-resource "aws_route53_record" "production_ns" {
+resource aws_route53_record production_ns {
 	zone_id = aws_route53_zone.production.zone_id
 	allow_overwrite = true
 	
@@ -49,7 +49,7 @@ resource "aws_route53_record" "production_ns" {
 }
 
 
-resource "aws_route53_record" "production_staging_ns" {
+resource aws_route53_record production_staging_ns {
 	zone_id = aws_route53_zone.production.zone_id
 	
 	name = aws_route53_zone.staging.name
@@ -59,7 +59,7 @@ resource "aws_route53_record" "production_staging_ns" {
 }
 
 
-resource "aws_route53_record" "production_portfolio_ns" {
+resource aws_route53_record production_portfolio_ns {
 	zone_id = aws_route53_zone.production.zone_id
 	
 	name = aws_route53_zone.portfolio.name
@@ -73,7 +73,7 @@ resource "aws_route53_record" "production_portfolio_ns" {
 # 
 # staging.vazprojects.com hosted zone.
 #-------------------------------------------------------------------------------
-resource "aws_route53_zone" "staging" {
+resource aws_route53_zone staging {
 	name = "staging.${aws_route53_zone.production.name}"
 	
 	tags = {
@@ -82,7 +82,7 @@ resource "aws_route53_zone" "staging" {
 }
 
 
-resource "aws_route53_record" "staging_soa" {
+resource aws_route53_record staging_soa {
 	zone_id = aws_route53_zone.staging.zone_id
 	allow_overwrite = true
 	
@@ -93,7 +93,7 @@ resource "aws_route53_record" "staging_soa" {
 }
 
 
-resource "aws_route53_record" "staging_ns" {
+resource aws_route53_record staging_ns {
 	zone_id = aws_route53_zone.staging.zone_id
 	allow_overwrite = true
 	
@@ -108,7 +108,7 @@ resource "aws_route53_record" "staging_ns" {
 # 
 # portfolio.vazprojects.com hosted zone.
 #-------------------------------------------------------------------------------
-resource "aws_route53_zone" "portfolio" {
+resource aws_route53_zone portfolio {
 	name = "portfolio.${aws_route53_zone.production.name}"
 	
 	tags = {
@@ -118,7 +118,7 @@ resource "aws_route53_zone" "portfolio" {
 }
 
 
-resource "aws_route53_record" "portfolio_soa" {
+resource aws_route53_record portfolio_soa {
 	zone_id = aws_route53_zone.portfolio.zone_id
 	allow_overwrite = true
 	
@@ -129,7 +129,7 @@ resource "aws_route53_record" "portfolio_soa" {
 }
 
 
-resource "aws_route53_record" "portfolio_ns" {
+resource aws_route53_record portfolio_ns {
 	zone_id = aws_route53_zone.portfolio.zone_id
 	allow_overwrite = true
 	

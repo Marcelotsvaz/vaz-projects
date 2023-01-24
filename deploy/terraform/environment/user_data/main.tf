@@ -6,7 +6,7 @@
 
 
 
-data "external" "user_data" {
+data external user_data {
 	program = [
 		"bash",
 		"-c",

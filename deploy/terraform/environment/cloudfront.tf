@@ -12,7 +12,7 @@ locals {
 
 
 
-resource "aws_cloudfront_distribution" "distribution" {
+resource aws_cloudfront_distribution distribution {
 	comment = "${local.project_name} Distribuition"
 	aliases = [ local.static_files_domain ]
 	enabled = true
@@ -89,7 +89,7 @@ resource "aws_cloudfront_distribution" "distribution" {
 }
 
 
-resource "aws_cloudfront_origin_access_control" "access_control" {
+resource aws_cloudfront_origin_access_control access_control {
 	name = "${local.project_code}-${var.environment}-originAccessControl"
 	description = "${local.project_name} Origin Access Control"
 	origin_access_control_origin_type = "s3"
@@ -98,12 +98,12 @@ resource "aws_cloudfront_origin_access_control" "access_control" {
 }
 
 
-data "aws_cloudfront_cache_policy" "cache_policy" {
+data aws_cloudfront_cache_policy cache_policy {
 	name = "Managed-CachingOptimized"
 }
 
 
-resource "aws_cloudfront_function" "favicon_redirect" {
+resource aws_cloudfront_function favicon_redirect {
 	name = "${local.project_code}-${var.environment}-faviconRedirect"
 	code = file( "favicon_redirect.js" )
 	runtime = "cloudfront-js-1.0"

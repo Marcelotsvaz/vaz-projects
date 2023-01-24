@@ -9,7 +9,7 @@
 # 
 # Instance.
 #-------------------------------------------------------------------------------
-resource "aws_spot_fleet_request" "fleet" {
+resource aws_spot_fleet_request fleet {
 	target_capacity = 1
 	instance_interruption_behaviour = "stop"
 	terminate_instances_on_delete = true
@@ -28,7 +28,7 @@ resource "aws_spot_fleet_request" "fleet" {
 }
 
 
-resource "aws_launch_template" "launch_template" {
+resource aws_launch_template launch_template {
 	name = "${var.prefix}-${var.identifier}-launchTemplate"
 	update_default_version = true
 	
@@ -74,7 +74,7 @@ resource "aws_launch_template" "launch_template" {
 }
 
 
-module "user_data" {
+module user_data {
 	source = "../user_data"
 	
 	input_dir = "../../../${var.identifier}/scripts"
@@ -90,7 +90,7 @@ module "user_data" {
 }
 
 
-data "aws_instance" "instance" {
+data aws_instance instance {
 	instance_tags = { "aws:ec2spot:fleet-request-id" = aws_spot_fleet_request.fleet.id }
 	
 	filter {
@@ -104,7 +104,7 @@ data "aws_instance" "instance" {
 # 
 # Private DNS.
 #-------------------------------------------------------------------------------
-resource "aws_route53_record" "a" {
+resource aws_route53_record a {
 	zone_id = var.private_hosted_zone.zone_id
 	
 	name = "${var.hostname}.${var.private_hosted_zone.name}"

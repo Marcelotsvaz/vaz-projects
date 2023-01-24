@@ -6,7 +6,7 @@
 
 
 
-data "aws_acm_certificate" "cloudfront" {
+data aws_acm_certificate cloudfront {
 	provider = aws.us_east_1
 	
 	domain = local.static_files_domain

@@ -6,7 +6,7 @@
 
 
 
-# resource "aws_iam_user" "deploy" {
+# resource aws_iam_user deploy {
 # 	for_each = toset( [ "production", "staging" ] )
 	
 # 	name = "${local.project_code}-${each.value}-deployUser"
@@ -17,7 +17,7 @@
 # }
 
 
-# resource "aws_iam_user_policy" "deploy" {
+# resource aws_iam_user_policy deploy {
 # 	for_each = aws_iam_user.deploy
 	
 # 	name = "deployPolicy"
@@ -26,7 +26,7 @@
 # }
 
 
-# data "aws_iam_policy_document" "deploy" {
+# data aws_iam_policy_document deploy {
 # 	statement {
 # 		sid = "ec2Access"
 		
@@ -66,7 +66,7 @@
 # }
 
 
-# resource "aws_iam_access_key" "deploy" {
+# resource aws_iam_access_key deploy {
 # 	for_each = aws_iam_user.deploy
 	
 # 	user = each.value.name
@@ -74,7 +74,7 @@
 
 
 
-# output "credentials" {
+# output credentials {
 # 	value = [ for key in aws_iam_access_key.deploy : "Id: \"${key.id}\" Secret: \"${key.secret}\"" ]
 # 	sensitive = true
 # }

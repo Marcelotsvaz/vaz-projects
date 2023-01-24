@@ -9,7 +9,7 @@
 # 
 # Private Route53 hosted zone.
 #-------------------------------------------------------------------------------
-resource "aws_route53_zone" "private" {
+resource aws_route53_zone private {
 	name = local.private_domain
 	
 	vpc { vpc_id = aws_vpc.vpc.id }
@@ -20,7 +20,7 @@ resource "aws_route53_zone" "private" {
 }
 
 
-resource "aws_route53_record" "private_soa" {
+resource aws_route53_record private_soa {
 	zone_id = aws_route53_zone.private.zone_id
 	allow_overwrite = true
 	
@@ -31,7 +31,7 @@ resource "aws_route53_record" "private_soa" {
 }
 
 
-resource "aws_route53_record" "private_ns" {
+resource aws_route53_record private_ns {
 	zone_id = aws_route53_zone.private.zone_id
 	allow_overwrite = true
 	
@@ -46,7 +46,7 @@ resource "aws_route53_record" "private_ns" {
 # 
 # External Route53 hosted zone.
 #-------------------------------------------------------------------------------
-data "aws_route53_zone" "hosted_zone" {
+data aws_route53_zone hosted_zone {
 	name = local.domain
 }
 
@@ -55,7 +55,7 @@ data "aws_route53_zone" "hosted_zone" {
 # 
 # Load balancer.
 #-------------------------------------------------------------------------------
-resource "aws_route53_record" "a_load_balancer" {
+resource aws_route53_record a_load_balancer {
 	zone_id = data.aws_route53_zone.hosted_zone.zone_id
 	
 	name = local.domain
@@ -65,7 +65,7 @@ resource "aws_route53_record" "a_load_balancer" {
 }
 
 
-resource "aws_route53_record" "aaaa_load_balancer" {
+resource aws_route53_record aaaa_load_balancer {
 	zone_id = data.aws_route53_zone.hosted_zone.zone_id
 	
 	name = local.domain
@@ -79,7 +79,7 @@ resource "aws_route53_record" "aaaa_load_balancer" {
 # 
 # CloudFront.
 #-------------------------------------------------------------------------------
-resource "aws_route53_record" "a_cloudfront" {
+resource aws_route53_record a_cloudfront {
 	zone_id = data.aws_route53_zone.hosted_zone.zone_id
 	
 	name = local.static_files_domain
@@ -93,7 +93,7 @@ resource "aws_route53_record" "a_cloudfront" {
 }
 
 
-resource "aws_route53_record" "aaaa_cloudfront" {
+resource aws_route53_record aaaa_cloudfront {
 	zone_id = data.aws_route53_zone.hosted_zone.zone_id
 	
 	name = local.static_files_domain
@@ -111,7 +111,7 @@ resource "aws_route53_record" "aaaa_cloudfront" {
 # 
 # Monitoring server.
 #-------------------------------------------------------------------------------
-resource "aws_route53_record" "a_monitoring_server" {
+resource aws_route53_record a_monitoring_server {
 	zone_id = data.aws_route53_zone.hosted_zone.zone_id
 	
 	name = local.monitoring_domain
@@ -121,7 +121,7 @@ resource "aws_route53_record" "a_monitoring_server" {
 }
 
 
-resource "aws_route53_record" "aaaa_monitoring_server" {
+resource aws_route53_record aaaa_monitoring_server {
 	zone_id = data.aws_route53_zone.hosted_zone.zone_id
 	
 	name = local.monitoring_domain
@@ -135,7 +135,7 @@ resource "aws_route53_record" "aaaa_monitoring_server" {
 # 
 # Third-party records.
 #-------------------------------------------------------------------------------
-resource "aws_route53_record" "caa" {
+resource aws_route53_record caa {
 	zone_id = data.aws_route53_zone.hosted_zone.zone_id
 	
 	name = local.domain
@@ -148,7 +148,7 @@ resource "aws_route53_record" "caa" {
 }
 
 
-resource "aws_route53_record" "txt_google" {
+resource aws_route53_record txt_google {
 	zone_id = data.aws_route53_zone.hosted_zone.zone_id
 	
 	name = local.domain
