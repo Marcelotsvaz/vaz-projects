@@ -6,17 +6,17 @@
 
 
 
-variable "ami_name" {
+variable ami_name {
 	type =  string
 	default = "VAZ Projects AMI"
 }
 
-variable "playbook" {
+variable playbook {
 	type =  string
 	default = "amiPlaybook.yaml"
 }
 
-variable "disk_size" {
+variable disk_size {
 	type =  number
 	default = 2
 }
@@ -34,7 +34,7 @@ packer {
 
 
 
-source "amazon-ebssurrogate" "arch_linux" {
+source amazon-ebssurrogate main {
 	# Builder options.
 	#---------------------------------------------------------------------------
 	spot_price = 0.01
@@ -134,9 +134,9 @@ source "amazon-ebssurrogate" "arch_linux" {
 
 
 build {
-	sources = [ "source.amazon-ebssurrogate.arch_linux" ]
+	sources = [ "source.amazon-ebssurrogate.main" ]
 	
-	provisioner "ansible-local" {
+	provisioner ansible-local {
 		command = "./sudoAnsiblePlaybook.sh"
 		
 		playbook_dir = "."
