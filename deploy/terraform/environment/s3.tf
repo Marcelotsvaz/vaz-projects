@@ -7,9 +7,9 @@
 
 
 # 
-# Main bucket.
+# Data Bucket
 #-------------------------------------------------------------------------------
-resource aws_s3_bucket bucket {
+resource aws_s3_bucket data {
 	bucket = lower( "${local.project_code}-${var.environment}" )
 	force_destroy = var.environment != "production"	# force_destroy only on staging environment.
 	
@@ -19,8 +19,8 @@ resource aws_s3_bucket bucket {
 }
 
 
-resource aws_s3_bucket_server_side_encryption_configuration bucket {
-	bucket = aws_s3_bucket.bucket.id
+resource aws_s3_bucket_server_side_encryption_configuration data {
+	bucket = aws_s3_bucket.data.id
 	
 	rule {
 		apply_server_side_encryption_by_default {
@@ -30,8 +30,8 @@ resource aws_s3_bucket_server_side_encryption_configuration bucket {
 }
 
 
-resource aws_s3_bucket_versioning bucket {
-	bucket = aws_s3_bucket.bucket.id
+resource aws_s3_bucket_versioning data {
+	bucket = aws_s3_bucket.data.id
 	
 	versioning_configuration {
 		status = "Enabled"
@@ -39,8 +39,8 @@ resource aws_s3_bucket_versioning bucket {
 }
 
 
-resource aws_s3_bucket_public_access_block bucket {
-	bucket = aws_s3_bucket.bucket.id
+resource aws_s3_bucket_public_access_block data {
+	bucket = aws_s3_bucket.data.id
 	
 	block_public_acls = true
 	ignore_public_acls = true
@@ -49,13 +49,13 @@ resource aws_s3_bucket_public_access_block bucket {
 }
 
 
-resource aws_s3_bucket_policy bucket_policy {
-	bucket = aws_s3_bucket.bucket.id
-	policy = data.aws_iam_policy_document.bucket_policy.json
+resource aws_s3_bucket_policy data {
+	bucket = aws_s3_bucket.data.id
+	policy = data.aws_iam_policy_document.data_bucket.json
 }
 
 
-data aws_iam_policy_document bucket_policy {
+data aws_iam_policy_document data_bucket {
 	# Used by CloudFront.
 	statement {
 		sid = "cloudfrontAccess"
@@ -68,21 +68,21 @@ data aws_iam_policy_document bucket_policy {
 		actions = [ "s3:GetObject" ]
 		
 		resources = [
-			"${aws_s3_bucket.bucket.arn}/static/*",
-			"${aws_s3_bucket.bucket.arn}/media/*",
+			"${aws_s3_bucket.data.arn}/static/*",
+			"${aws_s3_bucket.data.arn}/media/*",
 		]
 		
 		condition {
 			variable = "AWS:SourceArn"
 			test = "StringEquals"
-			values = [ aws_cloudfront_distribution.distribution.arn ]
+			values = [ aws_cloudfront_distribution.main.arn ]
 		}
 	}
 }
 
 
-resource aws_s3_bucket_cors_configuration bucket {
-	bucket = aws_s3_bucket.bucket.id
+resource aws_s3_bucket_cors_configuration data {
+	bucket = aws_s3_bucket.data.id
 	
 	cors_rule {
 		allowed_methods = [ "GET" ]
@@ -91,19 +91,19 @@ resource aws_s3_bucket_cors_configuration bucket {
 }
 
 
-resource aws_s3_bucket_logging bucket {
-	bucket = aws_s3_bucket.bucket.id
+resource aws_s3_bucket_logging data {
+	bucket = aws_s3_bucket.data.id
 	
-	target_bucket = aws_s3_bucket.logs_bucket.id
+	target_bucket = aws_s3_bucket.logs.id
 	target_prefix = "s3/"
 }
 
 
 
 # 
-# Logs bucket.
+# Logs Bucket
 #-------------------------------------------------------------------------------
-resource aws_s3_bucket logs_bucket {
+resource aws_s3_bucket logs {
 	bucket = lower( "${local.project_code}-${var.environment}-logs" )
 	force_destroy = var.environment != "production"	# force_destroy only on staging environment.
 	
@@ -113,8 +113,8 @@ resource aws_s3_bucket logs_bucket {
 }
 
 
-resource aws_s3_bucket_server_side_encryption_configuration logs_bucket {
-	bucket = aws_s3_bucket.logs_bucket.id
+resource aws_s3_bucket_server_side_encryption_configuration logs {
+	bucket = aws_s3_bucket.logs.id
 	
 	rule {
 		apply_server_side_encryption_by_default {
@@ -124,8 +124,8 @@ resource aws_s3_bucket_server_side_encryption_configuration logs_bucket {
 }
 
 
-resource aws_s3_bucket_public_access_block logs_bucket {
-	bucket = aws_s3_bucket.logs_bucket.id
+resource aws_s3_bucket_public_access_block logs {
+	bucket = aws_s3_bucket.logs.id
 	
 	block_public_acls = true
 	ignore_public_acls = true
@@ -134,8 +134,8 @@ resource aws_s3_bucket_public_access_block logs_bucket {
 }
 
 
-resource aws_s3_bucket_acl logs_bucket {
-	bucket = aws_s3_bucket.logs_bucket.id
+resource aws_s3_bucket_acl logs {
+	bucket = aws_s3_bucket.logs.id
 	
 	acl = "log-delivery-write"
 }

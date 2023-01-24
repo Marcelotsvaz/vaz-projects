@@ -7,7 +7,7 @@
 
 
 # 
-# vazprojects.com hosted zone.
+# vazprojects.com
 #-------------------------------------------------------------------------------
 resource aws_route53_zone production {
 	name = local.domain
@@ -71,7 +71,7 @@ resource aws_route53_record production_portfolio_ns {
 
 
 # 
-# staging.vazprojects.com hosted zone.
+# staging.vazprojects.com
 #-------------------------------------------------------------------------------
 resource aws_route53_zone staging {
 	name = "staging.${aws_route53_zone.production.name}"
@@ -106,7 +106,7 @@ resource aws_route53_record staging_ns {
 
 
 # 
-# portfolio.vazprojects.com hosted zone.
+# portfolio.vazprojects.com
 #-------------------------------------------------------------------------------
 resource aws_route53_zone portfolio {
 	name = "portfolio.${aws_route53_zone.production.name}"

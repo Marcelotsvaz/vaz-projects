@@ -7,9 +7,9 @@
 
 
 # 
-# Common.
+# Common
 #-------------------------------------------------------------------------------
-data aws_ami ami {
+data aws_ami main {
 	most_recent = true
 	owners = [ "self" ]
 	
@@ -22,7 +22,7 @@ data aws_ami ami {
 
 
 # 
-# Load balancer server.
+# Load Balancer Server
 #-------------------------------------------------------------------------------
 module load_balancer {
 	source = "./instance"
@@ -34,7 +34,7 @@ module load_balancer {
 	prefix = "${local.project_code}-${var.environment}"
 	
 	# Configuration.
-	ami_id = data.aws_ami.ami.id
+	ami_id = data.aws_ami.main.id
 	instance_type = "t3a.nano"
 	root_volume_size = 5
 	
@@ -48,17 +48,17 @@ module load_balancer {
 	private_hosted_zone = aws_route53_zone.private
 	
 	# Environment.
-	role_policy = data.aws_iam_policy_document.load_balancer_policy
+	role_policy = data.aws_iam_policy_document.load_balancer
 	environment = {
 		sshKey = local.ssh_key
 		repositorySnapshot = var.repository_snapshot
-		bucket = aws_s3_bucket.bucket.id
+		bucket = aws_s3_bucket.data.id
 		AWS_DEFAULT_REGION = local.region
 		domain = local.domain
 		staticFilesDomain = local.static_files_domain
 		monitoringDomain = local.monitoring_domain
 		privateDomain = local.private_domain
-		hostedZoneId = data.aws_route53_zone.hosted_zone.zone_id
+		hostedZoneId = data.aws_route53_zone.public.zone_id
 		cloudfrontCertificateArn = data.aws_acm_certificate.cloudfront.arn
 	}
 	
@@ -67,7 +67,7 @@ module load_balancer {
 }
 
 
-resource aws_eip load_balancer_ip {
+resource aws_eip load_balancer {
 	instance = module.load_balancer.id
 	
 	tags = {
@@ -76,14 +76,14 @@ resource aws_eip load_balancer_ip {
 }
 
 
-data aws_iam_policy_document load_balancer_policy {
+data aws_iam_policy_document load_balancer {
 	# Used in perInstance.sh.
 	statement {
 		sid = "s3ListBucket"
 		
 		actions = [ "s3:ListBucket" ]
 		
-		resources = [ aws_s3_bucket.bucket.arn ]
+		resources = [ aws_s3_bucket.data.arn ]
 	}
 	
 	# Used in perInstance.sh.
@@ -99,7 +99,7 @@ data aws_iam_policy_document load_balancer_policy {
 			"s3:DeleteObject",
 		]
 		
-		resources = [ "${aws_s3_bucket.bucket.arn}/deployment/*" ]
+		resources = [ "${aws_s3_bucket.data.arn}/deployment/*" ]
 	}
 	
 	# Used by dehydrated.
@@ -112,7 +112,7 @@ data aws_iam_policy_document load_balancer_policy {
 		]
 		
 		resources = [
-			data.aws_route53_zone.hosted_zone.arn,
+			data.aws_route53_zone.public.arn,
 			"arn:aws:route53:::change/*",
 		]
 	}
@@ -130,7 +130,7 @@ data aws_iam_policy_document load_balancer_policy {
 
 
 # 
-# Application server.
+# Application Server
 #-------------------------------------------------------------------------------
 module app_server {
 	source = "./autoscaling_instance"
@@ -142,7 +142,7 @@ module app_server {
 	prefix = "${local.project_code}-${var.environment}"
 	
 	# Configuration.
-	ami_id = data.aws_ami.ami.id
+	ami_id = data.aws_ami.main.id
 	instance_type = "t3a.small"
 	root_volume_size = 5
 	
@@ -155,7 +155,7 @@ module app_server {
 	private_hosted_zone = aws_route53_zone.private
 	
 	# Environment.
-	role_policy = data.aws_iam_policy_document.app_server_policy
+	role_policy = data.aws_iam_policy_document.app_server
 	environment = {
 		sshKey = local.ssh_key
 		repositorySnapshot = var.repository_snapshot
@@ -164,8 +164,8 @@ module app_server {
 		DJANGO_SETTINGS_MODULE = "settings.${var.environment}"
 		domain = local.domain
 		staticFilesDomain = local.static_files_domain
-		s3Endpoint = replace( aws_s3_bucket.bucket.bucket_regional_domain_name, "${aws_s3_bucket.bucket.bucket}.", "https://" )
-		bucket = aws_s3_bucket.bucket.id
+		s3Endpoint = replace( aws_s3_bucket.data.bucket_regional_domain_name, "${aws_s3_bucket.data.bucket}.", "https://" )
+		bucket = aws_s3_bucket.data.id
 	}
 	
 	# Tags.
@@ -173,14 +173,14 @@ module app_server {
 }
 
 
-data aws_iam_policy_document app_server_policy {
+data aws_iam_policy_document app_server {
 	# Used in perInstance.sh.
 	statement {
 		sid = "s3ListBucket"
 		
 		actions = [ "s3:ListBucket" ]
 		
-		resources = [ aws_s3_bucket.bucket.arn ]
+		resources = [ aws_s3_bucket.data.arn ]
 	}
 	
 	# Used in perInstance.sh.
@@ -192,7 +192,7 @@ data aws_iam_policy_document app_server_policy {
 			"s3:GetObjectAcl",
 		]
 		
-		resources = [ "${aws_s3_bucket.bucket.arn}/deployment/*" ]
+		resources = [ "${aws_s3_bucket.data.arn}/deployment/*" ]
 	}
 	
 	# Used by Django S3 storage backend.
@@ -207,14 +207,14 @@ data aws_iam_policy_document app_server_policy {
 			"s3:DeleteObject",
 		]
 		
-		resources = [ "${aws_s3_bucket.bucket.arn}/media/*" ]
+		resources = [ "${aws_s3_bucket.data.arn}/media/*" ]
 	}
 }
 
 
 
 # 
-# Database server.
+# Database Server
 #-------------------------------------------------------------------------------
 module database_server {
 	source = "./instance"
@@ -226,7 +226,7 @@ module database_server {
 	prefix = "${local.project_code}-${var.environment}"
 	
 	# Configuration.
-	ami_id = data.aws_ami.ami.id
+	ami_id = data.aws_ami.main.id
 	instance_type = "t3a.nano"
 	root_volume_size = 5
 	
@@ -239,12 +239,12 @@ module database_server {
 	private_hosted_zone = aws_route53_zone.private
 	
 	# Environment.
-	role_policy = data.aws_iam_policy_document.database_server_policy
+	role_policy = data.aws_iam_policy_document.database_server
 	environment = {
 		sshKey = local.ssh_key
-		dataVolumeId = aws_ebs_volume.database_volume.id
+		dataVolumeId = aws_ebs_volume.database.id
 		repositorySnapshot = var.repository_snapshot
-		bucket = aws_s3_bucket.bucket.id
+		bucket = aws_s3_bucket.data.id
 		AWS_DEFAULT_REGION = local.region
 	}
 	
@@ -253,7 +253,7 @@ module database_server {
 }
 
 
-resource aws_ebs_volume database_volume {
+resource aws_ebs_volume database {
 	availability_zone = aws_subnet.subnet_c.availability_zone
 	size = 1
 	type = "gp3"
@@ -272,13 +272,13 @@ resource null_resource wait_database_volume {
 	
 	provisioner local-exec {
 		environment = { AWS_DEFAULT_REGION = local.region }
-		command = "aws ec2 wait volume-available --volume-ids ${aws_ebs_volume.database_volume.id}"
+		command = "aws ec2 wait volume-available --volume-ids ${aws_ebs_volume.database.id}"
 	}
 }
 
 
-resource aws_volume_attachment database_volume_attachment {
-	volume_id = aws_ebs_volume.database_volume.id
+resource aws_volume_attachment database {
+	volume_id = aws_ebs_volume.database.id
 	instance_id = module.database_server.id
 	device_name = "/dev/xvdg"
 	skip_destroy = true
@@ -287,14 +287,14 @@ resource aws_volume_attachment database_volume_attachment {
 }
 
 
-data aws_iam_policy_document database_server_policy {
+data aws_iam_policy_document database_server {
 	# Used in perInstance.sh.
 	statement {
 		sid = "s3ListBucket"
 		
 		actions = [ "s3:ListBucket" ]
 		
-		resources = [ aws_s3_bucket.bucket.arn ]
+		resources = [ aws_s3_bucket.data.arn ]
 	}
 	
 	# Used in perInstance.sh.
@@ -306,14 +306,14 @@ data aws_iam_policy_document database_server_policy {
 			"s3:GetObjectAcl",
 		]
 		
-		resources = [ "${aws_s3_bucket.bucket.arn}/deployment/*" ]
+		resources = [ "${aws_s3_bucket.data.arn}/deployment/*" ]
 	}
 }
 
 
 
 # 
-# Monitoring server.
+# Monitoring Server
 #-------------------------------------------------------------------------------
 module monitoring_server {
 	source = "./instance"
@@ -325,7 +325,7 @@ module monitoring_server {
 	prefix = "${local.project_code}-${var.environment}"
 	
 	# Configuration.
-	ami_id = data.aws_ami.ami.id
+	ami_id = data.aws_ami.main.id
 	instance_type = "t3a.micro"
 	root_volume_size = 5
 	
@@ -338,12 +338,12 @@ module monitoring_server {
 	private_hosted_zone = aws_route53_zone.private
 	
 	# Environment.
-	role_policy = data.aws_iam_policy_document.monitoring_server_policy
+	role_policy = data.aws_iam_policy_document.monitoring_server
 	environment = {
 		sshKey = local.ssh_key
-		dataVolumeId = aws_ebs_volume.monitoring_volume.id
+		dataVolumeId = aws_ebs_volume.monitoring.id
 		repositorySnapshot = var.repository_snapshot
-		bucket = aws_s3_bucket.bucket.id
+		bucket = aws_s3_bucket.data.id
 		AWS_DEFAULT_REGION = local.region
 		monitoringDomain = local.monitoring_domain
 		environment = var.environment
@@ -354,7 +354,7 @@ module monitoring_server {
 }
 
 
-resource aws_ebs_volume monitoring_volume {
+resource aws_ebs_volume monitoring {
 	availability_zone = aws_subnet.subnet_c.availability_zone
 	size = 5
 	type = "gp3"
@@ -373,13 +373,13 @@ resource null_resource wait_monitoring_volume {
 	
 	provisioner local-exec {
 		environment = { AWS_DEFAULT_REGION = local.region }
-		command = "aws ec2 wait volume-available --volume-ids ${aws_ebs_volume.monitoring_volume.id}"
+		command = "aws ec2 wait volume-available --volume-ids ${aws_ebs_volume.monitoring.id}"
 	}
 }
 
 
-resource aws_volume_attachment monitoring_volume_attachment {
-	volume_id = aws_ebs_volume.monitoring_volume.id
+resource aws_volume_attachment monitoring {
+	volume_id = aws_ebs_volume.monitoring.id
 	instance_id = module.monitoring_server.id
 	device_name = "/dev/xvdg"
 	skip_destroy = true
@@ -388,14 +388,14 @@ resource aws_volume_attachment monitoring_volume_attachment {
 }
 
 
-data aws_iam_policy_document monitoring_server_policy {
+data aws_iam_policy_document monitoring_server {
 	# Used in perInstance.sh.
 	statement {
 		sid = "s3ListBucket"
 		
 		actions = [ "s3:ListBucket" ]
 		
-		resources = [ aws_s3_bucket.bucket.arn ]
+		resources = [ aws_s3_bucket.data.arn ]
 	}
 	
 	# Used in perInstance.sh.
@@ -407,7 +407,7 @@ data aws_iam_policy_document monitoring_server_policy {
 			"s3:GetObjectAcl",
 		]
 		
-		resources = [ "${aws_s3_bucket.bucket.arn}/deployment/*" ]
+		resources = [ "${aws_s3_bucket.data.arn}/deployment/*" ]
 	}
 	
 	# Used by Prometheus EC2 service discovery.

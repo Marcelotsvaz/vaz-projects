@@ -7,9 +7,9 @@
 
 
 # 
-# Instances.
+# Instances
 #-------------------------------------------------------------------------------
-resource aws_autoscaling_group autoscaling_group {
+resource aws_autoscaling_group main {
 	name = local.autoscaling_group_name
 	vpc_zone_identifier = var.subnet_ids
 	min_size = 1
@@ -19,13 +19,13 @@ resource aws_autoscaling_group autoscaling_group {
 	capacity_rebalance = true
 	
 	launch_template {
-		id = aws_launch_template.launch_template.id
-		version = aws_launch_template.launch_template.latest_version
+		id = aws_launch_template.main.id
+		version = aws_launch_template.main.latest_version
 	}
 	
 	depends_on = [
-		aws_cloudwatch_event_rule.autoscaling_event_rule,
-		aws_lambda_permission.autoscaling_lambda_resource_policy,
+		aws_cloudwatch_event_rule.main,
+		aws_lambda_permission.main,
 	]
 	
 	dynamic tag {
@@ -40,9 +40,9 @@ resource aws_autoscaling_group autoscaling_group {
 }
 
 
-resource aws_autoscaling_policy scale_down {
+resource aws_autoscaling_policy main {
 	name = "CPU Tracking Policy"
-	autoscaling_group_name = aws_autoscaling_group.autoscaling_group.name
+	autoscaling_group_name = aws_autoscaling_group.main.name
 	estimated_instance_warmup = 60
 	policy_type = "TargetTrackingScaling"
 	
@@ -53,14 +53,14 @@ resource aws_autoscaling_policy scale_down {
 }
 
 
-resource aws_launch_template launch_template {
+resource aws_launch_template main {
 	name = "${var.prefix}-${var.identifier}-launchTemplate"
 	update_default_version = true
 	
 	instance_market_options { market_type = "spot" }
 	image_id = var.ami_id
 	instance_type = var.instance_type
-	iam_instance_profile { arn = aws_iam_instance_profile.instance_profile.arn }
+	iam_instance_profile { arn = aws_iam_instance_profile.main.arn }
 	user_data = module.user_data.content_base64
 	ebs_optimized = true
 	
@@ -117,7 +117,7 @@ module user_data {
 
 
 # 
-# Private DNS.
+# Private DNS
 #-------------------------------------------------------------------------------
 resource aws_route53_record a {
 	zone_id = var.private_hosted_zone.zone_id

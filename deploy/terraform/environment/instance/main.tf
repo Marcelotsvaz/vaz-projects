@@ -7,9 +7,9 @@
 
 
 # 
-# Instance.
+# Instance
 #-------------------------------------------------------------------------------
-resource aws_spot_fleet_request fleet {
+resource aws_spot_fleet_request main {
 	target_capacity = 1
 	instance_interruption_behaviour = "stop"
 	terminate_instances_on_delete = true
@@ -17,8 +17,8 @@ resource aws_spot_fleet_request fleet {
 	
 	launch_template_config {
 		launch_template_specification {
-			id = aws_launch_template.launch_template.id
-			version = aws_launch_template.launch_template.latest_version
+			id = aws_launch_template.main.id
+			version = aws_launch_template.main.latest_version
 		}
 	}
 	
@@ -28,13 +28,13 @@ resource aws_spot_fleet_request fleet {
 }
 
 
-resource aws_launch_template launch_template {
+resource aws_launch_template main {
 	name = "${var.prefix}-${var.identifier}-launchTemplate"
 	update_default_version = true
 	
 	image_id = var.ami_id
 	instance_type = var.instance_type
-	iam_instance_profile { arn = aws_iam_instance_profile.instance_profile.arn }
+	iam_instance_profile { arn = aws_iam_instance_profile.main.arn }
 	user_data = module.user_data.content_base64
 	ebs_optimized = true
 	
@@ -90,8 +90,8 @@ module user_data {
 }
 
 
-data aws_instance instance {
-	instance_tags = { "aws:ec2spot:fleet-request-id" = aws_spot_fleet_request.fleet.id }
+data aws_instance main {
+	instance_tags = { "aws:ec2spot:fleet-request-id" = aws_spot_fleet_request.main.id }
 	
 	filter {
 		name = "instance-state-name"
@@ -102,7 +102,7 @@ data aws_instance instance {
 
 
 # 
-# Private DNS.
+# Private DNS
 #-------------------------------------------------------------------------------
 resource aws_route53_record a {
 	zone_id = var.private_hosted_zone.zone_id
@@ -110,5 +110,5 @@ resource aws_route53_record a {
 	name = "${var.hostname}.${var.private_hosted_zone.name}"
 	type = "A"
 	ttl = "60"
-	records = [ data.aws_instance.instance.private_ip ]
+	records = [ data.aws_instance.main.private_ip ]
 }

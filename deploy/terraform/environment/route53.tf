@@ -7,12 +7,12 @@
 
 
 # 
-# Private Route53 hosted zone.
+# Private Zone
 #-------------------------------------------------------------------------------
 resource aws_route53_zone private {
 	name = local.private_domain
 	
-	vpc { vpc_id = aws_vpc.vpc.id }
+	vpc { vpc_id = aws_vpc.main.id }
 	
 	tags = {
 		Name: "${local.project_name} Private Hosted Zone"
@@ -44,29 +44,29 @@ resource aws_route53_record private_ns {
 
 
 # 
-# External Route53 hosted zone.
+# Public Zone
 #-------------------------------------------------------------------------------
-data aws_route53_zone hosted_zone {
+data aws_route53_zone public {
 	name = local.domain
 }
 
 
 
 # 
-# Load balancer.
+# Load Balancer
 #-------------------------------------------------------------------------------
 resource aws_route53_record a_load_balancer {
-	zone_id = data.aws_route53_zone.hosted_zone.zone_id
+	zone_id = data.aws_route53_zone.public.zone_id
 	
 	name = local.domain
 	type = "A"
 	ttl = "60"
-	records = [ aws_eip.load_balancer_ip.public_ip ]
+	records = [ aws_eip.load_balancer.public_ip ]
 }
 
 
 resource aws_route53_record aaaa_load_balancer {
-	zone_id = data.aws_route53_zone.hosted_zone.zone_id
+	zone_id = data.aws_route53_zone.public.zone_id
 	
 	name = local.domain
 	type = "AAAA"
@@ -77,31 +77,31 @@ resource aws_route53_record aaaa_load_balancer {
 
 
 # 
-# CloudFront.
+# CloudFront
 #-------------------------------------------------------------------------------
 resource aws_route53_record a_cloudfront {
-	zone_id = data.aws_route53_zone.hosted_zone.zone_id
+	zone_id = data.aws_route53_zone.public.zone_id
 	
 	name = local.static_files_domain
 	type = "A"
 	
 	alias {
-		name = aws_cloudfront_distribution.distribution.domain_name
-		zone_id = aws_cloudfront_distribution.distribution.hosted_zone_id
+		name = aws_cloudfront_distribution.main.domain_name
+		zone_id = aws_cloudfront_distribution.main.hosted_zone_id
 		evaluate_target_health = false
 	}
 }
 
 
 resource aws_route53_record aaaa_cloudfront {
-	zone_id = data.aws_route53_zone.hosted_zone.zone_id
+	zone_id = data.aws_route53_zone.public.zone_id
 	
 	name = local.static_files_domain
 	type = "AAAA"
 	
 	alias {
-		name = aws_cloudfront_distribution.distribution.domain_name
-		zone_id = aws_cloudfront_distribution.distribution.hosted_zone_id
+		name = aws_cloudfront_distribution.main.domain_name
+		zone_id = aws_cloudfront_distribution.main.hosted_zone_id
 		evaluate_target_health = false
 	}
 }
@@ -109,20 +109,20 @@ resource aws_route53_record aaaa_cloudfront {
 
 
 # 
-# Monitoring server.
+# Monitoring Server
 #-------------------------------------------------------------------------------
 resource aws_route53_record a_monitoring_server {
-	zone_id = data.aws_route53_zone.hosted_zone.zone_id
+	zone_id = data.aws_route53_zone.public.zone_id
 	
 	name = local.monitoring_domain
 	type = "A"
 	ttl = "60"
-	records = [ aws_eip.load_balancer_ip.public_ip ]
+	records = [ aws_eip.load_balancer.public_ip ]
 }
 
 
 resource aws_route53_record aaaa_monitoring_server {
-	zone_id = data.aws_route53_zone.hosted_zone.zone_id
+	zone_id = data.aws_route53_zone.public.zone_id
 	
 	name = local.monitoring_domain
 	type = "AAAA"
@@ -133,10 +133,10 @@ resource aws_route53_record aaaa_monitoring_server {
 
 
 # 
-# Third-party records.
+# Third-party Records
 #-------------------------------------------------------------------------------
 resource aws_route53_record caa {
-	zone_id = data.aws_route53_zone.hosted_zone.zone_id
+	zone_id = data.aws_route53_zone.public.zone_id
 	
 	name = local.domain
 	type = "CAA"
@@ -149,7 +149,7 @@ resource aws_route53_record caa {
 
 
 resource aws_route53_record txt_google {
-	zone_id = data.aws_route53_zone.hosted_zone.zone_id
+	zone_id = data.aws_route53_zone.public.zone_id
 	
 	name = local.domain
 	type = "TXT"

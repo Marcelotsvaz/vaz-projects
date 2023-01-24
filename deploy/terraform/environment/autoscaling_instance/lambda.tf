@@ -7,15 +7,15 @@
 
 
 # 
-# Lambda Function.
+# Lambda Function
 #-------------------------------------------------------------------------------
-resource aws_lambda_function autoscaling_lambda {
-	function_name = local.autoscaling_lambda_function_name
-	role = aws_iam_role.autoscaling_lambda_role.arn
+resource aws_lambda_function main {
+	function_name = local.lambda_function_name
+	role = aws_iam_role.lambda.arn
 	
 	runtime = "python3.9"
-	filename = data.archive_file.autoscaling_lambda.output_path
-	source_code_hash = data.archive_file.autoscaling_lambda.output_base64sha256
+	filename = data.archive_file.main.output_path
+	source_code_hash = data.archive_file.main.output_base64sha256
 	handler = "autoscaling_lambda.main"
 	timeout = 10
 	
@@ -29,7 +29,7 @@ resource aws_lambda_function autoscaling_lambda {
 	}
 	
 	# Make sure the log group is created before the function because we removed the implicit dependency.
-	depends_on = [ aws_cloudwatch_log_group.autoscaling_lambda_log_group ]
+	depends_on = [ aws_cloudwatch_log_group.main ]
 	
 	tags = {
 		Name = "${var.name} Auto Scaling Lambda"
@@ -37,24 +37,24 @@ resource aws_lambda_function autoscaling_lambda {
 }
 
 
-data archive_file autoscaling_lambda {
+data archive_file main {
 	type = "zip"
 	source_file = "${path.module}/autoscaling_lambda.py"
 	output_path = "../../../deployment/${var.prefix}/${var.identifier}/autoscaling_lambda.zip"
 }
 
 
-resource aws_lambda_permission autoscaling_lambda_resource_policy {
-	function_name = aws_lambda_function.autoscaling_lambda.function_name
+resource aws_lambda_permission main {
+	function_name = aws_lambda_function.main.function_name
 	statement_id = "lambdaInvokeFunction"
 	principal = "events.amazonaws.com"
 	action = "lambda:InvokeFunction"
-	source_arn = aws_cloudwatch_event_rule.autoscaling_event_rule.arn
+	source_arn = aws_cloudwatch_event_rule.main.arn
 }
 
 
-resource aws_cloudwatch_log_group autoscaling_lambda_log_group {
-	name = "/aws/lambda/${local.autoscaling_lambda_function_name}"
+resource aws_cloudwatch_log_group main {
+	name = "/aws/lambda/${local.lambda_function_name}"
 	
 	tags = {
 		Name = "${var.name} Auto Scaling Lambda Log Group"
@@ -64,16 +64,16 @@ resource aws_cloudwatch_log_group autoscaling_lambda_log_group {
 
 
 # 
-# Lambda IAM Role.
+# Lambda IAM Role
 #-------------------------------------------------------------------------------
-resource aws_iam_role autoscaling_lambda_role {
+resource aws_iam_role lambda {
 	name = "${var.prefix}-${var.identifier}-autoscalingLambdaRole"
-	assume_role_policy = data.aws_iam_policy_document.autoscaling_lambda_assume_role_policy.json
+	assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
 	
 	inline_policy {
 		name = "${var.prefix}-${var.identifier}-autoscalingLambdaRolePolicy"
 		
-		policy = data.aws_iam_policy_document.autoscaling_lambda_role_policy.json
+		policy = data.aws_iam_policy_document.lambda.json
 	}
 	
 	tags = {
@@ -82,7 +82,7 @@ resource aws_iam_role autoscaling_lambda_role {
 }
 
 
-data aws_iam_policy_document autoscaling_lambda_assume_role_policy {
+data aws_iam_policy_document lambda_assume_role {
 	statement {
 		sid = "lambdaAssumeRole"
 		
@@ -96,7 +96,7 @@ data aws_iam_policy_document autoscaling_lambda_assume_role_policy {
 }
 
 
-data aws_iam_policy_document autoscaling_lambda_role_policy {
+data aws_iam_policy_document lambda {
 	# Used in autoscaling_lambda.py.
 	statement {
 		sid = "autoscalingDescribeAutoScalingGroups"
@@ -136,16 +136,16 @@ data aws_iam_policy_document autoscaling_lambda_role_policy {
 			"logs:PutLogEvents",
 		]
 		
-		resources = [ "${aws_cloudwatch_log_group.autoscaling_lambda_log_group.arn}:*" ]
+		resources = [ "${aws_cloudwatch_log_group.main.arn}:*" ]
 	}
 }
 
 
 
 # 
-# EventBridge.
+# EventBridge
 #-------------------------------------------------------------------------------
-resource aws_cloudwatch_event_rule autoscaling_event_rule {
+resource aws_cloudwatch_event_rule main {
 	name = "${var.prefix}-${var.identifier}-autoscalingEventRule"
 	event_pattern = <<EOF
 		{
@@ -164,7 +164,7 @@ resource aws_cloudwatch_event_rule autoscaling_event_rule {
 }
 
 
-resource aws_cloudwatch_event_target autoscaling_event_target {
-	rule = aws_cloudwatch_event_rule.autoscaling_event_rule.name
-	arn = aws_lambda_function.autoscaling_lambda.arn
+resource aws_cloudwatch_event_target main {
+	rule = aws_cloudwatch_event_rule.main.name
+	arn = aws_lambda_function.main.arn
 }

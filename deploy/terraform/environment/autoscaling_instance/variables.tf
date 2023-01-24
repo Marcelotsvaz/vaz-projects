@@ -6,7 +6,7 @@
 
 
 
-# Name.
+# Name
 #-------------------------------------------------------------------------------
 variable name {
 	description = "Name of the instance."
@@ -29,7 +29,7 @@ variable prefix {
 }
 
 
-# Configuration.
+# Configuration
 #-------------------------------------------------------------------------------
 variable ami_id {
 	description = "AMI ID."
@@ -47,7 +47,7 @@ variable root_volume_size {
 }
 
 
-# Network.
+# Network
 #-------------------------------------------------------------------------------
 variable subnet_ids {
 	description = "Set of VPC subnet ID."
@@ -61,7 +61,7 @@ variable ipv6_address_count {
 }
 
 variable vpc_security_group_ids {
-	description = "Set of security group IDs"
+	description = "Set of security group IDs."
 	type = set( string )
 }
 
@@ -71,7 +71,7 @@ variable private_hosted_zone {
 }
 
 
-# Environment.
+# Environment
 #-------------------------------------------------------------------------------
 variable role_policy {
 	description = "Policy for the IAM instance profile."
@@ -85,7 +85,7 @@ variable environment {
 }
 
 
-# Tags.
+# Tags
 #-------------------------------------------------------------------------------
 variable default_tags {
 	description = "Tags to be applied to all resources."
@@ -94,9 +94,9 @@ variable default_tags {
 }
 
 
-# Locals.
+# Locals
 #-------------------------------------------------------------------------------
 locals {
 	autoscaling_group_name = "${var.prefix}-${var.identifier}-autoScalingGroup"	# Avoid cyclic dependency created by depends_on.
-	autoscaling_lambda_function_name = "${var.prefix}-${var.identifier}-autoscalingLambda"	# Avoid cyclic dependency.
+	lambda_function_name = "${var.prefix}-${var.identifier}-autoscalingLambda"	# Avoid cyclic dependency.
 }

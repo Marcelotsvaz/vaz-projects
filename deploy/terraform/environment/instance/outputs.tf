@@ -8,10 +8,10 @@
 
 output id {
 	description = "Instance ID."
-	value = data.aws_instance.instance.id
+	value = data.aws_instance.main.id
 }
 
 output ipv6_address {
 	description = "Instance IPv6 address."
-	value = one( data.aws_instance.instance.ipv6_addresses )
+	value = one( data.aws_instance.main.ipv6_addresses )
 }

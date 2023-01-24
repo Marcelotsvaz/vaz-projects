@@ -12,7 +12,7 @@ locals {
 
 
 
-resource aws_cloudfront_distribution distribution {
+resource aws_cloudfront_distribution main {
 	comment = "${local.project_name} Distribuition"
 	aliases = [ local.static_files_domain ]
 	enabled = true
@@ -26,16 +26,16 @@ resource aws_cloudfront_distribution distribution {
 	
 	origin {
 		origin_id = "${local.origin_id}-static"
-		domain_name = aws_s3_bucket.bucket.bucket_regional_domain_name
+		domain_name = aws_s3_bucket.data.bucket_regional_domain_name
 		origin_path = "/static"
-		origin_access_control_id = aws_cloudfront_origin_access_control.access_control.id
+		origin_access_control_id = aws_cloudfront_origin_access_control.main.id
 	}
 	
 	origin {
 		origin_id = "${local.origin_id}-media"
-		domain_name = aws_s3_bucket.bucket.bucket_regional_domain_name
+		domain_name = aws_s3_bucket.data.bucket_regional_domain_name
 		origin_path = "/media"
-		origin_access_control_id = aws_cloudfront_origin_access_control.access_control.id
+		origin_access_control_id = aws_cloudfront_origin_access_control.main.id
 	}
 	
 	origin_group {
@@ -54,7 +54,7 @@ resource aws_cloudfront_distribution distribution {
 		target_origin_id = local.origin_id
 		allowed_methods = [ "GET", "HEAD" ]
 		cached_methods = [ "GET", "HEAD" ]
-		cache_policy_id = data.aws_cloudfront_cache_policy.cache_policy.id
+		cache_policy_id = data.aws_cloudfront_cache_policy.main.id
 		viewer_protocol_policy = "https-only"
 		compress = true
 	}
@@ -64,7 +64,7 @@ resource aws_cloudfront_distribution distribution {
 		target_origin_id = local.origin_id
 		allowed_methods = [ "GET", "HEAD" ]
 		cached_methods = [ "GET", "HEAD" ]
-		cache_policy_id = data.aws_cloudfront_cache_policy.cache_policy.id
+		cache_policy_id = data.aws_cloudfront_cache_policy.main.id
 		viewer_protocol_policy = "https-only"
 		compress = true
 		
@@ -79,7 +79,7 @@ resource aws_cloudfront_distribution distribution {
 	}
 	
 	logging_config {
-		bucket = aws_s3_bucket.logs_bucket.bucket_domain_name
+		bucket = aws_s3_bucket.logs.bucket_domain_name
 		prefix = "cloudfront/"
 	}
 	
@@ -89,7 +89,7 @@ resource aws_cloudfront_distribution distribution {
 }
 
 
-resource aws_cloudfront_origin_access_control access_control {
+resource aws_cloudfront_origin_access_control main {
 	name = "${local.project_code}-${var.environment}-originAccessControl"
 	description = "${local.project_name} Origin Access Control"
 	origin_access_control_origin_type = "s3"
@@ -98,7 +98,7 @@ resource aws_cloudfront_origin_access_control access_control {
 }
 
 
-data aws_cloudfront_cache_policy cache_policy {
+data aws_cloudfront_cache_policy main {
 	name = "Managed-CachingOptimized"
 }
 
