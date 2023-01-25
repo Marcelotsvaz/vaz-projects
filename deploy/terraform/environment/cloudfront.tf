@@ -90,7 +90,7 @@ resource aws_cloudfront_distribution main {
 
 
 resource aws_cloudfront_origin_access_control main {
-	name = "${local.project_code}-${var.environment}-originAccessControl"
+	name = "${local.project_code}-${var.environment}"
 	description = "${local.project_name} Origin Access Control"
 	origin_access_control_origin_type = "s3"
 	signing_behavior = "always"

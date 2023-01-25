@@ -29,7 +29,7 @@ resource aws_spot_fleet_request main {
 
 
 resource aws_launch_template main {
-	name = "${var.prefix}-${var.identifier}-launchTemplate"
+	name = "${var.prefix}-${var.identifier}"
 	update_default_version = true
 	
 	image_id = var.ami_id

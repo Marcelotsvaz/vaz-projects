@@ -97,6 +97,6 @@ variable default_tags {
 # Locals
 #-------------------------------------------------------------------------------
 locals {
-	autoscaling_group_name = "${var.prefix}-${var.identifier}-autoScalingGroup"	# Avoid cyclic dependency created by depends_on.
-	lambda_function_name = "${var.prefix}-${var.identifier}-autoscalingLambda"	# Avoid cyclic dependency.
+	autoscaling_group_name = "${var.prefix}-${var.identifier}"	# Avoid cyclic dependency created by depends_on.
+	lambda_function_name = "${var.prefix}-${var.identifier}-autoscaling"	# Avoid cyclic dependency.
 }
