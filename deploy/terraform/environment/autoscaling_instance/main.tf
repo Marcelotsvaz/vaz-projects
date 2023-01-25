@@ -100,10 +100,11 @@ resource aws_launch_template main {
 
 
 module user_data {
-	source = "../user_data"
+	source = "gitlab.com/marcelotsvaz/user-data/external"
+	version = "~> 1.0.1"
 	
 	input_dir = "../../../${var.identifier}/scripts"
-	output_dir = "../../../deployment/${var.prefix}/${var.identifier}"
+	output_dir = "../../../deployment/${local.module_prefix}"
 	
 	files = [ "perInstance.sh" ]
 	

@@ -40,7 +40,7 @@ resource aws_lambda_function main {
 data archive_file main {
 	type = "zip"
 	source_file = "${path.module}/autoscaling_lambda.py"
-	output_path = "../../../deployment/${var.prefix}/${var.identifier}/autoscaling_lambda.zip"
+	output_path = "../../../deployment/${local.module_prefix}/autoscaling_lambda.zip"
 }
 
 
