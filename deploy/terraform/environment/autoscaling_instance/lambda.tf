@@ -117,7 +117,7 @@ data aws_iam_policy_document lambda {
 	}
 	
 	statement {
-		sid = "cloudwatchWriteLogs"
+		sid = "putCloudwatchLogs"
 		actions = [
 			"logs:CreateLogStream",
 			"logs:PutLogEvents",
