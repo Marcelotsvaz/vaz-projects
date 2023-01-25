@@ -85,57 +85,43 @@ resource aws_iam_role lambda {
 data aws_iam_policy_document lambda_assume_role {
 	statement {
 		sid = "lambdaAssumeRole"
-		
+		actions = [ "sts:AssumeRole" ]
 		principals {
 			type = "Service"
 			identifiers = [ "lambda.amazonaws.com" ]
 		}
-		
-		actions = [ "sts:AssumeRole" ]
 	}
 }
 
 
 data aws_iam_policy_document lambda {
-	# Used in autoscaling_lambda.py.
 	statement {
 		sid = "autoscalingDescribeAutoScalingGroups"
-		
 		actions = [ "autoscaling:DescribeAutoScalingGroups" ]
-		
 		resources = [ "*" ]
 	}
 	
-	# Used in autoscaling_lambda.py.
 	statement {
-		sid = "ec2DescribeInstances"
-		
+		sid = "autoscalingDescribeInstances"
 		actions = [ "ec2:DescribeInstances" ]
-		
 		resources = [ "*" ]
 	}
 	
-	# Used in autoscaling_lambda.py.
 	statement {
-		sid = "route53ChangeRecordSets"
-		
+		sid = "autoscalingUpdateDns"
 		actions = [
 			"route53:ListResourceRecordSets",
 			"route53:ChangeResourceRecordSets",
 		]
-		
 		resources = [ var.private_hosted_zone.arn ]
 	}
 	
-	# Used by Lambda.
 	statement {
 		sid = "cloudwatchWriteLogs"
-		
 		actions = [
 			"logs:CreateLogStream",
 			"logs:PutLogEvents",
 		]
-		
 		resources = [ "${aws_cloudwatch_log_group.main.arn}:*" ]
 	}
 }

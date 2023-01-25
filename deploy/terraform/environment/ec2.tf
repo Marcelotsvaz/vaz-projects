@@ -20,6 +20,24 @@ data aws_ami main {
 }
 
 
+data aws_iam_policy_document common {
+	statement {
+		sid = "perInstanceListBucket"
+		actions = [ "s3:ListBucket" ]
+		resources = [ aws_s3_bucket.data.arn ]
+	}
+	
+	statement {
+		sid = "perInstanceGetDeployment"
+		actions = [
+			"s3:GetObject",
+			"s3:GetObjectAcl",
+		]
+		resources = [ "${aws_s3_bucket.data.arn}/deployment/*" ]
+	}
+}
+
+
 
 # 
 # Load Balancer Server
@@ -77,52 +95,33 @@ resource aws_eip load_balancer {
 
 
 data aws_iam_policy_document load_balancer {
-	# Used in perInstance.sh.
-	statement {
-		sid = "s3ListBucket"
-		
-		actions = [ "s3:ListBucket" ]
-		
-		resources = [ aws_s3_bucket.data.arn ]
-	}
+	source_policy_documents = [ data.aws_iam_policy_document.common.json ]
 	
-	# Used in perInstance.sh.
-	# Used by dehydrated.
 	statement {
-		sid = "s3WriteDeployment"
-		
-		actions = [
-			"s3:GetObject",
-			"s3:GetObjectAcl",
-			"s3:PutObject",
-			"s3:PutObjectAcl",
-			"s3:DeleteObject",
-		]
-		
-		resources = [ "${aws_s3_bucket.data.arn}/deployment/*" ]
-	}
-	
-	# Used by dehydrated.
-	statement {
-		sid = "route53ChangeRecordSets"
-		
+		sid = "dehydratedDnsChallenge"
 		actions = [
 			"route53:ChangeResourceRecordSets",
 			"route53:GetChange",
 		]
-		
 		resources = [
 			data.aws_route53_zone.public.arn,
 			"arn:aws:route53:::change/*",
 		]
 	}
 	
-	# Used by dehydrated.
 	statement {
-		sid = "acmImportCertificate"
-		
+		sid = "dehydratedUploadCertificate"
+		actions = [
+			"s3:PutObject",
+			"s3:PutObjectAcl",
+			"s3:DeleteObject",
+		]
+		resources = [ "${aws_s3_bucket.data.arn}/deployment/tls/*" ]
+	}
+	
+	statement {
+		sid = "dehydratedUpdateCertificate"
 		actions = [ "acm:ImportCertificate" ]
-		
 		resources = [ data.aws_acm_certificate.cloudfront.arn ]
 	}
 }
@@ -174,31 +173,10 @@ module app_server {
 
 
 data aws_iam_policy_document app_server {
-	# Used in perInstance.sh.
-	statement {
-		sid = "s3ListBucket"
-		
-		actions = [ "s3:ListBucket" ]
-		
-		resources = [ aws_s3_bucket.data.arn ]
-	}
+	source_policy_documents = [ data.aws_iam_policy_document.common.json ]
 	
-	# Used in perInstance.sh.
 	statement {
-		sid = "s3GetDeployment"
-		
-		actions = [
-			"s3:GetObject",
-			"s3:GetObjectAcl",
-		]
-		
-		resources = [ "${aws_s3_bucket.data.arn}/deployment/*" ]
-	}
-	
-	# Used by Django S3 storage backend.
-	statement {
-		sid = "s3WriteMedia"
-		
+		sid = "djangoS3StorageBackend"
 		actions = [
 			"s3:GetObject",
 			"s3:GetObjectAcl",
@@ -206,7 +184,6 @@ data aws_iam_policy_document app_server {
 			"s3:PutObjectAcl",
 			"s3:DeleteObject",
 		]
-		
 		resources = [ "${aws_s3_bucket.data.arn}/media/*" ]
 	}
 }
@@ -288,26 +265,7 @@ resource aws_volume_attachment database {
 
 
 data aws_iam_policy_document database_server {
-	# Used in perInstance.sh.
-	statement {
-		sid = "s3ListBucket"
-		
-		actions = [ "s3:ListBucket" ]
-		
-		resources = [ aws_s3_bucket.data.arn ]
-	}
-	
-	# Used in perInstance.sh.
-	statement {
-		sid = "s3GetDeployment"
-		
-		actions = [
-			"s3:GetObject",
-			"s3:GetObjectAcl",
-		]
-		
-		resources = [ "${aws_s3_bucket.data.arn}/deployment/*" ]
-	}
+	source_policy_documents = [ data.aws_iam_policy_document.common.json ]
 }
 
 
@@ -389,36 +347,14 @@ resource aws_volume_attachment monitoring {
 
 
 data aws_iam_policy_document monitoring_server {
-	# Used in perInstance.sh.
-	statement {
-		sid = "s3ListBucket"
-		
-		actions = [ "s3:ListBucket" ]
-		
-		resources = [ aws_s3_bucket.data.arn ]
-	}
+	source_policy_documents = [ data.aws_iam_policy_document.common.json ]
 	
-	# Used in perInstance.sh.
 	statement {
-		sid = "s3GetDeployment"
-		
-		actions = [
-			"s3:GetObject",
-			"s3:GetObjectAcl",
-		]
-		
-		resources = [ "${aws_s3_bucket.data.arn}/deployment/*" ]
-	}
-	
-	# Used by Prometheus EC2 service discovery.
-	statement {
-		sid = "ec2DescribeInstances"
-		
+		sid = "prometheusEc2ServiceDiscovery"
 		actions = [
 			"ec2:DescribeInstances",
 			"ec2:DescribeAvailabilityZones",
 		]
-		
 		resources = [ "*" ]
 	}
 }

@@ -56,26 +56,21 @@ resource aws_s3_bucket_policy data {
 
 
 data aws_iam_policy_document data_bucket {
-	# Used by CloudFront.
 	statement {
 		sid = "cloudfrontAccess"
-		
-		principals {
-			type = "Service"
-			identifiers = [ "cloudfront.amazonaws.com" ]
-		}
-		
 		actions = [ "s3:GetObject" ]
-		
 		resources = [
 			"${aws_s3_bucket.data.arn}/static/*",
 			"${aws_s3_bucket.data.arn}/media/*",
 		]
-		
 		condition {
 			variable = "AWS:SourceArn"
 			test = "StringEquals"
 			values = [ aws_cloudfront_distribution.main.arn ]
+		}
+		principals {
+			type = "Service"
+			identifiers = [ "cloudfront.amazonaws.com" ]
 		}
 	}
 }
