@@ -57,7 +57,7 @@ module load_balancer {
 	root_volume_size = 5
 	
 	# Network.
-	subnet_id = aws_subnet.subnet_c.id
+	subnet_id = module.vpc.subnets[2].id
 	ipv6_address_count = 1
 	vpc_security_group_ids = [
 		aws_default_security_group.common.id,
@@ -146,7 +146,7 @@ module app_server {
 	root_volume_size = 5
 	
 	# Network.
-	subnet_ids = [ aws_subnet.subnet_c.id ]
+	subnet_ids = [ module.vpc.subnets[2].id ]
 	vpc_security_group_ids = [
 		aws_default_security_group.common.id,
 		aws_security_group.private.id,
@@ -208,7 +208,7 @@ module database_server {
 	root_volume_size = 5
 	
 	# Network.
-	subnet_id = aws_subnet.subnet_c.id
+	subnet_id = module.vpc.subnets[2].id
 	vpc_security_group_ids = [
 		aws_default_security_group.common.id,
 		aws_security_group.private.id,
@@ -231,7 +231,7 @@ module database_server {
 
 
 resource aws_ebs_volume database {
-	availability_zone = aws_subnet.subnet_c.availability_zone
+	availability_zone = module.vpc.subnets[2].availability_zone
 	size = 1
 	type = "gp3"
 	encrypted = true
@@ -288,7 +288,7 @@ module monitoring_server {
 	root_volume_size = 5
 	
 	# Network.
-	subnet_id = aws_subnet.subnet_c.id
+	subnet_id = module.vpc.subnets[2].id
 	vpc_security_group_ids = [
 		aws_default_security_group.common.id,
 		aws_security_group.private.id,
@@ -313,7 +313,7 @@ module monitoring_server {
 
 
 resource aws_ebs_volume monitoring {
-	availability_zone = aws_subnet.subnet_c.availability_zone
+	availability_zone = module.vpc.subnets[2].availability_zone
 	size = 5
 	type = "gp3"
 	encrypted = true
