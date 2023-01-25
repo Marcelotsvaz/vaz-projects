@@ -34,7 +34,9 @@ resource aws_route53_record production_soa {
 	name = aws_route53_zone.production.name
 	type = "SOA"
 	ttl = "3600"
-	records = [ "${aws_route53_zone.production.primary_name_server} awsdns-hostmaster.amazon.com 1 ${2 * 3600} ${0.25 * 3600} ${14 * 24 * 3600} ${24 * 3600}" ]
+	records = [
+		"${aws_route53_zone.production.primary_name_server} awsdns-hostmaster.amazon.com 1 ${2 * 3600} ${0.25 * 3600} ${14 * 24 * 3600} ${24 * 3600}"
+	]
 }
 
 
@@ -89,7 +91,9 @@ resource aws_route53_record staging_soa {
 	name = aws_route53_zone.staging.name
 	type = "SOA"
 	ttl = "3600"
-	records = [ "${aws_route53_zone.staging.primary_name_server} awsdns-hostmaster.amazon.com 1 ${2 * 3600} ${0.25 * 3600} ${14 * 24 * 3600} ${24 * 3600}" ]
+	records = [
+		"${aws_route53_zone.staging.primary_name_server} awsdns-hostmaster.amazon.com 1 ${2 * 3600} ${0.25 * 3600} ${14 * 24 * 3600} ${24 * 3600}"
+	]
 }
 
 
@@ -125,7 +129,9 @@ resource aws_route53_record portfolio_soa {
 	name = aws_route53_zone.portfolio.name
 	type = "SOA"
 	ttl = "3600"
-	records = [ "${aws_route53_zone.portfolio.primary_name_server} awsdns-hostmaster.amazon.com 1 ${2 * 3600} ${0.25 * 3600} ${14 * 24 * 3600} ${24 * 3600}" ]
+	records = [
+		"${aws_route53_zone.portfolio.primary_name_server} awsdns-hostmaster.amazon.com 1 ${2 * 3600} ${0.25 * 3600} ${14 * 24 * 3600} ${24 * 3600}"
+	]
 }
 
 

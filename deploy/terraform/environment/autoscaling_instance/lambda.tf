@@ -28,7 +28,8 @@ resource aws_lambda_function main {
 		}
 	}
 	
-	# Make sure the log group is created before the function because we removed the implicit dependency.
+	# Make sure the log group is created before the function
+	# because we removed the implicit dependency.
 	depends_on = [ aws_cloudwatch_log_group.main ]
 	
 	tags = {
@@ -136,7 +137,11 @@ resource aws_cloudwatch_event_rule main {
 	event_pattern = <<EOF
 		{
 			"source": [ "aws.autoscaling" ],
-			"detail-type": [ "EC2 Instance Launch Successful", "EC2 Instance Terminate Successful" ],
+			"detail-type":
+			[
+				"EC2 Instance Launch Successful",
+				"EC2 Instance Terminate Successful"
+			],
 			"detail":
 			{
 				"AutoScalingGroupName": [ "${local.autoscaling_group_name}" ]

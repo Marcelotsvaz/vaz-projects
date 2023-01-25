@@ -27,7 +27,8 @@ if [[ "${GITLAB_CI}" ]]; then	# Running in GitLab CI/CD.
 else
 	echo 'Running outside CI/CD.'
 	
-	commitSha="$(git rev-parse remotes/gitlab/production)"	# TODO: Get PR branch when support for multiple staging environments is implemented.
+	# TODO: Get PR branch when support for multiple staging environments is implemented.
+	commitSha="$(git rev-parse remotes/gitlab/production)"
 	applicationImage="registry.gitlab.com/marcelotsvaz/vaz-projects/application:${commitSha}"
 fi
 

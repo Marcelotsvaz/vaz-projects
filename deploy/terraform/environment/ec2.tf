@@ -163,7 +163,11 @@ module app_server {
 		DJANGO_SETTINGS_MODULE = "settings.${var.environment}"
 		domain = local.domain
 		staticFilesDomain = local.static_files_domain
-		s3Endpoint = replace( aws_s3_bucket.data.bucket_regional_domain_name, "${aws_s3_bucket.data.bucket}.", "https://" )
+		s3Endpoint = replace(
+			aws_s3_bucket.data.bucket_regional_domain_name,
+			"${aws_s3_bucket.data.bucket}.",
+			"https://",
+		)
 		bucket = aws_s3_bucket.data.id
 	}
 	
@@ -242,8 +246,9 @@ resource aws_ebs_volume database {
 }
 
 
-# Wait for the volume to be detached since we use skip_destroy on the aws_volume_attachment. Otherwise we need to stop
-# the instance before detaching which is not supported by aws_spot_fleet_request.
+# Wait for the volume to be detached since we use skip_destroy on the aws_volume_attachment.
+# Otherwise we need to stop the instance before detaching which is not supported by
+# aws_spot_fleet_request.
 resource null_resource wait_database_volume {
 	triggers = { instance_id = module.database_server.id }
 	
@@ -324,8 +329,9 @@ resource aws_ebs_volume monitoring {
 }
 
 
-# Wait for the volume to be detached since we use skip_destroy on the aws_volume_attachment. Otherwise we need to stop
-# the instance before detaching which is not supported by aws_spot_fleet_request.
+# Wait for the volume to be detached since we use skip_destroy on the aws_volume_attachment.
+# Otherwise we need to stop the instance before detaching which is not supported by
+# aws_spot_fleet_request.
 resource null_resource wait_monitoring_volume {
 	triggers = { instance_id = module.monitoring_server.id }
 	

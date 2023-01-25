@@ -27,7 +27,9 @@ resource aws_route53_record private_soa {
 	name = aws_route53_zone.private.name
 	type = "SOA"
 	ttl = "3600"
-	records = [ "${aws_route53_zone.private.primary_name_server} awsdns-hostmaster.amazon.com 1 ${2 * 3600} ${0.25 * 3600} ${14 * 24 * 3600} ${24 * 3600}" ]
+	records = [
+		"${aws_route53_zone.private.primary_name_server} awsdns-hostmaster.amazon.com 1 ${2 * 3600} ${0.25 * 3600} ${14 * 24 * 3600} ${24 * 3600}"
+	]
 }
 
 

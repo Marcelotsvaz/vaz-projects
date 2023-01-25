@@ -23,8 +23,8 @@ stages:
 
 
 variables:
-    # Fix wrong permissions for application image and instance user data due to runner setting "umask 0000" before
-    # cloning the repository.
+    # Fix wrong permissions for application image and instance user data due to runner setting
+    # "umask 0000" before cloning the repository.
     FF_DISABLE_UMASK_FOR_DOCKER_EXECUTOR: 'true'
     GIT_STRATEGY: clone
     DOCKER_TLS_CERTDIR: /certs   # Enable TLS for Docker-in-Docker. Silences warning in GitLab CI/CD.
@@ -34,7 +34,7 @@ variables:
 
 # 
 # Local jobs.
-#-----------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 dockerImage:
     stage: build
     extends: .dockerImage
@@ -61,7 +61,7 @@ container_scanning:
 
 # 
 # Staging jobs.
-#-----------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 deploy-staging:
     stage: deploy-staging
     extends: .deploy
@@ -88,7 +88,7 @@ cleanup-staging:
 
 # 
 # Production jobs.
-#-----------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 deploy-production:
     stage: deploy-production
     extends: .deploy
