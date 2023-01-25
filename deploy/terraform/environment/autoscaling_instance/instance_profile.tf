@@ -7,7 +7,7 @@
 
 
 resource aws_iam_instance_profile main {
-	name = "${var.prefix}-${var.identifier}"
+	name = local.module_prefix
 	role = aws_iam_role.instance.name
 	
 	tags = {
@@ -17,11 +17,11 @@ resource aws_iam_instance_profile main {
 
 
 resource aws_iam_role instance {
-	name = "${var.prefix}-${var.identifier}"
+	name = local.module_prefix
 	assume_role_policy = data.aws_iam_policy_document.instance_assume_role.json
 	
 	inline_policy {
-		name = "${var.prefix}-${var.identifier}"
+		name = local.module_prefix
 		
 		policy = var.role_policy.json
 	}

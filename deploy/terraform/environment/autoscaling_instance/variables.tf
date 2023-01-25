@@ -6,6 +6,7 @@
 
 
 
+# 
 # Name
 #-------------------------------------------------------------------------------
 variable name {
@@ -29,6 +30,7 @@ variable prefix {
 }
 
 
+# 
 # Configuration
 #-------------------------------------------------------------------------------
 variable ami_id {
@@ -47,6 +49,7 @@ variable root_volume_size {
 }
 
 
+# 
 # Network
 #-------------------------------------------------------------------------------
 variable subnet_ids {
@@ -71,6 +74,7 @@ variable private_hosted_zone {
 }
 
 
+# 
 # Environment
 #-------------------------------------------------------------------------------
 variable role_policy {
@@ -85,6 +89,7 @@ variable environment {
 }
 
 
+# 
 # Tags
 #-------------------------------------------------------------------------------
 variable default_tags {
@@ -94,9 +99,12 @@ variable default_tags {
 }
 
 
+
+# 
 # Locals
 #-------------------------------------------------------------------------------
 locals {
-	autoscaling_group_name = "${var.prefix}-${var.identifier}"	# Avoid cyclic dependency created by depends_on.
-	lambda_function_name = "${var.prefix}-${var.identifier}-autoscaling"	# Avoid cyclic dependency.
+	module_prefix = "${var.prefix}-${var.identifier}"
+	autoscaling_group_name = local.module_prefix	# Avoid cyclic dependency created by depends_on.
+	lambda_function_name = "${local.module_prefix}-autoscaling"	# Avoid cyclic dependency.
 }

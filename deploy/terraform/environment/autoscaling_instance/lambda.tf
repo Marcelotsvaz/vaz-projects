@@ -67,11 +67,11 @@ resource aws_cloudwatch_log_group main {
 # Lambda IAM Role
 #-------------------------------------------------------------------------------
 resource aws_iam_role lambda {
-	name = "${var.prefix}-${var.identifier}-autoscalingLambda"
+	name = "${local.module_prefix}-autoscalingLambda"
 	assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
 	
 	inline_policy {
-		name = "${var.prefix}-${var.identifier}-autoscalingLambda"
+		name = "${local.module_prefix}-autoscalingLambda"
 		
 		policy = data.aws_iam_policy_document.lambda.json
 	}
@@ -146,7 +146,7 @@ data aws_iam_policy_document lambda {
 # EventBridge
 #-------------------------------------------------------------------------------
 resource aws_cloudwatch_event_rule main {
-	name = "${var.prefix}-${var.identifier}-autoscalingEvent"
+	name = "${local.module_prefix}-autoscalingEvent"
 	event_pattern = <<EOF
 		{
 			"source": [ "aws.autoscaling" ],

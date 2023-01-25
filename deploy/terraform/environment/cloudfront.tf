@@ -90,7 +90,7 @@ resource aws_cloudfront_distribution main {
 
 
 resource aws_cloudfront_origin_access_control main {
-	name = "${local.project_code}-${var.environment}"
+	name = local.project_prefix
 	description = "${local.project_name} Origin Access Control"
 	origin_access_control_origin_type = "s3"
 	signing_behavior = "always"
@@ -104,7 +104,7 @@ data aws_cloudfront_cache_policy main {
 
 
 resource aws_cloudfront_function favicon_redirect {
-	name = "${local.project_code}-${var.environment}-faviconRedirect"
+	name = "${local.project_prefix}-faviconRedirect"
 	code = file( "favicon_redirect.js" )
 	runtime = "cloudfront-js-1.0"
 }

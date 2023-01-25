@@ -10,7 +10,7 @@
 # Data Bucket
 #-------------------------------------------------------------------------------
 resource aws_s3_bucket data {
-	bucket = lower( "${local.project_code}-${var.environment}" )
+	bucket = lower( local.project_prefix )
 	force_destroy = var.environment != "production"	# force_destroy only on staging environment.
 	
 	tags = {
@@ -104,7 +104,7 @@ resource aws_s3_bucket_logging data {
 # Logs Bucket
 #-------------------------------------------------------------------------------
 resource aws_s3_bucket logs {
-	bucket = lower( "${local.project_code}-${var.environment}-logs" )
+	bucket = lower( "${local.project_prefix}-logs" )
 	force_destroy = var.environment != "production"	# force_destroy only on staging environment.
 	
 	tags = {

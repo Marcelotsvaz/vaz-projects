@@ -54,7 +54,7 @@ resource aws_autoscaling_policy main {
 
 
 resource aws_launch_template main {
-	name = "${var.prefix}-${var.identifier}"
+	name = local.module_prefix
 	update_default_version = true
 	
 	instance_market_options { market_type = "spot" }

@@ -6,6 +6,7 @@
 
 
 
+# 
 # Name
 #-------------------------------------------------------------------------------
 variable name {
@@ -29,6 +30,7 @@ variable prefix {
 }
 
 
+# 
 # Configuration
 #-------------------------------------------------------------------------------
 variable ami_id {
@@ -47,6 +49,7 @@ variable root_volume_size {
 }
 
 
+# 
 # Network
 #-------------------------------------------------------------------------------
 variable subnet_id {
@@ -71,6 +74,7 @@ variable private_hosted_zone {
 }
 
 
+# 
 # Environment
 #-------------------------------------------------------------------------------
 variable role_policy {
@@ -85,10 +89,20 @@ variable environment {
 }
 
 
+# 
 # Tags
 #-------------------------------------------------------------------------------
 variable default_tags {
 	description = "Tags to be applied to all resources."
 	type = map( string )
 	default = {}
+}
+
+
+
+# 
+# Locals
+#-------------------------------------------------------------------------------
+locals {
+	module_prefix = "${var.prefix}-${var.identifier}"
 }

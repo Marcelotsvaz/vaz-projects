@@ -28,6 +28,7 @@ variable application_image {
 locals {
 	project_name = "VAZ Projects"
 	project_code = "vazProjects"
+	project_prefix = "${local.project_code}-${var.environment}"
 	environment_name = title( var.environment )
 	region = "sa-east-1"
 	

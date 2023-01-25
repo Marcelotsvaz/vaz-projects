@@ -31,7 +31,7 @@ module load_balancer {
 	name = "${local.project_name} Load Balancer"
 	identifier = "loadBalancer"
 	hostname = "load-balancer"
-	prefix = "${local.project_code}-${var.environment}"
+	prefix = local.project_prefix
 	
 	# Configuration.
 	ami_id = data.aws_ami.main.id
@@ -139,7 +139,7 @@ module app_server {
 	name = "${local.project_name} Application Server"
 	identifier = "application"
 	hostname = "application"
-	prefix = "${local.project_code}-${var.environment}"
+	prefix = local.project_prefix
 	
 	# Configuration.
 	ami_id = data.aws_ami.main.id
@@ -223,7 +223,7 @@ module database_server {
 	name = "${local.project_name} Database Server"
 	identifier = "database"
 	hostname = "postgres"
-	prefix = "${local.project_code}-${var.environment}"
+	prefix = local.project_prefix
 	
 	# Configuration.
 	ami_id = data.aws_ami.main.id
@@ -322,7 +322,7 @@ module monitoring_server {
 	name = "${local.project_name} Monitoring Server"
 	identifier = "monitoring"
 	hostname = "monitoring"
-	prefix = "${local.project_code}-${var.environment}"
+	prefix = local.project_prefix
 	
 	# Configuration.
 	ami_id = data.aws_ami.main.id
