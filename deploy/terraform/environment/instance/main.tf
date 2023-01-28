@@ -13,6 +13,7 @@ resource aws_spot_fleet_request main {
 	target_capacity = 1
 	instance_interruption_behaviour = "stop"
 	terminate_instances_on_delete = true
+	wait_for_fulfillment = true
 	iam_fleet_role = "arn:aws:iam::983585628015:role/aws-ec2-spot-fleet-tagging-role"	# TODO
 	
 	launch_template_config {
