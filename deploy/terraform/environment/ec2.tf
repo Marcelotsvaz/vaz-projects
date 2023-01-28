@@ -43,7 +43,7 @@ data aws_iam_policy_document common {
 # Load Balancer Server
 #-------------------------------------------------------------------------------
 module load_balancer {
-	source = "./instance"
+	source = "../modules/instance"
 	
 	# Name.
 	name = "${local.project_name} Load Balancer"
@@ -132,7 +132,7 @@ data aws_iam_policy_document load_balancer {
 # Application Server
 #-------------------------------------------------------------------------------
 module app_server {
-	source = "./autoscaling_instance"
+	source = "../modules/autoscaling_group"
 	
 	# Name.
 	name = "${local.project_name} Application Server"
@@ -198,7 +198,7 @@ data aws_iam_policy_document app_server {
 # Database Server
 #-------------------------------------------------------------------------------
 module database_server {
-	source = "./instance"
+	source = "../modules/instance"
 	
 	# Name.
 	name = "${local.project_name} Database Server"
@@ -279,7 +279,7 @@ data aws_iam_policy_document database_server {
 # Monitoring Server
 #-------------------------------------------------------------------------------
 module monitoring_server {
-	source = "./instance"
+	source = "../modules/instance"
 	
 	# Name.
 	name = "${local.project_name} Monitoring Server"
