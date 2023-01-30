@@ -21,7 +21,7 @@ resource aws_autoscaling_group main {
 	mixed_instances_policy {
 		instances_distribution {
 			on_demand_percentage_above_base_capacity = 0	# Use only Spot Instances.
-			spot_allocation_strategy = "capacity-optimized"
+			spot_allocation_strategy = "price-capacity-optimized"
 		}
 		
 		launch_template {
