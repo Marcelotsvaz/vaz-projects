@@ -19,7 +19,10 @@ resource aws_autoscaling_group main {
 	capacity_rebalance = true
 	
 	mixed_instances_policy {
-		instances_distribution { spot_allocation_strategy = "capacity-optimized" }
+		instances_distribution {
+			on_demand_percentage_above_base_capacity = 0	# Use only Spot Instances.
+			spot_allocation_strategy = "capacity-optimized"
+		}
 		
 		launch_template {
 			launch_template_specification {
@@ -60,7 +63,10 @@ resource aws_autoscaling_policy main {
 
 
 data aws_ec2_instance_types all {
-	
+	filter {
+		name = "supported-usage-class"
+		values = [ "spot" ]
+	}
 }
 
 
@@ -76,7 +82,6 @@ resource aws_launch_template main {
 	name = local.module_prefix
 	update_default_version = true
 	
-	instance_market_options { market_type = "spot" }
 	image_id = var.ami_id
 	vpc_security_group_ids = var.vpc_security_group_ids
 	iam_instance_profile { arn = aws_iam_instance_profile.main.arn }

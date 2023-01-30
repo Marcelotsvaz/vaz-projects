@@ -33,7 +33,10 @@ resource aws_spot_fleet_request main {
 
 
 data aws_ec2_instance_types all {
-	
+	filter {
+		name = "supported-usage-class"
+		values = [ "spot" ]
+	}
 }
 
 
