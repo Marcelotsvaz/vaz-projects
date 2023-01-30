@@ -18,9 +18,15 @@ resource aws_autoscaling_group main {
 	instance_refresh { strategy = "Rolling" }
 	capacity_rebalance = true
 	
-	launch_template {
-		id = aws_launch_template.main.id
-		version = aws_launch_template.main.latest_version
+	mixed_instances_policy {
+		instances_distribution { spot_allocation_strategy = "capacity-optimized" }
+		
+		launch_template {
+			launch_template_specification {
+				launch_template_id = aws_launch_template.main.id
+				version = aws_launch_template.main.latest_version
+			}
+		}
 	}
 	
 	depends_on = [
@@ -53,13 +59,26 @@ resource aws_autoscaling_policy main {
 }
 
 
+data aws_ec2_instance_types all {
+	
+}
+
+
+data aws_ec2_instance_types uefi_boot {
+	filter {
+		name = "supported-boot-mode"
+		values = [ "uefi" ]
+	}
+}
+
+
 resource aws_launch_template main {
 	name = local.module_prefix
 	update_default_version = true
 	
 	instance_market_options { market_type = "spot" }
 	image_id = var.ami_id
-	instance_type = var.instance_type
+	vpc_security_group_ids = var.vpc_security_group_ids
 	iam_instance_profile { arn = aws_iam_instance_profile.main.arn }
 	user_data = module.user_data.content_base64
 	ebs_optimized = true
@@ -73,9 +92,16 @@ resource aws_launch_template main {
 		}
 	}
 	
-	network_interfaces {
-		ipv6_address_count = var.ipv6_address_count
-		security_groups = var.vpc_security_group_ids
+	instance_requirements {
+		vcpu_count { min = var.min_vcpu_count }
+		memory_mib { min = var.min_memory_gib * 1024 }
+		burstable_performance = "included"
+		
+		# Only include UEFI instances.
+		excluded_instance_types = setsubtract(
+			data.aws_ec2_instance_types.all.instance_types,
+			data.aws_ec2_instance_types.uefi_boot.instance_types,
+		)
 	}
 	
 	tag_specifications {

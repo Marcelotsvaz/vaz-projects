@@ -38,14 +38,20 @@ variable ami_id {
 	type = string
 }
 
-variable instance_type {
-	description = "Instance type. E.g. `t3.micro`."
-	type = string
+variable min_vcpu_count {
+	description = "Minimum number of vCPUs."
+	type = number
+}
+
+variable min_memory_gib {
+	description = "Minimum amount of memory."
+	type = number
 }
 
 variable root_volume_size {
 	description = "Size of the root volume in GB."
 	type = number
+	default = 5
 }
 
 
@@ -55,12 +61,6 @@ variable root_volume_size {
 variable subnet_id {
 	description = "VPC subnet ID."
 	type = string
-}
-
-variable ipv6_address_count {
-	description = "IPv6 address count."
-	type = number
-	default = 0
 }
 
 variable vpc_security_group_ids {

@@ -53,12 +53,11 @@ module load_balancer {
 	
 	# Configuration.
 	ami_id = data.aws_ami.main.id
-	instance_type = "t3a.nano"
-	root_volume_size = 5
+	min_vcpu_count = 2
+	min_memory_gib = 0.5
 	
 	# Network.
 	subnet_id = module.vpc.subnets[2].id
-	ipv6_address_count = 1
 	vpc_security_group_ids = [
 		aws_default_security_group.common.id,
 		aws_security_group.public.id,
@@ -142,8 +141,8 @@ module app_server {
 	
 	# Configuration.
 	ami_id = data.aws_ami.main.id
-	instance_type = "t3a.small"
-	root_volume_size = 5
+	min_vcpu_count = 2
+	min_memory_gib = 2
 	
 	# Network.
 	subnet_ids = [ module.vpc.subnets[2].id ]
@@ -208,8 +207,8 @@ module database_server {
 	
 	# Configuration.
 	ami_id = data.aws_ami.main.id
-	instance_type = "t3a.nano"
-	root_volume_size = 5
+	min_vcpu_count = 2
+	min_memory_gib = 0.5
 	
 	# Network.
 	subnet_id = module.vpc.subnets[2].id
@@ -289,8 +288,8 @@ module monitoring_server {
 	
 	# Configuration.
 	ami_id = data.aws_ami.main.id
-	instance_type = "t3a.micro"
-	root_volume_size = 5
+	min_vcpu_count = 2
+	min_memory_gib = 1
 	
 	# Network.
 	subnet_id = module.vpc.subnets[2].id

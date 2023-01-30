@@ -14,6 +14,7 @@ resource aws_spot_fleet_request main {
 	instance_interruption_behaviour = "stop"
 	terminate_instances_on_delete = true
 	wait_for_fulfillment = true
+	allocation_strategy = "capacityOptimized"
 	iam_fleet_role = "arn:aws:iam::983585628015:role/aws-ec2-spot-fleet-tagging-role"	# TODO
 	
 	launch_template_config {
@@ -21,10 +22,25 @@ resource aws_spot_fleet_request main {
 			id = aws_launch_template.main.id
 			version = aws_launch_template.main.latest_version
 		}
+		
+		overrides { subnet_id = var.subnet_id }
 	}
 	
 	tags = {
 		Name = "${var.name} Spot Fleet Request"
+	}
+}
+
+
+data aws_ec2_instance_types all {
+	
+}
+
+
+data aws_ec2_instance_types uefi_boot {
+	filter {
+		name = "supported-boot-mode"
+		values = [ "uefi" ]
 	}
 }
 
@@ -34,7 +50,7 @@ resource aws_launch_template main {
 	update_default_version = true
 	
 	image_id = var.ami_id
-	instance_type = var.instance_type
+	vpc_security_group_ids = var.vpc_security_group_ids
 	iam_instance_profile { arn = aws_iam_instance_profile.main.arn }
 	user_data = module.user_data.content_base64
 	ebs_optimized = true
@@ -48,10 +64,16 @@ resource aws_launch_template main {
 		}
 	}
 	
-	network_interfaces {
-		subnet_id = var.subnet_id
-		ipv6_address_count = var.ipv6_address_count
-		security_groups = var.vpc_security_group_ids
+	instance_requirements {
+		vcpu_count { min = var.min_vcpu_count }
+		memory_mib { min = var.min_memory_gib * 1024 }
+		burstable_performance = "included"
+		
+		# Only include UEFI instances.
+		excluded_instance_types = setsubtract(
+			data.aws_ec2_instance_types.all.instance_types,
+			data.aws_ec2_instance_types.uefi_boot.instance_types,
+		)
 	}
 	
 	tag_specifications {
