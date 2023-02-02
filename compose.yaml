@@ -83,7 +83,7 @@ services:
             start_period: 5s
     
     
-    setBucketAccess:
+    set-bucket-access:
         image: minio/mc:RELEASE.2022-07-06T14-54-36Z
         
         depends_on:
@@ -122,3 +122,9 @@ services:
 volumes:
     media:
     postgres:
+
+
+
+configs:
+    elasticsearch:
+        file: ./application/config/jvm.options

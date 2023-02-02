@@ -18,10 +18,30 @@ services:
           - privateDomain
           - monitoringDomain
         
-        volumes:
-            - ./config/nginx.conf:/etc/nginx/templates/default.conf.template:ro
-            - ../deployment/tls:/etc/nginx/tls:ro
+        configs:
+          - source: nginx
+            target: /etc/nginx/templates/default.conf.template
+        
+        secrets:
+          - source: certificate
+            target: /etc/nginx/tls/website.crt
+          - source: certificateKey
+            target: /etc/nginx/tls/websiteKey.pem
         
         ports:
             - 80:80
             - 443:443
+
+
+
+configs:
+    nginx:
+        file: ./config/nginx.conf
+
+
+
+secrets:
+    certificate:
+        file: ../deployment/tls/website.crt
+    certificateKey:
+        file: ../deployment/tls/websiteKey.pem

@@ -53,9 +53,17 @@ services:
             xpack.security.enabled: 'true'
             ELASTIC_PASSWORD:
         
-        volumes: [ ./config/jvm.options:/usr/share/elasticsearch/config/jvm.options.d/jvm.options:ro ]
+        configs:
+          - source: elasticsearch
+            target: /usr/share/elasticsearch/config/jvm.options.d/jvm.options
         
         healthcheck:
             test: curl --silent elasticsearch:9200/_cluster/health/
             interval: 1s
             start_period: 90s
+
+
+
+configs:
+    elasticsearch:
+        file: ./config/jvm.options

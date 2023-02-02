@@ -16,9 +16,11 @@ services:
             monitoringDomain:
             GF_SECURITY_ADMIN_PASSWORD:
         
-        volumes:
-          - ./config/grafana:/etc/grafana
-          - grafana:/var/lib/grafana
+        configs:
+          - source: grafana
+            target: /etc/grafana
+        
+        volumes: [ grafana:/var/lib/grafana ]
         
         ports: [ 80:3000 ]
     
@@ -28,9 +30,11 @@ services:
         
         restart: unless-stopped
         
-        volumes:
-          - ../deployment/prometheus.yaml:/etc/prometheus/prometheus.yaml:ro
-          - prometheus:/prometheus
+        configs:
+          - source: prometheus
+            target: /etc/prometheus/prometheus.yaml
+        
+        volumes: [ prometheus:/prometheus ]
             
         ports: [ 9090:9090 ]
         
@@ -45,9 +49,11 @@ services:
         
         restart: unless-stopped
         
-        volumes:
-          - ./config/loki.yaml:/etc/loki/local-config.yaml:ro
-          - loki:/loki
+        configs:
+          - source: loki
+            target: /etc/loki/local-config.yaml
+        
+        volumes: [ loki:/loki ]
             
         ports: [ 3100:3100 ]
 
@@ -57,3 +63,13 @@ volumes:
     grafana:
     prometheus:
     loki:
+
+
+
+configs:
+    grafana:
+        file: ./config/grafana
+    prometheus:
+        file: ../deployment/prometheus.yaml
+    loki:
+        file: ./config/loki.yaml
