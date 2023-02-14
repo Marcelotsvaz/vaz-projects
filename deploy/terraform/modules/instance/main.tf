@@ -70,7 +70,7 @@ resource aws_launch_template main {
 	instance_requirements {
 		vcpu_count { min = var.min_vcpu_count }
 		memory_mib { min = var.min_memory_gib * 1024 }
-		burstable_performance = "included"
+		burstable_performance = "required"
 		
 		# Only include UEFI instances.
 		excluded_instance_types = setsubtract(
