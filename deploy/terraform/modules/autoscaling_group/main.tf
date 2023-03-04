@@ -62,18 +62,15 @@ resource aws_autoscaling_policy main {
 }
 
 
-data aws_ec2_instance_types all {
-	filter {
-		name = "supported-usage-class"
-		values = [ "spot" ]
-	}
-}
-
-
-data aws_ec2_instance_types uefi_boot {
+data aws_ec2_instance_types main {
 	filter {
 		name = "supported-boot-mode"
 		values = [ "uefi" ]
+	}
+	
+	filter {
+		name = "supported-usage-class"
+		values = [ "spot" ]
 	}
 }
 
@@ -101,12 +98,7 @@ resource aws_launch_template main {
 		vcpu_count { min = var.min_vcpu_count }
 		memory_mib { min = var.min_memory_gib * 1024 }
 		burstable_performance = "required"
-		
-		# Only include UEFI instances.
-		excluded_instance_types = setsubtract(
-			data.aws_ec2_instance_types.all.instance_types,
-			data.aws_ec2_instance_types.uefi_boot.instance_types,
-		)
+		allowed_instance_types = data.aws_ec2_instance_types.main.instance_types
 	}
 	
 	tag_specifications {
