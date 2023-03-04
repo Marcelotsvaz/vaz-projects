@@ -14,3 +14,4 @@ baseArch_packages:
   - sudo
   - openssh
   - nano
+  - python-pefile # TODO: Ukify dependency. Remove this.
