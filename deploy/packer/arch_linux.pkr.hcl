@@ -37,10 +37,14 @@ packer {
 source amazon-ebssurrogate main {
 	# Builder options.
 	#---------------------------------------------------------------------------
-	spot_price = 0.01
+	spot_price = 0.05
 	spot_instance_types = [
+		"t3.micro",
+		"t3.small",
+		"t3.medium",
 		"t3a.micro",
 		"t3a.small",
+		"t3a.medium",
 	]
 	
 	# perInstance.sh file that just add the SSH key.
@@ -54,9 +58,9 @@ source amazon-ebssurrogate main {
 	
 	subnet_filter {
 		filters = {
-			"tag:Name": "VAZ Projects Subnet C"
 			"tag:Environment": "global"
 		}
+		random = true
 	}
 	
 	security_group_filter {
