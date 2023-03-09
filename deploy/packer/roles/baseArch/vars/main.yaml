@@ -11,7 +11,7 @@ baseArch_packages:
   - linux
   - mkinitcpio
   - efibootmgr
+  - systemd-ukify
   - sudo
   - openssh
   - nano
-  - python-pefile # TODO: Ukify dependency. Remove this.
