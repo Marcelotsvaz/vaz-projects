@@ -1,7 +1,7 @@
 boto3==1.24.29
 coverage==6.4.2
 Django==4.0.6
-django-3-jet @ https://gitlab.com/marcelotsvaz/django-jet/-/archive/45eee09b/django-jet.tar.gz
+django-3-jet @ git+https://gitlab.com/marcelotsvaz/django-jet.git@45eee09b78775d67678bce50e3e65d75724e1065
 django-cleanup==6.0.0
 django-compression-middleware==0.4.1
 django-debug-toolbar==3.5.0
