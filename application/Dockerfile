@@ -15,7 +15,7 @@ FROM python:3.10-alpine3.16 as wheelBuilder
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-RUN apk add --no-cache gcc musl-dev linux-headers zlib-dev postgresql-dev libmemcached-dev
+RUN apk add --no-cache git gcc musl-dev linux-headers zlib-dev postgresql-dev libmemcached-dev
 
 COPY requirements.txt .
 RUN <<EOF
