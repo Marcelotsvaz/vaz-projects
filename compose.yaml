@@ -44,8 +44,8 @@ services:
         
         healthcheck:
             test: 'curl --silent --header "Host: $${domain}" application'
-            interval: 1s
-            start_period: 10s
+            interval: 5s
+            start_period: 15s
     
     
     memcached:
@@ -86,7 +86,7 @@ services:
         volumes: [ media:/data ]
         
         entrypoint: [ /bin/sh, -c ]
-        command: [ 'mkdir -p /data/$${bucket} && minio server /data --console-address :9001' ]
+        command: [ 'mkdir -p /data/$${bucket}/ && minio server /data --console-address :9001' ]
         
         ports:
           - 9000:9000
@@ -94,7 +94,7 @@ services:
         
         healthcheck:
             test: curl --silent minio:9000/minio/health/live
-            interval: 1s
+            interval: 5s
             start_period: 5s
     
     
