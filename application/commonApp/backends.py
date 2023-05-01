@@ -9,7 +9,6 @@
 import re
 from io import BufferedReader
 
-from django.core.exceptions import SuspiciousFileOperation
 from django.conf import settings
 
 from storages.backends.s3boto3 import S3Boto3Storage
@@ -18,29 +17,6 @@ from storages.backends.s3boto3 import S3Boto3Storage
 
 # Storage backends
 #-------------------------------------------------------------------------------
-class OverwriteStorageMixin():
-	'''
-	Mixin that overrides the get_available_name method so that it deletes the
-	existing file and returns the same name.
-	'''
-	
-	def get_available_name( self, name, max_length = None ):
-		if max_length and len( name ) > max_length:
-			raise SuspiciousFileOperation(
-				f'Storage can not find an available filename for "{name}".'
-				' Please make sure that the corresponding file field'
-				' allows sufficient "max_length".'
-			)
-		
-		# Ideally this would be done in _save but to avoid race conditions between get_available_name and
-		# _save Django's FileSystemStorage will keep calling get_available_name if the file already exists
-		# after we delete it and we'll be stuck in an infinite loop, so we delete the file here.
-		if self.exists( name ):
-			self.delete( name )
-		
-		return name
-
-
 class StaticStorageMixin():
 	'''
 	Mixin to replicate Django's StaticFilesStorage behaviour with different
