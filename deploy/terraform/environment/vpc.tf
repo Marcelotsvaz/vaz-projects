@@ -13,7 +13,7 @@ module vpc {
 	source = "../modules/vpc"
 	
 	name = local.project_name
-	domain_name = aws_route53_zone.private.name
+	domain_name = local.private_domain
 }
 
 
