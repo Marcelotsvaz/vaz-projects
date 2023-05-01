@@ -30,7 +30,7 @@ Enable EC2 EBS encryption
 # 
 # Certificate setup.
 #---------------------------------------------------------------------------------------------------
-mkdir -p /home/${user}/deployment/tls && cd ${_}
+mkdir -p /home/${user}/deployment/tls/ && cd ${_}
 config=/home/${user}/loadBalancer/config/tls/dehydrated.conf
 
 Account:

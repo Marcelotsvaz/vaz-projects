@@ -10,7 +10,7 @@
 # Abort on error.
 set -e
 
-cd /home/${user}/deployment/tls
+cd /home/${user}/deployment/tls/
 config=/home/${user}/loadBalancer/config/tls/dehydrated.conf
 
 tempFile=$(mktemp)

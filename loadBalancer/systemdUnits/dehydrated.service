@@ -20,6 +20,6 @@ Restart = on-failure
 RestartSec = 1h
 
 EnvironmentFile = /etc/environment
-WorkingDirectory = /home/load-balancer/loadBalancer
-ExecStart = /home/load-balancer/loadBalancer/config/tls/dehydrated.sh
+WorkingDirectory = /home/load-balancer/loadBalancer/
+ExecStart = /home/load-balancer/loadBalancer/scripts/dehydrated.sh
 ExecStartPost = +docker compose restart nginx

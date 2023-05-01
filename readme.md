@@ -21,7 +21,7 @@ Make sure you have ports 80, 9000 and 9001 available.
 ```sh
 # Clone the repository.
 git clone https://gitlab.com/marcelotsvaz/vaz-projects.git
-cd vaz-projects
+cd vaz-projects/
 
 # Build the application image and start all containers.
 docker compose up --detach --build
