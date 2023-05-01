@@ -44,9 +44,9 @@ MEDIA_ROOT = 'media/'
 USE_TZ = True
 USE_THOUSAND_SEPARATOR = True
 
-LANGUAGE_CODE = 'en-US'
+LANGUAGE_CODE = 'en'
 LANGUAGES = [
-	( 'en-US', _('American English') ),
+	( 'en', _('English') ),
 ]
 TIME_ZONE = 'America/Sao_Paulo'
 
