@@ -9,7 +9,7 @@
 [Unit]
 Description = Shutdown Script
 Requires = perInstance.service
-After = perInstance.service
+After = perInstance.service docker.service
 ConditionFileIsExecutable = /usr/local/lib/perShutdown.sh
 
 [Service]
