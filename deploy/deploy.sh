@@ -42,6 +42,48 @@ repositorySnapshot="https://gitlab.com/marcelotsvaz/vaz-projects/-/archive/${com
 
 
 # 
+# Prepare files for Packer.
+#-------------------------------------------------------------------------------
+function preparePacker()
+{
+	# User data.
+	tar -cz									\
+		--mtime='UTC 2000-01-01'			\
+		--owner=root						\
+		--group=root						\
+		-f ../../deployment/userData.tar.gz	\
+		perInstance.sh
+}
+
+
+
+# 
+# Build AMI with Packer.
+#-------------------------------------------------------------------------------
+function buildAmi()
+{
+	cd deploy/packer/
+	
+	preparePacker
+	packer build .
+}
+
+
+
+# 
+# Build builder AMI with Packer.
+#-------------------------------------------------------------------------------
+function buildBuilderAmi()
+{
+	cd deploy/packer/
+	
+	preparePacker
+	packer build -var 'ami_name=VAZ Projects Builder AMI' -var 'playbook=builderAmiPlaybook.yaml' -var 'disk_size=3' .
+}
+
+
+
+# 
 # Setup Terraform with specified state.
 #-------------------------------------------------------------------------------
 function terraformInit()
@@ -131,7 +173,7 @@ function destroyGlobal()
 # 
 # Run command.
 #-------------------------------------------------------------------------------
-if [[ "${command}" =~ ^(deployEnvironment|destroyEnvironment|deployGlobal|destroyGlobal)$ ]]; then
+if [[ "${command}" =~ ^(buildAmi|buildBuilderAmi|deployEnvironment|destroyEnvironment|deployGlobal|destroyGlobal)$ ]]; then
 	${command}
 else
 	echo 'Invalid command.'

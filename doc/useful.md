@@ -1,14 +1,6 @@
 # Useful Stuff
 
 
-## Build Builder AMI with Packer
-
-```sh
-cd deploy/packer/
-packer build -var "ami_name=VAZ Projects Builder AMI" -var "playbook=builderAmiPlaybook.yaml" -var "disk_size=3" .
-```
-
-
 ## SSH Port Forward
 
 ```sh

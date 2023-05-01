@@ -70,6 +70,14 @@
 			"description": "Select operation",
 			"options": [
 				{
+					"label": "Build AMI",
+					"value": "buildAmi",
+				},
+				{
+					"label": "Build Builder AMI",
+					"value": "buildBuilderAmi",
+				},
+				{
 					"label": "Deploy Staging",
 					"value": "deployEnvironment staging",
 				},
