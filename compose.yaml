@@ -23,11 +23,12 @@ services:
         
         environment:
             DJANGO_SETTINGS_MODULE: ${DJANGO_SETTINGS_MODULE-settings.local}
-            djangoSecretKey: django
             domain: ${domain-localhost}
             staticFilesDomain: ${staticFilesDomain-localhost}
             s3Endpoint: &s3Endpoint ${s3Endpoint-http://minio:9000}
             bucket: &bucket ${bucket-local}
+            # Secrets.
+            djangoSecretKey: django
             POSTGRES_PASSWORD: &postgresPassword postgres
             ELASTIC_PASSWORD: &elasticsearchPassword elastic
             AWS_ACCESS_KEY_ID: &AWS_ACCESS_KEY_ID ${AWS_ACCESS_KEY_ID-minioadmin}
@@ -60,6 +61,7 @@ services:
             file: *applicationFile
         
         environment:
+            # Secrets.
             ELASTIC_PASSWORD: *elasticsearchPassword
     
     
@@ -69,6 +71,7 @@ services:
             file: database/compose.yaml
         
         environment:
+            # Secrets.
             POSTGRES_PASSWORD: *postgresPassword
         
         network_mode: bridge
@@ -108,6 +111,7 @@ services:
         environment:
             s3Endpoint: *s3Endpoint
             bucket: *bucket
+            # Secrets.
             AWS_ACCESS_KEY_ID: *AWS_ACCESS_KEY_ID
             AWS_SECRET_ACCESS_KEY: *AWS_SECRET_ACCESS_KEY
         

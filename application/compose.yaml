@@ -20,11 +20,12 @@ services:
         
         environment:
           - DJANGO_SETTINGS_MODULE
-          - djangoSecretKey
           - domain
           - staticFilesDomain
           - s3Endpoint
           - bucket
+            # Secrets.
+          - djangoSecretKey
           - POSTGRES_PASSWORD
           - ELASTIC_PASSWORD
         
@@ -51,6 +52,7 @@ services:
         environment:
             discovery.type: single-node
             xpack.security.enabled: 'true'
+            # Secrets.
             ELASTIC_PASSWORD:
         
         configs:

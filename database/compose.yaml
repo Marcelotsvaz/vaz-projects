@@ -13,6 +13,7 @@ services:
         restart: unless-stopped
         
         environment:
+            # Secrets.
           - POSTGRES_PASSWORD
         
         volumes: [ postgres:/var/lib/postgresql/data ]
