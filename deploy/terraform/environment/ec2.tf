@@ -46,10 +46,11 @@ module load_balancer {
 	source = "../modules/instance"
 	
 	# Name.
-	name = "${local.project_name} Load Balancer"
-	identifier = "loadBalancer"
-	hostname = "load-balancer"
 	prefix = local.project_prefix
+	identifier = "loadBalancer"
+	name = "${local.project_name} Load Balancer"
+	hostname = "load-balancer"
+	user = "load-balancer"
 	
 	# Configuration.
 	ami_id = data.aws_ami.main.id
@@ -57,7 +58,7 @@ module load_balancer {
 	min_memory_gib = 0.5
 	
 	# Network.
-	subnet_id = module.vpc.subnets[2].id
+	subnet_ids = module.vpc.subnets[*].id
 	vpc_security_group_ids = [
 		aws_default_security_group.common.id,
 		aws_security_group.public.id,
@@ -134,10 +135,11 @@ module app_server {
 	source = "../modules/autoscaling_group"
 	
 	# Name.
-	name = "${local.project_name} Application Server"
-	identifier = "application"
-	hostname = "application"
 	prefix = local.project_prefix
+	identifier = "application"
+	name = "${local.project_name} Application Server"
+	hostname = "application"
+	user = "application"
 	
 	# Configuration.
 	ami_id = data.aws_ami.main.id
@@ -145,7 +147,7 @@ module app_server {
 	min_memory_gib = 2
 	
 	# Network.
-	subnet_ids = [ module.vpc.subnets[2].id ]
+	subnet_ids = module.vpc.subnets[*].id
 	vpc_security_group_ids = [
 		aws_default_security_group.common.id,
 		aws_security_group.private.id,
@@ -200,10 +202,11 @@ module database_server {
 	source = "../modules/instance"
 	
 	# Name.
-	name = "${local.project_name} Database Server"
-	identifier = "database"
-	hostname = "postgres"
 	prefix = local.project_prefix
+	identifier = "database"
+	name = "${local.project_name} Database Server"
+	hostname = "postgres"
+	user = "postgres"
 	
 	# Configuration.
 	ami_id = data.aws_ami.main.id
@@ -211,7 +214,7 @@ module database_server {
 	min_memory_gib = 0.5
 	
 	# Network.
-	subnet_id = module.vpc.subnets[2].id
+	subnet_ids = [ module.vpc.subnets[2].id ]	# TODO: Fix this with volumes.
 	vpc_security_group_ids = [
 		aws_default_security_group.common.id,
 		aws_security_group.private.id,
@@ -281,10 +284,11 @@ module monitoring_server {
 	source = "../modules/instance"
 	
 	# Name.
-	name = "${local.project_name} Monitoring Server"
-	identifier = "monitoring"
-	hostname = "monitoring"
 	prefix = local.project_prefix
+	identifier = "monitoring"
+	name = "${local.project_name} Monitoring Server"
+	hostname = "monitoring"
+	user = "monitoring"
 	
 	# Configuration.
 	ami_id = data.aws_ami.main.id
@@ -292,7 +296,7 @@ module monitoring_server {
 	min_memory_gib = 1
 	
 	# Network.
-	subnet_id = module.vpc.subnets[2].id
+	subnet_ids = [ module.vpc.subnets[2].id ]	# TODO: Fix this with volumes.
 	vpc_security_group_ids = [
 		aws_default_security_group.common.id,
 		aws_security_group.private.id,

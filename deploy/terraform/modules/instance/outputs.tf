@@ -11,6 +11,11 @@ output id {
 	value = data.aws_instance.main.id
 }
 
+output ip_address {
+	description = "Instance IPv4 address."
+	value = data.aws_instance.main.public_ip
+}
+
 output ipv6_address {
 	description = "Instance IPv6 address."
 	value = one( data.aws_instance.main.ipv6_addresses )

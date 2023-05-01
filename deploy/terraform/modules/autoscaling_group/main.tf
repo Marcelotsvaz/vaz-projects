@@ -22,6 +22,7 @@ resource aws_autoscaling_group main {
 		instances_distribution {
 			on_demand_percentage_above_base_capacity = 0	# Use only Spot Instances.
 			spot_allocation_strategy = "price-capacity-optimized"
+			spot_max_price = 0.025
 		}
 		
 		launch_template {
@@ -97,7 +98,7 @@ resource aws_launch_template main {
 	instance_requirements {
 		vcpu_count { min = var.min_vcpu_count }
 		memory_mib { min = var.min_memory_gib * 1024 }
-		burstable_performance = "required"
+		burstable_performance = "included"
 		allowed_instance_types = data.aws_ec2_instance_types.main.instance_types
 	}
 	
@@ -126,16 +127,23 @@ module user_data {
 	source = "gitlab.com/marcelotsvaz/user-data/external"
 	version = "~> 1.0.1"
 	
-	input_dir = "../../../${var.identifier}/scripts"
-	output_dir = "../../../deployment/${local.module_prefix}"
+	input_dir = "../../../${var.identifier}/scripts/"
+	output_dir = "../../../deployment/terraform/${local.module_prefix}/"
 	
-	files = [ "perInstance.sh" ]
+	files = var.files
+	templates = var.templates
 	
+	context = var.context
 	environment = merge( var.environment, {
 		instanceName = var.name
 		hostname = var.hostname
-		user = var.hostname
+		user = var.user
 	} )
+}
+
+
+resource null_resource deployment {
+	triggers = var.instance_replacement_triggers
 }
 
 

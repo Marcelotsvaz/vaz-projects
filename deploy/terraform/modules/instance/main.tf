@@ -15,7 +15,8 @@ resource aws_spot_fleet_request main {
 	terminate_instances_on_delete = true
 	wait_for_fulfillment = true
 	allocation_strategy = "priceCapacityOptimized"
-	iam_fleet_role = "arn:aws:iam::983585628015:role/aws-ec2-spot-fleet-tagging-role"	# TODO
+	spot_price = 0.025
+	iam_fleet_role = aws_iam_role.fleet.arn
 	
 	launch_template_config {
 		launch_template_specification {
@@ -23,7 +24,13 @@ resource aws_spot_fleet_request main {
 			version = aws_launch_template.main.latest_version
 		}
 		
-		overrides { subnet_id = var.subnet_id }
+		overrides {
+			subnet_id = join( ", ", var.subnet_ids )
+		}
+	}
+	
+	lifecycle {
+		replace_triggered_by = [ null_resource.deployment ]
 	}
 	
 	tags = {
@@ -67,7 +74,7 @@ resource aws_launch_template main {
 	instance_requirements {
 		vcpu_count { min = var.min_vcpu_count }
 		memory_mib { min = var.min_memory_gib * 1024 }
-		burstable_performance = "required"
+		burstable_performance = "included"
 		allowed_instance_types = data.aws_ec2_instance_types.main.instance_types
 	}
 	
@@ -96,16 +103,23 @@ module user_data {
 	source = "gitlab.com/marcelotsvaz/user-data/external"
 	version = "~> 1.0.1"
 	
-	input_dir = "../../../${var.identifier}/scripts"
-	output_dir = "../../../deployment/${local.module_prefix}"
+	input_dir = "../../../${var.identifier}/scripts/"
+	output_dir = "../../../deployment/terraform/${local.module_prefix}/"
 	
-	files = [ "perInstance.sh" ]
+	files = var.files
+	templates = var.templates
 	
+	context = var.context
 	environment = merge( var.environment, {
 		instanceName = var.name
 		hostname = var.hostname
-		user = var.hostname
+		user = var.user
 	} )
+}
+
+
+resource null_resource deployment {
+	triggers = var.instance_replacement_triggers
 }
 
 
@@ -124,6 +138,8 @@ data aws_instance main {
 # Private DNS
 #-------------------------------------------------------------------------------
 resource aws_route53_record a {
+	count = var.private_hosted_zone == null ? 0 : 1
+	
 	zone_id = var.private_hosted_zone.zone_id
 	
 	name = "${var.hostname}.${var.private_hosted_zone.name}"

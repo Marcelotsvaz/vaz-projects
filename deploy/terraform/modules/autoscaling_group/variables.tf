@@ -9,8 +9,8 @@
 # 
 # Name
 #-------------------------------------------------------------------------------
-variable name {
-	description = "Name of the instance."
+variable prefix {
+	description = "Unique prefix used in resources that need a globally unique name."
 	type = string
 }
 
@@ -19,13 +19,18 @@ variable identifier {
 	type = string
 }
 
+variable name {
+	description = "Name of the instance."
+	type = string
+}
+
 variable hostname {
 	description = "Hostname for private hosted zone A record."
 	type = string
 }
 
-variable prefix {
-	description = "Unique prefix used in resources that need a globally unique name."
+variable user {
+	description = "Main user."
 	type = string
 }
 
@@ -82,8 +87,32 @@ variable role_policy {
 	type = object( { json = string } )
 }
 
+variable files {
+	description = "Raw files that will be added to the archive."
+	type = set( string )
+	default = [ "perInstance.sh" ]
+}
+
+variable templates {
+	description = "Templates that will be rendered and added to the archive."
+	type = set( string )
+	default = []
+}
+
+variable context {
+	description = "Context variables for template substitution."
+	type = map( string )
+	default = {}
+}
+
 variable environment {
 	description = "Environment variables."
+	type = map( string )
+	default = {}
+}
+
+variable instance_replacement_triggers {
+	description = "Replacement triggers for aws_spot_fleet_request.main."
 	type = map( string )
 	default = {}
 }
