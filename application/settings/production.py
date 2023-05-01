@@ -18,7 +18,7 @@ ENVIRONMENT = 'production'
 # Static and media files
 #---------------------------------------
 STATIC_URL = f'https://{environ["staticFilesDomain"]}/'
-MEDIA_URL = f'https://{environ["staticFilesDomain"]}/'
+MEDIA_URL = STATIC_URL
 
 
 # Security

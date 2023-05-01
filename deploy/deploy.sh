@@ -64,7 +64,7 @@ function terraformInit()
 #-------------------------------------------------------------------------------
 function deployEnvironment()
 {
-	cd ${terraformRoot}/environment
+	cd ${terraformRoot}/environment/
 	terraformInit ${environment}
 	terraform plan											\
 		-var="environment=${environment}"					\
@@ -93,7 +93,7 @@ function deployEnvironment()
 #-------------------------------------------------------------------------------
 function destroyEnvironment()
 {
-	cd ${terraformRoot}/environment
+	cd ${terraformRoot}/environment/
 	terraformInit ${environment}
 	terraform destroy										\
 		-var="environment=${environment}"					\
@@ -109,7 +109,7 @@ function destroyEnvironment()
 #-------------------------------------------------------------------------------
 function deployGlobal()
 {
-	cd ${terraformRoot}/global
+	cd ${terraformRoot}/global/
 	terraformInit global
 	terraform apply ${terraformAutoApprove}
 }
@@ -121,7 +121,7 @@ function deployGlobal()
 #-------------------------------------------------------------------------------
 function destroyGlobal()
 {
-	cd ${terraformRoot}/global
+	cd ${terraformRoot}/global/
 	terraformInit global
 	terraform destroy ${terraformAutoApprove}
 }

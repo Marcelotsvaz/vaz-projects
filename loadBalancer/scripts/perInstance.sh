@@ -23,14 +23,14 @@ echo ${sshKey} > ~marcelotsvaz/.ssh/authorized_keys	# Admin user.
 hostnamectl set-hostname ${hostname}
 
 useradd -rms /usr/bin/nologin ${user}
-cd /home/${user}
+cd /home/${user}/
 sudo -Eu ${user} bash << EOF
 curl -s ${repositorySnapshot} | tar -xz --strip-components 1
 aws s3 sync s3://${bucket}/deployment/ deployment/ --no-progress
 chmod 600 deployment/secrets.env deployment/tls/*
 EOF
 
-cd loadBalancer
+cd loadBalancer/
 docker compose up --detach --quiet-pull
 
 systemctl enable /home/${user}/loadBalancer/systemdUnits/*

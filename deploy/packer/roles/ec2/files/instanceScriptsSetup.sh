@@ -24,7 +24,7 @@ resize2fs ${partition}
 
 
 # Download user data.
-mkdir /tmp/deploy && cd ${_}
+mkdir /tmp/deploy/ && cd ${_}
 curl -s http://169.254.169.254/latest/user-data | tar -xz
 mv per*.sh /usr/local/lib/
 test -f environment.env && mv environment.env /etc/environment || true

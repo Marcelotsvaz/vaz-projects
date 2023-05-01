@@ -6,7 +6,7 @@
 
 
 
-  - name: vazProjects setup
+  - name: VAZ Projects setup
     become: true
     connection: community.general.chroot
     

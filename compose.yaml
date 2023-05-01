@@ -48,6 +48,21 @@ services:
             start_period: 10s
     
     
+    memcached:
+        extends:
+            service: memcached
+            file: *applicationFile
+    
+    
+    elasticsearch:
+        extends:
+            service: elasticsearch
+            file: *applicationFile
+        
+        environment:
+            ELASTIC_PASSWORD: *elasticsearchPassword
+    
+    
     postgres:
         extends:
             service: postgres
@@ -101,21 +116,6 @@ services:
           - |-
             mc alias set minio $${s3Endpoint} $${AWS_ACCESS_KEY_ID} $${AWS_SECRET_ACCESS_KEY}
             mc policy set public minio/$${bucket}
-    
-    
-    memcached:
-        extends:
-            service: memcached
-            file: *applicationFile
-    
-    
-    elasticsearch:
-        extends:
-            service: elasticsearch
-            file: *applicationFile
-        
-        environment:
-            ELASTIC_PASSWORD: *elasticsearchPassword
 
 
 
