@@ -26,14 +26,14 @@ resource aws_cloudfront_distribution main {
 	
 	origin {
 		origin_id = "${local.origin_id}-static"
-		domain_name = aws_s3_bucket.data.bucket_regional_domain_name
+		domain_name = data.aws_s3_bucket.data.bucket_regional_domain_name
 		origin_path = "/static"
 		origin_access_control_id = aws_cloudfront_origin_access_control.main.id
 	}
 	
 	origin {
 		origin_id = "${local.origin_id}-media"
-		domain_name = aws_s3_bucket.data.bucket_regional_domain_name
+		domain_name = data.aws_s3_bucket.data.bucket_regional_domain_name
 		origin_path = "/media"
 		origin_access_control_id = aws_cloudfront_origin_access_control.main.id
 	}
@@ -79,7 +79,7 @@ resource aws_cloudfront_distribution main {
 	}
 	
 	logging_config {
-		bucket = aws_s3_bucket.logs.bucket_domain_name
+		bucket = data.aws_s3_bucket.logs.bucket_domain_name
 		prefix = "cloudfront/"
 	}
 	

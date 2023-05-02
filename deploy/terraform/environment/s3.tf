@@ -9,18 +9,13 @@
 # 
 # Data Bucket
 #-------------------------------------------------------------------------------
-resource aws_s3_bucket data {
+data aws_s3_bucket data {
 	bucket = lower( local.project_prefix )
-	force_destroy = var.environment != "production"	# force_destroy only on staging environment.
-	
-	tags = {
-		Name: "${local.project_name} Bucket"
-	}
 }
 
 
 resource aws_s3_bucket_server_side_encryption_configuration data {
-	bucket = aws_s3_bucket.data.id
+	bucket = data.aws_s3_bucket.data.id
 	
 	rule {
 		apply_server_side_encryption_by_default {
@@ -31,7 +26,7 @@ resource aws_s3_bucket_server_side_encryption_configuration data {
 
 
 resource aws_s3_bucket_versioning data {
-	bucket = aws_s3_bucket.data.id
+	bucket = data.aws_s3_bucket.data.id
 	
 	versioning_configuration {
 		status = "Enabled"
@@ -40,7 +35,7 @@ resource aws_s3_bucket_versioning data {
 
 
 resource aws_s3_bucket_public_access_block data {
-	bucket = aws_s3_bucket.data.id
+	bucket = data.aws_s3_bucket.data.id
 	
 	block_public_acls = true
 	ignore_public_acls = true
@@ -50,7 +45,7 @@ resource aws_s3_bucket_public_access_block data {
 
 
 resource aws_s3_bucket_policy data {
-	bucket = aws_s3_bucket.data.id
+	bucket = data.aws_s3_bucket.data.id
 	policy = data.aws_iam_policy_document.data_bucket.json
 }
 
@@ -60,8 +55,8 @@ data aws_iam_policy_document data_bucket {
 		sid = "cloudfrontAccess"
 		actions = [ "s3:GetObject" ]
 		resources = [
-			"${aws_s3_bucket.data.arn}/static/*",
-			"${aws_s3_bucket.data.arn}/media/*",
+			"${data.aws_s3_bucket.data.arn}/static/*",
+			"${data.aws_s3_bucket.data.arn}/media/*",
 		]
 		condition {
 			variable = "AWS:SourceArn"
@@ -77,7 +72,7 @@ data aws_iam_policy_document data_bucket {
 
 
 resource aws_s3_bucket_cors_configuration data {
-	bucket = aws_s3_bucket.data.id
+	bucket = data.aws_s3_bucket.data.id
 	
 	cors_rule {
 		allowed_methods = [ "GET" ]
@@ -87,9 +82,9 @@ resource aws_s3_bucket_cors_configuration data {
 
 
 resource aws_s3_bucket_logging data {
-	bucket = aws_s3_bucket.data.id
+	bucket = data.aws_s3_bucket.data.id
 	
-	target_bucket = aws_s3_bucket.logs.id
+	target_bucket = data.aws_s3_bucket.logs.id
 	target_prefix = "s3/"
 }
 
@@ -98,18 +93,13 @@ resource aws_s3_bucket_logging data {
 # 
 # Logs Bucket
 #-------------------------------------------------------------------------------
-resource aws_s3_bucket logs {
+data aws_s3_bucket logs {
 	bucket = lower( "${local.project_prefix}-logs" )
-	force_destroy = var.environment != "production"	# force_destroy only on staging environment.
-	
-	tags = {
-		Name: "${local.project_name} Logs Bucket"
-	}
 }
 
 
 resource aws_s3_bucket_server_side_encryption_configuration logs {
-	bucket = aws_s3_bucket.logs.id
+	bucket = data.aws_s3_bucket.logs.id
 	
 	rule {
 		apply_server_side_encryption_by_default {
@@ -120,7 +110,7 @@ resource aws_s3_bucket_server_side_encryption_configuration logs {
 
 
 resource aws_s3_bucket_public_access_block logs {
-	bucket = aws_s3_bucket.logs.id
+	bucket = data.aws_s3_bucket.logs.id
 	
 	block_public_acls = true
 	ignore_public_acls = true
@@ -130,7 +120,7 @@ resource aws_s3_bucket_public_access_block logs {
 
 
 resource aws_s3_bucket_acl logs {
-	bucket = aws_s3_bucket.logs.id
+	bucket = data.aws_s3_bucket.logs.id
 	
 	acl = "log-delivery-write"
 }

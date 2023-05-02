@@ -24,7 +24,7 @@ data aws_iam_policy_document common {
 	statement {
 		sid = "perInstanceListBucket"
 		actions = [ "s3:ListBucket" ]
-		resources = [ aws_s3_bucket.data.arn ]
+		resources = [ data.aws_s3_bucket.data.arn ]
 	}
 	
 	statement {
@@ -33,7 +33,7 @@ data aws_iam_policy_document common {
 			"s3:GetObject",
 			"s3:GetObjectAcl",
 		]
-		resources = [ "${aws_s3_bucket.data.arn}/deployment/*" ]
+		resources = [ "${data.aws_s3_bucket.data.arn}/deployment/*" ]
 	}
 }
 
@@ -70,7 +70,7 @@ module load_balancer {
 	environment = {
 		sshKey = local.ssh_key
 		repositorySnapshot = var.repository_snapshot
-		bucket = aws_s3_bucket.data.id
+		bucket = data.aws_s3_bucket.data.id
 		AWS_DEFAULT_REGION = local.region
 		domain = local.domain
 		staticFilesDomain = local.static_files_domain
@@ -116,7 +116,7 @@ data aws_iam_policy_document load_balancer {
 			"s3:PutObjectAcl",
 			"s3:DeleteObject",
 		]
-		resources = [ "${aws_s3_bucket.data.arn}/deployment/tls/*" ]
+		resources = [ "${data.aws_s3_bucket.data.arn}/deployment/tls/*" ]
 	}
 	
 	statement {
@@ -165,11 +165,11 @@ module app_server {
 		domain = local.domain
 		staticFilesDomain = local.static_files_domain
 		s3Endpoint = replace(
-			aws_s3_bucket.data.bucket_regional_domain_name,
-			"${aws_s3_bucket.data.bucket}.",
+			data.aws_s3_bucket.data.bucket_regional_domain_name,
+			"${data.aws_s3_bucket.data.bucket}.",
 			"https://",
 		)
-		bucket = aws_s3_bucket.data.id
+		bucket = data.aws_s3_bucket.data.id
 	}
 	
 	# Tags.
@@ -189,7 +189,7 @@ data aws_iam_policy_document app_server {
 			"s3:PutObjectAcl",
 			"s3:DeleteObject",
 		]
-		resources = [ "${aws_s3_bucket.data.arn}/media/*" ]
+		resources = [ "${data.aws_s3_bucket.data.arn}/media/*" ]
 	}
 }
 
@@ -227,7 +227,7 @@ module database_server {
 		sshKey = local.ssh_key
 		dataVolumeId = aws_ebs_volume.database.id
 		repositorySnapshot = var.repository_snapshot
-		bucket = aws_s3_bucket.data.id
+		bucket = data.aws_s3_bucket.data.id
 		AWS_DEFAULT_REGION = local.region
 	}
 	
@@ -309,7 +309,7 @@ module monitoring_server {
 		sshKey = local.ssh_key
 		dataVolumeId = aws_ebs_volume.monitoring.id
 		repositorySnapshot = var.repository_snapshot
-		bucket = aws_s3_bucket.data.id
+		bucket = data.aws_s3_bucket.data.id
 		AWS_DEFAULT_REGION = local.region
 		monitoringDomain = local.monitoring_domain
 		environment = var.environment

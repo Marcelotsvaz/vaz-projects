@@ -7,7 +7,7 @@
 
 
 # 
-# Account.
+# Account
 #---------------------------------------------------------------------------------------------------
 Setup account
 Account Alias: marcelotsvaz
@@ -28,7 +28,7 @@ Enable EC2 EBS encryption
 
 
 # 
-# Certificate setup.
+# Certificates
 #---------------------------------------------------------------------------------------------------
 mkdir -p /home/${user}/deployment/tls/ && cd ${_}
 config=/home/${user}/loadBalancer/config/tls/dehydrated.conf
@@ -46,18 +46,21 @@ CloudFront:
 	openssl req -new -subj / -addext "subjectAltName = DNS:${staticFilesDomain}" -key cloudfrontKey.pem -sha512 -out cloudfrontCsr.pem
 	dehydrated -f ${config} -p accountKey.pem -s cloudfrontCsr.pem --accept-terms > cloudfront.crt
 
-# Upload to S3.
-aws s3 cp accountKey.pem s3://${bucket}/deployment/tls/
-aws s3 cp websiteKey.pem s3://${bucket}/deployment/tls/
-aws s3 cp websiteCsr.pem s3://${bucket}/deployment/tls/
-aws s3 cp website.crt s3://${bucket}/deployment/tls/
-aws s3 cp cloudfrontKey.pem s3://${bucket}/deployment/tls/
-aws s3 cp cloudfrontCsr.pem s3://${bucket}/deployment/tls/
-aws s3 cp cloudfront.crt s3://${bucket}/deployment/tls/
-
 
 
 # 
-# Upload files.
+# S3 Buckets
 #---------------------------------------------------------------------------------------------------
-aws s3 cp deployment/secrets.env s3://${bucket}/deployment/
+cd deployment/
+
+Create bucket
+	Name: VAZ Projects Bucket
+	Project: VAZ Projects
+	Environment: Production
+aws s3 cp secrets.env s3://${bucket}/deployment/
+aws s3 sync tls/ s3://${bucket}/deployment/tls/
+
+Create bucket
+	Name: VAZ Projects Logs Bucket
+	Project: VAZ Projects
+	Environment: Production
