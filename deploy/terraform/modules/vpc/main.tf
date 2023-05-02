@@ -15,7 +15,7 @@ resource aws_vpc main {
 	enable_dns_hostnames = true
 	
 	tags = {
-		Name: "${var.name} VPC"
+		Name = "${var.name} VPC"
 	}
 }
 
@@ -25,7 +25,7 @@ resource aws_vpc_dhcp_options main {
 	domain_name_servers = [ "AmazonProvidedDNS" ]
 	
 	tags = {
-		Name: "${var.name} DHCP Options"
+		Name = "${var.name} DHCP Options"
 	}
 }
 
@@ -40,7 +40,7 @@ resource aws_internet_gateway main {
 	vpc_id = aws_vpc.main.id
 	
 	tags = {
-		Name: "${var.name} Internet Gateway"
+		Name = "${var.name} Internet Gateway"
 	}
 }
 
@@ -59,7 +59,7 @@ resource aws_default_route_table main {
 	}
 	
 	tags = {
-		Name: "${var.name} Route Table"
+		Name = "${var.name} Route Table"
 	}
 }
 
@@ -95,7 +95,7 @@ resource aws_subnet main {
 	depends_on = [ aws_vpc_dhcp_options_association.main ]
 	
 	tags = {
-		Name: "${var.name} Subnet ${local.availability_zone_letters[count.index]}"
+		Name = "${var.name} Subnet ${local.availability_zone_letters[count.index]}"
 	}
 }
 
@@ -145,6 +145,6 @@ resource aws_default_network_acl main {
 	}
 	
 	tags = {
-		Name: "${var.name} ACL"
+		Name = "${var.name} ACL"
 	}
 }

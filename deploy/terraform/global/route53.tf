@@ -22,7 +22,7 @@ resource aws_route53_zone production {
 	}
 	
 	tags = {
-		Name: "${local.project_name} Hosted Zone"
+		Name = "${local.project_name} Hosted Zone"
 	}
 }
 
@@ -79,7 +79,7 @@ resource aws_route53_zone staging {
 	name = "staging.${aws_route53_zone.production.name}"
 	
 	tags = {
-		Name: "${local.project_name} Hosted Zone"
+		Name = "${local.project_name} Hosted Zone"
 	}
 }
 
@@ -116,8 +116,8 @@ resource aws_route53_zone portfolio {
 	name = "portfolio.${aws_route53_zone.production.name}"
 	
 	tags = {
-		Name: "Portfolio Hosted Zone"
-		Project: "Portfolio"
+		Name = "Portfolio Hosted Zone"
+		Project = "Portfolio"
 	}
 }
 

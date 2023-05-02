@@ -12,7 +12,7 @@
 # 	name = "${local.project_code}-${each.value}-deployUser"
 	
 # 	tags = {
-# 		Name: "${local.project_name} Deploy User"
+# 		Name = "${local.project_name} Deploy User"
 # 	}
 # }
 

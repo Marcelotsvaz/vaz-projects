@@ -58,7 +58,7 @@ resource aws_default_security_group common {
 	}
 	
 	tags = {
-		Name: "${local.project_name} Common Security Group"
+		Name = "${local.project_name} Common Security Group"
 	}
 }
 
@@ -94,7 +94,7 @@ resource aws_security_group public {
 	}
 	
 	tags = {
-		Name: "${local.project_name} Public Security Group"
+		Name = "${local.project_name} Public Security Group"
 	}
 }
 
@@ -143,6 +143,6 @@ resource aws_security_group private {
 	}
 	
 	tags = {
-		Name: "${local.project_name} Private Security Group"
+		Name = "${local.project_name} Private Security Group"
 	}
 }

@@ -84,7 +84,7 @@ resource aws_cloudfront_distribution main {
 	}
 	
 	tags = {
-		Name: "${local.project_name} Distribuition"
+		Name = "${local.project_name} Distribuition"
 	}
 }
 

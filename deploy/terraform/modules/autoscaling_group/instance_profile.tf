@@ -11,7 +11,7 @@ resource aws_iam_instance_profile main {
 	role = aws_iam_role.main.name
 	
 	tags = {
-		Name: "${var.name} Instance Profile"
+		Name = "${var.name} Instance Profile"
 	}
 }
 
@@ -27,7 +27,7 @@ resource aws_iam_role main {
 	}
 	
 	tags = {
-		Name: "${var.name} Role"
+		Name = "${var.name} Role"
 	}
 }
 

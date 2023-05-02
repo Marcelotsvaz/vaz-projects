@@ -42,6 +42,6 @@ resource aws_default_security_group common {
 	}
 	
 	tags = {
-		Name: "${local.project_name} Common Security Group"
+		Name = "${local.project_name} Common Security Group"
 	}
 }

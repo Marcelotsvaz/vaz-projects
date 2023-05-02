@@ -15,7 +15,7 @@ resource aws_route53_zone private {
 	vpc { vpc_id = module.vpc.id }
 	
 	tags = {
-		Name: "${local.project_name} Private Hosted Zone"
+		Name = "${local.project_name} Private Hosted Zone"
 	}
 }
 

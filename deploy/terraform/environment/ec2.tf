@@ -243,7 +243,7 @@ resource aws_ebs_volume database {
 	encrypted = true
 	
 	tags = {
-		Name: "${local.project_name} Database Data Volume"
+		Name = "${local.project_name} Database Data Volume"
 	}
 }
 
@@ -327,7 +327,7 @@ resource aws_ebs_volume monitoring {
 	encrypted = true
 	
 	tags = {
-		Name: "${local.project_name} Monitoring Data Volume"
+		Name = "${local.project_name} Monitoring Data Volume"
 	}
 }
 
