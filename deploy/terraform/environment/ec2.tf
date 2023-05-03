@@ -79,9 +79,6 @@ module load_balancer {
 		hostedZoneId = data.aws_route53_zone.public.zone_id
 		cloudfrontCertificateArn = data.aws_acm_certificate.cloudfront.arn
 	}
-	
-	# Tags.
-	default_tags = local.default_tags
 }
 
 
@@ -171,9 +168,6 @@ module app_server {
 		)
 		bucket = data.aws_s3_bucket.data.id
 	}
-	
-	# Tags.
-	default_tags = local.default_tags
 }
 
 
@@ -230,9 +224,6 @@ module database_server {
 		bucket = data.aws_s3_bucket.data.id
 		AWS_DEFAULT_REGION = local.region
 	}
-	
-	# Tags.
-	default_tags = local.default_tags
 }
 
 
@@ -314,9 +305,6 @@ module monitoring_server {
 		monitoringDomain = local.monitoring_domain
 		environment = var.environment
 	}
-	
-	# Tags.
-	default_tags = local.default_tags
 }
 
 

@@ -80,17 +80,17 @@ resource aws_launch_template main {
 	
 	tag_specifications {
 		resource_type = "spot-instances-request"
-		tags = merge( { Name = "${var.name} Spot Request" }, var.default_tags )
+		tags = merge( { Name = "${var.name} Spot Request" }, data.aws_default_tags.main.tags )
 	}
 	
 	tag_specifications {
 		resource_type = "instance"
-		tags = merge( { Name = var.name }, var.default_tags )
+		tags = merge( { Name = var.name }, data.aws_default_tags.main.tags )
 	}
 	
 	tag_specifications {
 		resource_type = "volume"
-		tags = merge( { Name = "${var.name} Root Volume" }, var.default_tags )
+		tags = merge( { Name = "${var.name} Root Volume" }, data.aws_default_tags.main.tags )
 	}
 	
 	tags = {
@@ -131,6 +131,9 @@ data aws_instance main {
 		values = [ "running" ]
 	}
 }
+
+
+data aws_default_tags main {}
 
 
 
