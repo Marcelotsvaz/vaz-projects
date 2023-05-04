@@ -9,8 +9,23 @@
 # 
 # Data Bucket
 #-------------------------------------------------------------------------------
+resource aws_s3_bucket data {
+	# Create a bucket for staging environments but use a persistent one for production.
+	count = var.environment == "staging" ? 1 : 0
+	
+	bucket = lower( local.project_prefix )
+	force_destroy = var.environment == "staging"	# Just to be safe.
+	
+	tags = {
+		Name: "${local.project_name} Bucket"
+	}
+}
+
+
 data aws_s3_bucket data {
 	bucket = lower( local.project_prefix )
+	
+	depends_on = [ aws_s3_bucket.data ]
 }
 
 
@@ -93,8 +108,23 @@ resource aws_s3_bucket_logging data {
 # 
 # Logs Bucket
 #-------------------------------------------------------------------------------
+resource aws_s3_bucket logs {
+	# Create bucket for staging environments but use a persistent one for production.
+	count = var.environment == "staging" ? 1 : 0
+	
+	bucket = lower( "${local.project_prefix}-logs" )
+	force_destroy = var.environment == "staging"	# Just to be safe.
+	
+	tags = {
+		Name: "${local.project_name} Logs Bucket"
+	}
+}
+
+
 data aws_s3_bucket logs {
 	bucket = lower( "${local.project_prefix}-logs" )
+	
+	depends_on = [ aws_s3_bucket.logs ]
 }
 
 
