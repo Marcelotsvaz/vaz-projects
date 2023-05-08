@@ -16,6 +16,19 @@ resource aws_s3_bucket data {
 	bucket = lower( local.project_prefix )
 	force_destroy = var.environment == "staging"	# Just to be safe.
 	
+	provisioner local-exec {
+		environment = {
+			environment = var.environment
+			domain = local.domain
+			monitoringDomain = local.monitoring_domain
+			staticFilesDomain = local.static_files_domain
+			hostedZoneId = data.aws_route53_zone.public.zone_id
+			bucket = self.bucket
+		}
+		
+		command = "./bootstrap.sh"
+	}
+	
 	tags = {
 		Name: "${local.project_name} Bucket"
 	}
@@ -149,8 +162,8 @@ resource aws_s3_bucket_public_access_block logs {
 }
 
 
-resource aws_s3_bucket_acl logs {
-	bucket = data.aws_s3_bucket.logs.id
+# resource aws_s3_bucket_acl logs {
+# 	bucket = data.aws_s3_bucket.logs.id
 	
-	acl = "log-delivery-write"
-}
+# 	acl = "log-delivery-write"
+# }

@@ -77,7 +77,7 @@ module load_balancer {
 		monitoringDomain = local.monitoring_domain
 		privateDomain = local.private_domain
 		hostedZoneId = data.aws_route53_zone.public.zone_id
-		cloudfrontCertificateArn = data.aws_acm_certificate.cloudfront.arn
+		cloudfrontCertificateArn = aws_acm_certificate.cloudfront.arn
 	}
 }
 
@@ -119,7 +119,7 @@ data aws_iam_policy_document load_balancer {
 	statement {
 		sid = "dehydratedUpdateCertificate"
 		actions = [ "acm:ImportCertificate" ]
-		resources = [ data.aws_acm_certificate.cloudfront.arn ]
+		resources = [ aws_acm_certificate.cloudfront.arn ]
 	}
 }
 
