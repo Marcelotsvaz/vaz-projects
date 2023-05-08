@@ -73,9 +73,6 @@ services:
         environment:
             # Secrets.
             POSTGRES_PASSWORD: *postgresPassword
-        
-        network_mode: bridge
-        networks: [ default ]
     
     
     minio:
