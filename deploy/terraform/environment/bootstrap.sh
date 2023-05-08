@@ -14,7 +14,7 @@ set -e	# Abort on error.
 # 
 # Certificates
 #---------------------------------------------------------------------------------------------------
-mkdir -p ../../../deployment/tls-${environment} && cd ${_}
+mkdir -p ../../../deployment/tls-${environment}/ && cd ${_}
 config=../../loadBalancer/config/tls/dehydrated.conf
 
 
@@ -38,3 +38,12 @@ dehydrated --config ${config} --signcsr cloudfrontCsr.pem > cloudfront.crt
 #---------------------------------------------------------------------------------------------------
 aws s3 sync . s3://${bucket}/deployment/tls/ --no-progress --content-type text/plain
 aws s3 cp ../secrets.env s3://${bucket}/deployment/
+
+
+
+# 
+# Clean-up
+#---------------------------------------------------------------------------------------------------
+cd ..
+rm -r tls-${environment}/
+rm secrets.env
