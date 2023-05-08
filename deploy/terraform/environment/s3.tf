@@ -162,8 +162,19 @@ resource aws_s3_bucket_public_access_block logs {
 }
 
 
-# resource aws_s3_bucket_acl logs {
-# 	bucket = data.aws_s3_bucket.logs.id
+resource aws_s3_bucket_ownership_controls logs {
+	bucket = data.aws_s3_bucket.logs.id
 	
-# 	acl = "log-delivery-write"
-# }
+	rule {
+		object_ownership = "BucketOwnerPreferred"
+	}
+}
+
+
+resource aws_s3_bucket_acl logs {
+	bucket = data.aws_s3_bucket.logs.id
+	
+	acl = "log-delivery-write"
+	
+	depends_on = [ aws_s3_bucket_ownership_controls.logs ]
+}

@@ -78,10 +78,10 @@ resource aws_cloudfront_distribution main {
 		geo_restriction { restriction_type = "none" }
 	}
 	
-	# logging_config {
-	# 	bucket = data.aws_s3_bucket.logs.bucket_domain_name
-	# 	prefix = "cloudfront/"
-	# }
+	logging_config {
+		bucket = data.aws_s3_bucket.logs.bucket_domain_name
+		prefix = "cloudfront/"
+	}
 	
 	tags = {
 		Name = "${local.project_name} Distribuition"
