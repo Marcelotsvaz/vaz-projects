@@ -17,6 +17,7 @@ resource aws_spot_fleet_request main {
 	allocation_strategy = "priceCapacityOptimized"
 	spot_price = 0.025
 	iam_fleet_role = aws_iam_role.fleet.arn
+	instance_pools_to_use_count = 0	# Fix drift.
 	
 	launch_template_config {
 		launch_template_specification {
