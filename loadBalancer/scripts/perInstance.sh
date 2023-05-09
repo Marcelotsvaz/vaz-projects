@@ -27,7 +27,7 @@ cd /home/${user}/
 sudo -u ${user} bash << EOF
 curl -s ${repositorySnapshot} | tar -xz --strip-components 1
 aws s3 sync s3://${bucket}/deployment/ deployment/ --no-progress
-chmod 600 deployment/secrets.env deployment/tls/*
+chmod -R go= deployment/secrets.env deployment/tls/
 EOF
 
 cd loadBalancer/

@@ -37,7 +37,7 @@ dehydrated --config ${config} --signcsr cloudfrontCsr.pem > cloudfront.crt
 # Upload to S3
 #---------------------------------------------------------------------------------------------------
 aws s3 sync . s3://${bucket}/deployment/tls/ --no-progress --content-type text/plain
-aws s3 cp ../secrets.env s3://${bucket}/deployment/
+aws s3 cp ../secrets.env s3://${bucket}/deployment/ --no-progress --content-type text/plain
 
 
 

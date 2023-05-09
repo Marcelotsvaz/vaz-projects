@@ -18,7 +18,7 @@ tempFile=$(mktemp)
 (dehydrated --config ${config} --signcsr websiteCsr.pem > ${tempFile} && cp ${tempFile} website.crt)
 (dehydrated --config ${config} --signcsr cloudfrontCsr.pem > ${tempFile} && cp ${tempFile} cloudfront.crt)
 
-aws s3 sync . s3://${bucket}/deployment/tls/ --no-progress
+aws s3 sync . s3://${bucket}/deployment/tls/ --no-progress --content-type text/plain
 
 # Update the CloudFront certificate in ACM, somehow.
 cat cloudfront.crt | python -c 'import sys, re, subprocess; match = re.search( r"(-[\S\s]*?)\s\s(-[\S\s]*)", sys.stdin.read() ); subprocess.run( [ "aws" ] + match.expand( r"acm  --region  us-east-1  import-certificate  --certificate-arn  '${cloudfrontCertificateArn}'  --certificate  \1  --certificate-chain  \2  --private-key  file://cloudfrontKey.pem"  ).split("  ") )'
