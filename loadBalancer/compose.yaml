@@ -7,36 +7,41 @@
 
 
 services:
-    nginx:
-        image: nginx:1.23-alpine
+    traefik:
+        image: traefik:2.9
         
         restart: unless-stopped
         
         environment:
           - domain
-          - staticFilesDomain
-          - privateDomain
-          - monitoringDomain
+          - staticFilesUrl
+        
+        volumes: [ ../deployment/logs/traefikAccess.log:/var/log/traefikAccess.log ]
         
         configs:
-          - source: nginx
-            target: /etc/nginx/templates/default.conf.template
+          - source: traefikStatic
+            target: /etc/traefik/traefik.yaml
+          - source: traefikDynamic
+            target: /etc/traefik/dynamic.yaml
         
         secrets:
           - source: certificate
-            target: /etc/nginx/tls/website.crt
+            target: /etc/traefik/website.crt
           - source: certificateKey
-            target: /etc/nginx/tls/websiteKey.pem
+            target: /etc/traefik/websiteKey.pem
         
         ports:
-            - 80:80
-            - 443:443
+          - 80:80
+          - 443:443
+          - 8080:8080
 
 
 
 configs:
-    nginx:
-        file: ./config/nginx.conf
+    traefikStatic:
+        file: ./config/traefik/static.yaml
+    traefikDynamic:
+        file: ./config/traefik/dynamic.yaml
 
 
 

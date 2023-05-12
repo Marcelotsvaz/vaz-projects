@@ -1,0 +1,64 @@
+# 
+# VAZ Projects
+# 
+# 
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+http:
+    routers:
+        toApplication:
+            entrypoints: [ https ]
+            rule: Host( `{{ env "domain" }}` )
+            middlewares: [ securityHeaders ]
+            service: application
+        
+        toDashboard:
+            entrypoints: [ dashboard ]
+            rule: Host( `{{ env "domain" }}` )
+            service: api@internal
+    
+    
+    middlewares:
+        securityHeaders:
+            headers:
+                stsSeconds: 63072000
+                stsIncludeSubdomains: true
+                stsPreload: true
+                referrerPolicy: strict-origin-when-cross-origin
+                contentTypeNosniff: true
+                frameDeny: true
+                browserXssFilter: true
+                contentSecurityPolicy: >-
+                    default-src 'none';
+                    img-src 'self' {{ env "staticFilesUrl" }};
+                    style-src {{ env "staticFilesUrl" }} 'unsafe-inline';
+                    font-src {{ env "staticFilesUrl" }};
+                    script-src 'self' {{ env "staticFilesUrl" }};
+                    connect-src 'self';
+                    frame-src https://www.google.com
+    
+    
+    services:
+        application:
+            loadBalancer:
+                servers:
+                  - url: http://application:8000
+
+
+
+tls:
+    certificates:
+      - certFile: /etc/traefik/website.crt
+        keyFile: /etc/traefik/websiteKey.pem
+    
+    options:
+        default:
+            sniStrict: true
+            preferServerCipherSuites: true
+            minVersion: VersionTLS12
+            cipherSuites:
+              - TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256
+              - TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+            curvePreferences: [ X25519 ]

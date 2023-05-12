@@ -68,4 +68,3 @@ COPY --link --chown=${dockerUid}:${dockerUid} --from=lessBuilder deployment/stat
 
 ENV PATH="${PATH}:/home/${dockerUser}"
 ENTRYPOINT [ "/bin/sh", "-c" ]
-EXPOSE 3031

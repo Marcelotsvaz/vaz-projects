@@ -23,8 +23,8 @@ services:
         
         environment:
             DJANGO_SETTINGS_MODULE: ${DJANGO_SETTINGS_MODULE-settings.local}
-            domain: ${domain-localhost}
-            staticFilesDomain: ${staticFilesDomain-localhost}
+            domain: &domain ${domain-localhost}
+            staticFilesDomain: &staticFilesUrl ${staticFilesDomain-localhost}
             s3Endpoint: &s3Endpoint ${s3Endpoint-http://minio:9000}
             bucket: &bucket ${bucket-local}
             # Secrets.
@@ -39,14 +39,7 @@ services:
             manage.py migrate --no-input
             manage.py collectstatic --ignore '*/src/*' --no-input
             manage.py search_index --populate
-            manage.py runserver 0.0.0.0:80 --nostatic
-        
-        ports: [ 80:80 ]
-        
-        healthcheck:
-            test: 'curl --silent --header "Host: $${domain}" application'
-            interval: 5s
-            start_period: 15s
+            manage.py runserver 0.0.0.0:8000 --nostatic
     
     
     memcached:
@@ -73,6 +66,16 @@ services:
         environment:
             # Secrets.
             POSTGRES_PASSWORD: *postgresPassword
+    
+    
+    traefik:
+        extends:
+            service: traefik
+            file: loadBalancer/compose.yaml
+        
+        environment:
+            domain: *domain
+            staticFilesUrl: *staticFilesUrl
     
     
     minio:
@@ -129,3 +132,15 @@ volumes:
 configs:
     elasticsearch:
         file: ./application/config/jvm.options
+    traefikStatic:
+        file: ./loadBalancer/config/traefik/static.yaml
+    traefikDynamic:
+        file: ./loadBalancer/config/traefik/dynamic.yaml
+
+
+
+secrets:
+    certificate:
+        file: ./deployment/tls/website.crt
+    certificateKey:
+        file: ./deployment/tls/websiteKey.pem

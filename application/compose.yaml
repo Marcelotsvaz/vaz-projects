@@ -35,7 +35,12 @@ services:
             manage.py search_index --populate
             uwsgi --ini config/uwsgi.ini
         
-        ports: [ 3031:3031 ]
+        ports: [ 8000:8000 ]
+        
+        healthcheck:
+            test: 'curl --silent --header "Host: $${domain}" http://application:8000'
+            interval: 5s
+            start_period: 15s
     
     
     memcached:
