@@ -7,9 +7,9 @@
 
 
 .dockerImage:
-    services: [ docker:20.10-dind ]
+    services: [ docker:23.0-dind ]
     
-    image: docker:20.10
+    image: docker:23.0
     
     interruptible: true
     

@@ -7,13 +7,17 @@
 
 
 .unitTests:
-    services: [ docker:20.10-dind ]
+    services: [ docker:23.0-dind ]
     
-    image: docker:20.10
+    image: docker:23.0
     
     interruptible: true
     
     script:
+      - mkdir -p deployment/tls/ && cd deployment/tls/
+      - openssl genpkey -algorithm EC -pkeyopt ec_paramgen_curve:prime256v1 -out websiteKey.pem
+      - openssl req -x509 -subj / -addext "subjectAltName = DNS:localhost" -key websiteKey.pem -sha512 -out website.crt
+      - cd ../../
       - echo ${CI_REGISTRY_PASSWORD} | docker login --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
       - docker compose up --no-build --detach --quiet-pull
       - docker compose exec --no-TTY application coverage run manage.py test

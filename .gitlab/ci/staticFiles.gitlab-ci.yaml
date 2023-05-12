@@ -10,9 +10,9 @@
     environment:
         action: prepare
     
-    services: [ docker:20.10-dind ]
+    services: [ docker:23.0-dind ]
     
-    image: docker:20.10
+    image: docker:23.0
     
     script:
       - echo ${CI_REGISTRY_PASSWORD} | docker login --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
