@@ -30,7 +30,7 @@ resource aws_s3_bucket data {
 	}
 	
 	tags = {
-		Name: "${local.project_name} Bucket"
+		Name = "${local.project_name} Bucket"
 	}
 }
 
@@ -129,7 +129,7 @@ resource aws_s3_bucket logs {
 	force_destroy = var.environment == "staging"	# Just to be safe.
 	
 	tags = {
-		Name: "${local.project_name} Logs Bucket"
+		Name = "${local.project_name} Logs Bucket"
 	}
 }
 

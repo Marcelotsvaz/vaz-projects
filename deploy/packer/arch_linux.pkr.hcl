@@ -96,15 +96,15 @@ source amazon-ebssurrogate main {
 	}
 	
 	run_tags = {
-		Name: "${var.ami_name} Builder"
+		Name = "${var.ami_name} Builder"
 	}
 	
 	run_volume_tags = {
-		Name: "${var.ami_name} Builder Volume"
+		Name = "${var.ami_name} Builder Volume"
 	}
 	
 	spot_tags = {
-		Name: "${var.ami_name} Builder Spot Request"
+		Name = "${var.ami_name} Builder Spot Request"
 	}
 	
 	
@@ -126,11 +126,11 @@ source amazon-ebssurrogate main {
 	}
 	
 	tags = {
-		Name: var.ami_name
+		Name = var.ami_name
 	}
 	
 	snapshot_tags = {
-		Name: "${var.ami_name} Snapshot"
+		Name = "${var.ami_name} Snapshot"
 	}
 }
 

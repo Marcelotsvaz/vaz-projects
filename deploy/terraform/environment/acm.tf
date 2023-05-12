@@ -46,6 +46,6 @@ resource aws_acm_certificate cloudfront {
 	}
 	
 	tags = {
-		Name: "${local.project_name} CloudFront Certificate"
+		Name = "${local.project_name} CloudFront Certificate"
 	}
 }
