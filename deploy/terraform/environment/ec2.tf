@@ -73,9 +73,8 @@ module load_balancer {
 		bucket = data.aws_s3_bucket.data.id
 		AWS_DEFAULT_REGION = local.region
 		domain = local.domain
-		staticFilesDomain = local.static_files_domain
+		staticFilesUrl = "https://${local.static_files_domain}/"
 		monitoringDomain = local.monitoring_domain
-		privateDomain = local.private_domain
 		hostedZoneId = data.aws_route53_zone.public.zone_id
 		cloudfrontCertificateArn = aws_acm_certificate.cloudfront.arn
 	}
@@ -160,7 +159,7 @@ module app_server {
 		applicationImage = var.application_image
 		DJANGO_SETTINGS_MODULE = "settings.${var.environment}"
 		domain = local.domain
-		staticFilesDomain = local.static_files_domain
+		staticFilesUrl = "https://${local.static_files_domain}/"
 		s3Endpoint = replace(
 			data.aws_s3_bucket.data.bucket_regional_domain_name,
 			"${data.aws_s3_bucket.data.bucket}.",

@@ -16,7 +16,7 @@ services:
           - domain
           - staticFilesUrl
         
-        volumes: [ ../deployment/logs/traefikAccess.log:/var/log/traefikAccess.log ]
+        # volumes: [ ../deployment/logs/traefikAccess.log:/var/log/traefikAccess.log ]
         
         configs:
           - source: traefikStatic

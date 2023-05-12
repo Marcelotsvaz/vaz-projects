@@ -67,7 +67,7 @@ resource aws_security_group public {
 	vpc_id = module.vpc.id
 	
 	ingress {
-		description = "NGINX - HTTPS"
+		description = "Traefik - HTTPS"
 		protocol = "tcp"
 		from_port = 443
 		to_port = 443
@@ -76,7 +76,7 @@ resource aws_security_group public {
 	}
 	
 	ingress {
-		description = "NGINX - HTTP"
+		description = "Traefik - HTTP"
 		protocol = "tcp"
 		from_port = 80
 		to_port = 80
@@ -105,8 +105,8 @@ resource aws_security_group private {
 	ingress {
 		description = "uWSGI"
 		protocol = "tcp"
-		from_port = 3031
-		to_port = 3031
+		from_port = 8000
+		to_port = 8000
 		security_groups = [ aws_security_group.public.id ]
 	}
 	

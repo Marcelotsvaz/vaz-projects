@@ -22,4 +22,4 @@ RestartSec = 1h
 EnvironmentFile = /etc/environment
 WorkingDirectory = /home/load-balancer/loadBalancer/
 ExecStart = /home/load-balancer/loadBalancer/scripts/dehydrated.sh
-ExecStartPost = +docker compose restart nginx
+ExecStartPost = +docker compose restart traefik
