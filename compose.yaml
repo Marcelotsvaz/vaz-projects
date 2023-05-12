@@ -24,7 +24,7 @@ services:
         environment:
             DJANGO_SETTINGS_MODULE: ${DJANGO_SETTINGS_MODULE-settings.local}
             domain: &domain ${domain-localhost}
-            staticFilesDomain: &staticFilesUrl ${staticFilesDomain-localhost}
+            staticFilesUrl: &staticFilesUrl ${staticFilesUrl-https://localhost:9000}
             s3Endpoint: &s3Endpoint ${s3Endpoint-http://minio:9000}
             bucket: &bucket ${bucket-local}
             # Secrets.
@@ -88,6 +88,12 @@ services:
         
         volumes: [ media:/data ]
         
+        secrets:
+          - source: certificate
+            target: /root/.minio/certs/public.crt
+          - source: certificateKey
+            target: /root/.minio/certs/private.key
+        
         entrypoint: [ /bin/sh, -c ]
         command: [ 'mkdir -p /data/$${bucket}/ && minio server /data --console-address :9001' ]
         
@@ -96,7 +102,7 @@ services:
           - 9001:9001
         
         healthcheck:
-            test: curl --silent minio:9000/minio/health/live
+            test: curl --silent --insecure https://minio:9000/minio/health/live
             interval: 5s
             start_period: 5s
     

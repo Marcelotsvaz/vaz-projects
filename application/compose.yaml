@@ -21,7 +21,7 @@ services:
         environment:
           - DJANGO_SETTINGS_MODULE
           - domain
-          - staticFilesDomain
+          - staticFilesUrl
           - s3Endpoint
           - bucket
             # Secrets.

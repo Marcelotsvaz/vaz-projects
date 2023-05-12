@@ -51,6 +51,13 @@ LANGUAGES = [
 TIME_ZONE = 'America/Sao_Paulo'
 
 
+# Security
+#---------------------------------------
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+LANGUAGE_COOKIE_SECURE = True
+
+
 # Admin
 #---------------------------------------
 JET_DEFAULT_THEME = 'dark-gray'
@@ -90,7 +97,6 @@ INSTALLED_APPS = [
 	'siteApp.apps.siteAppConfig',
 	'projectsApp.apps.projectsAppConfig',
 	'blogApp.apps.blogAppConfig',
-	'storages',
 	'taggit',
 	'django_elasticsearch_dsl',
 	'rest_framework',

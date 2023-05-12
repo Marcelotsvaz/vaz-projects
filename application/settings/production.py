@@ -17,15 +17,8 @@ ENVIRONMENT = 'production'
 
 # Static and media files
 #---------------------------------------
-STATIC_URL = f'https://{environ["staticFilesDomain"]}/'
+STATIC_URL = environ["staticFilesUrl"]
 MEDIA_URL = STATIC_URL
-
-
-# Security
-#---------------------------------------
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-LANGUAGE_COOKIE_SECURE = True
 
 
 # Disqus
