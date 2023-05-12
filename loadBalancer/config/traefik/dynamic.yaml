@@ -32,12 +32,12 @@ http:
                 browserXssFilter: true
                 contentSecurityPolicy: >-
                     default-src 'none';
-                    img-src 'self' {{ env "staticFilesUrl" }};
-                    style-src {{ env "staticFilesUrl" }} 'unsafe-inline';
+                    img-src {{ env "staticFilesUrl" }} https://c.disquscdn.com/next/embed/assets/img/ https://referrer.disqus.com/juggler/stat.gif;
+                    style-src {{ env "staticFilesUrl" }} https://c.disquscdn.com/next/embed/styles/;
                     font-src {{ env "staticFilesUrl" }};
-                    script-src 'self' {{ env "staticFilesUrl" }};
+                    script-src {{ env "staticFilesUrl" }} https://vazprojects.disqus.com/embed.js https://staging-vazprojects.disqus.com/embed.js;
                     connect-src 'self';
-                    frame-src https://www.google.com
+                    frame-src https://disqus.com/embed/comments/ https://disqus.com/home/preload/
     
     
     services:
