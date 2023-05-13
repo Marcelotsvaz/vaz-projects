@@ -52,9 +52,9 @@ secret_detection:
 
 container_scanning:
     variables:
-        DOCKER_IMAGE: ${applicationImage}
-        DOCKERFILE_PATH: application/Dockerfile
         GIT_STRATEGY: fetch
+        CS_DOCKERFILE_PATH: application/Dockerfile
+        CS_IMAGE: ${applicationImage}
         CS_DISABLE_LANGUAGE_VULNERABILITY_SCAN: 'false'
 
 
