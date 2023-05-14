@@ -24,7 +24,7 @@ services:
         environment:
             DJANGO_SETTINGS_MODULE: ${DJANGO_SETTINGS_MODULE-settings.local}
             domain: &domain ${domain-localhost}
-            staticFilesUrl: &staticFilesUrl ${staticFilesUrl-https://localhost:9000}
+            staticFilesUrl: &staticFilesUrl ${staticFilesUrl-https://localhost:9000/local/}
             s3Endpoint: &s3Endpoint ${s3Endpoint-http://minio:9000}
             bucket: &bucket ${bucket-local}
             # Secrets.

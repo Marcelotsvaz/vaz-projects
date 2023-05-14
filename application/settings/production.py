@@ -15,12 +15,6 @@ from .base import *
 ENVIRONMENT = 'production'
 
 
-# Static and media files
-#---------------------------------------
-STATIC_URL = environ["staticFilesUrl"]
-MEDIA_URL = STATIC_URL
-
-
 # Disqus
 #---------------------------------------
 DISQUS_SHORTNAME = 'vazprojects'

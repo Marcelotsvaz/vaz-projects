@@ -35,8 +35,10 @@ AWS_QUERYSTRING_AUTH = False
 
 STATICFILES_DIRS = [ BASE_DIR / 'deployment/static' ]
 STATIC_ROOT = 'static/'
+STATIC_URL = environ["staticFilesUrl"]
 
 MEDIA_ROOT = 'media/'
+MEDIA_URL = STATIC_URL
 
 
 # Localization
