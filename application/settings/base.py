@@ -72,7 +72,7 @@ JET_SIDE_MENU_COMPACT = True
 # EMAIL_PORT = 465
 # EMAIL_USE_SSL = True
 
-SERVER_EMAIL = 'VAZ Projects <server@vazprojects.com>'
+SERVER_EMAIL = f'VAZ Projects <server@{environ["domain"]}>'
 ADMINS = [ ( 'Marcelo Vaz', 'marcelotsvaz@gmail.com' ) ]
 
 

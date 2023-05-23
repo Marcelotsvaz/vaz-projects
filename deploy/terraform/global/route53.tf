@@ -7,7 +7,7 @@
 
 
 # 
-# vazprojects.com
+# Base Domain
 #-------------------------------------------------------------------------------
 resource aws_route53_zone production {
 	name = local.domain
@@ -51,6 +51,7 @@ resource aws_route53_record production_ns {
 }
 
 
+# Delegates staging sub-domain to it's own zone.
 resource aws_route53_record production_staging_ns {
 	zone_id = aws_route53_zone.production.zone_id
 	
@@ -61,6 +62,7 @@ resource aws_route53_record production_staging_ns {
 }
 
 
+# Delegates portfolio sub-domain to it's own zone.
 resource aws_route53_record production_portfolio_ns {
 	zone_id = aws_route53_zone.production.zone_id
 	
@@ -73,7 +75,7 @@ resource aws_route53_record production_portfolio_ns {
 
 
 # 
-# staging.vazprojects.com
+# Staging Domain
 #-------------------------------------------------------------------------------
 resource aws_route53_zone staging {
 	name = "staging.${aws_route53_zone.production.name}"
@@ -110,7 +112,7 @@ resource aws_route53_record staging_ns {
 
 
 # 
-# portfolio.vazprojects.com
+# Portfolio Domain
 #-------------------------------------------------------------------------------
 resource aws_route53_zone portfolio {
 	name = "portfolio.${aws_route53_zone.production.name}"
