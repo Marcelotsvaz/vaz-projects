@@ -9,17 +9,25 @@
 # 
 # Base Domain
 #-------------------------------------------------------------------------------
+resource aws_route53domains_registered_domain main {
+	domain_name = local.domain
+	
+	dynamic name_server {
+		for_each = aws_route53_zone.production.name_servers
+		
+		content {
+			name = name_server.value
+		}
+	}
+	
+	tags = {
+		Name = "${local.project_name} Domain"
+	}
+}
+
+
 resource aws_route53_zone production {
 	name = local.domain
-	
-	provisioner local-exec {
-		command = <<-EOF
-			aws route53domains update-domain-nameservers	\
-				--region us-east-1							\
-				--domain-name ${local.domain}				\
-				--nameservers ${join( " ", [ for ns in aws_route53_zone.production.name_servers : "Name=${ns}"] )}
-		EOF
-	}
 	
 	tags = {
 		Name = "${local.project_name} Hosted Zone"
