@@ -25,7 +25,7 @@ services:
             DJANGO_SETTINGS_MODULE: ${DJANGO_SETTINGS_MODULE-settings.local}
             domain: &domain ${domain-localhost}
             staticFilesUrl: &staticFilesUrl ${staticFilesUrl-https://localhost:9000/local/}
-            s3Endpoint: &s3Endpoint ${s3Endpoint-http://minio:9000}
+            s3Endpoint: &s3Endpoint ${s3Endpoint-https://minio:9000}
             bucket: &bucket ${bucket-local}
             # Secrets.
             djangoSecretKey: django
@@ -33,6 +33,10 @@ services:
             ELASTIC_PASSWORD: &elasticsearchPassword elastic
             AWS_ACCESS_KEY_ID: &AWS_ACCESS_KEY_ID ${AWS_ACCESS_KEY_ID-minioadmin}
             AWS_SECRET_ACCESS_KEY: &AWS_SECRET_ACCESS_KEY ${AWS_SECRET_ACCESS_KEY-minioadmin}
+        
+        secrets:
+          - source: rootCertificates
+            target: /etc/ssl/certs/ca-certificates.crt
         
         command:
           - |-
@@ -121,6 +125,10 @@ services:
             AWS_ACCESS_KEY_ID: *AWS_ACCESS_KEY_ID
             AWS_SECRET_ACCESS_KEY: *AWS_SECRET_ACCESS_KEY
         
+        secrets:
+          - source: rootCertificates
+            target: /etc/ssl/certs/ca-certificates.crt
+        
         entrypoint: [ /bin/sh, -c ]
         command:
           - |-
@@ -146,6 +154,8 @@ configs:
 
 
 secrets:
+    rootCertificates:
+        file: /etc/ssl/certs/ca-certificates.crt
     certificate:
         file: ./deployment/tls/website.crt
     certificateKey:

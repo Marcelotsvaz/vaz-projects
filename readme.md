@@ -3,26 +3,36 @@ This is the repository for [VAZ Projects](https://vazprojects.com).
 
 
 
-## Running locally
+## Running Locally
 
 
-### Install Docker Compose
+### Install Dependencies
 ```sh
-# Install Docker, Buildx and Docker Compose.
-pacman -S docker docker-buildx docker-compose	# On Arch Linux.
+# Install Docker, Buildx, Docker Compose and mkcert.
+pacman -S docker docker-buildx docker-compose mkcert	# On Arch Linux.
 ```
 
 You might need to enable buildx by default with `docker buildx install`.
 
 
-### Start Compose project
-Make sure you have ports 80, 9000 and 9001 available.
+### Project Setup
 
 ```sh
 # Clone the repository.
 git clone https://gitlab.com/marcelotsvaz/vaz-projects.git
 cd vaz-projects/
 
+# Create certificates with mkcert.
+mkdir -p deployment/tls/
+
+mkcert -ecdsa -install	# If not done yet.
+mkcert -ecdsa -key-file deployment/tls/websiteKey.pem -cert-file deployment/tls/website.crt localhost minio
+```
+
+
+### Start Compose Project
+Make sure you have ports 80, 443, 8080, 9000 and 9001 available.
+```sh
 # Build the application image and start all containers.
 docker compose up --detach --build
 
@@ -31,12 +41,13 @@ docker compose run --rm application 'manage.py createsuperuser'
 ```
 
 The following URLs will be available:
-- Website: http://localhost
-- Django admin: http://localhost/admin
-- MinIO console: http://localhost:9001
+- Application: https://localhost
+- Django admin: https://localhost/admin
+- Traefik dashboard: https://localhost:8080
+- MinIO console: https://localhost:9001
 
 
-### Running tests
+### Running Tests
 ```sh
 # Run unit tests and generate coverage report.
 docker compose run --rm --build application 'coverage run manage.py test && coverage report'

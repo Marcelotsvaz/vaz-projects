@@ -49,12 +49,17 @@ FROM python:3.10-alpine3.16
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
+# Packages.
 RUN apk add --no-cache curl libpq libmemcached
 RUN --mount=from=wheelBuilder,source=wheels/,target=wheels/ <<EOF
 	pip install --no-cache-dir --upgrade pip
 	pip install --no-cache-dir wheels/*
 EOF
 
+# Use system certificates for Boto.
+RUN ln -sf /etc/ssl/certs/ca-certificates.crt $(python -m certifi)
+
+# User.
 ARG dockerUser=django dockerUid=500
 RUN <<EOF
 	addgroup ${dockerUser} --system --gid ${dockerUid}
@@ -63,6 +68,7 @@ EOF
 USER ${dockerUser}
 WORKDIR /home/${dockerUser}
 
+# Application source.
 COPY --link --chown=${dockerUid}:${dockerUid} . .
 COPY --link --chown=${dockerUid}:${dockerUid} --from=lessBuilder deployment/static/siteApp/css/siteApp.css deployment/static/siteApp/css/
 
