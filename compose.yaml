@@ -80,6 +80,7 @@ services:
         environment:
             domain: *domain
             staticFilesUrl: *staticFilesUrl
+            monitoringDomain: ${monitoringDomain-monitoring.localhost}
     
     
     minio:

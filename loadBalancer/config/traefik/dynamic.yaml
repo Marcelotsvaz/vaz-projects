@@ -14,6 +14,11 @@ http:
             middlewares: [ securityHeaders ]
             service: application
         
+        toMonitoring:
+            entrypoints: [ https ]
+            rule: Host( `{{ env "monitoringDomain" }}` )
+            service: monitoring
+        
         toDashboard:
             entrypoints: [ dashboard ]
             rule: Host( `{{ env "domain" }}` )
@@ -45,6 +50,11 @@ http:
             loadBalancer:
                 servers:
                   - url: http://application:8000
+        
+        monitoring:
+            loadBalancer:
+                servers:
+                  - url: http://monitoring
 
 
 

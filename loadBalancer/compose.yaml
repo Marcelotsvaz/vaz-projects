@@ -15,6 +15,7 @@ services:
         environment:
           - domain
           - staticFilesUrl
+          - monitoringDomain
         
         # volumes: [ ../deployment/logs/traefikAccess.log:/var/log/traefikAccess.log ]
         
