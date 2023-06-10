@@ -1,5 +1,5 @@
 # VAZ Projects Website
-This is the repository for [VAZ Projects](https://vazprojects.com).
+This is the repository for [VAZ Projects](https://vazprojects.com), my personal blog and project log. Its main purpose is to serve as a sandbox for my DevOps learning journey.
 
 
 
