@@ -3,6 +3,12 @@ This is the repository for [VAZ Projects](https://vazprojects.com), my personal 
 
 
 
+## Architecture Overview
+The project consists of a Django application running on multiple EC2 instances within an Auto Scaling group. Traffic is routed to these instances using Traefik as the load balancer. A self-managed PostgreSQL instance is used as the database. Static and user-uploaded files are served through CloudFront.
+![Architecture Overview Diagram](doc/architectureOverview.drawio.svg)
+
+
+
 ## Running Locally
 
 
