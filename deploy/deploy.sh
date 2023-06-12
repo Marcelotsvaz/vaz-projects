@@ -20,7 +20,7 @@ environment=${2}
 if [[ "${GITLAB_CI}" ]]; then	# Running in GitLab CI/CD.
 	echo 'Running in CI/CD.'
 	
-	commitSha="${CI_COMMIT_SHA}"
+	commitSha=${CI_COMMIT_SHA}
 	terraformAutoApprove='-auto-approve'
 	
 	set -x	# Echo commands.
@@ -28,7 +28,7 @@ else
 	echo 'Running outside CI/CD.'
 	
 	# TODO: Get PR branch when support for multiple staging environments is implemented.
-	commitSha="$(git rev-parse remotes/gitlab/production)"
+	commitSha=$(git rev-parse remotes/gitlab/production)
 	applicationImage="registry.gitlab.com/marcelotsvaz/vaz-projects/application:${commitSha}"
 fi
 
@@ -44,7 +44,7 @@ repositorySnapshot="https://gitlab.com/marcelotsvaz/vaz-projects/-/archive/${com
 # 
 # Prepare files for Packer.
 #-------------------------------------------------------------------------------
-function preparePacker()
+function preparePacker
 {
 	# User data.
 	tar -cz									\
@@ -60,7 +60,7 @@ function preparePacker()
 # 
 # Build AMI with Packer.
 #-------------------------------------------------------------------------------
-function buildAmi()
+function buildAmi
 {
 	cd deploy/packer/
 	
@@ -73,7 +73,7 @@ function buildAmi()
 # 
 # Build builder AMI with Packer.
 #-------------------------------------------------------------------------------
-function buildBuilderAmi()
+function buildBuilderAmi
 {
 	cd deploy/packer/
 	
@@ -86,7 +86,7 @@ function buildBuilderAmi()
 # 
 # Setup Terraform with specified state.
 #-------------------------------------------------------------------------------
-function terraformInit()
+function terraformInit
 {
 	local stateName=${1}
 	local terraformUrl="https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/terraform/state/${stateName}"
@@ -104,7 +104,7 @@ function terraformInit()
 # 
 # Deploy environment-specific AWS resources.
 #-------------------------------------------------------------------------------
-function deployEnvironment()
+function deployEnvironment
 {
 	cd ${terraformRoot}/environment/
 	terraformInit ${environment}
@@ -133,7 +133,7 @@ function deployEnvironment()
 # 
 # Destroy environment-specific AWS resources.
 #-------------------------------------------------------------------------------
-function destroyEnvironment()
+function destroyEnvironment
 {
 	cd ${terraformRoot}/environment/
 	terraformInit ${environment}
@@ -149,7 +149,7 @@ function destroyEnvironment()
 # 
 # Deploy AWS infrastructure common to all environments.
 #-------------------------------------------------------------------------------
-function deployGlobal()
+function deployGlobal
 {
 	cd ${terraformRoot}/global/
 	terraformInit global
@@ -161,7 +161,7 @@ function deployGlobal()
 # 
 # Destroy AWS infrastructure common to all environments.
 #-------------------------------------------------------------------------------
-function destroyGlobal()
+function destroyGlobal
 {
 	cd ${terraformRoot}/global/
 	terraformInit global

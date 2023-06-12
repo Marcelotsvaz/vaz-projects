@@ -7,17 +7,17 @@
 
 
 variable ami_name {
-	type =  string
+	type = string
 	default = "VAZ Projects AMI"
 }
 
 variable playbook {
-	type =  string
+	type = string
 	default = "amiPlaybook.yaml"
 }
 
 variable disk_size {
-	type =  number
+	type = number
 	default = 2
 }
 

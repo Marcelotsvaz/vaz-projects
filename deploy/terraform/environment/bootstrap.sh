@@ -38,7 +38,7 @@ dehydrated --config ${config} --signcsr cloudfrontCsr.pem > cloudfront.crt
 #---------------------------------------------------------------------------------------------------
 function generateSecret
 {
-	local length="${1-128}"
+	local length=${1-128}
 	
 	cat /dev/urandom | tr -dc A-Za-z0-9 | head -c ${length}
 }

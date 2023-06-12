@@ -10,3 +10,4 @@ vazProjects_packages:
   - docker
   - docker-compose
   - dehydrated
+  - jq

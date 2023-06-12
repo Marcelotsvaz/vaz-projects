@@ -21,4 +21,27 @@ tempFile=$(mktemp)
 aws s3 sync . s3://${bucket}/deployment/tls/ --no-progress --content-type text/plain
 
 # Update the CloudFront certificate in ACM, somehow.
-cat cloudfront.crt | python -c 'import sys, re, subprocess; match = re.search( r"(-[\S\s]*?)\s\s(-[\S\s]*)", sys.stdin.read() ); subprocess.run( [ "aws" ] + match.expand( r"acm  --region  us-east-1  import-certificate  --certificate-arn  '${cloudfrontCertificateArn}'  --certificate  \1  --certificate-chain  \2  --private-key  file://cloudfrontKey.pem"  ).split("  ") )'
+cat cloudfront.crt | python <(cat <<- EOF
+	import sys
+	import re
+	import subprocess
+	
+	match = re.search( r'(-[\S\s]*?)\s\s(-[\S\s]*)', sys.stdin.read() )
+	
+	subprocess.run( [
+		'aws',
+		'acm',
+		'--region',
+		'us-east-1',
+		'import-certificate',
+		'--certificate-arn',
+		'${cloudfrontCertificateArn}',
+		'--certificate',
+		match[1],
+		'--certificate-chain',
+		match[2],
+		'--private-key',
+		'file://cloudfrontKey.pem',
+	] )
+EOF
+)

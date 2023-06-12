@@ -72,7 +72,7 @@ class BlogPost( models.Model ):
 	user_images			= GenericRelation(	UserImage, for_concrete_model = False )
 	draft				= BooleanField(		_('draft'), default = True )
 	posted				= DateTimeField(	_('posted'), default = timezone.now )
-	last_edited			= DateTimeField(	_('last edited'), auto_now = True  )
+	last_edited			= DateTimeField(	_('last edited'), auto_now = True )
 	
 	tags				= TaggableManager(	_('tags'), blank = True )
 	

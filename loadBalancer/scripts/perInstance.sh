@@ -24,10 +24,10 @@ hostnamectl set-hostname ${hostname}
 
 useradd -rms /usr/bin/nologin ${user}
 cd /home/${user}/
-sudo -u ${user} bash << EOF
-curl -s ${repositorySnapshot} | tar -xz --strip-components 1
-aws s3 sync s3://${bucket}/deployment/ deployment/ --no-progress
-chmod -R go= deployment/secrets.env deployment/tls/
+sudo -u ${user} bash <<- EOF
+	curl -s ${repositorySnapshot} | tar -xz --strip-components 1
+	aws s3 sync s3://${bucket}/deployment/ deployment/ --no-progress
+	chmod -R go= deployment/secrets.env deployment/tls/
 EOF
 
 cd loadBalancer/
