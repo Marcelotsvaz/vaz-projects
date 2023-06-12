@@ -14,8 +14,8 @@ set -e	# Abort on error.
 # 
 # Certificates
 #---------------------------------------------------------------------------------------------------
-mkdir -p ../../../deployment/tls-${environment}/ && cd ${_}
-config=../../loadBalancer/config/tls/dehydrated.conf
+mkdir -p ../../../deployment/${environment}/tls/ && cd ${_}
+config=../../../loadBalancer/config/tls/dehydrated.conf
 
 
 # Account.
@@ -34,10 +34,48 @@ dehydrated --config ${config} --signcsr cloudfrontCsr.pem > cloudfront.crt
 
 
 # 
+# Secrets
+#---------------------------------------------------------------------------------------------------
+function generateSecret
+{
+	local length="${1-128}"
+	
+	cat /dev/urandom | tr -dc A-Za-z0-9 | head -c ${length}
+}
+
+
+cd ..
+#-------------------------------------------------------------------------------
+cat > secrets.env <<- EOF
+	#
+	# VAZ Projects
+	#
+	#
+	# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+	
+	
+	
+	# Django application.
+	djangoSecretKey='$(generateSecret)'
+	
+	# Elasticsearch.
+	ELASTIC_PASSWORD='$(generateSecret)'
+	
+	# Postgres.
+	POSTGRES_PASSWORD='$(generateSecret)'
+	
+	# Grafana.
+	GF_SECURITY_ADMIN_PASSWORD='$(generateSecret 32)'
+EOF
+#-------------------------------------------------------------------------------
+
+
+
+# 
 # Upload to S3
 #---------------------------------------------------------------------------------------------------
-aws s3 sync . s3://${bucket}/deployment/tls/ --no-progress --content-type text/plain
-aws s3 cp ../secrets.env s3://${bucket}/deployment/ --no-progress --content-type text/plain
+aws s3 sync tls/ s3://${bucket}/deployment/tls/ --no-progress --content-type text/plain
+aws s3 cp secrets.env s3://${bucket}/deployment/ --no-progress --content-type text/plain
 
 
 
@@ -45,5 +83,4 @@ aws s3 cp ../secrets.env s3://${bucket}/deployment/ --no-progress --content-type
 # Clean-up
 #---------------------------------------------------------------------------------------------------
 cd ..
-rm -r tls-${environment}/
-rm secrets.env
+rm -r ${environment}/
