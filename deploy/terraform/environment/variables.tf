@@ -24,6 +24,13 @@ variable application_image {
 }
 
 
+variable highly_available {
+	description = "Launch resources in a high availability configuration."
+	type = bool
+	default = false
+}
+
+
 
 locals {
 	project_name = "VAZ Projects"

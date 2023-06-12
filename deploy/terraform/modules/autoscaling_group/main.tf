@@ -12,7 +12,7 @@
 resource aws_autoscaling_group main {
 	name = local.autoscaling_group_name
 	vpc_zone_identifier = var.subnet_ids
-	min_size = 1
+	min_size = var.highly_available ? 2 : 1
 	max_size = 10
 	default_cooldown = 120
 	instance_refresh { strategy = "Rolling" }
