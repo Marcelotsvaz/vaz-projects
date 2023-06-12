@@ -138,6 +138,7 @@ module app_server {
 	user = "application"
 	
 	# Configuration.
+	min_size = var.highly_available ? 2 : 1
 	ami_id = data.aws_ami.main.id
 	min_vcpu_count = 2
 	min_memory_gib = 2

@@ -38,6 +38,18 @@ variable user {
 # 
 # Configuration
 #-------------------------------------------------------------------------------
+variable min_size {
+	description = "Minimum number of instances."
+	type = number
+	default = 1
+}
+
+variable max_size {
+	description = "Maximum number of instances."
+	type = number
+	default = 10
+}
+
 variable ami_id {
 	description = "AMI ID."
 	type = string
