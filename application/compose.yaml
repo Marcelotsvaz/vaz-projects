@@ -65,7 +65,7 @@ services:
             target: /usr/share/elasticsearch/config/jvm.options.d/jvm.options
         
         healthcheck:
-            test: curl --silent elasticsearch:9200/_cluster/health/
+            test: curl --silent http://elasticsearch:9200/_cluster/health/
             interval: 5s
             start_period: 90s
 
