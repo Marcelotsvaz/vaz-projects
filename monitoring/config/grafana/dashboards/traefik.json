@@ -1,0 +1,133 @@
+{
+	"annotations": {
+		"list": [
+			{
+				"builtIn": 1,
+				"datasource": {
+					"type": "grafana",
+					"uid": "-- Grafana --"
+				},
+				"enable": true,
+				"hide": true,
+				"iconColor": "rgba(0, 211, 255, 1)",
+				"name": "Annotations & Alerts",
+				"target": {
+					"limit": 100,
+					"matchAny": false,
+					"tags": [],
+					"type": "dashboard"
+				},
+				"type": "dashboard"
+			}
+		]
+	},
+	"description": "",
+	"editable": true,
+	"fiscalYearStartMonth": 0,
+	"graphTooltip": 0,
+	"id": 6,
+	"iteration": 1686689237108,
+	"links": [],
+	"liveNow": false,
+	"panels": [
+		{
+			"datasource": {
+				"type": "loki",
+				"uid": "${datasource}"
+			},
+			"description": "",
+			"gridPos": {
+				"h": 20,
+				"w": 24,
+				"x": 0,
+				"y": 0
+			},
+			"id": 2,
+			"options": {
+				"dedupStrategy": "none",
+				"enableLogDetails": true,
+				"prettifyLogMessage": false,
+				"showCommonLabels": false,
+				"showLabels": false,
+				"showTime": false,
+				"sortOrder": "Descending",
+				"wrapLogMessage": false
+			},
+			"pluginVersion": "9.0.2",
+			"targets": [
+				{
+					"datasource": {
+						"type": "loki",
+						"uid": "${datasource}"
+					},
+					"editorMode": "code",
+					"expr": "{ job = \"$job\", service = \"$service\" }\n|~ \"^{\"\n| json\n| RouterName = \"toApplication@file\"\n| label_format level = \"{{.DownstreamStatus}}\"\n| line_format \"{{.DownstreamStatus}} <- {{.RequestMethod}} {{.RequestPath}}\"",
+					"hide": false,
+					"queryType": "range",
+					"refId": "Main"
+				}
+			],
+			"title": "Access Logs",
+			"transformations": [],
+			"type": "logs"
+		}
+	],
+	"schemaVersion": 36,
+	"style": "dark",
+	"tags": [
+		"Linux"
+	],
+	"templating": {
+		"list": [
+			{
+				"current": {},
+				"hide": 0,
+				"includeAll": false,
+				"label": "Data source",
+				"multi": false,
+				"name": "datasource",
+				"options": [],
+				"query": "loki",
+				"queryValue": "",
+				"refresh": 1,
+				"regex": "",
+				"skipUrlSync": false,
+				"type": "datasource"
+			},
+			{
+				"hide": 2,
+				"label": "Job",
+				"name": "job",
+				"query": "Docker Containers",
+				"skipUrlSync": false,
+				"type": "constant"
+			},
+			{
+				"hide": 2,
+				"label": "Service",
+				"name": "service",
+				"query": "traefik",
+				"skipUrlSync": false,
+				"type": "constant"
+			}
+		]
+	},
+	"time": {
+		"from": "now-1h",
+		"to": "now"
+	},
+	"timepicker": {
+		"refresh_intervals": [
+			"5s",
+			"15s",
+			"30s",
+			"1m",
+			"5m"
+		]
+	},
+	"timezone": "",
+	"title": "Traefik",
+	"uid": "OdvMg3_4z",
+	"version": 4,
+	"weekStart": ""
+}
