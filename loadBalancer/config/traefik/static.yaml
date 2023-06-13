@@ -23,7 +23,7 @@ entryPoints:
             tls: {}
     
     
-    dashboard:
+    api:
         address: :8080
         
         http:

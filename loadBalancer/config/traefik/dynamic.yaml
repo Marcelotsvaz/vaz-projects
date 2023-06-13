@@ -19,9 +19,9 @@ http:
             rule: Host( `{{ env "monitoringDomain" }}` )
             service: monitoring
         
-        toDashboard:
-            entrypoints: [ dashboard ]
-            rule: Host( `{{ env "domain" }}` )
+        toApi:
+            entrypoints: [ api ]
+            rule: Host( `{{ env "domain" }}` ) && ( PathPrefix( `/api/` ) || PathPrefix( `/dashboard/` ) )
             service: api@internal
     
     
