@@ -33,6 +33,11 @@ services:
           - 80:80
           - 443:443
           - 8080:8080
+        
+        healthcheck:
+            test: traefik healthcheck
+            interval: 5s
+            start_period: 5s
 
 
 

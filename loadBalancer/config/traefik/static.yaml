@@ -28,6 +28,10 @@ entryPoints:
         
         http:
             tls: {}
+    
+    
+    ping:
+        address: :8081
 
 
 
@@ -39,6 +43,11 @@ providers:
 
 api:
     dashboard: true
+
+
+
+ping:
+    entryPoint: ping
 
 
 
