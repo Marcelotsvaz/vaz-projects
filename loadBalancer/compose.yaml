@@ -30,9 +30,9 @@ services:
             target: /etc/traefik/websiteKey.pem
         
         ports:
-          - 80:80
-          - 443:443
-          - 8080:8080
+          - 80:80 # HTTP entrypoint.
+          - 443:443 # HTTPS entrypoint.
+          - 8080:8080 # Dashboard and API.
         
         healthcheck:
             test: traefik healthcheck

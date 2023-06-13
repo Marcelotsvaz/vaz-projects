@@ -23,7 +23,7 @@ services:
         
         volumes: [ grafana:/var/lib/grafana ]
         
-        ports: [ 80:3000 ]
+        ports: [ 80:3000 ]  # Application.
     
     
     prometheus:
@@ -37,7 +37,7 @@ services:
         
         volumes: [ prometheus:/prometheus ]
             
-        ports: [ 9090:9090 ]
+        ports: [ 9090:9090 ]    # API and dashboard.
         
         command:
           - --config.file=/etc/prometheus/prometheus.yaml
@@ -56,7 +56,7 @@ services:
         
         volumes: [ loki:/loki ]
             
-        ports: [ 3100:3100 ]
+        ports: [ 3100:3100 ]    # API and dashboard.
 
 
 
