@@ -43,4 +43,4 @@ api:
 
 
 accessLog:
-    filePath: /var/log/traefikAccess.log
+    format: json

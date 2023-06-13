@@ -17,8 +17,6 @@ services:
           - staticFilesUrl
           - monitoringDomain
         
-        # volumes: [ ../deployment/logs/traefikAccess.log:/var/log/traefikAccess.log ]
-        
         configs:
           - source: traefikStatic
             target: /etc/traefik/traefik.yaml
