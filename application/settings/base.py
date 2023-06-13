@@ -55,9 +55,10 @@ TIME_ZONE = 'America/Sao_Paulo'
 
 # Security
 #---------------------------------------
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+CSRF_TRUSTED_ORIGINS = [ f'https://{host}' for host in ALLOWED_HOSTS ]
 LANGUAGE_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 
 # Admin
