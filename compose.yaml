@@ -95,8 +95,6 @@ services:
         volumes: [ media:/data ]
         
         secrets:
-          - source: rootCertificates
-            target: /etc/ssl/certs/ca-bundle.crt
           - source: certificate
             target: /root/.minio/certs/public.crt
           - source: certificateKey
@@ -110,7 +108,7 @@ services:
           - 9001:9001
         
         healthcheck:
-            test: curl --silent https://minio:9000/minio/health/live
+            test: curl --insecure --silent https://minio:9000/minio/health/live
             interval: 5s
             start_period: 5s
     
