@@ -1,10 +1,11 @@
 # Useful Stuff
 
 
-## SSH Port Forward
+## SSH Port Forward With Jump Host
 
 ```sh
-ssh -L 8000:localhost:8000 staging.vazprojects ssh -ttL 8000:localhost:9090 monitoring
+ssh -L local:port:remote:port -J jumpHost host
+ssh -L localhost:9090:localhost:9090 -J staging.vazprojects monitoring
 ```
 
 
