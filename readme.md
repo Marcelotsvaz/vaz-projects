@@ -53,7 +53,7 @@ docker compose run --rm application 'manage.py createsuperuser'
 The following URLs will be available:
 - Application: https://localhost/
 - Django admin: https://localhost/admin/
-- Traefik dashboard: https://localhost:8080/dashboard/
+- Traefik dashboard: http://localhost:8080/dashboard/
 - MinIO console: https://localhost:9001/
 
 

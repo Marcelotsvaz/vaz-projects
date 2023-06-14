@@ -23,15 +23,8 @@ entryPoints:
             tls: {}
     
     
-    api:
+    privateHttp:
         address: :8080
-        
-        http:
-            tls: {}
-    
-    
-    ping:
-        address: :8081
 
 
 
@@ -48,12 +41,12 @@ api:
 
 metrics:
     prometheus:
-        entryPoint: api
+        entryPoint: privateHttp
 
 
 
 ping:
-    entryPoint: ping
+    entryPoint: privateHttp
 
 
 
