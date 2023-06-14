@@ -153,7 +153,7 @@ class Project( models.Model ):
 		identifiers = [ page.get_absolute_url() for page in self.pages.all() ]
 		identifiers.append( self.get_absolute_url() )
 		
-		return sum( getDisqusCommentsCount( identifiers ).values() ) 
+		return sum( getDisqusCommentsCount( identifiers ).values() )
 			
 	def getMarkdownImages( self ):
 		'''

@@ -71,8 +71,8 @@ class BlogPostAdmin( DjangoObjectActions, admin.ModelAdmin ):
 	prepopulated_fields = { 'slug': ( 'title', ) }
 	readonly_fields = (
 		'draft',
-		'posted', 
-		'last_edited', 
+		'posted',
+		'last_edited',
 	)
 	inlines = [ UserImageInLine ]
 	change_actions = (

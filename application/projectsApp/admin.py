@@ -162,8 +162,8 @@ class ProjectAdmin( DjangoObjectActions, admin.ModelAdmin ):
 	prepopulated_fields = { 'slug': ( 'name', ) }
 	readonly_fields = (
 		'draft',
-		'posted', 
-		'base_last_edited', 
+		'posted',
+		'base_last_edited',
 	)
 	inlines = [ PageInLine, UserImageInLine ]
 	change_actions = (

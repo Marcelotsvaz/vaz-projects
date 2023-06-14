@@ -14,7 +14,7 @@
 {% block bannerTitle %}{{ post.title }}{% endblock %}
 {% block bannerText %}
 	{% trans user = post.author.get_username(), isoTime = post.posted.isoformat(), date = post.posted.strftime( '%B %-d, %Y' ) %}
-		by {{ user }} on <time datetime="{{ isoTime }}">{{ date }}</time> 
+		by {{ user }} on <time datetime="{{ isoTime }}">{{ date }}</time>
 	{% endtrans %}
 	{% if post.draft %}{{ _('(Draft)') }}{% endif %}
 {% endblock %}
