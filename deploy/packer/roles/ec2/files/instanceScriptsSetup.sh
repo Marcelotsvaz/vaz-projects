@@ -7,14 +7,16 @@
 
 
 
-# Grow root partition.
-disk="/dev/$(lsblk -nro MOUNTPOINT,PKNAME | grep '^/ ' | cut -d ' ' -f2)"
-partition="/dev/$(lsblk -nro MOUNTPOINT,KNAME | grep '^/ ' | cut -d ' ' -f2)"
+# Get root disk and partition.
+diskInfo=$(lsblk -nro MOUNTPOINT,PKNAME,PATH,PARTUUID | grep '^/ ')
+disk="/dev/$(echo ${diskInfo} | cut -d ' ' -f2)"
+partition=$(echo ${diskInfo} | cut -d ' ' -f3)
+rootPartitionUuid=$(echo ${diskInfo} | cut -d ' ' -f4)
 
 # Resize root partition.
 sgdisk --move-second-header ${disk}
 sgdisk --delete 2 ${disk}
-sgdisk --new 2:0:0 --change-name 2:'Root' ${disk}
+sgdisk --new 2:0:0 --change-name 2:Root --partition-guid 2:${rootPartitionUuid} ${disk}
 
 # Reload partitions.
 partx -u ${disk}
