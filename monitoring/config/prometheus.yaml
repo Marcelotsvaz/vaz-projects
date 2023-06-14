@@ -40,6 +40,6 @@ scrape_configs:
     
   - job_name: cAdvisor
     ec2_sd_configs:
-      - port: 8080
+      - port: 9080
         filters: *filterEnvironment
     relabel_configs: *ec2Labels

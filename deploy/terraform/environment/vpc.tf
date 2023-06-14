@@ -52,8 +52,8 @@ resource aws_default_security_group common {
 	ingress {
 		description = "cAdvisor Metrics"
 		protocol = "tcp"
-		from_port = 8080
-		to_port = 8080
+		from_port = 9080
+		to_port = 9080
 		self = true
 	}
 	

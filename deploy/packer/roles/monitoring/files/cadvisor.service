@@ -13,7 +13,7 @@ Documentation = https://github.com/google/cadvisor
 After = perBoot.service
 
 [Service]
-ExecStart = /usr/local/lib/cadvisor
+ExecStart = /usr/local/lib/cadvisor --port 9080
 
 [Install]
 WantedBy = multi-user.target
