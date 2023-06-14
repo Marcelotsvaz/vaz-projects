@@ -43,3 +43,8 @@ scrape_configs:
       - port: 9080
         filters: *filterEnvironment
     relabel_configs: *ec2Labels
+    
+    
+  - job_name: Traefik
+    static_configs:
+      - targets: [ load-balancer:8080 ]

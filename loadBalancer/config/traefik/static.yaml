@@ -46,6 +46,12 @@ api:
 
 
 
+metrics:
+    prometheus:
+        entryPoint: api
+
+
+
 ping:
     entryPoint: ping
 

@@ -57,6 +57,14 @@ resource aws_default_security_group common {
 		self = true
 	}
 	
+	ingress {
+		description = "Traefik Metrics"
+		protocol = "tcp"
+		from_port = 8080
+		to_port = 8080
+		self = true
+	}
+	
 	tags = {
 		Name = "${local.project_name} Common Security Group"
 	}
