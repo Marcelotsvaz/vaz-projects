@@ -29,7 +29,7 @@
         
         
       - name: Generate fstab
-        shell: genfstab -U {{ mountPoint }} >> {{ mountPoint }}/etc/fstab
+        shell: genfstab -t PARTUUID {{ mountPoint }} >> {{ mountPoint }}/etc/fstab
     
     
     
@@ -96,12 +96,12 @@
         #-------------------------------------------------------------------------------
       - name: Write kernel parameters
         copy:
-            content: root=/dev/nvme0n1p2 rw nomodeset console=ttyS0,9600n8 earlyprintk=serial,ttyS0,9600 loglevel=6
+            content: root=PARTUUID={{ rootPartUuid }} rw nomodeset console=ttyS0,9600n8 earlyprintk=serial,ttyS0,9600 loglevel=6
             dest: /etc/kernel/cmdline
         
         
       - name: Create unified kernel image
-        shell: /usr/lib/systemd/ukify
+        command: /usr/lib/systemd/ukify
             /boot/vmlinuz-linux
             /boot/initramfs-linux.img
             --cmdline @/etc/kernel/cmdline
