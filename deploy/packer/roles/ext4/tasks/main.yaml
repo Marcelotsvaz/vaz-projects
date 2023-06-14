@@ -24,9 +24,14 @@
         command: sgdisk --new 2:0:0 --change-name 2:'Root' {{ disk }}
         
         
-      - name: Register root partition UUID
+      - name: Get root partition UUID
         shell: lsblk -nro PARTUUID,PATH | grep ' {{ disk }}p2$' | cut -d ' ' -f1
         register: rootPartUuid
+        
+        
+      - name: Register root partition UUID
+        set_fact:
+            rootPartUuid: '{{ rootPartUuid.stdout }}'
         
         
         
