@@ -1,187 +1,206 @@
 {
-	"annotations": {
-		"list": [
-			{
-				"builtIn": 1,
-				"datasource": {
-					"type": "grafana",
-					"uid": "-- Grafana --"
-				},
-				"enable": true,
-				"hide": true,
-				"iconColor": "rgba(0, 211, 255, 1)",
-				"name": "Annotations & Alerts",
-				"target": {
-					"limit": 100,
-					"matchAny": false,
-					"tags": [],
-					"type": "dashboard"
-				},
-				"type": "dashboard"
-			}
-		]
-	},
-	"description": "",
-	"editable": true,
-	"fiscalYearStartMonth": 0,
-	"graphTooltip": 0,
-	"id": 9,
-	"iteration": 1662242394964,
-	"links": [],
-	"liveNow": false,
-	"panels": [
-		{
-			"datasource": {
-				"type": "loki",
-				"uid": "${datasource}"
-			},
-			"description": "",
-			"gridPos": {
-				"h": 20,
-				"w": 24,
-				"x": 0,
-				"y": 0
-			},
-			"id": 2,
-			"options": {
-				"dedupStrategy": "none",
-				"enableLogDetails": true,
-				"prettifyLogMessage": false,
-				"showCommonLabels": false,
-				"showLabels": false,
-				"showTime": true,
-				"sortOrder": "Descending",
-				"wrapLogMessage": false
-			},
-			"pluginVersion": "9.0.2",
-			"targets": [
-				{
-					"datasource": {
-						"type": "loki",
-						"uid": "${datasource}"
-					},
-					"editorMode": "code",
-					"expr": "{ job = \"$job\", instance = \"$instance\", unit =~ \"$unit\", transport =~ \"$transport\" } | json | label_format level = \"{{.PRIORITY}}\" | line_format \"{{.unit}}[{{._PID}}]: {{.MESSAGE}}\"",
-					"hide": false,
-					"queryType": "range",
-					"refId": "Main"
-				}
-			],
-			"title": "systemd Journal",
-			"transformations": [],
-			"type": "logs"
-		}
-	],
-	"schemaVersion": 36,
-	"style": "dark",
-	"tags": [
-		"Linux"
-	],
-	"templating": {
-		"list": [
-			{
-				"current": {},
-				"hide": 0,
-				"includeAll": false,
-				"label": "Data source",
-				"multi": false,
-				"name": "datasource",
-				"options": [],
-				"query": "loki",
-				"queryValue": "",
-				"refresh": 1,
-				"regex": "",
-				"skipUrlSync": false,
-				"type": "datasource"
-			},
-			{
-				"hide": 2,
-				"label": "Job",
-				"name": "job",
-				"query": "systemd Journal",
-				"skipUrlSync": false,
-				"type": "constant"
-			},
-			{
-				"current": {},
-				"datasource": {
-					"type": "loki",
-					"uid": "${datasource}"
-				},
-				"definition": "label_values({job=\"$job\"}, instance)",
-				"hide": 0,
-				"includeAll": false,
-				"label": "Instance",
-				"multi": false,
-				"name": "instance",
-				"options": [],
-				"query": "label_values({job=\"$job\"}, instance)",
-				"refresh": 2,
-				"regex": "",
-				"skipUrlSync": false,
-				"sort": 5,
-				"type": "query"
-			},
-			{
-				"allValue": ".*",
-				"current": {},
-				"datasource": {
-					"type": "loki",
-					"uid": "${datasource}"
-				},
-				"definition": "label_values({job=\"$job\"}, unit)",
-				"hide": 0,
-				"includeAll": true,
-				"label": "Unit",
-				"multi": false,
-				"name": "unit",
-				"options": [],
-				"query": "label_values({job=\"$job\"}, unit)",
-				"refresh": 2,
-				"regex": "",
-				"skipUrlSync": false,
-				"sort": 5,
-				"type": "query"
-			},
-			{
-				"allValue": ".*",
-				"current": {},
-				"datasource": {
-					"type": "loki",
-					"uid": "${datasource}"
-				},
-				"definition": "label_values({job=\"$job\"}, transport)",
-				"hide": 0,
-				"includeAll": true,
-				"label": "Transport",
-				"multi": false,
-				"name": "transport",
-				"options": [],
-				"query": "label_values({job=\"$job\"}, transport)",
-				"refresh": 2,
-				"regex": "",
-				"skipUrlSync": false,
-				"sort": 5,
-				"type": "query"
-			}
-		]
-	},
-	"time": {
-		"from": "now-1h",
-		"to": "now"
-	},
-	"timepicker": {
-		"refresh_intervals": [
-			"5s",
-			"15s",
-			"30s",
-			"1m",
-			"5m"
-		]
-	},
-	"timezone": "",
-	"title": "systemd Journal",
-	"uid": "rFaW2aZVz",
-	"version": 1,
-	"weekStart": ""
+  "slug": "",
+  "title": "systemd Journal",
+  "originalTitle": "",
+  "description": "Display systemd journal entries for all EC2 instances.",
+  "tags": [
+    "Linux"
+  ],
+  "style": "dark",
+  "timezone": "",
+  "editable": true,
+  "hideControls": false,
+  "sharedCrosshair": false,
+  "panels": [
+    {
+      "datasource": "${datasource}",
+      "editable": false,
+      "error": false,
+      "gridPos": {
+        "h": 20,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "isNew": false,
+      "span": 6,
+      "title": "systemd Journal",
+      "transparent": false,
+      "type": "logs",
+      "targets": [
+        {
+          "refId": "",
+          "expr": "{ job = \"$job\", instance = \"$instance\", unit =~ \"$unit\", transport =~ \"$transport\" } | json | label_format level = \"{{.PRIORITY}}\" | line_format \"{{.unit}}[{{._PID}}]: {{.MESSAGE}}\""
+        }
+      ],
+      "options": {
+        "dedupStrategy": "",
+        "wrapLogMessage": false,
+        "showTime": true,
+        "showLabels": false,
+        "showCommonLabels": false,
+        "prettifyLogMessage": false,
+        "sortOrder": "Descending",
+        "enableLogDetails": true
+      }
+    }
+  ],
+  "rows": [],
+  "templating": {
+    "list": [
+      {
+        "name": "datasource",
+        "type": "datasource",
+        "datasource": null,
+        "refresh": 1,
+        "options": [],
+        "includeAll": false,
+        "allFormat": "",
+        "allValue": "",
+        "multi": false,
+        "multiFormat": "",
+        "query": "loki",
+        "regex": "",
+        "current": {
+          "text": null,
+          "value": null
+        },
+        "label": "Data source",
+        "hide": 0,
+        "sort": 0
+      },
+      {
+        "name": "job",
+        "type": "constant",
+        "datasource": null,
+        "refresh": false,
+        "options": [
+          {
+            "text": "query",
+            "value": "systemd Journal",
+            "selected": false
+          }
+        ],
+        "includeAll": false,
+        "allFormat": "",
+        "allValue": "",
+        "multi": false,
+        "multiFormat": "",
+        "query": "systemd Journal",
+        "regex": "",
+        "current": {
+          "text": null,
+          "value": null
+        },
+        "label": "Job",
+        "hide": 2,
+        "sort": 0
+      },
+      {
+        "name": "instance",
+        "type": "query",
+        "datasource": "${datasource}",
+        "refresh": 2,
+        "options": [],
+        "includeAll": false,
+        "allFormat": "",
+        "allValue": "",
+        "multi": false,
+        "multiFormat": "",
+        "query": "label_values({job=\"$job\"}, instance)",
+        "regex": "",
+        "current": {
+          "text": null,
+          "value": null
+        },
+        "label": "Instance",
+        "hide": 0,
+        "sort": 5
+      },
+      {
+        "name": "unit",
+        "type": "query",
+        "datasource": "${datasource}",
+        "refresh": 2,
+        "options": [
+          {
+            "text": "All",
+            "value": "$__all",
+            "selected": false
+          }
+        ],
+        "includeAll": true,
+        "allFormat": "",
+        "allValue": ".*",
+        "multi": false,
+        "multiFormat": "",
+        "query": "label_values({job=\"$job\"}, unit)",
+        "regex": "",
+        "current": {
+          "text": null,
+          "value": null
+        },
+        "label": "Unit",
+        "hide": 0,
+        "sort": 5
+      },
+      {
+        "name": "transport",
+        "type": "query",
+        "datasource": "${datasource}",
+        "refresh": 2,
+        "options": [
+          {
+            "text": "All",
+            "value": "$__all",
+            "selected": false
+          }
+        ],
+        "includeAll": true,
+        "allFormat": "",
+        "allValue": ".*",
+        "multi": false,
+        "multiFormat": "",
+        "query": "label_values({job=\"$job\"}, transport)",
+        "regex": "",
+        "current": {
+          "text": null,
+          "value": null
+        },
+        "label": "Transport",
+        "hide": 0,
+        "sort": 5
+      }
+    ]
+  },
+  "annotations": {
+    "list": null
+  },
+  "schemaVersion": 0,
+  "version": 0,
+  "links": null,
+  "time": {
+    "from": "now-3h",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "15s",
+      "30s",
+      "1m",
+      "5m"
+    ],
+    "time_options": [
+      "5m",
+      "15m",
+      "1h",
+      "6h",
+      "12h",
+      "24h",
+      "2d",
+      "7d",
+      "30d"
+    ]
+  }
 }

@@ -1,0 +1,75 @@
+# 
+# VAZ Projects
+# 
+# 
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+title: systemd Journal
+editable: true
+description: Display systemd journal entries for all EC2 instances.
+timepicker:
+    refresh_intervals:
+      - 15s
+      - 30s
+      - 1m
+      - 5m
+tags:
+  - Linux
+
+
+variables:
+  - datasource:
+        name: datasource
+        label: Data source
+        type: loki
+    
+  - const:
+        name: job
+        label: Job
+        hide: variable
+        values_map:
+            query: systemd Journal
+    
+  - query: &query
+        label: Instance
+        name: instance
+        datasource: ${datasource}
+        request: label_values({job="$job"}, instance)
+        sort: alphabetical_no_case_asc
+        refresh: time_change
+    
+  - query:
+        <<: *query
+        label: Unit
+        name: unit
+        request: label_values({job="$job"}, unit)
+        include_all: true
+        all_value: .*
+    
+  - query:
+        <<: *query
+        label: Transport
+        name: transport
+        request: label_values({job="$job"}, transport)
+        include_all: true
+        all_value: .*
+
+
+panels:
+  - logs:
+        title: systemd Journal
+        grid_pos: { x: 0, y: 0, w: 24, h: 20 }
+        visualization:
+            time: true
+            hide_log_details: false
+        
+        datasource: ${datasource}
+        targets:
+            - loki:
+                query: >
+                    { job = "$job", instance = "$instance", unit =~ "$unit", transport =~ "$transport" }
+                    | json
+                    | label_format level = "{{.PRIORITY}}"
+                    | line_format "{{.unit}}[{{._PID}}]: {{.MESSAGE}}"
