@@ -92,7 +92,6 @@ services:
         
         environment:
             MINIO_SERVER_URL: https://minio:9000
-            bucket: *bucket
         
         volumes: [ media:/data ]
         
@@ -102,8 +101,7 @@ services:
           - source: certificateKey
             target: /root/.minio/certs/private.key
         
-        entrypoint: [ /bin/sh, -c ]
-        command: [ 'mkdir -p /data/$${bucket}/ && minio server /data --console-address :9001' ]
+        command: server /data --console-address :9001
         
         ports:
           - 9000:9000   # API.
@@ -130,13 +128,14 @@ services:
             AWS_SECRET_ACCESS_KEY: *AWS_SECRET_ACCESS_KEY
         
         secrets:
-          - source: rootCertificates
-            target: /etc/ssl/certs/ca-certificates.crt
+          - source: certificate
+            target: /root/.mc/certs/CAs/minio.crt
         
-        entrypoint: [ /bin/sh, -c ]
+        entrypoint: [ /bin/sh, -ec ]
         command:
           - |-
             mc alias set minio $${s3Endpoint} $${AWS_ACCESS_KEY_ID} $${AWS_SECRET_ACCESS_KEY}
+            mc mb --ignore-existing minio/$${bucket}
             mc policy set public minio/$${bucket}
 
 
