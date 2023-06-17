@@ -13,7 +13,7 @@
   "sharedCrosshair": false,
   "panels": [
     {
-      "datasource": "${datasource}",
+      "datasource": "${loki}",
       "editable": false,
       "error": false,
       "gridPos": {
@@ -31,7 +31,7 @@
       "targets": [
         {
           "refId": "",
-          "expr": "{ job = \"$job\", instance = \"$instance\", unit =~ \"$unit\", transport =~ \"$transport\" } | json | label_format level = \"{{.PRIORITY}}\" | line_format \"{{.unit}}[{{._PID}}]: {{.MESSAGE}}\""
+          "expr": "{ job = \"$job\", instance = \"$instance\", unit =~ \"$unit\", transport =~ \"$transport\" }\n| json\n| PRIORITY \u003c= $priority\n| label_format level = `{{ $levels := fromJson \"{\\\"0\\\": \\\"emerg\\\",\\\"1\\\": \\\"alert\\\",\\\"2\\\": \\\"critical\\\",\\\"3\\\": \\\"error\\\",\\\"4\\\": \\\"warning\\\",\\\"5\\\": \\\"notice\\\",\\\"6\\\": \\\"informational\\\",\\\"7\\\": \\\"debug\\\"}\" }}{{ index $levels .PRIORITY }}`\n| label_format linePid = \"{{ if ._PID -}} [{{ ._PID }}] {{- end }}\"\n| line_format \"{{ ._HOSTNAME }} {{ .SYSLOG_IDENTIFIER }}{{ .linePid }}: {{ .MESSAGE }}\""
         }
       ],
       "options": {
@@ -50,7 +50,7 @@
   "templating": {
     "list": [
       {
-        "name": "datasource",
+        "name": "loki",
         "type": "datasource",
         "datasource": null,
         "refresh": 1,
@@ -66,8 +66,8 @@
           "text": null,
           "value": null
         },
-        "label": "Data source",
-        "hide": 0,
+        "label": "loki",
+        "hide": 2,
         "sort": 0
       },
       {
@@ -77,7 +77,7 @@
         "refresh": false,
         "options": [
           {
-            "text": "query",
+            "text": "value",
             "value": "systemd Journal",
             "selected": false
           }
@@ -93,14 +93,14 @@
           "text": null,
           "value": null
         },
-        "label": "Job",
+        "label": "job",
         "hide": 2,
         "sort": 0
       },
       {
         "name": "instance",
         "type": "query",
-        "datasource": "${datasource}",
+        "datasource": "${loki}",
         "refresh": 2,
         "options": [],
         "includeAll": false,
@@ -121,7 +121,7 @@
       {
         "name": "unit",
         "type": "query",
-        "datasource": "${datasource}",
+        "datasource": "${loki}",
         "refresh": 2,
         "options": [
           {
@@ -148,7 +148,7 @@
       {
         "name": "transport",
         "type": "query",
-        "datasource": "${datasource}",
+        "datasource": "${loki}",
         "refresh": 2,
         "options": [
           {
@@ -171,6 +171,70 @@
         "label": "Transport",
         "hide": 0,
         "sort": 5
+      },
+      {
+        "name": "priority",
+        "type": "custom",
+        "datasource": null,
+        "refresh": false,
+        "options": [
+          {
+            "text": "Emergency",
+            "value": "0",
+            "selected": false
+          },
+          {
+            "text": "Alert",
+            "value": "1",
+            "selected": false
+          },
+          {
+            "text": "Critical",
+            "value": "2",
+            "selected": false
+          },
+          {
+            "text": "Error",
+            "value": "3",
+            "selected": false
+          },
+          {
+            "text": "Warning",
+            "value": "4",
+            "selected": false
+          },
+          {
+            "text": "Notice",
+            "value": "5",
+            "selected": false
+          },
+          {
+            "text": "Informational",
+            "value": "6",
+            "selected": false
+          },
+          {
+            "text": "Debug",
+            "value": "7",
+            "selected": false
+          }
+        ],
+        "includeAll": false,
+        "allFormat": "",
+        "allValue": "",
+        "multi": false,
+        "multiFormat": "",
+        "query": "Emergency : 0, Alert : 1, Critical : 2, Error : 3, Warning : 4, Notice : 5, Informational : 6, Debug : 7",
+        "regex": "",
+        "current": {
+          "text": [
+            "Informational"
+          ],
+          "value": "6"
+        },
+        "label": "Priority",
+        "hide": 0,
+        "sort": 0
       }
     ]
   },

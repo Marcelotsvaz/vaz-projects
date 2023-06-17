@@ -10,51 +10,60 @@ title: systemd Journal
 editable: true
 description: Display systemd journal entries for all EC2 instances.
 timepicker:
-    refresh_intervals:
-      - 15s
-      - 30s
-      - 1m
-      - 5m
+    refresh_intervals: [ 15s, 30s, 1m, 5m ]
 tags:
   - Linux
 
 
 variables:
   - datasource:
-        name: datasource
-        label: Data source
+        name: loki
         type: loki
+        hide: variable
     
   - const:
         name: job
-        label: Job
         hide: variable
         values_map:
-            query: systemd Journal
+            value: systemd Journal
     
   - query: &query
-        label: Instance
         name: instance
-        datasource: ${datasource}
+        label: Instance
+        datasource: ${loki}
         request: label_values({job="$job"}, instance)
         sort: alphabetical_no_case_asc
         refresh: time_change
     
   - query:
         <<: *query
-        label: Unit
         name: unit
+        label: Unit
         request: label_values({job="$job"}, unit)
         include_all: true
         all_value: .*
     
   - query:
         <<: *query
-        label: Transport
         name: transport
+        label: Transport
         request: label_values({job="$job"}, transport)
         include_all: true
         all_value: .*
+    
+  - custom:
+        name: priority
+        label: Priority
+        default: 6
+        values_map:
+            Emergency: 0
+            Alert: 1
+            Critical: 2
+            Error: 3
+            Warning: 4
+            Notice: 5
+            Informational: 6
+            Debug: 7
 
 
 panels:
@@ -65,11 +74,13 @@ panels:
             time: true
             hide_log_details: false
         
-        datasource: ${datasource}
+        datasource: ${loki}
         targets:
             - loki:
-                query: >
+                query: |-
                     { job = "$job", instance = "$instance", unit =~ "$unit", transport =~ "$transport" }
                     | json
-                    | label_format level = "{{.PRIORITY}}"
-                    | line_format "{{.unit}}[{{._PID}}]: {{.MESSAGE}}"
+                    | PRIORITY <= $priority
+                    | label_format level = `{{ $levels := fromJson "{\"0\": \"emerg\",\"1\": \"alert\",\"2\": \"critical\",\"3\": \"error\",\"4\": \"warning\",\"5\": \"notice\",\"6\": \"informational\",\"7\": \"debug\"}" }}{{ index $levels .PRIORITY }}`
+                    | label_format linePid = "{{ if ._PID -}} [{{ ._PID }}] {{- end }}"
+                    | line_format "{{ ._HOSTNAME }} {{ .SYSLOG_IDENTIFIER }}{{ .linePid }}: {{ .MESSAGE }}"
