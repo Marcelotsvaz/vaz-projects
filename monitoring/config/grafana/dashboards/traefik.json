@@ -1,133 +1,227 @@
 {
-	"annotations": {
-		"list": [
-			{
-				"builtIn": 1,
-				"datasource": {
-					"type": "grafana",
-					"uid": "-- Grafana --"
-				},
-				"enable": true,
-				"hide": true,
-				"iconColor": "rgba(0, 211, 255, 1)",
-				"name": "Annotations & Alerts",
-				"target": {
-					"limit": 100,
-					"matchAny": false,
-					"tags": [],
-					"type": "dashboard"
-				},
-				"type": "dashboard"
-			}
-		]
-	},
-	"description": "",
-	"editable": true,
-	"fiscalYearStartMonth": 0,
-	"graphTooltip": 0,
-	"id": 6,
-	"iteration": 1686689237108,
-	"links": [],
-	"liveNow": false,
-	"panels": [
-		{
-			"datasource": {
-				"type": "loki",
-				"uid": "${datasource}"
-			},
-			"description": "",
-			"gridPos": {
-				"h": 20,
-				"w": 24,
-				"x": 0,
-				"y": 0
-			},
-			"id": 2,
-			"options": {
-				"dedupStrategy": "none",
-				"enableLogDetails": true,
-				"prettifyLogMessage": false,
-				"showCommonLabels": false,
-				"showLabels": false,
-				"showTime": false,
-				"sortOrder": "Descending",
-				"wrapLogMessage": false
-			},
-			"pluginVersion": "9.0.2",
-			"targets": [
-				{
-					"datasource": {
-						"type": "loki",
-						"uid": "${datasource}"
-					},
-					"editorMode": "code",
-					"expr": "{ job = \"$job\", service = \"$service\" }\n|~ \"^{\"\n| json\n| RouterName = \"toApplication@file\"\n| label_format level = \"{{.DownstreamStatus}}\"\n| line_format \"{{.DownstreamStatus}} <- {{.RequestMethod}} {{.RequestPath}}\"",
-					"hide": false,
-					"queryType": "range",
-					"refId": "Main"
-				}
-			],
-			"title": "Access Logs",
-			"transformations": [],
-			"type": "logs"
-		}
-	],
-	"schemaVersion": 36,
-	"style": "dark",
-	"tags": [
-		"Linux"
-	],
-	"templating": {
-		"list": [
-			{
-				"current": {},
-				"hide": 0,
-				"includeAll": false,
-				"label": "Data source",
-				"multi": false,
-				"name": "datasource",
-				"options": [],
-				"query": "loki",
-				"queryValue": "",
-				"refresh": 1,
-				"regex": "",
-				"skipUrlSync": false,
-				"type": "datasource"
-			},
-			{
-				"hide": 2,
-				"label": "Job",
-				"name": "job",
-				"query": "Docker Containers",
-				"skipUrlSync": false,
-				"type": "constant"
-			},
-			{
-				"hide": 2,
-				"label": "Service",
-				"name": "service",
-				"query": "traefik",
-				"skipUrlSync": false,
-				"type": "constant"
-			}
-		]
-	},
-	"time": {
-		"from": "now-1h",
-		"to": "now"
-	},
-	"timepicker": {
-		"refresh_intervals": [
-			"5s",
-			"15s",
-			"30s",
-			"1m",
-			"5m"
-		]
-	},
-	"timezone": "",
-	"title": "Traefik",
-	"uid": "OdvMg3_4z",
-	"version": 4,
-	"weekStart": ""
+  "slug": "",
+  "title": "Traefik",
+  "originalTitle": "",
+  "description": "Display Traefik access logs",
+  "tags": [
+    "Linux"
+  ],
+  "style": "dark",
+  "timezone": "",
+  "editable": true,
+  "hideControls": false,
+  "sharedCrosshair": false,
+  "panels": [
+    {
+      "datasource": "${loki}",
+      "editable": false,
+      "error": false,
+      "gridPos": {
+        "h": 20,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "isNew": false,
+      "span": 6,
+      "title": "Access Logs",
+      "transparent": false,
+      "type": "logs",
+      "targets": [
+        {
+          "refId": "",
+          "expr": "{ job = \"$jobLoki\", service = \"$dockerService\" }\n|~ \"^{\"\n| json\n| ServiceName = \"$service\"\n| label_format level = \"{{.DownstreamStatus}}\"\n| line_format \"{{.DownstreamStatus}} \u003c- {{.RequestMethod}} {{.RequestPath}}\""
+        }
+      ],
+      "options": {
+        "dedupStrategy": "",
+        "wrapLogMessage": false,
+        "showTime": true,
+        "showLabels": false,
+        "showCommonLabels": false,
+        "prettifyLogMessage": false,
+        "sortOrder": "Descending",
+        "enableLogDetails": true
+      }
+    }
+  ],
+  "rows": [],
+  "templating": {
+    "list": [
+      {
+        "name": "prometheus",
+        "type": "datasource",
+        "datasource": null,
+        "refresh": 1,
+        "options": [],
+        "includeAll": false,
+        "allFormat": "",
+        "allValue": "",
+        "multi": false,
+        "multiFormat": "",
+        "query": "prometheus",
+        "regex": "",
+        "current": {
+          "text": null,
+          "value": null
+        },
+        "label": "prometheus",
+        "hide": 2,
+        "sort": 0
+      },
+      {
+        "name": "loki",
+        "type": "datasource",
+        "datasource": null,
+        "refresh": 1,
+        "options": [],
+        "includeAll": false,
+        "allFormat": "",
+        "allValue": "",
+        "multi": false,
+        "multiFormat": "",
+        "query": "loki",
+        "regex": "",
+        "current": {
+          "text": null,
+          "value": null
+        },
+        "label": "loki",
+        "hide": 2,
+        "sort": 0
+      },
+      {
+        "name": "jobPrometheus",
+        "type": "constant",
+        "datasource": null,
+        "refresh": false,
+        "options": [
+          {
+            "text": "value",
+            "value": "Traefik",
+            "selected": false
+          }
+        ],
+        "includeAll": false,
+        "allFormat": "",
+        "allValue": "",
+        "multi": false,
+        "multiFormat": "",
+        "query": "Traefik",
+        "regex": "",
+        "current": {
+          "text": null,
+          "value": null
+        },
+        "label": "jobPrometheus",
+        "hide": 2,
+        "sort": 0
+      },
+      {
+        "name": "jobLoki",
+        "type": "constant",
+        "datasource": null,
+        "refresh": false,
+        "options": [
+          {
+            "text": "value",
+            "value": "Docker Containers",
+            "selected": false
+          }
+        ],
+        "includeAll": false,
+        "allFormat": "",
+        "allValue": "",
+        "multi": false,
+        "multiFormat": "",
+        "query": "Docker Containers",
+        "regex": "",
+        "current": {
+          "text": null,
+          "value": null
+        },
+        "label": "jobLoki",
+        "hide": 2,
+        "sort": 0
+      },
+      {
+        "name": "dockerService",
+        "type": "constant",
+        "datasource": null,
+        "refresh": false,
+        "options": [
+          {
+            "text": "value",
+            "value": "traefik",
+            "selected": false
+          }
+        ],
+        "includeAll": false,
+        "allFormat": "",
+        "allValue": "",
+        "multi": false,
+        "multiFormat": "",
+        "query": "traefik",
+        "regex": "",
+        "current": {
+          "text": null,
+          "value": null
+        },
+        "label": "dockerService",
+        "hide": 2,
+        "sort": 0
+      },
+      {
+        "name": "service",
+        "type": "query",
+        "datasource": "${prometheus}",
+        "refresh": 2,
+        "options": [],
+        "includeAll": false,
+        "allFormat": "",
+        "allValue": "",
+        "multi": false,
+        "multiFormat": "",
+        "query": "label_values(traefik_service_requests_total{job=\"$jobPrometheus\"}, service)",
+        "regex": "",
+        "current": {
+          "text": null,
+          "value": null
+        },
+        "label": "Service",
+        "hide": 0,
+        "sort": 5
+      }
+    ]
+  },
+  "annotations": {
+    "list": null
+  },
+  "schemaVersion": 0,
+  "version": 0,
+  "links": null,
+  "time": {
+    "from": "now-3h",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "15s",
+      "30s",
+      "1m",
+      "5m"
+    ],
+    "time_options": [
+      "5m",
+      "15m",
+      "1h",
+      "6h",
+      "12h",
+      "24h",
+      "2d",
+      "7d",
+      "30d"
+    ]
+  }
 }

@@ -1,0 +1,73 @@
+# 
+# VAZ Projects
+# 
+# 
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+title: Traefik
+editable: true
+description: Display Traefik access logs
+timepicker:
+    refresh_intervals: [ 15s, 30s, 1m, 5m ]
+tags:
+  - Linux
+
+
+variables:
+  - datasource:
+        name: prometheus
+        type: prometheus
+        hide: variable
+    
+  - datasource:
+        name: loki
+        type: loki
+        hide: variable
+    
+  - const:
+        name: jobPrometheus
+        hide: variable
+        values_map:
+            value: Traefik
+    
+  - const:
+        name: jobLoki
+        hide: variable
+        values_map:
+            value: Docker Containers
+    
+  - const:
+        name: dockerService
+        hide: variable
+        values_map:
+            value: traefik
+    
+  - query:
+        name: service
+        label: Service
+        datasource: ${prometheus}
+        request: label_values(traefik_service_requests_total{job="$jobPrometheus"}, service) 
+        sort: alphabetical_no_case_asc
+        refresh: time_change
+
+
+panels:
+  - logs:
+        title: Access Logs
+        grid_pos: { x: 0, y: 0, w: 24, h: 20 }
+        visualization:
+            time: true
+            hide_log_details: false
+        
+        datasource: ${loki}
+        targets:
+          - loki:
+                query: |-
+                    { job = "$jobLoki", service = "$dockerService" }
+                    |~ "^{"
+                    | json
+                    | ServiceName = "$service"
+                    | label_format level = "{{.DownstreamStatus}}"
+                    | line_format "{{.DownstreamStatus}} <- {{.RequestMethod}} {{.RequestPath}}"
