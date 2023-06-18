@@ -60,13 +60,6 @@ services:
 
 
 
-volumes:
-    grafana:
-    prometheus:
-    loki:
-
-
-
 configs:
     grafana:
         file: ./config/grafana
@@ -74,3 +67,10 @@ configs:
         file: ../deployment/prometheus.yaml
     loki:
         file: ./config/loki.yaml
+
+
+
+volumes:
+    grafana:
+    prometheus:
+    loki:

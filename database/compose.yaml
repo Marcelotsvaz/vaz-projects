@@ -16,6 +16,10 @@ services:
             # Secrets.
           - POSTGRES_PASSWORD
         
+        configs:
+          - source: stagingDatabaseFixture
+            target: /docker-entrypoint-initdb.d/stagingFixture.sql
+        
         volumes: [ postgres:/var/lib/postgresql/data ]
         
         ports: [ 5432:5432 ]    # API.
@@ -24,6 +28,12 @@ services:
             test: pg_isready --username postgres
             interval: 5s
             start_period: 10s
+
+
+
+configs:
+    stagingDatabaseFixture:
+        file: ./scripts/stagingFixture.sql
 
 
 

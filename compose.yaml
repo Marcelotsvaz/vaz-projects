@@ -93,13 +93,13 @@ services:
         environment:
             MINIO_SERVER_URL: https://minio:9000
         
-        volumes: [ media:/data ]
-        
         secrets:
           - source: certificate
             target: /root/.minio/certs/public.crt
           - source: certificateKey
             target: /root/.minio/certs/private.key
+        
+        volumes: [ media:/data ]
         
         command: server /data --console-address :9001
         
@@ -140,12 +140,6 @@ services:
 
 
 
-volumes:
-    media:
-    postgres:
-
-
-
 configs:
     elasticsearch:
         file: ./application/config/jvm.options
@@ -153,6 +147,8 @@ configs:
         file: ./loadBalancer/config/traefik/static.yaml
     traefikDynamic:
         file: ./loadBalancer/config/traefik/dynamic.yaml
+    stagingDatabaseFixture:
+        file: ./database/scripts/stagingFixture.sql
 
 
 
@@ -163,3 +159,9 @@ secrets:
         file: ./deployment/tls/website.crt
     certificateKey:
         file: ./deployment/tls/websiteKey.pem
+
+
+
+volumes:
+    media:
+    postgres:

@@ -9,6 +9,13 @@ ssh -L localhost:9090:localhost:9090 -J staging.vazprojects monitoring
 ```
 
 
+## PostgreSQL Dump
+
+```sh
+docker compose exec postgres pg_dump --username postgres > dump.sql
+```
+
+
 ## WebP Conversion
 
 ```sh
