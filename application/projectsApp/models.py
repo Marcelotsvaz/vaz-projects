@@ -239,7 +239,7 @@ class Page( models.Model ):
 	
 	
 	# Manager.
-	objects = ProjectManager()
+	objects = PageManager()
 	all_objects = models.Manager()
 	
 	
