@@ -7,7 +7,6 @@
 
 
 from django.contrib import admin
-from django_object_actions import DjangoObjectActions
 from django.utils.translation import gettext_lazy as _
 
 from commonApp.admin import UserImageInLine
@@ -16,7 +15,7 @@ from .models import BlogPost
 
 
 @admin.register( BlogPost )
-class BlogPostAdmin( DjangoObjectActions, admin.ModelAdmin ):
+class BlogPostAdmin( admin.ModelAdmin ):
 	'''
 	Blog Post admin page.
 	'''
@@ -55,13 +54,12 @@ class BlogPostAdmin( DjangoObjectActions, admin.ModelAdmin ):
 	
 	
 	# Object actions.
-	def publish( self, request, object ):
-		object.publish()
+	@admin.action( description = _('Publish selected posts.') )
+	def publish( self, request, queryset ):
+		for post in queryset:
+			post.publish()
 		
-		self.message_user( request, _('Published post.'), level = 25 )
-	
-	publish.label = _('Publish')
-	publish.short_description = _('Publish this post.')
+		self.message_user( request, _('Published posts.'), level = 25 )
 	
 	
 	# Edit page options.
@@ -75,6 +73,6 @@ class BlogPostAdmin( DjangoObjectActions, admin.ModelAdmin ):
 		'last_edited',
 	)
 	inlines = [ UserImageInLine ]
-	change_actions = (
+	actions = (
 		'publish',
 	)

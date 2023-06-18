@@ -8,7 +8,6 @@
 
 from django.contrib import admin
 from jet.admin import CompactInline
-from django_object_actions import DjangoObjectActions
 from django.utils.translation import gettext_lazy as _
 
 from commonApp.admin import UserImageInLine
@@ -93,7 +92,7 @@ class PageInLine( CompactInline ):
 
 
 @admin.register( Project )
-class ProjectAdmin( DjangoObjectActions, admin.ModelAdmin ):
+class ProjectAdmin( admin.ModelAdmin ):
 	'''
 	Project admin page.
 	'''
@@ -138,21 +137,19 @@ class ProjectAdmin( DjangoObjectActions, admin.ModelAdmin ):
 	
 	
 	# Object actions.
-	def publish( self, request, object ):
-		object.publish()
+	@admin.action( description = _('Publish selected projects.') )
+	def publish( self, request, queryset ):
+		for project in queryset:
+			project.publish()
 		
-		self.message_user( request, _('Published project.'), level = 25 )
+		self.message_user( request, _('Published projects.'), level = 25 )
 	
-	publish.label = _('Publish')
-	publish.short_description = _('Publish this project.')
-	
-	def publishAll( self, request, object ):
-		object.publish( publishPages = True )
+	@admin.action( description = _('Publish selected projects and its pages.') )
+	def publishAll( self, request, queryset ):
+		for project in queryset:
+			project.publish( publishPages = True )
 		
-		self.message_user( request, _('Published project and pages.'), level = 25 )
-	
-	publishAll.label = _('Publish All')
-	publishAll.short_description = _('Publish this project and all of its pages.')
+		self.message_user( request, _('Published projects and pages.'), level = 25 )
 	
 	
 	# Edit page options.
@@ -166,7 +163,7 @@ class ProjectAdmin( DjangoObjectActions, admin.ModelAdmin ):
 		'base_last_edited',
 	)
 	inlines = [ PageInLine, UserImageInLine ]
-	change_actions = (
+	actions = (
 		'publish',
 		'publishAll',
 	)

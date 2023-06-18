@@ -15,7 +15,6 @@ django-compression-middleware==0.4.1
 django-debug-toolbar==3.5.0
 django-elasticsearch-dsl==7.2.2
 django-imagekit==4.1.0
-django-object-actions==4.0.0
 django-storages==1.12.3
 django-taggit==3.0.0
 djangorestframework==3.14.0
