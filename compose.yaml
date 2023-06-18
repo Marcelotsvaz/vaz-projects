@@ -127,6 +127,10 @@ services:
             AWS_ACCESS_KEY_ID: *AWS_ACCESS_KEY_ID
             AWS_SECRET_ACCESS_KEY: *AWS_SECRET_ACCESS_KEY
         
+        configs:
+          - source: stagingMediaFixture
+            target: /stagingMedia/
+        
         secrets:
           - source: certificate
             target: /root/.mc/certs/CAs/minio.crt
@@ -135,8 +139,11 @@ services:
         command:
           - |-
             mc alias set minio $${s3Endpoint} $${AWS_ACCESS_KEY_ID} $${AWS_SECRET_ACCESS_KEY}
-            mc mb --ignore-existing minio/$${bucket}
-            mc policy set public minio/$${bucket}
+            mc stat minio/$${bucket} &> /dev/null && exit    # Run only on empty volume.
+            mc mb $${_}
+            mc mirror /stagingMedia/ $${_}
+            mc anonymous set download $${_}
+            sh
 
 
 
@@ -147,6 +154,8 @@ configs:
         file: ./loadBalancer/config/traefik/static.yaml
     traefikDynamic:
         file: ./loadBalancer/config/traefik/dynamic.yaml
+    stagingMediaFixture:
+        file: ./application/stagingMedia/
     stagingDatabaseFixture:
         file: ./database/scripts/stagingFixture.sql
 
