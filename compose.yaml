@@ -143,7 +143,6 @@ services:
             mc mb $${_}
             mc mirror /stagingMedia/ $${_}
             mc anonymous set download $${_}
-            sh
 
 
 
