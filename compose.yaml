@@ -44,7 +44,7 @@ services:
           - |-
             manage.py migrate --no-input
             manage.py collectstatic --ignore '*/src/*' --no-input
-            manage.py search_index --populate
+            manage.py search_index --rebuild -f
             manage.py runserver 0.0.0.0:8000 --nostatic
     
     

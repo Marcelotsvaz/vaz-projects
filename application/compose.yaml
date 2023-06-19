@@ -32,7 +32,7 @@ services:
         command:
           - |-
             manage.py migrate --no-input
-            manage.py search_index --populate
+            manage.py search_index --rebuild -f
             uwsgi --ini config/uwsgi.ini
         
         ports: [ 8000:8000 ]    # Application.
