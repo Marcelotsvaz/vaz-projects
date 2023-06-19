@@ -16,6 +16,14 @@ docker compose exec postgres pg_dump --username postgres > database/scripts/stag
 ```
 
 
+## Django Dump
+
+```sh
+docker compose exec application manage.py dumpdata --all --natural-primary --natural-foreign --indent 4 auth.user taggit commonApp projectsApp blogApp > data.json
+cat data.json | docker compose exec --no-TTY application manage.py loaddata --format=json -
+```
+
+
 ## WebP Conversion
 
 ```sh
