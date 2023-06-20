@@ -49,16 +49,17 @@
 					"value": "-f compose.yaml -f development.compose.yaml up --detach --build",
 				},
 				{
-					"label": "down",
-					"value": "down"
+					"value": "down",
 				},
 				{
-					"label": "build",
-					"value": "build"
+					"value": "down --volumes",
+				},
+				{
+					"value": "build",
 				},
 				{
 					"label": "tests",
-					"value": "run --rm --build application 'coverage run manage.py test && coverage report'"
+					"value": "run --rm --build application 'coverage run manage.py test && coverage report'",
 				},
 			],
 		},
