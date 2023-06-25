@@ -73,4 +73,4 @@ COPY --link --chown=${dockerUid}:${dockerUid} . .
 COPY --link --chown=${dockerUid}:${dockerUid} --from=lessBuilder deployment/static/siteApp/css/siteApp.css deployment/static/siteApp/css/
 
 ENV PATH="${PATH}:/home/${dockerUser}"
-ENTRYPOINT [ "/bin/sh", "-c" ]
+ENTRYPOINT [ "/bin/sh", "-ec" ]
