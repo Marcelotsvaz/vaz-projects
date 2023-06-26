@@ -16,9 +16,15 @@
     script:
       - mkdir -p deployment/tls/ && cd deployment/tls/
       - openssl genpkey -algorithm EC -pkeyopt ec_paramgen_curve:prime256v1 -out websiteKey.pem
-      - openssl req -x509 -subj / -addext "subjectAltName = DNS:localhost, DNS:minio" -key websiteKey.pem -sha512 -out website.crt
+      - openssl req
+          -x509 -subj /
+          -addext 'subjectAltName = DNS:localhost, DNS:minio'
+          -key websiteKey.pem
+          -sha512
+          -out website.crt
       - cd ../../
-      - echo ${CI_REGISTRY_PASSWORD} | docker login --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
+      - echo ${CI_REGISTRY_PASSWORD} | docker login
+            --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
       - docker compose up --no-build --detach --quiet-pull
       - docker compose exec --no-TTY application coverage run manage.py test
       - docker compose exec --no-TTY application coverage report
