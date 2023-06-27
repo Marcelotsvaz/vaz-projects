@@ -30,3 +30,11 @@ cat data.json | docker compose exec --no-TTY application manage.py loaddata --fo
 cwebp src.png -o dest.webp -lossless
 cwebp src.jpg -o dest.webp -q 90 -m 6 -resize 2000 0
 ```
+
+
+## Disqus API
+
+```sh
+curl 'https://disqus.com/api/3.0/forums/listThreads.json?api_key=<apiKey>&forum=<forum>' | jq '.response[].id' -r
+curl -d 'api_key=?' -d 'api_secret=?' -d 'access_token=?' -d 'thread=?' -d 'thread=?' 'https://disqus.com/api/3.0/threads/remove.json'
+```
