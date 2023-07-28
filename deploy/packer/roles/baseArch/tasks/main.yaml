@@ -13,7 +13,7 @@
       - name: Get packages from all roles
         set_fact:
             packages: '{{ packages | default( [] ) + lookup( "vars", item ) }}'
-        with_varnames: ^.*_packages$
+        with_varnames: ^.+_packages$
         
         
       - name: Run pacstrap

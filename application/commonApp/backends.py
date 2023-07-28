@@ -19,7 +19,7 @@ from storages.backends.s3boto3 import S3Boto3Storage
 #-------------------------------------------------------------------------------
 class StaticStorageMixin():
 	'''
-	Mixin to replicate Django's StaticFilesStorage behaviour with different
+	Mixin to replicate Django's StaticFilesStorage behavior with different
 	base storage backends.
 	'''
 	
@@ -47,7 +47,7 @@ class CloudfrontStorage( S3Boto3Storage ):
 	
 	def __init__( self, location = None, base_url = None, **kwargs ):
 		'''
-		CloudfrontStorage copies the behaviour of Django's FileSystemStorage.
+		CloudfrontStorage copies the behavior of Django's FileSystemStorage.
 		'''
 		
 		if location is None:
@@ -57,7 +57,7 @@ class CloudfrontStorage( S3Boto3Storage ):
 			base_url = settings.MEDIA_URL
 		
 		# MEDIA_URL needs a protocol and to end with a slash, custom_domain must not.
-		base_url = re.sub( r'^https?://(.*)/', r'\1', base_url )
+		base_url = re.sub( r'^https?://(.+)/', r'\1', base_url )
 		
 		super().__init__( location = location, custom_domain = base_url, **kwargs )
 		
