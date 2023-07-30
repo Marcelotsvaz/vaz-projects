@@ -89,14 +89,15 @@ function buildBuilderAmi
 function terraformInit
 {
 	local stateName=${1}
-	local terraformUrl="https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/terraform/state/${stateName}"
 	
-	terraform init -reconfigure										\
-		-backend-config="address=${terraformUrl}"					\
-		-backend-config="lock_address=${terraformUrl}/lock"			\
-		-backend-config="unlock_address=${terraformUrl}/lock"		\
-		-backend-config="username=${gitlabUser:-gitlab-ci-token}"	\
-		-backend-config="password=${CI_JOB_TOKEN}"
+	# Terraform HTTP backend setup.
+	TF_HTTP_ADDRESS="https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/terraform/state/${stateName}"
+	TF_HTTP_LOCK_ADDRESS="${TF_HTTP_ADDRESS}/lock"
+	TF_HTTP_UNLOCK_ADDRESS="${TF_HTTP_ADDRESS}/lock"
+	TF_HTTP_USERNAME="${gitlabUser:-gitlab-ci-token}"
+	TF_HTTP_PASSWORD="${CI_JOB_TOKEN}"
+	
+	terraform init -reconfigure
 }
 
 
