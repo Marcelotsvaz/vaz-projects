@@ -88,7 +88,7 @@
 				},
 				{
 					"label": "Deploy Global",
-					"value": "deployGlobal",
+					"value": "deployGlobal global",
 				},
 				{
 					"label": "Destroy Staging",
@@ -100,7 +100,7 @@
 				},
 				{
 					"label": "Destroy Global",
-					"value": "destroyGlobal",
+					"value": "destroyGlobal global",
 				},
 			],
 		},

@@ -7,37 +7,72 @@
 
 
 
-# Export variables and abort on error.
-set -ae
+# Export variables.
+set -a
 
 
 # Parameters.
-command=${1}
-environment=${2}
+command="${1}"
+environment="${2}"
 
 
-# Variables.
-if [[ "${GITLAB_CI}" ]]; then	# Running in GitLab CI/CD.
-	echo 'Running in CI/CD.'
+# Manually set GitLab CI/CD variables when running locally.
+# Use a function to allow local variables and the use of different
+# environments on the same script call.
+function setupEnvironment
+{
+	local environment="${1}"
 	
-	commitSha=${CI_COMMIT_SHA}
-	terraformAutoApprove='-auto-approve'
+	if [[ "${GITLAB_CI:-}" ]]; then
+		echo 'Running in CI/CD.'
+		
+		terraformAutoApprove='-auto-approve'
+		
+		set -x	# Echo commands.
+	else
+		echo 'Running outside CI/CD.'
+		
+		source 'deployment/local.env'
+		
+		local CI_API_V4_URL='https://gitlab.com/api/v4'
+		local CI_REGISTRY='registry.gitlab.com'
+		local CI_PROJECT_URL="https://gitlab.com/${CI_PROJECT_PATH}"
+		local CI_REGISTRY_IMAGE="${CI_REGISTRY}/${CI_PROJECT_PATH}"
+		# TODO: Get PR branch when support for multiple staging environments is implemented.
+		local CI_COMMIT_SHA=$(git rev-parse remotes/gitlab/production)
+		local applicationImage="${CI_REGISTRY_IMAGE}/application:${CI_COMMIT_SHA}"
+	fi
 	
-	set -x	# Echo commands.
-else
-	echo 'Running outside CI/CD.'
+	# Terraform HTTP backend setup.
+	TF_HTTP_ADDRESS="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/terraform/state/${environment}"
+	TF_HTTP_LOCK_ADDRESS="${TF_HTTP_ADDRESS}/lock"
+	TF_HTTP_UNLOCK_ADDRESS="${TF_HTTP_ADDRESS}/lock"
+	TF_HTTP_USERNAME="${terraformBackendUsername-gitlab-ci-token}"
+	TF_HTTP_PASSWORD="${terraformBackendPassword-${CI_JOB_TOKEN}}"
 	
-	# TODO: Get PR branch when support for multiple staging environments is implemented.
-	commitSha=$(git rev-parse remotes/gitlab/production)
-	applicationImage="registry.gitlab.com/marcelotsvaz/vaz-projects/application:${commitSha}"
+	# Terraform setup.
+	TF_DATA_DIR='../../../deployment/terraform'
+	TF_IN_AUTOMATION='True'
+	terraformRoot='deploy/terraform'
+	terraformPlan="${TF_DATA_DIR}/../terraformPlan.cache"
+	terraformChanges="${TF_DATA_DIR}/../terraformChanges.json"
+	repositorySnapshot="${CI_PROJECT_URL}/-/archive/${CI_COMMIT_SHA}/vaz-projects.tar.gz"
+}
+
+
+setupEnvironment ${environment}
+
+
+# Check if sourced.
+if [[ "${BASH_SOURCE[0]}" != "${0}" ]]; then
+    echo 'Environment setup complete.'
+	
+	return
 fi
 
-TF_IN_AUTOMATION='True'
-TF_DATA_DIR='../../../deployment/terraform'
-terraformRoot='deploy/terraform'
-terraformPlan=${TF_DATA_DIR}/../terraformPlan.cache
-terraformChanges=${TF_DATA_DIR}/../terraformChanges.json
-repositorySnapshot="https://gitlab.com/marcelotsvaz/vaz-projects/-/archive/${commitSha}/vaz-projects.tar.gz"
+
+# Abort on error, but not when sourcing.
+set -e
 
 
 
@@ -88,15 +123,6 @@ function buildBuilderAmi
 #-------------------------------------------------------------------------------
 function terraformInit
 {
-	local stateName=${1}
-	
-	# Terraform HTTP backend setup.
-	TF_HTTP_ADDRESS="https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/terraform/state/${stateName}"
-	TF_HTTP_LOCK_ADDRESS="${TF_HTTP_ADDRESS}/lock"
-	TF_HTTP_UNLOCK_ADDRESS="${TF_HTTP_ADDRESS}/lock"
-	TF_HTTP_USERNAME="${gitlabUser:-gitlab-ci-token}"
-	TF_HTTP_PASSWORD="${CI_JOB_TOKEN}"
-	
 	terraform init -reconfigure
 }
 
@@ -108,7 +134,7 @@ function terraformInit
 function deployEnvironment
 {
 	cd ${terraformRoot}/environment/
-	terraformInit ${environment}
+	terraformInit
 	terraform plan											\
 		-var="environment=${environment}"					\
 		-var="repository_snapshot=${repositorySnapshot}"	\
@@ -137,7 +163,7 @@ function deployEnvironment
 function destroyEnvironment
 {
 	cd ${terraformRoot}/environment/
-	terraformInit ${environment}
+	terraformInit
 	terraform destroy										\
 		-var="environment=${environment}"					\
 		-var="repository_snapshot=${repositorySnapshot}"	\
@@ -153,7 +179,7 @@ function destroyEnvironment
 function deployGlobal
 {
 	cd ${terraformRoot}/global/
-	terraformInit global
+	terraformInit
 	terraform apply ${terraformAutoApprove}
 }
 
@@ -165,7 +191,7 @@ function deployGlobal
 function destroyGlobal
 {
 	cd ${terraformRoot}/global/
-	terraformInit global
+	terraformInit
 	terraform destroy ${terraformAutoApprove}
 }
 
