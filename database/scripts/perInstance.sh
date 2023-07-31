@@ -36,7 +36,7 @@ while [[ ! -b ${dataDisk} ]]; do
 done
 
 # Format volume if partition doesn't exist.
-if [[ $(partx --show --nr 1 --output name --noheadings ${dataDisk}) != "${partitionName}" ]]; then
+if [[ $(partx --show --nr 1 --output name --noheadings ${dataDisk}) != ${partitionName} ]]; then
 	echo Formatting new volume...
 	
 	sgdisk --clear ${dataDisk}

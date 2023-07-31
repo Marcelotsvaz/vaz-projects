@@ -7,4 +7,4 @@
 
 
 
-PYTHONUNBUFFERED=1 sudo -E ansible-playbook "${@}"
+PYTHONUNBUFFERED='1' sudo -E ansible-playbook "${@}"

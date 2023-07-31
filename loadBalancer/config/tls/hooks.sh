@@ -13,11 +13,11 @@ set -e	# Abort on error.
 
 function dns_update
 {
-	local action=${1}; shift
+	local action="${1}"; shift
 	local changeBatch='{ "Changes": [] }'
 	
-	while [[ "${@}" ]]; do
-		local domain=${1} tokenValue=${3}; shift 3
+	while [[ ${@} ]]; do
+		local domain="${1}" tokenValue="${3}"; shift 3
 		
 		change=$(cat <<- EOF
 			{
@@ -60,7 +60,7 @@ function clean_challenge
 }
 
 
-command=${1}; shift
-if [[ "${command}" =~ ^(deploy_challenge|clean_challenge)$ ]]; then
+command="${1}"; shift
+if [[ ${command} =~ ^(deploy_challenge|clean_challenge)$ ]]; then
 	${command} "${@}"
 fi

@@ -11,7 +11,7 @@
 set -e
 
 cd /home/${user}/deployment/tls/
-config=../../loadBalancer/config/tls/dehydrated.conf
+config='../../loadBalancer/config/tls/dehydrated.conf'
 
 tempFile=$(mktemp)
 # Run in a sub-shell because `set -e` doesn't trigger with `&&`.

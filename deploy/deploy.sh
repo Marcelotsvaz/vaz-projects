@@ -23,7 +23,7 @@ function setupEnvironment
 {
 	local environment="${1}"
 	
-	if [[ "${GITLAB_CI:-}" ]]; then
+	if [[ ${GITLAB_CI} ]]; then
 		echo 'Running in CI/CD.'
 		
 		terraformAutoApprove='-auto-approve'
@@ -47,8 +47,8 @@ function setupEnvironment
 	TF_HTTP_ADDRESS="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/terraform/state/${environment}"
 	TF_HTTP_LOCK_ADDRESS="${TF_HTTP_ADDRESS}/lock"
 	TF_HTTP_UNLOCK_ADDRESS="${TF_HTTP_ADDRESS}/lock"
-	TF_HTTP_USERNAME="${terraformBackendUsername-gitlab-ci-token}"
-	TF_HTTP_PASSWORD="${terraformBackendPassword-${CI_JOB_TOKEN}}"
+	TF_HTTP_USERNAME="${terraformBackendUsername:-gitlab-ci-token}"
+	TF_HTTP_PASSWORD="${terraformBackendPassword:-${CI_JOB_TOKEN}}"
 	
 	# Terraform setup.
 	TF_DATA_DIR='../../../deployment/terraform'
@@ -64,7 +64,7 @@ setupEnvironment ${environment}
 
 
 # Check if sourced.
-if [[ "${BASH_SOURCE[0]}" != "${0}" ]]; then
+if [[ ${BASH_SOURCE[0]} != ${0} ]]; then
     echo 'Environment setup complete.'
 	
 	return
@@ -133,26 +133,26 @@ function terraformInit
 #-------------------------------------------------------------------------------
 function deployEnvironment
 {
-	cd ${terraformRoot}/environment/
+	cd "${terraformRoot}/environment/"
 	terraformInit
 	terraform plan											\
 		-var="environment=${environment}"					\
 		-var="repository_snapshot=${repositorySnapshot}"	\
 		-var="application_image=${applicationImage}"		\
-		-out ${terraformPlan}
-	terraform show -no-color ${terraformPlan}																						\
+		-out "${terraformPlan}"
+	terraform show -no-color "${terraformPlan}"																						\
 		| sed -En 's/^Plan: ([0-9]+) to add, ([0-9]+) to change, ([0-9]+) to destroy\.$/{"create":\1,"update":\2,"delete":\3}/p'	\
-		> ${terraformChanges}
+		> "${terraformChanges}"
 	
-	if [[ ! "${terraformAutoApprove}" ]]; then
-		read -p "Do you want to perform these actions? " approved
+	if [[ ! ${terraformAutoApprove} ]]; then
+		read -p 'Do you want to perform these actions? ' approved
 		
-		if [[ "${approved}" != 'yes' ]]; then
+		if [[ ${approved} != 'yes' ]]; then
 			exit 1
 		fi
 	fi
 	
-	terraform apply ${terraformPlan}
+	terraform apply "${terraformPlan}"
 }
 
 
@@ -162,7 +162,7 @@ function deployEnvironment
 #-------------------------------------------------------------------------------
 function destroyEnvironment
 {
-	cd ${terraformRoot}/environment/
+	cd "${terraformRoot}/environment/"
 	terraformInit
 	terraform destroy										\
 		-var="environment=${environment}"					\
@@ -178,7 +178,7 @@ function destroyEnvironment
 #-------------------------------------------------------------------------------
 function deployGlobal
 {
-	cd ${terraformRoot}/global/
+	cd "${terraformRoot}/global/"
 	terraformInit
 	terraform apply ${terraformAutoApprove}
 }
@@ -190,7 +190,7 @@ function deployGlobal
 #-------------------------------------------------------------------------------
 function destroyGlobal
 {
-	cd ${terraformRoot}/global/
+	cd "${terraformRoot}/global/"
 	terraformInit
 	terraform destroy ${terraformAutoApprove}
 }
@@ -200,7 +200,7 @@ function destroyGlobal
 # 
 # Run command.
 #-------------------------------------------------------------------------------
-if [[ "${command}" =~ ^(buildAmi|buildBuilderAmi|deployEnvironment|destroyEnvironment|deployGlobal|destroyGlobal)$ ]]; then
+if [[ ${command} =~ ^(buildAmi|buildBuilderAmi|deployEnvironment|destroyEnvironment|deployGlobal|destroyGlobal)$ ]]; then
 	${command}
 else
 	echo 'Invalid command.'
