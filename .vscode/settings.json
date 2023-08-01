@@ -9,17 +9,17 @@
 {
 	"terminal.integrated.automationProfile.linux": {
 		"path": "/usr/bin/bash",
-		"args": [ "-c", "source '${workspaceFolder}/deploy/deploy.sh' null local; eval $1" ],
+		"args": [ "-c", "source '${workspaceFolder}/deploy/deploy.sh' global; eval $1" ],
 	},
 	
 	"terminal.integrated.profiles.linux": {
 		"bash": {
 			"path": "/usr/bin/bash",
-			"args": [ "-c", "source '${workspaceFolder}/deploy/deploy.sh' null local; exec bash" ],
+			"args": [ "-c", "source '${workspaceFolder}/deploy/deploy.sh' global; exec bash" ],
 		},
 		"fish": {
 			"path": "/usr/bin/fish",
-			"args": [ "-c", "sourceBash '${workspaceFolder}/deploy/deploy.sh' null local; exec fish" ],
+			"args": [ "-c", "sourceBash '${workspaceFolder}/deploy/deploy.sh' global; exec fish" ],
 		},
 	},
 	

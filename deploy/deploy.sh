@@ -8,8 +8,8 @@
 
 
 # Parameters.
-command="${1}"
-environment="${2}"
+environment="${1}" 
+command="${2}"
 
 
 # Manually set GitLab CI/CD variables when running locally.

@@ -72,35 +72,35 @@
 			"options": [
 				{
 					"label": "Build AMI",
-					"value": "buildAmi",
+					"value": "global buildAmi",
 				},
 				{
 					"label": "Build Builder AMI",
-					"value": "buildBuilderAmi",
+					"value": "global buildBuilderAmi",
 				},
 				{
 					"label": "Deploy Staging",
-					"value": "deployEnvironment staging",
+					"value": "staging deployEnvironment",
 				},
 				{
 					"label": "Deploy Production",
-					"value": "deployEnvironment production",
+					"value": "production deployEnvironment",
 				},
 				{
 					"label": "Deploy Global",
-					"value": "deployGlobal global",
+					"value": "global deployGlobal",
 				},
 				{
 					"label": "Destroy Staging",
-					"value": "destroyEnvironment staging",
+					"value": "staging destroyEnvironment",
 				},
 				{
 					"label": "Destroy Production",
-					"value": "destroyEnvironment production",
+					"value": "production destroyEnvironment",
 				},
 				{
 					"label": "Destroy Global",
-					"value": "destroyGlobal global",
+					"value": "global destroyGlobal",
 				},
 			],
 		},
