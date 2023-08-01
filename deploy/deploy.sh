@@ -34,17 +34,25 @@ function setupEnvironment
 		
 		source 'deployment/local.env'
 		
+		# Get project path from git remote URL.
+		local gitRemote=$(git rev-parse --abbrev-ref HEAD@{upstream} | cut -d '/' -f 1)
+		local CI_PROJECT_PATH=$(git remote get-url ${gitRemote} | grep -Po '(?<=:)(.+)(?=\.git)')
+		
+		# Get latest upstream commit hash so we can set `repositorySnapshot` and `applicationImage`
+		# to the same value that was deployed in CI/CD. Without it, local runs of Terraform will try
+		# to update many resources that depend on those variables even though there was no actual
+		# changes to the infrastructure.
+		local CI_COMMIT_SHA=$(git rev-parse HEAD@{upstream})
+		
 		local CI_API_V4_URL='https://gitlab.com/api/v4'
 		local CI_REGISTRY='registry.gitlab.com'
 		local CI_PROJECT_URL="https://gitlab.com/${CI_PROJECT_PATH}"
 		local CI_REGISTRY_IMAGE="${CI_REGISTRY}/${CI_PROJECT_PATH}"
-		# TODO: Get PR branch when support for multiple staging environments is implemented.
-		local CI_COMMIT_SHA=$(git rev-parse remotes/gitlab/production)
 		local applicationImage="${CI_REGISTRY_IMAGE}/application:${CI_COMMIT_SHA}"
 	fi
 	
 	# Terraform HTTP backend setup.
-	TF_HTTP_ADDRESS="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/terraform/state/${environment}"
+	TF_HTTP_ADDRESS="${CI_API_V4_URL}/projects/${CI_PROJECT_PATH/\//%2F}/terraform/state/${environment}"
 	TF_HTTP_LOCK_ADDRESS="${TF_HTTP_ADDRESS}/lock"
 	TF_HTTP_UNLOCK_ADDRESS="${TF_HTTP_ADDRESS}/lock"
 	TF_HTTP_USERNAME="${terraformBackendUsername:-gitlab-ci-token}"
