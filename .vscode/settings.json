@@ -9,17 +9,17 @@
 {
 	"terminal.integrated.automationProfile.linux": {
 		"path": "/usr/bin/bash",
-		"args": [ "-c", "set -a; source '${workspaceFolder}/deployment/local.env'; bash -c \"${1}\"" ],
+		"args": [ "-c", "source '${workspaceFolder}/deploy/deploy.sh' null local; eval $1" ],
 	},
 	
 	"terminal.integrated.profiles.linux": {
 		"bash": {
 			"path": "/usr/bin/bash",
-			"args": [ "-c", "set -a; source '${workspaceFolder}/deployment/local.env'; bash" ],
+			"args": [ "-c", "source '${workspaceFolder}/deploy/deploy.sh' null local; exec bash" ],
 		},
 		"fish": {
 			"path": "/usr/bin/fish",
-			"args": [ "-c", "sourceEnv '${workspaceFolder}/deployment/local.env'" ],
+			"args": [ "-c", "sourceBash '${workspaceFolder}/deploy/deploy.sh' null local; exec fish" ],
 		},
 	},
 	
@@ -27,7 +27,7 @@
 		{
 			// Match less files.
 			"match": "\\.less$",
-			"command": "application/scripts/less.sh",
+			"command": "${workspaceFolder}/application/scripts/less.sh",
 			"runIn": "backend",
 			"finishStatusMessage": "LESS compiled",
 		},

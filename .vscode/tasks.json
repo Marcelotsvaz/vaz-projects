@@ -27,7 +27,7 @@
 		{
 			"label": "Deploy",
 			"type": "shell",
-			"command": "deploy/deploy.sh ${input:deployArguments}",
+			"command": "'${workspaceFolder}/deploy/deploy.sh' ${input:deployArguments}",
 			"icon": {
 				"id": "rocket",
 				"color": "terminal.ansiMagenta",

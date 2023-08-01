@@ -7,10 +7,6 @@
 
 
 
-# Export variables.
-set -a
-
-
 # Parameters.
 command="${1}"
 environment="${2}"
@@ -50,6 +46,10 @@ function setupEnvironment
 		local CI_REGISTRY_IMAGE="${CI_REGISTRY}/${CI_PROJECT_PATH}"
 		local applicationImage="${CI_REGISTRY_IMAGE}/application:${CI_COMMIT_SHA}"
 	fi
+	
+	# Export the following variables.
+	local -
+	set -a
 	
 	# Terraform HTTP backend setup.
 	TF_HTTP_ADDRESS="${CI_API_V4_URL}/projects/${CI_PROJECT_PATH/\//%2F}/terraform/state/${environment}"
