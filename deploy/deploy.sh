@@ -12,6 +12,10 @@ environment="${1}"
 command="${2}"
 
 
+# Always run on project root.
+cd "$(dirname "${BASH_SOURCE[0]}")/../"
+
+
 # Manually set GitLab CI/CD variables when running locally.
 # Use a function to allow local variables and the use of different
 # environments on the same script call.
