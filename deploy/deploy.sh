@@ -131,22 +131,12 @@ function buildBuilderAmi
 
 
 # 
-# Setup Terraform with specified state.
-#-------------------------------------------------------------------------------
-function terraformInit
-{
-	terraform init -reconfigure
-}
-
-
-
-# 
 # Deploy environment-specific AWS resources.
 #-------------------------------------------------------------------------------
 function deployEnvironment
 {
 	cd "${terraformRoot}/environment/"
-	terraformInit
+	terraform init -reconfigure
 	terraform plan											\
 		-var="environment=${environment}"					\
 		-var="repository_snapshot=${repositorySnapshot}"	\
@@ -175,7 +165,7 @@ function deployEnvironment
 function destroyEnvironment
 {
 	cd "${terraformRoot}/environment/"
-	terraformInit
+	terraform init -reconfigure
 	terraform destroy										\
 		-var="environment=${environment}"					\
 		-var="repository_snapshot=${repositorySnapshot}"	\
@@ -191,7 +181,7 @@ function destroyEnvironment
 function deployGlobal
 {
 	cd "${terraformRoot}/global/"
-	terraformInit
+	terraform init -reconfigure
 	terraform apply ${terraformAutoApprove}
 }
 
@@ -203,7 +193,7 @@ function deployGlobal
 function destroyGlobal
 {
 	cd "${terraformRoot}/global/"
-	terraformInit
+	terraform init -reconfigure
 	terraform destroy ${terraformAutoApprove}
 }
 
