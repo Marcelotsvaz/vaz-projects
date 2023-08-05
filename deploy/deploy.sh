@@ -69,6 +69,11 @@ function setupEnvironment
 	terraformPlan="${TF_DATA_DIR}/../terraformPlan.cache"
 	terraformChanges="${TF_DATA_DIR}/../terraformChanges.json"
 	repositorySnapshot="${CI_PROJECT_URL}/-/archive/${CI_COMMIT_SHA}/vaz-projects.tar.gz"
+	
+	# Terraform variables.
+	TF_VAR_environment="${environment}"
+	TF_VAR_repository_snapshot="${repositorySnapshot}"
+	TF_VAR_application_image="${applicationImage}"
 }
 
 
@@ -137,11 +142,7 @@ function deployEnvironment
 {
 	cd "${terraformRoot}/environment/"
 	terraform init -reconfigure
-	terraform plan											\
-		-var="environment=${environment}"					\
-		-var="repository_snapshot=${repositorySnapshot}"	\
-		-var="application_image=${applicationImage}"		\
-		-out "${terraformPlan}"
+	terraform plan -out "${terraformPlan}"
 	terraform show -no-color "${terraformPlan}"																						\
 		| sed -En 's/^Plan: ([0-9]+) to add, ([0-9]+) to change, ([0-9]+) to destroy\.$/{"create":\1,"update":\2,"delete":\3}/p'	\
 		> "${terraformChanges}"
@@ -166,11 +167,7 @@ function destroyEnvironment
 {
 	cd "${terraformRoot}/environment/"
 	terraform init -reconfigure
-	terraform destroy										\
-		-var="environment=${environment}"					\
-		-var="repository_snapshot=${repositorySnapshot}"	\
-		-var="application_image=${applicationImage}"		\
-		${terraformAutoApprove}
+	terraform destroy ${terraformAutoApprove}
 }
 
 
