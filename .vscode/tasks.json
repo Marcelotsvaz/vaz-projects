@@ -45,20 +45,23 @@
 			"description": "Select operation",
 			"options": [
 				{
-					"label": "up",
+					"label": "🚀 up",
 					"value": "-f compose.yaml -f development.compose.yaml up --detach --build",
 				},
 				{
+					"label": "🗑️ down",
 					"value": "down",
 				},
 				{
+					"label": "🗑️ down (delete volumes)",
 					"value": "down --volumes",
 				},
 				{
+					"label": "🛠️ build",
 					"value": "build",
 				},
 				{
-					"label": "tests",
+					"label": "🧪 tests",
 					"value": "run --rm --build application 'coverage run manage.py test && coverage report'",
 				},
 			],
@@ -71,35 +74,35 @@
 			"description": "Select operation",
 			"options": [
 				{
-					"label": "Build AMI",
+					"label": "🛠️ Build AMI",
 					"value": "global buildAmi",
 				},
 				{
-					"label": "Build Builder AMI",
+					"label": "🛠️ Build Builder AMI",
 					"value": "global buildBuilderAmi",
 				},
 				{
-					"label": "Deploy Staging",
+					"label": "🚀 Deploy Staging",
 					"value": "staging deployEnvironment",
 				},
 				{
-					"label": "Deploy Production",
+					"label": "🚀 Deploy Production",
 					"value": "production deployEnvironment",
 				},
 				{
-					"label": "Deploy Global",
+					"label": "🚀 Deploy Global",
 					"value": "global deployGlobal",
 				},
 				{
-					"label": "Destroy Staging",
+					"label": "🗑️ Destroy Staging",
 					"value": "staging destroyEnvironment",
 				},
 				{
-					"label": "Destroy Production",
+					"label": "🗑️ Destroy Production",
 					"value": "production destroyEnvironment",
 				},
 				{
-					"label": "Destroy Global",
+					"label": "🗑️ Destroy Global",
 					"value": "global destroyGlobal",
 				},
 			],
