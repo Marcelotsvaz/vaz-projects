@@ -7,14 +7,13 @@
 
 
 
-# Abort on error.
-set -e
+set -o errexit
 
 cd /home/${user}/deployment/tls/
 config='../../loadBalancer/config/tls/dehydrated.conf'
 
 tempFile=$(mktemp)
-# Run in a sub-shell because `set -e` doesn't trigger with `&&`.
+# Run in a sub-shell because `set -o errexit` doesn't trigger with `&&`.
 (dehydrated --config ${config} --signcsr websiteCsr.pem > ${tempFile} && cp ${tempFile} website.crt)
 (dehydrated --config ${config} --signcsr cloudfrontCsr.pem > ${tempFile} && cp ${tempFile} cloudfront.crt)
 

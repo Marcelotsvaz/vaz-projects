@@ -7,7 +7,7 @@
 
 
 
-set -e	# Abort on error.
+set -o errexit
 
 
 

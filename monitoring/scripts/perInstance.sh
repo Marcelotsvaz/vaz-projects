@@ -13,7 +13,7 @@ echo 'Starting Instance Configuration Script...'
 
 # Script Setup
 #---------------------------------------
-set -e	# Abort on error.
+set -o errexit
 
 
 

@@ -28,7 +28,7 @@ function setupEnvironment
 		
 		terraformAutoApprove='-auto-approve'
 		
-		set -x	# Echo commands.
+		set -o xtrace
 	else
 		echo 'Running outside CI/CD.'
 		
@@ -51,9 +51,9 @@ function setupEnvironment
 		local applicationImage="${CI_REGISTRY_IMAGE}/application:${CI_COMMIT_SHA}"
 	fi
 	
-	# Export the following variables.
+	# Export only the following variables.
 	local -
-	set -a
+	set -o allexport
 	
 	# Terraform HTTP backend setup.
 	TF_HTTP_ADDRESS="${CI_API_V4_URL}/projects/${CI_PROJECT_PATH/\//%2F}/terraform/state/${environment}"
@@ -84,7 +84,7 @@ fi
 
 
 # Abort on error, but not when sourcing.
-set -e
+set -o errexit
 
 
 
