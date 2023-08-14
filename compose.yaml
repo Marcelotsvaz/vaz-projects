@@ -12,7 +12,7 @@ services:
             service: application
             file: &applicationFile application/compose.yaml
         
-        image: ${applicationImage-vaz-projects/application:development}
+        image: ${applicationImage:-vaz-projects/application:development}
         build: application/
         
         depends_on:
@@ -24,17 +24,17 @@ services:
                 condition: service_completed_successfully
         
         environment:
-            DJANGO_SETTINGS_MODULE: ${DJANGO_SETTINGS_MODULE-settings.local}
-            domain: &domain ${domain-localhost}
-            staticFilesUrl: &staticFilesUrl ${staticFilesUrl-https://localhost:9000/local/}
-            s3Endpoint: &s3Endpoint ${s3Endpoint-https://minio:9000}
-            bucket: &bucket ${bucket-local}
+            DJANGO_SETTINGS_MODULE: ${DJANGO_SETTINGS_MODULE:-settings.local}
+            domain: &domain ${domain:-localhost}
+            staticFilesUrl: &staticFilesUrl ${staticFilesUrl:-https://localhost:9000/local/}
+            s3Endpoint: &s3Endpoint ${s3Endpoint:-https://minio:9000}
+            bucket: &bucket ${bucket:-local}
             # Secrets.
             djangoSecretKey: django
             POSTGRES_PASSWORD: &postgresPassword postgres
             ELASTIC_PASSWORD: &elasticsearchPassword elastic
-            AWS_ACCESS_KEY_ID: &AWS_ACCESS_KEY_ID ${AWS_ACCESS_KEY_ID-minioadmin}
-            AWS_SECRET_ACCESS_KEY: &AWS_SECRET_ACCESS_KEY ${AWS_SECRET_ACCESS_KEY-minioadmin}
+            AWS_ACCESS_KEY_ID: &AWS_ACCESS_KEY_ID ${AWS_ACCESS_KEY_ID:-minioadmin}
+            AWS_SECRET_ACCESS_KEY: &AWS_SECRET_ACCESS_KEY ${AWS_SECRET_ACCESS_KEY:-minioadmin}
         
         secrets:
           - source: rootCertificates
@@ -82,7 +82,7 @@ services:
         environment:
             domain: *domain
             staticFilesUrl: *staticFilesUrl
-            monitoringDomain: ${monitoringDomain-monitoring.localhost}
+            monitoringDomain: ${monitoringDomain:-monitoring.localhost}
     
     
     minio:

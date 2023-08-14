@@ -8,7 +8,7 @@
 
 services:
     application:
-        image: ${applicationImage-}
+        image: ${applicationImage:-}
         
         depends_on:
             memcached:
