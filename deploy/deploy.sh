@@ -202,7 +202,7 @@ function destroyGlobal
 if [[ ${command} =~ ^(buildAmi|buildBuilderAmi|deployEnvironment|destroyEnvironment|deployGlobal|destroyGlobal)$ ]]; then
 	${command}
 else
-	echo 'Invalid command.'
+	echo "Invalid command: ${command}"
 	
 	exit 1
 fi
