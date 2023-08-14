@@ -12,7 +12,7 @@ services:
             service: application
             file: &applicationFile application/compose.yaml
         
-        image: ${applicationImage-registry.gitlab.com/marcelotsvaz/vaz-projects/application:development}
+        image: ${applicationImage-vaz-projects/application:development}
         build: application/
         
         depends_on:
