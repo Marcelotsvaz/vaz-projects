@@ -117,6 +117,7 @@ function buildAmi
 	cd deploy/packer/
 	
 	preparePacker
+	packer init .
 	packer build .
 }
 
@@ -130,6 +131,7 @@ function buildBuilderAmi
 	cd deploy/packer/
 	
 	preparePacker
+	packer init .
 	packer build -var 'ami_name=VAZ Projects Builder AMI' -var 'playbook=builderAmiPlaybook.yaml' -var 'disk_size=3' .
 }
 
