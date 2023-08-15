@@ -27,7 +27,7 @@ packer {
 	required_plugins {
 		amazon = {
 			source = "github.com/hashicorp/amazon"
-			version = "~> 1.1"
+			version = "~> 1.2"
 		}
 		
 		ansible = {
@@ -57,7 +57,6 @@ source amazon-ebssurrogate main {
 	
 	ssh_agent_auth = true
 	ssh_username = "marcelotsvaz"
-	ssh_interface = "public_ip"
 	ssh_pty = true
 	
 	subnet_filter {
