@@ -10,6 +10,10 @@
     become: true
     
     block:
+      - name: Update Arch Linux keyring
+        command: pacman --noconfirm --noprogressbar -Sy archlinux-keyring
+        
+        
       - name: Get packages from all roles
         set_fact:
             packages: '{{ packages | default( [] ) + lookup( "vars", item ) }}'
