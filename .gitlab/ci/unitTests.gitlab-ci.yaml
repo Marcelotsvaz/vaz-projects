@@ -11,6 +11,8 @@
     
     image: docker:23.0
     
+    tags: [ docker ]
+    
     interruptible: true
     
     script:
