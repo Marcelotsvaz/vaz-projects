@@ -7,6 +7,10 @@
 
 
 
+set -o errexit
+
+
+
 # Get root disk and partition.
 diskInfo=$(lsblk -nro MOUNTPOINT,PKNAME,PATH,PARTUUID | grep '^/ ')
 disk="/dev/$(echo ${diskInfo} | cut -d ' ' -f2)"
@@ -26,7 +30,6 @@ resize2fs ${partition}
 
 
 # Download user data.
-mkdir /tmp/deploy/ && cd ${_}
-curl -s http://169.254.169.254/latest/user-data | tar -xz
-mv per*.sh /usr/local/lib/
+cd /usr/local/lib/
+curl --silent http://169.254.169.254/latest/user-data | tar -xz || true
 test -f environment.env && mv environment.env /etc/environment || true
