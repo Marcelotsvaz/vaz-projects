@@ -14,7 +14,7 @@ set -o errexit
 # 
 # Certificates
 #---------------------------------------------------------------------------------------------------
-mkdir -p ../../../deployment/${environment}/tls/ && cd ${_}
+mkdir -p ../../../deployment/bootstrap-${environment}/tls/ && cd ${_}
 config='../../../loadBalancer/config/tls/dehydrated.conf'
 
 
@@ -74,9 +74,8 @@ EOF
 # 
 # Upload to S3
 #---------------------------------------------------------------------------------------------------
-aws s3 sync ../application/stagingMedia/ s3://${bucket}/ --no-progress
-aws s3 sync tls/ s3://${bucket}/deployment/tls/ --no-progress --content-type text/plain
-aws s3 cp secrets.env s3://${bucket}/deployment/ --no-progress --content-type text/plain
+aws s3 sync ../../application/stagingMedia/ s3://${bucket}/ --no-progress
+aws s3 sync . s3://${bucket}/deployment/ --no-progress --content-type text/plain
 
 
 
@@ -84,4 +83,4 @@ aws s3 cp secrets.env s3://${bucket}/deployment/ --no-progress --content-type te
 # Clean-up
 #---------------------------------------------------------------------------------------------------
 cd ..
-rm -r ${environment}/
+rm -r bootstrap-${environment}/
