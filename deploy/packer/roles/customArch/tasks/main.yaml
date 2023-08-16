@@ -39,20 +39,20 @@
         shell: rm /etc/skel/.bash*
         
         
-      - name: Make SSH dir
+      - name: Make SSH directory
         file:
             state: directory
             dest: /etc/skel/.ssh
             mode: 0700
         
         
-      - name: Create authorized_keys
-        file:
-            state: touch
-            path: /etc/skel/.ssh/authorized_keys
-        
-        
-      - name: Add admin user
+      - name: Create admin user
         user:
             name: marcelotsvaz
             groups: wheel
+        
+        
+      - name: Add SSH public key to admin user
+        copy:
+            content: '{{ sshKey }}'
+            dest: ~marcelotsvaz/.ssh/authorized_keys

@@ -10,6 +10,7 @@
 Description = Instance Configuration Script
 Requires = instanceScriptsSetup.service
 After = instanceScriptsSetup.service
+ConditionFileIsExecutable = /usr/local/lib/perInstance.sh
 ConditionFirstBoot = yes
 
 [Service]

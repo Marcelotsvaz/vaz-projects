@@ -40,6 +40,7 @@ packer {
 
 
 source amazon-ebssurrogate main {
+	# 
 	# Builder options.
 	#---------------------------------------------------------------------------
 	spot_price = 0.05
@@ -52,7 +53,6 @@ source amazon-ebssurrogate main {
 		"t3a.medium",
 	]
 	
-	user_data_file = "../../deployment/userData.tar.gz"
 	ebs_optimized = true
 	
 	ssh_agent_auth = true
@@ -112,6 +112,7 @@ source amazon-ebssurrogate main {
 	}
 	
 	
+	# 
 	# AMI options.
 	#---------------------------------------------------------------------------
 	ami_name = var.ami_name

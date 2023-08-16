@@ -44,8 +44,6 @@ locals {
 	monitoring_domain = "monitoring.${local.domain}"
 	private_domain = "private.${local.domain}"
 	
-	ssh_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH7gGmj7aRlkjoPKKM35M+dG6gMkgD9IEZl2UVp6JYPs VAZ Projects SSH Key"
-	
 	default_tags = {
 		Project = local.project_name
 		Environment = var.environment

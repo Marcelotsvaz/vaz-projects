@@ -19,7 +19,6 @@ set -o errexit
 
 # System Setup
 #---------------------------------------
-echo ${sshKey} > ~marcelotsvaz/.ssh/authorized_keys	# Admin user.
 hostnamectl set-hostname ${hostname}
 
 useradd -rms /usr/bin/nologin ${user}

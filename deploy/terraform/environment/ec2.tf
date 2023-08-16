@@ -68,7 +68,6 @@ module load_balancer {
 	# Environment.
 	role_policy = data.aws_iam_policy_document.load_balancer
 	environment = {
-		sshKey = local.ssh_key
 		repositorySnapshot = var.repository_snapshot
 		bucket = data.aws_s3_bucket.data.id
 		AWS_DEFAULT_REGION = local.region
@@ -154,7 +153,6 @@ module app_server {
 	# Environment.
 	role_policy = data.aws_iam_policy_document.app_server
 	environment = {
-		sshKey = local.ssh_key
 		repositorySnapshot = var.repository_snapshot
 		AWS_DEFAULT_REGION = local.region
 		applicationImage = var.application_image
@@ -218,7 +216,6 @@ module database_server {
 	# Environment.
 	role_policy = data.aws_iam_policy_document.database_server
 	environment = {
-		sshKey = local.ssh_key
 		dataVolumeId = aws_ebs_volume.database.id
 		repositorySnapshot = var.repository_snapshot
 		bucket = data.aws_s3_bucket.data.id
@@ -297,7 +294,6 @@ module monitoring_server {
 	# Environment.
 	role_policy = data.aws_iam_policy_document.monitoring_server
 	environment = {
-		sshKey = local.ssh_key
 		dataVolumeId = aws_ebs_volume.monitoring.id
 		repositorySnapshot = var.repository_snapshot
 		bucket = data.aws_s3_bucket.data.id

@@ -94,29 +94,12 @@ set -o errexit
 
 
 # 
-# Prepare files for Packer.
-#-------------------------------------------------------------------------------
-function preparePacker
-{
-	# User data.
-	tar -cz									\
-		--mtime='UTC 2000-01-01'			\
-		--owner=root						\
-		--group=root						\
-		-f ../../deployment/userData.tar.gz	\
-		perInstance.sh
-}
-
-
-
-# 
 # Build AMI with Packer.
 #-------------------------------------------------------------------------------
 function buildAmi
 {
 	cd deploy/packer/
 	
-	preparePacker
 	packer init .
 	packer build .
 }
@@ -130,7 +113,6 @@ function buildBuilderAmi
 {
 	cd deploy/packer/
 	
-	preparePacker
 	packer init .
 	packer build -var 'ami_name=VAZ Projects Builder AMI' -var 'playbook=builderAmiPlaybook.yaml' -var 'disk_size=3' .
 }
