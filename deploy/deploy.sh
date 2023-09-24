@@ -8,7 +8,7 @@
 
 
 # Parameters.
-environment="${1}" 
+export environment="${1}"
 command="${2}"
 
 
@@ -74,6 +74,8 @@ function setupEnvironment
 	TF_VAR_environment="${environment}"
 	TF_VAR_repository_snapshot="${repositorySnapshot}"
 	TF_VAR_application_image="${applicationImage}"
+	
+	echo "Using \"${environment}\" environment."
 }
 
 
@@ -82,8 +84,6 @@ setupEnvironment ${environment}
 
 # Check if sourced.
 if [[ ${BASH_SOURCE[0]} != ${0} ]]; then
-    echo 'Environment setup complete.'
-	
 	return
 fi
 

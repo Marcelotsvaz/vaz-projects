@@ -25,23 +25,29 @@
 			"application/": true,
 		},
 		
+		"terminal.integrated.defaultProfile.linux": "fish [staging]",
 		"terminal.integrated.cwd": "${workspaceFolder:Infrastructure}",
+		
+		"terminal.integrated.profiles.linux": {
+			"fish [global]": {
+				"path": "/usr/bin/fish",
+				"args": [ "-c", "sourceBash '${workspaceFolder:Infrastructure}/deploy/deploy.sh' global; exec fish" ],
+			},
+			
+			"fish [staging]": {
+				"path": "/usr/bin/fish",
+				"args": [ "-c", "sourceBash '${workspaceFolder:Infrastructure}/deploy/deploy.sh' staging; exec fish" ],
+			},
+			
+			"fish [production]": {
+				"path": "/usr/bin/fish",
+				"args": [ "-c", "sourceBash '${workspaceFolder:Infrastructure}/deploy/deploy.sh' production; exec fish" ],
+			},
+		},
 		
 		"terminal.integrated.automationProfile.linux": {
 			"path": "/usr/bin/bash",
 			"args": [ "-c", "source '${workspaceFolder:Infrastructure}/deploy/deploy.sh' global; eval $1" ],
-		},
-		
-		"terminal.integrated.profiles.linux": {
-			"bash": {
-				"path": "/usr/bin/bash",
-				"args": [ "-c", "source '${workspaceFolder:Infrastructure}/deploy/deploy.sh' global; exec bash" ],
-			},
-			
-			"fish": {
-				"path": "/usr/bin/fish",
-				"args": [ "-c", "sourceBash '${workspaceFolder:Infrastructure}/deploy/deploy.sh' global; exec fish" ],
-			},
 		},
 		
 		"runOnSave.commands": [

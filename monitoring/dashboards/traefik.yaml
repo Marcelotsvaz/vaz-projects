@@ -48,7 +48,7 @@ variables:
         name: service
         label: Service
         datasource: ${prometheus}
-        request: label_values(traefik_service_requests_total{job="$jobPrometheus"}, service) 
+        request: label_values(traefik_service_requests_total{job="$jobPrometheus"}, service)
         sort: alphabetical_no_case_asc
         refresh: time_change
 
