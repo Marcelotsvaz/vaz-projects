@@ -72,12 +72,18 @@ resource aws_launch_template main {
 		}
 	}
 	
-	instance_requirements {
-		vcpu_count { min = var.min_vcpu_count }
-		memory_mib { min = var.min_memory_gib * 1024 }
-		burstable_performance = "included"
-		allowed_instance_types = data.aws_ec2_instance_types.main.instance_types
-	}
+	# TODO: Re-enable multiple capacity pools.
+	instance_type = {
+		0.5 = "t3a.nano"
+		1 = "t3a.micro"
+		2 = "t3a.small"
+	}[var.min_memory_gib]
+	# instance_requirements {
+	# 	vcpu_count { min = var.min_vcpu_count }
+	# 	memory_mib { min = var.min_memory_gib * 1024 }
+	# 	burstable_performance = "included"
+	# 	allowed_instance_types = data.aws_ec2_instance_types.main.instance_types
+	# }
 	
 	tag_specifications {
 		resource_type = "spot-instances-request"

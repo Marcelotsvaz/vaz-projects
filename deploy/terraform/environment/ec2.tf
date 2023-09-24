@@ -58,7 +58,8 @@ module load_balancer {
 	min_memory_gib = 0.5
 	
 	# Network.
-	subnet_ids = module.vpc.subnets[*].id
+	subnet_ids = [ module.vpc.subnets[2].id ]	# TODO: Re-enable multiple capacity pools.
+	# subnet_ids = module.vpc.subnets[*].id
 	vpc_security_group_ids = [
 		aws_default_security_group.common.id,
 		aws_security_group.public.id,
@@ -206,7 +207,8 @@ module database_server {
 	min_memory_gib = 0.5
 	
 	# Network.
-	subnet_ids = [ module.vpc.subnets[2].id ]	# TODO: Fix this with volumes.
+	subnet_ids = [ module.vpc.subnets[2].id ]	# TODO: Re-enable multiple capacity pools.
+	# subnet_ids = module.vpc.subnets[*].id
 	vpc_security_group_ids = [
 		aws_default_security_group.common.id,
 		aws_security_group.private.id,
@@ -284,7 +286,8 @@ module monitoring_server {
 	min_memory_gib = 1
 	
 	# Network.
-	subnet_ids = [ module.vpc.subnets[2].id ]	# TODO: Fix this with volumes.
+	subnet_ids = [ module.vpc.subnets[2].id ]	# TODO: Re-enable multiple capacity pools.
+	# subnet_ids = module.vpc.subnets[*].id
 	vpc_security_group_ids = [
 		aws_default_security_group.common.id,
 		aws_security_group.private.id,
