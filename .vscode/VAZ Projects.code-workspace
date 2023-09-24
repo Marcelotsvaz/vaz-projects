@@ -1,0 +1,56 @@
+// 
+// VAZ Projects
+// 
+// 
+// Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+
+
+
+{
+	"folders": [
+		{
+			"name": "Infrastructure",
+			"path": "../",
+		},
+		
+		{
+			"name": "Application",
+			"path": "../application/",
+		},
+	],
+	
+	
+	"settings": {
+		"files.exclude": {
+			"application/": true,
+		},
+		
+		"terminal.integrated.cwd": "${workspaceFolder:Infrastructure}",
+		
+		"terminal.integrated.automationProfile.linux": {
+			"path": "/usr/bin/bash",
+			"args": [ "-c", "source '${workspaceFolder:Infrastructure}/deploy/deploy.sh' global; eval $1" ],
+		},
+		
+		"terminal.integrated.profiles.linux": {
+			"bash": {
+				"path": "/usr/bin/bash",
+				"args": [ "-c", "source '${workspaceFolder:Infrastructure}/deploy/deploy.sh' global; exec bash" ],
+			},
+			
+			"fish": {
+				"path": "/usr/bin/fish",
+				"args": [ "-c", "sourceBash '${workspaceFolder:Infrastructure}/deploy/deploy.sh' global; exec fish" ],
+			},
+		},
+		
+		"runOnSave.commands": [
+			{
+				"match": "\\.less$",	// Match less files.
+				"command": "${workspaceFolder}/application/scripts/less.sh",
+				"runIn": "backend",
+				"finishStatusMessage": "LESS compiled",
+			},
+		],
+	},
+}
