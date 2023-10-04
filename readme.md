@@ -7,9 +7,9 @@ This is the repository for [VAZ Projects](https://vazprojects.com), my personal 
 The project consists of a Django application running on multiple EC2 instances within an Auto Scaling group. Traffic is routed to these instances using Traefik as the load balancer. A self-managed PostgreSQL instance is used as the database. Static and user-uploaded files are served through CloudFront.
 ![Architecture Overview Diagram](doc/architectureOverview.drawio.svg)
 
-GitLab is used for continuous integration and continuous delivery. Development takes place on feature branches. New commits trigger a pipeline, which builds container images, runs tests, and deploys to a staging environment. A successful merge to the production branch triggers deployment to the production environment.
+GitLab is used for continuous integration and continuous delivery. Each new commit triggers a pipeline that builds container images, runs tests, and deploys the new version to a staging environment. Deployment to production can be started with manual approval.
 
-A Grafana/Prometheus/Loki stack is used to monitor user activity, application performance and instance resource utilization as well as ingesting logs for different services.
+A Grafana/Prometheus/Loki stack is used to monitor user activity, application performance and instance resource utilization, as well as ingesting logs for different services.
 
 
 
