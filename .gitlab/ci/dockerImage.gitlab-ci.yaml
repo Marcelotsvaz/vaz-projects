@@ -17,7 +17,7 @@
     
     cache:
         key: ${CI_COMMIT_REF_SLUG}-buildkit # Per-branch BuildKit cache.
-        paths: [ deployment/buildkitCache/ ]
+        paths: [ deployment/cache/buildkit/ ]
     
     script:
       - echo ${CI_REGISTRY_PASSWORD} | docker login
