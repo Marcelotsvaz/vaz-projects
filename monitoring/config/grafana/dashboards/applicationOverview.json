@@ -1,0 +1,228 @@
+{
+   "description": "High level metrics for monitoring application health and performance.",
+   "editable": false,
+   "graphTooltip": 1,
+   "panels": [
+      {
+         "datasource": {
+            "type": "datasource",
+            "uid": "-- Mixed --"
+         },
+         "description": "",
+         "fieldConfig": {
+            "defaults": {
+               "custom": {
+                  "fillOpacity": 25,
+                  "showPoints": "never"
+               },
+               "min": 0,
+               "noValue": "0",
+               "unit": "reqps"
+            }
+         },
+         "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 0
+         },
+         "id": 1,
+         "pluginVersion": "v10.1.0",
+         "targets": [
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "Prometheus"
+               },
+               "expr": "sum(rate(traefik_service_requests_total{service=\"application@file\"}[$__rate_interval:$__interval]))",
+               "legendFormat": "Traefik"
+            }
+         ],
+         "title": "Traffic",
+         "type": "timeseries"
+      },
+      {
+         "datasource": {
+            "type": "datasource",
+            "uid": "-- Mixed --"
+         },
+         "description": "",
+         "fieldConfig": {
+            "defaults": {
+               "color": {
+                  "mode": "thresholds",
+                  "seriesBy": "min"
+               },
+               "custom": {
+                  "axisLabel": "CPU Load",
+                  "axisSoftMax": 1,
+                  "fillOpacity": 25,
+                  "gradientMode": "scheme",
+                  "showPoints": "never"
+               },
+               "min": 0,
+               "thresholds": {
+                  "steps": [
+                     {
+                        "color": "green",
+                        "value": null
+                     },
+                     {
+                        "color": "red",
+                        "value": 0.69999999999999996
+                     }
+                  ]
+               },
+               "unit": "percentunit"
+            }
+         },
+         "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 0
+         },
+         "id": 2,
+         "pluginVersion": "v10.1.0",
+         "targets": [
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "Prometheus"
+               },
+               "expr": "1 - sum(rate(node_cpu_seconds_total{instance=\"VAZ Projects Application Server\",mode=\"idle\"}[$__rate_interval:$__interval])) / sum(machine_cpu_cores{instance=\"VAZ Projects Application Server\"})",
+               "legendFormat": "Application Server"
+            }
+         ],
+         "title": "Saturation",
+         "type": "timeseries"
+      },
+      {
+         "datasource": {
+            "type": "datasource",
+            "uid": "-- Mixed --"
+         },
+         "description": "",
+         "fieldConfig": {
+            "defaults": {
+               "color": {
+                  "mode": "thresholds",
+                  "seriesBy": "min"
+               },
+               "custom": {
+                  "fillOpacity": 25,
+                  "gradientMode": "scheme",
+                  "showPoints": "never"
+               },
+               "min": 0,
+               "thresholds": {
+                  "steps": [
+                     {
+                        "color": "green",
+                        "value": null
+                     },
+                     {
+                        "color": "red",
+                        "value": 0.5
+                     }
+                  ]
+               },
+               "unit": "s"
+            }
+         },
+         "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 8
+         },
+         "id": 3,
+         "pluginVersion": "v10.1.0",
+         "targets": [
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "Prometheus"
+               },
+               "expr": "histogram_quantile(0.94999999999999996, sum by (le) (rate(traefik_service_request_duration_seconds_bucket{service=\"application@file\"}[$__rate_interval:$__interval])))",
+               "legendFormat": "2xx"
+            }
+         ],
+         "title": "Latency (95th percentile)",
+         "type": "timeseries"
+      },
+      {
+         "datasource": {
+            "type": "datasource",
+            "uid": "-- Mixed --"
+         },
+         "description": "",
+         "fieldConfig": {
+            "defaults": {
+               "color": {
+                  "mode": "thresholds",
+                  "seriesBy": "min"
+               },
+               "custom": {
+                  "axisSoftMax": 0.050000000000000003,
+                  "fillOpacity": 25,
+                  "gradientMode": "scheme",
+                  "showPoints": "never"
+               },
+               "min": 0,
+               "thresholds": {
+                  "steps": [
+                     {
+                        "color": "green",
+                        "value": null
+                     },
+                     {
+                        "color": "red",
+                        "value": 0.01
+                     }
+                  ]
+               },
+               "unit": "percentunit"
+            }
+         },
+         "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 8
+         },
+         "id": 4,
+         "pluginVersion": "v10.1.0",
+         "targets": [
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "Prometheus"
+               },
+               "expr": "sum(rate(traefik_service_requests_total{service=\"application@file\",code=~\"5..\"}[$__rate_interval:$__interval])) / sum(rate(traefik_service_requests_total{service=\"application@file\"}[$__rate_interval:$__interval])) or vector( 0 )",
+               "legendFormat": "Traefik"
+            }
+         ],
+         "title": "Error Rate",
+         "type": "timeseries"
+      }
+   ],
+   "schemaVersion": 36,
+   "tags": [
+      "Monitoring"
+   ],
+   "time": {
+      "from": "now-6h",
+      "to": "now"
+   },
+   "timepicker": {
+      "refresh_intervals": [
+         "15s",
+         "30s",
+         "1m",
+         "5m"
+      ]
+   },
+   "timezone": "",
+   "title": "Application Overview"
+}
