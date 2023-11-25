@@ -1,3 +1,9 @@
+[![Gitlab pipeline status](https://img.shields.io/gitlab/pipeline-status/marcelotsvaz%2Fvaz-projects?branch=production&logo=gitlab&label=Build)](https://gitlab.com/marcelotsvaz/vaz-projects/-/pipelines/latest)
+[![Code coverage](https://img.shields.io/gitlab/pipeline-coverage/marcelotsvaz%2Fvaz-projects?branch=production&label=Coverage)](https://gitlab.com/marcelotsvaz/vaz-projects/-/pipelines/latest)
+[![Renovate](https://img.shields.io/badge/Renovate-enabled-green?logo=renovatebot&logoColor=%23007fa0)](https://gitlab.com/marcelotsvaz/vaz-projects/-/issues/1)
+
+
+
 # VAZ Projects Website
 This is the repository for [VAZ Projects](https://vazprojects.com), my personal blog and project log. Its main purpose is to serve as a sandbox for my DevOps learning journey.
 
