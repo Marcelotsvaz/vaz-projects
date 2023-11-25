@@ -4,8 +4,8 @@
 # 
 # Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
 
-local promql = import 'promql-jsonnet/promql.libsonnet';
-local grafonnet = import 'grafonnet-v10.1.0/main.libsonnet';
+local promql = import 'github.com/satyanash/promql-jsonnet/promql.libsonnet';
+local grafonnet = import 'github.com/grafana/grafonnet/gen/grafonnet-v10.1.0/main.libsonnet';
 local dashboard = grafonnet.dashboard;
 local timeSeries = grafonnet.panel.timeSeries;
 local prometheus = grafonnet.query.prometheus;
