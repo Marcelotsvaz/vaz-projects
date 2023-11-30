@@ -6,11 +6,11 @@
 
 local promql = import 'github.com/satyanash/promql-jsonnet/promql.libsonnet';
 local grafonnet = import 'github.com/grafana/grafonnet/gen/grafonnet-v10.1.0/main.libsonnet';
-local dashboard = grafonnet.dashboard;
-local timeSeries = grafonnet.panel.timeSeries;
-local withUnit = timeSeries.standardOptions.withUnit;
 
+local a = import 'aliases.libsonnet';
 local base = import 'base.libsonnet';
+
+local dashboard = grafonnet.dashboard;
 
 
 
@@ -23,11 +23,11 @@ local trafficQuery = promql.new( 'traefik_service_requests_total' )
 	.sum()
 	.build();
 
-local trafficPanel = base.baseTimeSeries( 'Traffic', 0, 0 )
-	+ timeSeries.panelOptions.withDescription( '' )
-	+ base.withQuery( 'Traefik', trafficQuery )
-	+ timeSeries.standardOptions.withNoValue( '0' )
-	+ withUnit( 'reqps' );
+local trafficPanel = base.timeSeries( 'Traffic', 0, 0 )
+	+ a.description( '' )
+	+ base.query( 'Traefik', trafficQuery )
+	+ a.noValue( '0' )
+	+ a.unit( 'reqps' );
 
 
 
@@ -48,13 +48,13 @@ local cpuCoreCountQuery = promql.new( 'machine_cpu_cores' )
 
 local saturationQuery = '1 - %s / %s' % [ cpuLoadQuery.build(), cpuCoreCountQuery.build() ];
 
-local saturationPanel = base.baseTimeSeries( 'Saturation', 12, 0 )
-	+ timeSeries.panelOptions.withDescription( '' )
-	+ base.withQuery( 'Application Server', saturationQuery )
-	+ base.withThreshold( 0.70 )
-	+ timeSeries.fieldConfig.defaults.custom.withAxisSoftMax( 1.00 )
-	+ timeSeries.fieldConfig.defaults.custom.withAxisLabel( 'CPU Load' )
-	+ withUnit( 'percentunit' );
+local saturationPanel = base.timeSeries( 'Saturation', 12, 0 )
+	+ a.description( '' )
+	+ base.query( 'Application Server', saturationQuery )
+	+ base.threshold( 0.70 )
+	+ a.softMax( 1.00 )
+	+ a.axisLabel( 'CPU Load' )
+	+ a.unit( 'percentunit' );
 
 
 
@@ -68,11 +68,11 @@ local latencyQuery = promql.new( 'traefik_service_request_duration_seconds_bucke
 	.histogram_quantile( 0.95 )
 	.build();
 
-local latencyPanel = base.baseTimeSeries( 'Latency (95th percentile)', 0, 8 )
-	+ timeSeries.panelOptions.withDescription( '' )
-	+ base.withQuery( '2xx', latencyQuery )
-	+ base.withThreshold( 0.5 )
-	+ withUnit( 's' );
+local latencyPanel = base.timeSeries( 'Latency (95th percentile)', 0, 8 )
+	+ a.description( '' )
+	+ base.query( '2xx', latencyQuery )
+	+ base.threshold( 0.5 )
+	+ a.unit( 's' );
 
 
 
@@ -93,12 +93,12 @@ local errorRequestsQuery = allRequestsQuery
 
 local errorRateQuery = '%s / %s or vector( 0 )' % [ errorRequestsQuery.build(), allRequestsQuery.build() ];
 
-local errorRatePanel = base.baseTimeSeries( 'Error Rate', 12, 8 )
-	+ timeSeries.panelOptions.withDescription( '' )
-	+ base.withQuery( 'Traefik', errorRateQuery )
-	+ base.withThreshold( 0.01 )
-	+ withUnit( 'percentunit' )
-	+ timeSeries.fieldConfig.defaults.custom.withAxisSoftMax( 0.05 );
+local errorRatePanel = base.timeSeries( 'Error Rate', 12, 8 )
+	+ a.description( '' )
+	+ base.query( 'Traefik', errorRateQuery )
+	+ base.threshold( 0.01 )
+	+ a.unit( 'percentunit' )
+	+ a.softMax( 0.05 );
 
 
 

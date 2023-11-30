@@ -5,16 +5,16 @@
 # Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
 
 local grafonnet = import 'github.com/grafana/grafonnet/gen/grafonnet-v10.1.0/main.libsonnet';
+
+local a = import 'aliases.libsonnet';
+
 local timeSeries = grafonnet.panel.timeSeries;
 local prometheus = grafonnet.query.prometheus;
 
 
 
-# 
-# Base Definitions
-#---------------------------------------------------------------------------------------------------
 {
-	baseTimeSeries( title, x, y )::
+	timeSeries( title, x, y ):
 		timeSeries.new( title ) {
 			gridPos: {
 				w: 12,
@@ -23,16 +23,16 @@ local prometheus = grafonnet.query.prometheus;
 				y: y,
 			},
 		}
-		+ timeSeries.standardOptions.withMin( 0 )
-		+ timeSeries.fieldConfig.defaults.custom.withFillOpacity( 25 )
-		+ timeSeries.fieldConfig.defaults.custom.withShowPoints( 'never' ),
+		+ a.min( 0 )
+		+ a.fillOpacity( 25 )
+		+ a.showPoints( 'never' ),
 	
 	
-	withThreshold( theshold )::
-		timeSeries.fieldConfig.defaults.custom.withGradientMode( 'scheme' )
-		+ timeSeries.standardOptions.color.withMode( 'thresholds' )
-		+ timeSeries.standardOptions.color.withSeriesBy( 'min' )
-		+ timeSeries.standardOptions.thresholds.withSteps( [
+	threshold( theshold ):
+		a.gradientMode( 'scheme' )
+		+ a.colorScheme( 'thresholds' )
+		+ a.colorSeriesBy( 'min' )
+		+ a.steps( [
 			{
 				color: 'green',
 				value: null,
@@ -44,7 +44,7 @@ local prometheus = grafonnet.query.prometheus;
 		] ),
 	
 	
-	withQuery( legend, query )::
+	query( legend, query ):
 		local target = prometheus.new( 'Prometheus', query )
 		+ prometheus.withLegendFormat( legend );
 		
