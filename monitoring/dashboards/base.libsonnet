@@ -20,16 +20,41 @@ local makeQuery( query, queryLegend ) =
 
 
 {
+	local panel( type, title, width, height ) =
+		grafonnet.panel[type].new( title )
+		+ a.width( width )
+		+ a.height( height ),
+	
+	
+	row( title ):
+		panel( 'row', title, 24, 1 ),
+	
+	
+	text( title, text ):
+		panel( 'text', title, 24, 3 )
+		+ grafonnet.panel.text.options.withContent( text ),
+	
+	
+	gauge( title ):
+		panel( 'gauge', title, 6, 4 ),
+	
+	
+	stat( title ):
+		panel( 'stat', title, 6, 4 ),
+	
+	
 	timeSeries( title, description, query, queryLegend, unity ):
-		timeSeries.new( title )
-		+ a.width( 12 )
-		+ a.height( 8 )
+		panel( 'timeSeries', title, 12, 7 )
 		+ a.description( description )
 		+ a.targets( [ makeQuery( query, queryLegend ) ] )
 		+ a.unit( unity )
 		+ a.min( 0 )
 		+ a.fillOpacity( 25 )
 		+ a.showPoints( 'never' ),
+	
+	
+	logs( title ):
+		panel( 'logs', title, 6, 4 ),
 	
 	
 	threshold( theshold ):
