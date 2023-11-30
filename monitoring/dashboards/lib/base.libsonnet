@@ -8,14 +8,11 @@ local grafonnet = import 'github.com/grafana/grafonnet/gen/grafonnet-v10.1.0/mai
 
 local a = import 'aliases.libsonnet';
 
-local timeSeries = grafonnet.panel.timeSeries;
-local prometheus = grafonnet.query.prometheus;
-
 
 
 local makeQuery( query, queryLegend ) =
-	prometheus.new( 'Prometheus', query )
-	+ prometheus.withLegendFormat( queryLegend );
+	grafonnet.query.prometheus.new( 'Prometheus', query )
+	+ grafonnet.query.prometheus.withLegendFormat( queryLegend );
 
 
 
@@ -44,7 +41,7 @@ local makeQuery( query, queryLegend ) =
 	
 	
 	timeSeries( title, description, query, queryLegend, unity ):
-		panel( 'timeSeries', title, 12, 7 )
+		panel( 'timeSeries', title, 12, 8 )
 		+ a.description( description )
 		+ a.targets( [ makeQuery( query, queryLegend ) ] )
 		+ a.unit( unity )

@@ -7,9 +7,9 @@
 local promql = import 'github.com/satyanash/promql-jsonnet/promql.libsonnet';
 local grafonnet = import 'github.com/grafana/grafonnet/gen/grafonnet-v10.1.0/main.libsonnet';
 
-local base = import 'base.libsonnet';
-local util = import 'util.libsonnet';
-local a = import 'aliases.libsonnet';
+local base = import 'lib/base.libsonnet';
+local util = import 'lib/util.libsonnet';
+local a = import 'lib/aliases.libsonnet';
 
 local dashboard = grafonnet.dashboard;
 
