@@ -58,5 +58,8 @@
 				"finishStatusMessage": "LESS compiled",
 			},
 		],
+		
+		"jsonnet.languageServer.tankaMode": false,	// Overrides `jpath` when true.
+		"jsonnet.languageServer.jpath": [ "deployment/jsonnet/" ],
 	},
 }
