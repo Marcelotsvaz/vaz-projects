@@ -8,25 +8,33 @@ local grafonnet = import 'github.com/grafana/grafonnet/gen/grafonnet-v10.1.0/mai
 
 local timeSeries = grafonnet.panel.timeSeries;
 
-local field = timeSeries.fieldConfig;
+local field = timeSeries.fieldConfig.defaults.custom;
 local panel = timeSeries.panelOptions;
+local position = timeSeries.gridPos;
 local query = timeSeries.queryOptions;
 local standard = timeSeries.standardOptions;
 
 
 
 {
-	# fieldConfig.
-	showPoints:		field.defaults.custom.withShowPoints,
-	axisLabel:		field.defaults.custom.withAxisLabel,
-	softMin:		field.defaults.custom.withAxisSoftMin,
-	softMax:		field.defaults.custom.withAxisSoftMax,
-	fillOpacity:	field.defaults.custom.withFillOpacity,
-	gradientMode:	field.defaults.custom.withGradientMode,
+	# fieldConfig.defaults.custom.
+	showPoints:		field.withShowPoints,
+	axisLabel:		field.withAxisLabel,
+	softMin:		field.withAxisSoftMin,
+	softMax:		field.withAxisSoftMax,
+	fillOpacity:	field.withFillOpacity,
+	gradientMode:	field.withGradientMode,
 	
 	
 	# panelOptions.
 	description:	panel.withDescription,
+	
+	
+	# gridPos.
+	width:			position.withW,
+	height:			position.withH,
+	x:				position.withX,
+	y:				position.withY,
 	
 	
 	# queryOptions.

@@ -21,12 +21,9 @@ local makeQuery( query, queryLegend ) =
 
 {
 	timeSeries( title, description, query, queryLegend, unity ):
-		timeSeries.new( title ) {
-			gridPos: {
-				w: 12,
-				h: 8,
-			},
-		}
+		timeSeries.new( title )
+		+ a.width( 12 )
+		+ a.height( 8 )
 		+ a.description( description )
 		+ a.targets( [ makeQuery( query, queryLegend ) ] )
 		+ a.unit( unity )
