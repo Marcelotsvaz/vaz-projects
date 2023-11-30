@@ -7,8 +7,9 @@
 local promql = import 'github.com/satyanash/promql-jsonnet/promql.libsonnet';
 local grafonnet = import 'github.com/grafana/grafonnet/gen/grafonnet-v10.1.0/main.libsonnet';
 
-local a = import 'aliases.libsonnet';
 local base = import 'base.libsonnet';
+local util = import 'util.libsonnet';
+local a = import 'aliases.libsonnet';
 
 local dashboard = grafonnet.dashboard;
 
@@ -73,8 +74,6 @@ local errorRateQuery = '%s / %s or vector( 0 )' % [ errorRequestsQuery.build(), 
 local trafficPanel = base.timeSeries(
 		title = 'Traffic',
 		description = '',
-		x = 0,
-		y = 0,
 		query = trafficQuery,
 		queryLegend = 'Traefik',
 		unity = 'reqps',
@@ -85,8 +84,6 @@ local trafficPanel = base.timeSeries(
 local saturationPanel = base.timeSeries(
 		title = 'Saturation',
 		description = '',
-		x = 12,
-		y = 0,
 		query = saturationQuery,
 		queryLegend = 'Application Server',
 		unity = 'percentunit',
@@ -99,8 +96,6 @@ local saturationPanel = base.timeSeries(
 local latencyPanel = base.timeSeries(
 		title = 'Latency (95th percentile)',
 		description = '',
-		x = 0,
-		y = 8,
 		query = latencyQuery,
 		queryLegend = '2xx',
 		unity = 's',
@@ -111,8 +106,6 @@ local latencyPanel = base.timeSeries(
 local errorRatePanel = base.timeSeries(
 		title = 'Error Rate',
 		description = '',
-		x = 12,
-		y = 8,
 		query = errorRateQuery,
 		queryLegend = 'Traefik',
 		unity = 'percentunit',
@@ -125,6 +118,11 @@ local errorRatePanel = base.timeSeries(
 # 
 # Dashboard
 #---------------------------------------------------------------------------------------------------
+local panels = util.layoutPanels( [
+	[ trafficPanel, saturationPanel ],
+	[ latencyPanel, errorRatePanel ],
+] );
+
 dashboard.new( 'Application Overview' ) {
 		description: 'High level metrics for monitoring application health and performance.',
 		tags: [
@@ -140,9 +138,4 @@ dashboard.new( 'Application Overview' ) {
 		'5m',
 	] )
 	+ dashboard.graphTooltip.withSharedCrosshair()
-	+ dashboard.withPanels( [
-		trafficPanel,
-		saturationPanel,
-		latencyPanel,
-		errorRatePanel,
-	] )
+	+ dashboard.withPanels( panels )
