@@ -8,47 +8,9 @@ local promql = import 'github.com/satyanash/promql-jsonnet/promql.libsonnet';
 local grafonnet = import 'github.com/grafana/grafonnet/gen/grafonnet-v10.1.0/main.libsonnet';
 local dashboard = grafonnet.dashboard;
 local timeSeries = grafonnet.panel.timeSeries;
-local prometheus = grafonnet.query.prometheus;
 local withUnit = timeSeries.standardOptions.withUnit;
 
-
-
-# 
-# Base Definitions
-#---------------------------------------------------------------------------------------------------
-local baseTimeSeries( title, x, y ) = timeSeries.new( title ) {
-		gridPos: {
-			w: 12,
-			h: 8,
-			x: x,
-			y: y,
-		},
-	}
-	+ timeSeries.standardOptions.withMin( 0 )
-	+ timeSeries.fieldConfig.defaults.custom.withFillOpacity( 25 )
-	+ timeSeries.fieldConfig.defaults.custom.withShowPoints( 'never' );
-
-local withThreshold( theshold ) = timeSeries.fieldConfig.defaults.custom.withGradientMode( 'scheme' )
-	+ timeSeries.standardOptions.color.withMode( 'thresholds' )
-	+ timeSeries.standardOptions.color.withSeriesBy( 'min' )
-	+ timeSeries.standardOptions.thresholds.withSteps( [
-		{
-			color: 'green',
-			value: null,
-		},
-		{
-			color: 'red',
-			value: theshold,
-		},
-	] );
-
-local withQuery( legend, query ) = timeSeries.queryOptions.withTargets( [
-	prometheus.new(
-		'Prometheus',
-		query,
-	)
-	+ prometheus.withLegendFormat( legend ),
-] );
+local base = import 'base.libsonnet';
 
 
 
@@ -61,9 +23,9 @@ local trafficQuery = promql.new( 'traefik_service_requests_total' )
 	.sum()
 	.build();
 
-local trafficPanel = baseTimeSeries( 'Traffic', 0, 0 )
+local trafficPanel = base.baseTimeSeries( 'Traffic', 0, 0 )
 	+ timeSeries.panelOptions.withDescription( '' )
-	+ withQuery( 'Traefik', trafficQuery )
+	+ base.withQuery( 'Traefik', trafficQuery )
 	+ timeSeries.standardOptions.withNoValue( '0' )
 	+ withUnit( 'reqps' );
 
@@ -86,10 +48,10 @@ local cpuCoreCountQuery = promql.new( 'machine_cpu_cores' )
 
 local saturationQuery = '1 - %s / %s' % [ cpuLoadQuery.build(), cpuCoreCountQuery.build() ];
 
-local saturationPanel = baseTimeSeries( 'Saturation', 12, 0 )
+local saturationPanel = base.baseTimeSeries( 'Saturation', 12, 0 )
 	+ timeSeries.panelOptions.withDescription( '' )
-	+ withQuery( 'Application Server', saturationQuery )
-	+ withThreshold( 0.70 )
+	+ base.withQuery( 'Application Server', saturationQuery )
+	+ base.withThreshold( 0.70 )
 	+ timeSeries.fieldConfig.defaults.custom.withAxisSoftMax( 1.00 )
 	+ timeSeries.fieldConfig.defaults.custom.withAxisLabel( 'CPU Load' )
 	+ withUnit( 'percentunit' );
@@ -106,10 +68,10 @@ local latencyQuery = promql.new( 'traefik_service_request_duration_seconds_bucke
 	.histogram_quantile( 0.95 )
 	.build();
 
-local latencyPanel = baseTimeSeries( 'Latency (95th percentile)', 0, 8 )
+local latencyPanel = base.baseTimeSeries( 'Latency (95th percentile)', 0, 8 )
 	+ timeSeries.panelOptions.withDescription( '' )
-	+ withQuery( '2xx', latencyQuery )
-	+ withThreshold( 0.5 )
+	+ base.withQuery( '2xx', latencyQuery )
+	+ base.withThreshold( 0.5 )
 	+ withUnit( 's' );
 
 
@@ -131,10 +93,10 @@ local errorRequestsQuery = allRequestsQuery
 
 local errorRateQuery = '%s / %s or vector( 0 )' % [ errorRequestsQuery.build(), allRequestsQuery.build() ];
 
-local errorRatePanel = baseTimeSeries( 'Error Rate', 12, 8 )
+local errorRatePanel = base.baseTimeSeries( 'Error Rate', 12, 8 )
 	+ timeSeries.panelOptions.withDescription( '' )
-	+ withQuery( 'Traefik', errorRateQuery )
-	+ withThreshold( 0.01 )
+	+ base.withQuery( 'Traefik', errorRateQuery )
+	+ base.withThreshold( 0.01 )
 	+ withUnit( 'percentunit' )
 	+ timeSeries.fieldConfig.defaults.custom.withAxisSoftMax( 0.05 );
 
