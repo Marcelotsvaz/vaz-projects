@@ -7,15 +7,33 @@
 local grafonnet = import 'github.com/grafana/grafonnet/gen/grafonnet-v10.1.0/main.libsonnet';
 
 local timeSeries = grafonnet.panel.timeSeries;
-local panel = timeSeries.panelOptions;
-local standard = timeSeries.standardOptions;
+
 local field = timeSeries.fieldConfig;
+local panel = timeSeries.panelOptions;
+local query = timeSeries.queryOptions;
+local standard = timeSeries.standardOptions;
 
 
 
 {
+	# fieldConfig.
+	showPoints:		field.defaults.custom.withShowPoints,
+	axisLabel:		field.defaults.custom.withAxisLabel,
+	softMin:		field.defaults.custom.withAxisSoftMin,
+	softMax:		field.defaults.custom.withAxisSoftMax,
+	fillOpacity:	field.defaults.custom.withFillOpacity,
+	gradientMode:	field.defaults.custom.withGradientMode,
+	
+	
+	# panelOptions.
 	description:	panel.withDescription,
 	
+	
+	# queryOptions.
+	targets:		query.withTargets,
+	
+	
+	# standardOptions.
 	unit:			standard.withUnit,
 	noValue:		standard.withNoValue,
 	min:			standard.withMin,
@@ -25,11 +43,4 @@ local field = timeSeries.fieldConfig;
 	colorSeriesBy:	standard.color.withSeriesBy,
 	
 	steps:			standard.thresholds.withSteps,
-	
-	showPoints:		field.defaults.custom.withShowPoints,
-	axisLabel:		field.defaults.custom.withAxisLabel,
-	softMin:		field.defaults.custom.withAxisSoftMin,
-	softMax:		field.defaults.custom.withAxisSoftMax,
-	fillOpacity:	field.defaults.custom.withFillOpacity,
-	gradientMode:	field.defaults.custom.withGradientMode,
 }

@@ -23,11 +23,18 @@ local trafficQuery = promql.new( 'traefik_service_requests_total' )
 	.sum()
 	.build();
 
-local trafficPanel = base.timeSeries( 'Traffic', 0, 0 )
-	+ a.description( '' )
-	+ base.query( 'Traefik', trafficQuery )
-	+ a.noValue( '0' )
-	+ a.unit( 'reqps' );
+
+# Panel.
+local trafficPanel = base.timeSeries(
+		title = 'Traffic',
+		description = '',
+		x = 0,
+		y = 0,
+		query = trafficQuery,
+		queryLegend = 'Traefik',
+		unity = 'reqps',
+	)
+	+ a.noValue( '0' );
 
 
 
@@ -48,13 +55,20 @@ local cpuCoreCountQuery = promql.new( 'machine_cpu_cores' )
 
 local saturationQuery = '1 - %s / %s' % [ cpuLoadQuery.build(), cpuCoreCountQuery.build() ];
 
-local saturationPanel = base.timeSeries( 'Saturation', 12, 0 )
-	+ a.description( '' )
-	+ base.query( 'Application Server', saturationQuery )
+
+# Panel.
+local saturationPanel = base.timeSeries(
+		title = 'Saturation',
+		description = '',
+		x = 12,
+		y = 0,
+		query = saturationQuery,
+		queryLegend = 'Application Server',
+		unity = 'percentunit',
+	)
 	+ base.threshold( 0.70 )
 	+ a.softMax( 1.00 )
-	+ a.axisLabel( 'CPU Load' )
-	+ a.unit( 'percentunit' );
+	+ a.axisLabel( 'CPU Load' );
 
 
 
@@ -68,11 +82,18 @@ local latencyQuery = promql.new( 'traefik_service_request_duration_seconds_bucke
 	.histogram_quantile( 0.95 )
 	.build();
 
-local latencyPanel = base.timeSeries( 'Latency (95th percentile)', 0, 8 )
-	+ a.description( '' )
-	+ base.query( '2xx', latencyQuery )
-	+ base.threshold( 0.5 )
-	+ a.unit( 's' );
+
+# Panel.
+local latencyPanel = base.timeSeries(
+		title = 'Latency (95th percentile)',
+		description = '',
+		x = 0,
+		y = 8,
+		query = latencyQuery,
+		queryLegend = '2xx',
+		unity = 's',
+	)
+	+ base.threshold( 0.5 );
 
 
 
@@ -93,11 +114,18 @@ local errorRequestsQuery = allRequestsQuery
 
 local errorRateQuery = '%s / %s or vector( 0 )' % [ errorRequestsQuery.build(), allRequestsQuery.build() ];
 
-local errorRatePanel = base.timeSeries( 'Error Rate', 12, 8 )
-	+ a.description( '' )
-	+ base.query( 'Traefik', errorRateQuery )
+
+# Panel.
+local errorRatePanel = base.timeSeries(
+		title = 'Error Rate',
+		description = '',
+		x = 12,
+		y = 8,
+		query = errorRateQuery,
+		queryLegend = 'Traefik',
+		unity = 'percentunit',
+	)
 	+ base.threshold( 0.01 )
-	+ a.unit( 'percentunit' )
 	+ a.softMax( 0.05 );
 
 

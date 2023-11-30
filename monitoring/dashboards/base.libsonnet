@@ -13,8 +13,14 @@ local prometheus = grafonnet.query.prometheus;
 
 
 
+local makeQuery( query, queryLegend ) =
+	prometheus.new( 'Prometheus', query )
+	+ prometheus.withLegendFormat( queryLegend );
+
+
+
 {
-	timeSeries( title, x, y ):
+	timeSeries( title, description, x, y, query, queryLegend, unity ):
 		timeSeries.new( title ) {
 			gridPos: {
 				w: 12,
@@ -23,6 +29,9 @@ local prometheus = grafonnet.query.prometheus;
 				y: y,
 			},
 		}
+		+ a.description( description )
+		+ a.targets( [ makeQuery( query, queryLegend ) ] )
+		+ a.unit( unity )
 		+ a.min( 0 )
 		+ a.fillOpacity( 25 )
 		+ a.showPoints( 'never' ),
@@ -42,11 +51,4 @@ local prometheus = grafonnet.query.prometheus;
 				value: theshold,
 			},
 		] ),
-	
-	
-	query( legend, query ):
-		local target = prometheus.new( 'Prometheus', query )
-		+ prometheus.withLegendFormat( legend );
-		
-		timeSeries.queryOptions.withTargets( [ target ] ),
 }
