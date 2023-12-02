@@ -55,6 +55,9 @@ function setupEnvironment
 	local -
 	set -o allexport
 	
+	# Jsonnet path.
+	JSONNET_PATH='../deployment/jsonnet/'
+	
 	# Terraform HTTP backend setup.
 	TF_HTTP_ADDRESS="${CI_API_V4_URL}/projects/${CI_PROJECT_PATH/\//%2F}/terraform/state/${environment}"
 	TF_HTTP_LOCK_ADDRESS="${TF_HTTP_ADDRESS}/lock"
