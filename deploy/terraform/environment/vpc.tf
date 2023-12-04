@@ -76,7 +76,7 @@ resource aws_security_group public {
 	
 	ingress {
 		description = "Traefik - HTTPS"
-		protocol = "tcp"
+		protocol = "all"	# UDP for HTTP/3.
 		from_port = 443
 		to_port = 443
 		cidr_blocks = [ "0.0.0.0/0" ]

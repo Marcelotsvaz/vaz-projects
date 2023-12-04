@@ -8,7 +8,7 @@
 
 services:
     traefik:
-        image: traefik:2.9
+        image: traefik:2.10.6
         
         restart: unless-stopped
         
@@ -31,7 +31,8 @@ services:
         
         ports:
           - 80:80 # HTTP entrypoint.
-          - 443:443 # HTTPS entrypoint.
+          - 443:443/tcp # HTTPS entrypoint.
+          - 443:443/udp # HTTPS entrypoint (HTTP/3).
           - 8080:8080 # Dashboard and API.
         
         healthcheck:

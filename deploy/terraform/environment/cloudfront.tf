@@ -17,6 +17,7 @@ resource aws_cloudfront_distribution main {
 	aliases = [ local.static_files_domain ]
 	enabled = true
 	is_ipv6_enabled = true
+	http_version = "http2and3"
 	
 	viewer_certificate {
 		acm_certificate_arn = aws_acm_certificate.cloudfront.arn

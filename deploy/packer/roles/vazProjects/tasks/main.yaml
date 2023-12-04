@@ -29,3 +29,10 @@
         systemd:
             enabled: true
             name: docker.socket
+        
+        
+      - name: Increase UDP buffer size for HTTP/3 with Traefik
+        copy:
+            src: 99-traefik.conf
+            dest: /etc/sysctl.d/
+            mode: preserve

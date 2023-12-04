@@ -6,6 +6,12 @@
 
 
 
+providers:
+    file:
+        filename: /etc/traefik/dynamic.yaml
+
+
+
 entryPoints:
     http:
         address: :80
@@ -21,6 +27,8 @@ entryPoints:
         
         http:
             tls: {}
+        
+        http3: {}
     
     
     privateHttp:
@@ -28,14 +36,7 @@ entryPoints:
 
 
 
-providers:
-    file:
-        filename: /etc/traefik/dynamic.yaml
-
-
-
-api:
-    dashboard: true
+api: {}
 
 
 
@@ -59,3 +60,8 @@ ping:
 
 accessLog:
     format: json
+
+
+
+experimental:
+    http3: true
