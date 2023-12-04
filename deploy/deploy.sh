@@ -87,6 +87,7 @@ setupEnvironment ${environment}
 
 # Check if sourced.
 if [[ ${BASH_SOURCE[0]} != ${0} ]]; then
+	cd -
 	return
 fi
 

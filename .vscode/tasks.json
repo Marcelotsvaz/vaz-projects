@@ -34,6 +34,21 @@
 			},
 			"problemMatcher": [],
 		},
+		
+		
+		{
+			"label": "Build Dashboards",
+			"type": "shell",
+			"command": "jsonnet dashboards/applicationOverview.jsonnet -o config/grafana/dashboards/applicationOverview.json && ./grafana.py upload config/grafana/dashboards/applicationOverview.json",
+			"options": {
+				"cwd": "${workspaceFolder}/monitoring/"
+			},
+			"icon": {
+				"id": "clock",
+				"color": "terminal.ansiMagenta",
+			},
+			"problemMatcher": []
+		},
 	],
 	
 	
