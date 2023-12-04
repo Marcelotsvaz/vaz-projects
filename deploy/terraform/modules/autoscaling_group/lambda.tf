@@ -11,7 +11,7 @@
 #-------------------------------------------------------------------------------
 module autoscaling_lambda {
 	source = "gitlab.com/marcelotsvaz/lambda/aws"
-	version = "~> 0.2.0"
+	version = "0.2.1"
 	
 	name = "${var.name} Auto Scaling"
 	identifier = "${local.module_prefix}-autoscaling"
