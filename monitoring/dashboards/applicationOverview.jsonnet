@@ -7,9 +7,8 @@
 local promql = import 'github.com/satyanash/promql-jsonnet/promql.libsonnet';
 local grafonnet = import 'github.com/grafana/grafonnet/gen/grafonnet-v10.1.0/main.libsonnet';
 
-local base = import 'lib/base.libsonnet';
+local panel = import 'lib/panel.libsonnet';
 local util = import 'lib/util.libsonnet';
-local a = import 'lib/aliases.libsonnet';
 
 local dashboard = grafonnet.dashboard;
 
@@ -71,47 +70,47 @@ local errorRateQuery = '%s / %s or vector( 0 )' % [ errorRequestsQuery.build(), 
 # 
 # Panels
 #---------------------------------------------------------------------------------------------------
-local trafficPanel = base.timeSeries(
+local trafficPanel = panel.timeSeries(
 		title = 'Traffic',
 		description = '',
 		query = trafficQuery,
 		queryLegend = 'Traefik',
 		unity = 'reqps',
 	)
-	+ a.noValue( '0' );
+	.noValue( '0' );
 
 
-local saturationPanel = base.timeSeries(
+local saturationPanel = panel.timeSeries(
 		title = 'Saturation',
 		description = '',
 		query = saturationQuery,
 		queryLegend = 'Application Server',
 		unity = 'percentunit',
 	)
-	+ base.threshold( 0.70 )
-	+ a.softMax( 1.00 )
-	+ a.axisLabel( 'CPU Load' );
+	.threshold( 0.70 )
+	.softMax( 1.00 )
+	.axisLabel( 'CPU Load' );
 
 
-local latencyPanel = base.timeSeries(
+local latencyPanel = panel.timeSeries(
 		title = 'Latency (95th percentile)',
 		description = '',
 		query = latencyQuery,
 		queryLegend = '2xx',
 		unity = 's',
 	)
-	+ base.threshold( 0.5 );
+	.threshold( 0.5 );
 
 
-local errorRatePanel = base.timeSeries(
+local errorRatePanel = panel.timeSeries(
 		title = 'Error Rate',
 		description = '',
 		query = errorRateQuery,
 		queryLegend = 'Traefik',
 		unity = 'percentunit',
 	)
-	+ base.threshold( 0.01 )
-	+ a.softMax( 0.05 );
+	.threshold( 0.01 )
+	.softMax( 0.05 );
 
 
 

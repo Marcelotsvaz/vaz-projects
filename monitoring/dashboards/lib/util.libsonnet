@@ -39,12 +39,16 @@
 	
 	
 	layoutPanels( rows ):
+		local rawRows = [
+			[ panel.data for panel in row ] for row in rows
+		];
+		
 		# Annotate each row with the height of the tallest element.
 		local rowsWithHeight = [
 			{
 				row: row,
 				height: std.foldl( std.max, [ panel.gridPos.h for panel in row ], 1 ),
-			} for row in rows
+			} for row in rawRows
 		];
 		
 		# Lay out column, than lay out each row, and update each panel's vertical position from
