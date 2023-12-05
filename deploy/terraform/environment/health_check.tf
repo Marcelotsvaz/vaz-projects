@@ -9,6 +9,8 @@
 resource aws_route53_health_check main {
 	fqdn = local.domain
 	type = "HTTPS"
+	port = 443
+	request_interval = 30
 	
 	regions = [
 		"sa-east-1",
