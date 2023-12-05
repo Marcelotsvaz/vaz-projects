@@ -22,3 +22,51 @@ resource aws_route53_health_check main {
 		Name = "${local.project_name} Health Check"
 	}
 }
+
+
+resource aws_cloudwatch_metric_alarm health_check {
+	provider = aws.us_east_1
+	
+	alarm_name = "${local.project_name} Health Check Alarm"
+	alarm_description = "Triggers when the Route53 health check of the application HTTPS endpoint fails."
+	
+	# Metric.
+	namespace = "AWS/Route53"
+	metric_name = "HealthCheckStatus"
+	dimensions = { HealthCheckId = aws_route53_health_check.main.id }
+	statistic = "Minimum"
+	period = 60
+	
+	# Condition.
+	comparison_operator = "LessThanThreshold"
+	threshold = 1
+	evaluation_periods = 1
+	
+	# Actions
+	alarm_actions = [ aws_sns_topic.health_check.arn ]
+	ok_actions = [ aws_sns_topic.health_check.arn ]
+	
+	tags = {
+		Name = "${local.project_name} Health Check Alarm"
+	}
+}
+
+
+resource aws_sns_topic health_check {
+	provider = aws.us_east_1
+	
+	name = "${local.project_prefix}-alarm"
+	
+	tags = {
+		Name = "${local.project_name} Health Check Topic"
+	}
+}
+
+
+resource aws_sns_topic_subscription health_check {
+	provider = aws.us_east_1
+	
+	topic_arn = aws_sns_topic.health_check.arn
+	protocol = "email"
+	endpoint = local.admin_email
+}

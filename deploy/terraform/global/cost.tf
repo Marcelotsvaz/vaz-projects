@@ -17,14 +17,14 @@ resource aws_ce_anomaly_monitor main {
 }
 
 
-resource aws_ce_anomaly_subscription test {
+resource aws_ce_anomaly_subscription main {
 	name = local.project_code
 	frequency = "DAILY"
 	monitor_arn_list = [ aws_ce_anomaly_monitor.main.arn ]
 	
 	subscriber {
 		type = "EMAIL"
-		address = "marcelotsvaz@gmail.com"
+		address = local.admin_email
 	}
 	
 	threshold_expression {

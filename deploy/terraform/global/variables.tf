@@ -13,6 +13,8 @@ locals {
 	
 	domain = "vazprojects.com"
 	
+	admin_email = "marcelotsvaz@gmail.com"
+	
 	default_tags = {
 		Project = local.project_name
 		Environment = "global"

@@ -44,6 +44,8 @@ locals {
 	monitoring_domain = "monitoring.${local.domain}"
 	private_domain = "private.${local.domain}"
 	
+	admin_email = "marcelotsvaz@gmail.com"
+	
 	default_tags = {
 		Project = local.project_name
 		Environment = var.environment
