@@ -25,7 +25,7 @@ resource aws_route53_health_check main {
 
 
 resource aws_cloudwatch_metric_alarm health_check {
-	provider = aws.us_east_1
+	provider = aws.global
 	
 	alarm_name = "${local.project_name} Health Check Alarm"
 	alarm_description = "Triggers when the Route53 health check of the application HTTPS endpoint fails."
@@ -53,7 +53,7 @@ resource aws_cloudwatch_metric_alarm health_check {
 
 
 resource aws_sns_topic health_check {
-	provider = aws.us_east_1
+	provider = aws.global
 	
 	name = "${local.project_prefix}-alarm"
 	
@@ -64,7 +64,7 @@ resource aws_sns_topic health_check {
 
 
 resource aws_sns_topic_subscription health_check {
-	provider = aws.us_east_1
+	provider = aws.global
 	
 	topic_arn = aws_sns_topic.health_check.arn
 	protocol = "email"

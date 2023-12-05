@@ -30,7 +30,7 @@ locals {
 
 
 resource aws_acm_certificate cloudfront {
-	provider = aws.us_east_1
+	provider = aws.global
 	
 	private_key = data.aws_s3_object.cloudfront_key.body
 	certificate_body = local.cloudfront_certificate_body

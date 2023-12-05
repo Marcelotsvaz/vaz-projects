@@ -47,7 +47,7 @@ provider aws {
 
 # For aws_acm_certificate.cloudfront.
 provider aws {
-	alias = "us_east_1"
+	alias = "global"
 	
 	region = "us-east-1"
 	
