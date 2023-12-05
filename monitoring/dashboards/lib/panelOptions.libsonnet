@@ -2,7 +2,7 @@
 # VAZ Projects
 # 
 # 
-# Author:: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
+# Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
 
 local grafonnet = import 'github.com/grafana/grafonnet/gen/grafonnet-v10.1.0/main.libsonnet';
 

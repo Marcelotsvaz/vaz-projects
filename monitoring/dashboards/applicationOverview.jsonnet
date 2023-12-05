@@ -4,10 +4,10 @@
 # 
 # Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
 
-local promql = import 'github.com/satyanash/promql-jsonnet/promql.libsonnet';
 local grafonnet = import 'github.com/grafana/grafonnet/gen/grafonnet-v10.1.0/main.libsonnet';
 
 local panel = import 'lib/panel.libsonnet';
+local query = import 'lib/query.libsonnet';
 local util = import 'lib/util.libsonnet';
 
 local dashboard = grafonnet.dashboard;
@@ -18,52 +18,56 @@ local dashboard = grafonnet.dashboard;
 # Queries
 #---------------------------------------------------------------------------------------------------
 # Traffic.
-local trafficQuery = promql.new( 'traefik_service_requests_total' )
+local trafficExpression = query.expression.promql( 'traefik_service_requests_total' )
 	.withLabels( { service: 'application@file' } )
-	.rate( [ '$__rate_interval', '$__interval' ] )
-	.sum()
-	.build();
+	.rate()
+	.sum();
+
+local trafficQuery = query.prometheus( 'Prometheus', trafficExpression, 'Traefik' );
 
 
 # Saturation.
-local cpuLoadQuery = promql.new( 'node_cpu_seconds_total' )
+local cpuLoadExpression = query.expression.promql( 'node_cpu_seconds_total' )
 	.withLabels( {
 		instance: 'VAZ Projects Application Server',
 		mode: 'idle',
 	} )
-	.rate( [ '$__rate_interval', '$__interval' ] )
+	.rate()
 	.sum();
 
-local cpuCoreCountQuery = promql.new( 'machine_cpu_cores' )
+local cpuCoreCountExpression = query.expression.promql( 'machine_cpu_cores' )
 	.withLabels( { instance: 'VAZ Projects Application Server' } )
 	.sum();
 
-local saturationQuery = '1 - %s / %s' % [ cpuLoadQuery.build(), cpuCoreCountQuery.build() ];
+local saturationExpression = cpuLoadExpression.op( '/', cpuCoreCountExpression.build() ).opL( 1, '-' );
+local saturationQuery = query.prometheus( 'Prometheus', saturationExpression, 'Application Server' );
 
 
 # Latency.
-local latencyQuery = promql.new( 'traefik_service_request_duration_seconds_bucket' )
+local latencyExpression = query.expression.promql( 'traefik_service_request_duration_seconds_bucket' )
 	.withLabels( { service: 'application@file' } )
-	.rate( [ '$__rate_interval', '$__interval' ] )
+	.rate()
 	.sum( by = [ 'le' ] )
-	.histogram_quantile( 0.95 )
-	.build();
+	.histogramQuantile( 0.95 );
+
+local latencyQuery = query.prometheus( 'Prometheus', latencyExpression, '2xx' );
 
 
 # Error Rate.
-local allRequestsQuery = promql.new( 'traefik_service_requests_total' )
+local allRequestsExpression = query.expression.promql( 'traefik_service_requests_total' )
 	.withLabels( { service: 'application@file' } )
-	.rate( [ '$__rate_interval', '$__interval' ] )
+	.rate()
 	.sum();
 
-local errorRequestsQuery = allRequestsQuery
+local errorRequestsExpression = allRequestsExpression
 	.withLabel( {
 		key: 'code',
 		op: '=~',
 		value: '5..'
 	} );
 
-local errorRateQuery = '%s / %s or vector( 0 )' % [ errorRequestsQuery.build(), allRequestsQuery.build() ];
+local errorRateExpression = errorRequestsExpression.op( '/', allRequestsExpression.build() ).op( 'or', 'vector( 0 )' );
+local errorRateQuery = query.prometheus( 'Prometheus', errorRateExpression, 'Traefik' );
 
 
 
@@ -74,7 +78,6 @@ local trafficPanel = panel.timeSeries(
 		title = 'Traffic',
 		description = '',
 		query = trafficQuery,
-		queryLegend = 'Traefik',
 		unity = 'reqps',
 	)
 	.noValue( '0' );
@@ -84,7 +87,6 @@ local saturationPanel = panel.timeSeries(
 		title = 'Saturation',
 		description = '',
 		query = saturationQuery,
-		queryLegend = 'Application Server',
 		unity = 'percentunit',
 	)
 	.threshold( 0.70 )
@@ -96,7 +98,6 @@ local latencyPanel = panel.timeSeries(
 		title = 'Latency (95th percentile)',
 		description = '',
 		query = latencyQuery,
-		queryLegend = '2xx',
 		unity = 's',
 	)
 	.threshold( 0.5 );
@@ -106,7 +107,6 @@ local errorRatePanel = panel.timeSeries(
 		title = 'Error Rate',
 		description = '',
 		query = errorRateQuery,
-		queryLegend = 'Traefik',
 		unity = 'percentunit',
 	)
 	.threshold( 0.01 )

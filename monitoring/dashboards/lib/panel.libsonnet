@@ -10,22 +10,33 @@ local promql = import 'promql.libsonnet';
 
 
 {
-	local basePanel( panelType, title, width, height ) =
+	local basePanel( panelType, title, description, width, height ) =
 		panelOptions.basePanel( panelType )
 		.init( title )
+		.description( description )
 		.width( width )
 		.height( height ),
 	
 	
+	# Base for all panels that use queries.
+	local queryPanel( panelType, title, description, width, height, query ) =
+		basePanel( panelType, title, description, width, height )
+		.targets( [ query.data ] ),
+	
+	
+	
+	# 
+	# Concrete panels.
+	#---------------------------------------------------------------------------
 	row( title ):
 		basePanel( 'row', title, 24, 1 )
 		.mergeOpts( panelOptions.row ),
 	
 	
-	text( title, text ):
+	text( title, content ):
 		basePanel( 'text', title, 24, 3 )
 		.mergeOpts( panelOptions.text )
-		.content( text ),
+		.content( content ),
 	
 	
 	gauge( title ):
@@ -38,11 +49,9 @@ local promql = import 'promql.libsonnet';
 		.mergeOpts( panelOptions.stat ),
 	
 	
-	timeSeries( title, description, query, queryLegend, unity ):
-		basePanel( 'timeSeries', title, 12, 8 )
+	timeSeries( title, description, query, unity ):
+		queryPanel( 'timeSeries', title, description, 12, 8, query )
 		.mergeOpts( panelOptions.timeSeries )
-		.description( description )
-		.targets( [ promql.makeQuery( query, queryLegend ) ] )
 		.unit( unity )
 		.min( 0 )
 		.fillOpacity( 25 )
