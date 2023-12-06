@@ -49,6 +49,19 @@ local promql = import 'promql.libsonnet';
 		.mergeOpts( panelOptions.stat ),
 	
 	
+	pieChart( title, description, query ):
+		queryPanel( 'pieChart', title, description, 4, 6, query )
+		.mergeOpts( panelOptions.pieChart )
+		.showValues( 'all' )
+		.decimals( 1 )
+		.unit( 'percentunit' )
+		.overrideField.byType( 'string', 'unit' )
+		.legendMode( 'table' )
+		.legendPlacement( 'right' )
+		.legendValue( 'value' )
+		.tooltipMode( 'multi' ),
+	
+	
 	timeSeries( title, description, query, unity ):
 		queryPanel( 'timeSeries', title, description, 12, 8, query )
 		.mergeOpts( panelOptions.timeSeries )

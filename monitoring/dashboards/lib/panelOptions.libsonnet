@@ -61,6 +61,7 @@ local grafonnet = import 'github.com/grafana/grafonnet/gen/grafonnet-v10.1.0/mai
 		
 		
 		# standardOptions.
+		decimals( value ):			addOpt( opts.standard.withDecimals( value ) ),
 		unit( value ):				addOpt( opts.standard.withUnit( value ) ),
 		noValue( value ):			addOpt( opts.standard.withNoValue( value ) ),
 		min( value ):				addOpt( opts.standard.withMin( value ) ),
@@ -128,6 +129,20 @@ local grafonnet = import 'github.com/grafana/grafonnet/gen/grafonnet-v10.1.0/mai
 	
 	stat: utils {
 		
+	},
+	
+	
+	pieChart: utils {
+		local showValuesEnum = {
+			all: true,
+			calculate: false,
+		},
+		
+		showValues( value ): self.addOpt( grafonnet.panel.pieChart.options.reduceOptions.withValues( showValuesEnum[value] ) ),
+		legendMode( mode ): self.addOpt( grafonnet.panel.pieChart.options.legend.withDisplayMode( mode ) ),
+		legendPlacement( placement ): self.addOpt( grafonnet.panel.pieChart.options.legend.withPlacement( placement ) ),
+		legendValue( value ): self.addOpt( grafonnet.panel.pieChart.options.legend.withValues( [ value ] ) ),
+		tooltipMode( mode ): self.addOpt( grafonnet.panel.pieChart.options.tooltip.withMode( mode ) ),
 	},
 	
 	
