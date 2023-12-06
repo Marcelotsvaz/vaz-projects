@@ -31,7 +31,7 @@ local promql = import 'github.com/satyanash/promql-jsonnet/promql.libsonnet';
 	},
 	
 	
-	local baseQuery( dataSourceType, dataSource, expression, legend ) = utils {
+	local baseQuery( dataSourceType, dataSource, expression ) = utils {
 		local addOpt = self.addOpt,
 		local query = grafonnet.query[dataSourceType],
 		
@@ -40,9 +40,9 @@ local promql = import 'github.com/satyanash/promql-jsonnet/promql.libsonnet';
 		legend( legend ):				addOpt( query.withLegendFormat( legend ) ),
 	}
 		.init( dataSource, expression )
-		.legend( legend ),
+		.legend( '__auto' ),
 	
 	
-	prometheus( dataSource, expression, legend ):
-		baseQuery( 'prometheus', dataSource, expression, legend ),
+	prometheus( dataSource, expression ):
+		baseQuery( 'prometheus', dataSource, expression ),
 }

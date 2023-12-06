@@ -23,7 +23,7 @@ local trafficExpression = query.expression.promql( 'traefik_service_requests_tot
 	.rate()
 	.sum();
 
-local trafficQuery = query.prometheus( 'Prometheus', trafficExpression, 'Traefik' );
+local trafficQuery = query.prometheus( 'Prometheus', trafficExpression ).legend( 'Traefik' );
 
 
 # Saturation.
@@ -40,7 +40,7 @@ local cpuCoreCountExpression = query.expression.promql( 'machine_cpu_cores' )
 	.sum();
 
 local saturationExpression = cpuLoadExpression.op( '/', cpuCoreCountExpression.build() ).opL( 1, '-' );
-local saturationQuery = query.prometheus( 'Prometheus', saturationExpression, 'Application Server' );
+local saturationQuery = query.prometheus( 'Prometheus', saturationExpression ).legend( 'Application Server' );
 
 
 # Latency.
@@ -50,7 +50,7 @@ local latencyExpression = query.expression.promql( 'traefik_service_request_dura
 	.sum( by = [ 'le' ] )
 	.histogramQuantile( 0.95 );
 
-local latencyQuery = query.prometheus( 'Prometheus', latencyExpression, '2xx' );
+local latencyQuery = query.prometheus( 'Prometheus', latencyExpression ).legend( '2xx' );
 
 
 # Error Rate.
@@ -67,7 +67,7 @@ local errorRequestsExpression = allRequestsExpression
 	} );
 
 local errorRateExpression = errorRequestsExpression.op( '/', allRequestsExpression.build() ).op( 'or', 'vector( 0 )' );
-local errorRateQuery = query.prometheus( 'Prometheus', errorRateExpression, 'Traefik' );
+local errorRateQuery = query.prometheus( 'Prometheus', errorRateExpression ).legend( 'Traefik' );
 
 
 
