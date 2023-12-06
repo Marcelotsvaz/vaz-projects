@@ -40,7 +40,7 @@
 	
 	layoutPanels( rows ):
 		local rawRows = [
-			[ panel.data for panel in row ] for row in rows
+			[ panel.build() for panel in row ] for row in rows
 		];
 		
 		# Annotate each row with the height of the tallest element.

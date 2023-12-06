@@ -16,19 +16,24 @@ local grafonnet = import 'github.com/grafana/grafonnet/gen/grafonnet-v10.1.0/mai
 	
 	
 	basePanel( panelType ): utils {
+		# Private fields and locals.
+		_overrides:: [],
+		
 		local addOpt = self.addOpt,
 		local panel = grafonnet.panel[panelType],
 		local opts = {
-			field: grafonnet.panel.timeSeries.fieldConfig.defaults.custom,
-			panel: grafonnet.panel.timeSeries.panelOptions,
-			position: grafonnet.panel.timeSeries.gridPos,
-			query: grafonnet.panel.timeSeries.queryOptions,
-			standard: grafonnet.panel.timeSeries.standardOptions,
+			field: panel.fieldConfig.defaults.custom,
+			panel: panel.panelOptions,
+			position: panel.gridPos,
+			query: panel.queryOptions,
+			standard: panel.standardOptions,
 		},
 		
 		
-		# Constructor.
-		init( title ):				addOpt( panel.new( title ) ),
+		# Main methods.
+		init( title ): addOpt( panel.new( title ) ),
+		build(): self.data
+			+ opts.standard.withOverrides( self._overrides ),
 		
 		
 		# fieldConfig.defaults.custom.
@@ -67,7 +72,27 @@ local grafonnet = import 'github.com/grafana/grafonnet/gen/grafonnet-v10.1.0/mai
 		steps( value ):				addOpt( opts.standard.thresholds.withSteps( value ) ),
 		
 		
-		# Complex setters.
+		# Custom setters.
+		local addOverride( override ) = self {
+			_overrides:: super._overrides + [ override ]
+		},
+		
+		overrideField: {
+			byType( type, property, value = null ): addOverride( {
+				matcher: {
+					id: 'byType',
+					options: type,
+				},
+				
+				properties: [
+					{
+						id: property,
+						[if value != null then 'value']: value,
+					},
+				],
+			} ),
+		},
+		
 		threshold( theshold ):
 			self
 			.gradientMode( 'scheme' )
