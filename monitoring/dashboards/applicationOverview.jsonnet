@@ -150,11 +150,9 @@ local mainDashboard = dashboard.default(
 		description = 'High level metrics for monitoring application health and performance.',
 	)
 	.tags( [ 'Monitoring' ] )
-	.panels( [
-		[ trafficPanel, saturationPanel ],
-		[ latencyPanel, errorRatePanel ],
-		[ requestDistributionPanel ],
-	] );
+	.addRow( [ trafficPanel, saturationPanel ] )
+	.addRow( [ latencyPanel, errorRatePanel ] )
+	.addRow( [ requestDistributionPanel ] );
 
 
 mainDashboard.build()

@@ -10,7 +10,7 @@ local promql = import 'promql.libsonnet';
 
 
 {
-	local basePanel( panelType, title, description, width, height ) =
+	basePanel( panelType, title, description, width, height ):
 		panelOptions.basePanel( panelType )
 		.init( title )
 		.description( description )
@@ -19,8 +19,8 @@ local promql = import 'promql.libsonnet';
 	
 	
 	# Base for all panels that use queries.
-	local queryPanel( panelType, title, description, width, height, query ) =
-		basePanel( panelType, title, description, width, height )
+	queryPanel( panelType, title, description, width, height, query ):
+		self.basePanel( panelType, title, description, width, height )
 		.targets( [ query.data ] ),
 	
 	
@@ -29,28 +29,28 @@ local promql = import 'promql.libsonnet';
 	# Concrete panels.
 	#---------------------------------------------------------------------------
 	row( title ):
-		basePanel( 'row', title, 24, 1 )
+		self.basePanel( 'row', title, 24, 1 )
 		.mergeOpts( panelOptions.row ),
 	
 	
 	text( title, content ):
-		basePanel( 'text', title, 24, 3 )
+		self.basePanel( 'text', title, '', 24, 3 )
 		.mergeOpts( panelOptions.text )
 		.content( content ),
 	
 	
 	gauge( title ):
-		basePanel( 'gauge', title, 6, 4 )
+		self.basePanel( 'gauge', title, 6, 4 )
 		.mergeOpts( panelOptions.gauge ),
 	
 	
 	stat( title ):
-		basePanel( 'stat', title, 6, 4 )
+		self.basePanel( 'stat', title, 6, 4 )
 		.mergeOpts( panelOptions.stat ),
 	
 	
 	pieChart( title, description, query ):
-		queryPanel( 'pieChart', title, description, 4, 6, query )
+		self.queryPanel( 'pieChart', title, description, 4, 6, query )
 		.mergeOpts( panelOptions.pieChart )
 		.showValues( 'all' )
 		.decimals( 1 )
@@ -63,7 +63,7 @@ local promql = import 'promql.libsonnet';
 	
 	
 	timeSeries( title, description, query, unity ):
-		queryPanel( 'timeSeries', title, description, 12, 8, query )
+		self.queryPanel( 'timeSeries', title, description, 12, 8, query )
 		.mergeOpts( panelOptions.timeSeries )
 		.unit( unity )
 		.min( 0 )
@@ -72,6 +72,6 @@ local promql = import 'promql.libsonnet';
 	
 	
 	logs( title ):
-		basePanel( 'logs', title, 6, 4 )
+		self.basePanel( 'logs', title, 6, 4 )
 		.mergeOpts( panelOptions.logs ),
 }

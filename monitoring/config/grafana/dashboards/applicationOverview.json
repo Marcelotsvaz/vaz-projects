@@ -10,6 +10,30 @@
          },
          "description": "",
          "fieldConfig": {
+            "overrides": [ ]
+         },
+         "gridPos": {
+            "h": 3,
+            "w": 24,
+            "x": 0,
+            "y": 0
+         },
+         "id": 1,
+         "options": {
+            "content": "# Application Overview\n\nHigh level metrics for monitoring application health and performance.\n"
+         },
+         "pluginVersion": "v10.1.0",
+         "title": "",
+         "transparent": true,
+         "type": "text"
+      },
+      {
+         "datasource": {
+            "type": "datasource",
+            "uid": "-- Mixed --"
+         },
+         "description": "",
+         "fieldConfig": {
             "defaults": {
                "custom": {
                   "fillOpacity": 25,
@@ -25,9 +49,9 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 0
+            "y": 3
          },
-         "id": 1,
+         "id": 2,
          "pluginVersion": "v10.1.0",
          "targets": [
             {
@@ -82,9 +106,9 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 0
+            "y": 3
          },
-         "id": 2,
+         "id": 3,
          "pluginVersion": "v10.1.0",
          "targets": [
             {
@@ -137,9 +161,9 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 8
+            "y": 11
          },
-         "id": 3,
+         "id": 4,
          "pluginVersion": "v10.1.0",
          "targets": [
             {
@@ -193,9 +217,9 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 8
+            "y": 11
          },
-         "id": 4,
+         "id": 5,
          "pluginVersion": "v10.1.0",
          "targets": [
             {
@@ -239,9 +263,9 @@
             "h": 6,
             "w": 4,
             "x": 0,
-            "y": 16
+            "y": 19
          },
-         "id": 5,
+         "id": 6,
          "options": {
             "legend": {
                "displayMode": "table",

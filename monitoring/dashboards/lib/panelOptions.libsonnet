@@ -49,6 +49,7 @@ local grafonnet = import 'github.com/grafana/grafonnet/gen/grafonnet-v10.1.0/mai
 		
 		# panelOptions.
 		description( value ):		addOpt( opts.panel.withDescription( value ) ),
+		transparent( value ):		addOpt( opts.panel.withTransparent( value ) ),
 		
 		
 		# gridPos.
