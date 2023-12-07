@@ -12,6 +12,7 @@ local promql = import 'promql.libsonnet';
 {
 	basePanel( panelType, title, description, width, height ):
 		panelOptions.basePanel( panelType )
+		.mergeOpts( panelOptions[panelType] )
 		.init( title )
 		.description( description )
 		.width( width )
@@ -29,29 +30,24 @@ local promql = import 'promql.libsonnet';
 	# Concrete panels.
 	#---------------------------------------------------------------------------
 	row( title ):
-		self.basePanel( 'row', title, 24, 1 )
-		.mergeOpts( panelOptions.row ),
+		self.basePanel( 'row', title, '', 24, 1 ),
 	
 	
 	text( title, content ):
 		self.basePanel( 'text', title, '', 24, 3 )
-		.mergeOpts( panelOptions.text )
 		.content( content ),
 	
 	
-	gauge( title ):
-		self.basePanel( 'gauge', title, 6, 4 )
-		.mergeOpts( panelOptions.gauge ),
+	gauge( title, description, query ):
+		self.queryPanel( 'gauge', title, description, 6, 4, query ),
 	
 	
-	stat( title ):
-		self.basePanel( 'stat', title, 6, 4 )
-		.mergeOpts( panelOptions.stat ),
+	stat( title, description, query ):
+		self.queryPanel( 'stat', title, description, 3, 4, query ),
 	
 	
 	pieChart( title, description, query ):
 		self.queryPanel( 'pieChart', title, description, 4, 6, query )
-		.mergeOpts( panelOptions.pieChart )
 		.showValues( 'all' )
 		.decimals( 1 )
 		.unit( 'percentunit' )
@@ -64,14 +60,12 @@ local promql = import 'promql.libsonnet';
 	
 	timeSeries( title, description, query, unity ):
 		self.queryPanel( 'timeSeries', title, description, 12, 8, query )
-		.mergeOpts( panelOptions.timeSeries )
 		.unit( unity )
 		.min( 0 )
 		.fillOpacity( 25 )
 		.showPoints( 'never' ),
 	
 	
-	logs( title ):
-		self.basePanel( 'logs', title, 6, 4 )
-		.mergeOpts( panelOptions.logs ),
+	logs( title, description ):
+		self.basePanel( 'logs', title, description, 6, 4 ),
 }
