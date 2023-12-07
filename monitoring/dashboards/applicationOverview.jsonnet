@@ -4,13 +4,9 @@
 # 
 # Author: Marcelo Tellier Sartori Vaz <marcelotsvaz@gmail.com>
 
-local grafonnet = import 'github.com/grafana/grafonnet/gen/grafonnet-v10.1.0/main.libsonnet';
-
+local dashboard = import 'lib/dashboard.libsonnet';
 local panel = import 'lib/panel.libsonnet';
 local query = import 'lib/query.libsonnet';
-local util = import 'lib/util.libsonnet';
-
-local dashboard = grafonnet.dashboard;
 
 
 
@@ -149,25 +145,16 @@ local requestDistributionPanel = panel.pieChart(
 # 
 # Dashboard
 #---------------------------------------------------------------------------------------------------
-local panels = util.layoutPanels( [
-	[ trafficPanel, saturationPanel ],
-	[ latencyPanel, errorRatePanel ],
-	[ requestDistributionPanel ],
-] );
+local mainDashboard = dashboard.default(
+		name = 'Application Overview',
+		description = 'High level metrics for monitoring application health and performance.',
+	)
+	.tags( [ 'Monitoring' ] )
+	.panels( [
+		[ trafficPanel, saturationPanel ],
+		[ latencyPanel, errorRatePanel ],
+		[ requestDistributionPanel ],
+	] );
 
-dashboard.new( 'Application Overview' ) {
-		description: 'High level metrics for monitoring application health and performance.',
-		tags: [
-			'Monitoring'
-		],
-		editable: false,
-		timezone: '',
-	}
-	+ dashboard.timepicker.withRefreshIntervals( [
-		'15s',
-		'30s',
-		'1m',
-		'5m',
-	] )
-	+ dashboard.graphTooltip.withSharedCrosshair()
-	+ dashboard.withPanels( panels )
+
+mainDashboard.build()
