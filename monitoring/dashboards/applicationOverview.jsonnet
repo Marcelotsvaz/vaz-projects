@@ -18,7 +18,8 @@ local dashboard = grafonnet.dashboard;
 # Queries
 #---------------------------------------------------------------------------------------------------
 # Traffic.
-local trafficExpression = query.expression.promql( 'traefik_service_requests_total' )
+local trafficExpression =
+	query.expression.promql( 'traefik_service_requests_total' )
 	.withLabels( { service: 'application@file' } )
 	.rate()
 	.sum();
@@ -27,7 +28,8 @@ local trafficQuery = query.prometheus( 'Prometheus', trafficExpression ).legend(
 
 
 # Saturation.
-local cpuLoadExpression = query.expression.promql( 'node_cpu_seconds_total' )
+local cpuLoadExpression =
+	query.expression.promql( 'node_cpu_seconds_total' )
 	.withLabels( {
 		instance: 'VAZ Projects Application Server',
 		mode: 'idle',
@@ -35,7 +37,8 @@ local cpuLoadExpression = query.expression.promql( 'node_cpu_seconds_total' )
 	.rate()
 	.sum();
 
-local cpuCoreCountExpression = query.expression.promql( 'machine_cpu_cores' )
+local cpuCoreCountExpression =
+	query.expression.promql( 'machine_cpu_cores' )
 	.withLabels( { instance: 'VAZ Projects Application Server' } )
 	.sum();
 
@@ -44,7 +47,8 @@ local saturationQuery = query.prometheus( 'Prometheus', saturationExpression ).l
 
 
 # Latency.
-local latencyExpression = query.expression.promql( 'traefik_service_request_duration_seconds_bucket' )
+local latencyExpression =
+	query.expression.promql( 'traefik_service_request_duration_seconds_bucket' )
 	.withLabels( { service: 'application@file' } )
 	.rate()
 	.sum( by = [ 'le' ] )
@@ -54,20 +58,41 @@ local latencyQuery = query.prometheus( 'Prometheus', latencyExpression ).legend(
 
 
 # Error Rate.
-local allRequestsExpression = query.expression.promql( 'traefik_service_requests_total' )
+local allRequestsExpression =
+	query.expression.promql( 'traefik_service_requests_total' )
 	.withLabels( { service: 'application@file' } )
 	.rate()
 	.sum();
 
-local errorRequestsExpression = allRequestsExpression
+local errorRequestsExpression =
+	allRequestsExpression
 	.withLabel( {
 		key: 'code',
 		op: '=~',
 		value: '5..'
 	} );
 
-local errorRateExpression = errorRequestsExpression.op( '/', allRequestsExpression.build() ).op( 'or', 'vector( 0 )' );
+local errorRateExpression =
+	errorRequestsExpression
+	.op( '/', allRequestsExpression.build() )
+	.op( 'or', 'vector( 0 )' );
+
 local errorRateQuery = query.prometheus( 'Prometheus', errorRateExpression ).legend( 'Traefik' );
+
+
+# Request distribution.
+local requestsExpression =
+	query.expression.promql( 'traefik_service_requests_total' )
+	.withLabels( { service: 'application@file' } )
+	.increase( '$__range' );
+
+local requestDistributionExpression =
+	requestsExpression
+	.sum( by = [ 'code' ] )
+	.op( '/ on() group_left', requestsExpression.sum().build() )
+	.op( '>', 0 );
+
+local requestDistributionQuery = query.prometheusInstant( 'Prometheus', requestDistributionExpression );
 
 
 
@@ -113,6 +138,13 @@ local errorRatePanel = panel.timeSeries(
 	.softMax( 0.05 );
 
 
+local requestDistributionPanel = panel.pieChart(
+		title = 'Request Status',
+		description = '',
+		query = requestDistributionQuery,
+	);
+
+
 
 # 
 # Dashboard
@@ -120,6 +152,7 @@ local errorRatePanel = panel.timeSeries(
 local panels = util.layoutPanels( [
 	[ trafficPanel, saturationPanel ],
 	[ latencyPanel, errorRatePanel ],
+	[ requestDistributionPanel ],
 ] );
 
 dashboard.new( 'Application Overview' ) {
