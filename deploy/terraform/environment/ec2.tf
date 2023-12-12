@@ -302,6 +302,7 @@ module monitoring_server {
 		bucket = data.aws_s3_bucket.data.id
 		AWS_DEFAULT_REGION = local.region
 		monitoringDomain = local.monitoring_domain
+		assumeRoleArn = aws_iam_role.grafana.arn
 		environment = var.environment
 	}
 }
@@ -350,6 +351,88 @@ data aws_iam_policy_document monitoring_server {
 		actions = [
 			"ec2:DescribeInstances",
 			"ec2:DescribeAvailabilityZones",
+		]
+		resources = [ "*" ]
+	}
+	
+	statement {
+		sid = "assumeGrafanaRole"
+		actions = [ "sts:AssumeRole" ]
+		resources = [ "*" ]
+	}
+}
+
+
+resource aws_iam_role grafana {
+	name = "${local.project_prefix}-grafana"
+	assume_role_policy = data.aws_iam_policy_document.grafana_assume_role.json
+	managed_policy_arns = []
+	
+	inline_policy {
+		name = "cloudWatchDataSource"
+		policy = data.aws_iam_policy_document.cloudwatch_data_source.json
+	}
+	
+	tags = {
+		Name = "${local.project_name} Grafana Role"
+	}
+}
+
+
+data aws_iam_policy_document grafana_assume_role {
+	statement {
+		sid = "monitoringRoleAssumeRole"
+		principals {
+			type = "AWS"
+			identifiers = [ module.monitoring_server.instance_profile_role_arn ]
+		}
+		actions = [ "sts:AssumeRole" ]
+	}
+}
+
+
+data aws_iam_policy_document cloudwatch_data_source {
+	statement {
+		sid = "readMetrics"
+		actions = [
+			"cloudwatch:ListMetrics",
+			"cloudwatch:GetMetricData",
+			
+			# For annotations.
+			"cloudwatch:DescribeAlarms",
+			"cloudwatch:DescribeAlarmsForMetric",
+			"cloudwatch:DescribeAlarmHistory",
+		]
+		resources = [ "*" ]
+	}
+	
+	statement {
+		sid = "readLogs"
+		actions = [
+			"logs:DescribeLogGroups",
+			"logs:GetLogGroupFields",
+			"logs:GetLogEvents",
+			"logs:StartQuery",
+			"logs:StopQuery",
+			"logs:GetQueryResults",
+		]
+		resources = [ "*" ]
+	}
+	
+	statement {
+		sid = "listResources"
+		actions = [
+			"ec2:DescribeRegions",
+			"oam:ListSinks",	# List monitoring accounts. For cross-account stuff?
+		]
+		resources = [ "*" ]
+	}
+	
+	statement {
+		sid = "createQueryVariables"
+		actions = [
+			"ec2:DescribeInstances",
+			"tag:GetResources",
 		]
 		resources = [ "*" ]
 	}

@@ -13,7 +13,9 @@ services:
         restart: unless-stopped
         
         environment:
+            AWS_DEFAULT_REGION:
             monitoringDomain:
+            grafanaRoleArn:
             # Secrets.
             GF_SECURITY_ADMIN_PASSWORD:
         

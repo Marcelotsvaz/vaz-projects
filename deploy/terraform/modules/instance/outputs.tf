@@ -20,3 +20,8 @@ output ipv6_address {
 	description = "Instance IPv6 address."
 	value = one( data.aws_instance.main.ipv6_addresses )
 }
+
+output instance_profile_role_arn {
+	description = "Instance IAM Role ARN."
+	value = aws_iam_role.main.arn
+}
