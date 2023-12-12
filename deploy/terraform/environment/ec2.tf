@@ -302,7 +302,7 @@ module monitoring_server {
 		bucket = data.aws_s3_bucket.data.id
 		AWS_DEFAULT_REGION = local.region
 		monitoringDomain = local.monitoring_domain
-		assumeRoleArn = aws_iam_role.grafana.arn
+		grafanaRoleArn = aws_iam_role.grafana.arn
 		environment = var.environment
 	}
 }
