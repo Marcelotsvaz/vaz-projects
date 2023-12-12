@@ -48,7 +48,7 @@ local promql = import 'promql.libsonnet';
 	
 	pieChart( title, description, query ):
 		self.queryPanel( 'pieChart', title, description, 4, 6, query )
-		.showValues( 'all' )
+		.aggregate( false )
 		.decimals( 1 )
 		.unit( 'percentunit' )
 		.overrideField.byType( 'string', 'unit' )

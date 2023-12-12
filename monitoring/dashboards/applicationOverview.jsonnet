@@ -91,6 +91,17 @@ local requestDistributionExpression =
 local requestDistributionQuery = query.prometheusInstant( 'Prometheus', requestDistributionExpression );
 
 
+# Uptime.
+local uptimeQuery = query.cloudWatchMetric(
+		dataSource = 'CloudWatch',
+		region = 'us-east-1',
+		namespace = 'AWS/Route53',
+		metric = 'HealthCheckStatus',
+		statistic = 'Average',
+	)
+	.matchExact( false );
+
+
 
 # 
 # Panels
@@ -141,6 +152,16 @@ local requestDistributionPanel = panel.pieChart(
 	);
 
 
+local uptimePanel = panel.stat(
+		title = 'Uptime',
+		description = '',
+		query = uptimeQuery,
+	)
+	.aggregateFunction( 'mean' )
+	.unit( 'percentunit' )
+	.decimals( 3 );
+
+
 
 # 
 # Dashboard
@@ -152,7 +173,7 @@ local mainDashboard = dashboard.default(
 	.tags( [ 'Monitoring' ] )
 	.addRow( [ trafficPanel, saturationPanel ] )
 	.addRow( [ latencyPanel, errorRatePanel ] )
-	.addRow( [ requestDistributionPanel ] );
+	.addRow( [ requestDistributionPanel, uptimePanel ] );
 
 
 mainDashboard.build()

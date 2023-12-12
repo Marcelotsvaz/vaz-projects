@@ -72,4 +72,44 @@ local promql = import 'github.com/satyanash/promql-jsonnet/promql.libsonnet';
 		baseQuery( 'prometheus', dataSource, expression )
 		.type( 'instant' )
 		.format( 'table' ),
+	
+	
+	cloudWatchMetric( dataSource, region, namespace, metric, statistic ): utils {
+			local addOpt = self.addOpt,
+			local cloudWatchQuery = grafonnet.query.cloudWatch.CloudWatchMetricsQuery,
+			
+			local modeEnum = {
+				metric: "Metrics",
+				logs: "Logs",
+				annotation: "Annotations",
+			},
+			
+			local typeEnum = {
+				search: 0,
+				query: 1,
+			},
+			
+			local editorModeEnum = {
+				builder: 0,
+				code: 1,
+			},
+			
+			mode( value ):			addOpt( cloudWatchQuery.withQueryMode( modeEnum[value] ) ),
+			type( value ):			addOpt( cloudWatchQuery.withMetricQueryType( typeEnum[value] ) ),
+			editorMode( value ):	addOpt( cloudWatchQuery.withMetricEditorMode( editorModeEnum[value] ) ),
+			region( value ):		addOpt( cloudWatchQuery.withRegion( value ) ),
+			namespace( value ):		addOpt( cloudWatchQuery.withNamespace( value ) ),
+			metricName( value ):	addOpt( cloudWatchQuery.withMetricName( value ) ),
+			datasource( value ):	addOpt( cloudWatchQuery.withDatasource( value ) ),
+			statistic( value ):		addOpt( cloudWatchQuery.withStatistic( value ) ),
+			matchExact( value ):	addOpt( cloudWatchQuery.withMatchExact( value ) ),
+		}
+		.mode( "metric" )
+		.type( "search" )
+		.editorMode( "builder" )
+		.datasource( dataSource )
+		.region( region )
+		.namespace( namespace )
+		.metricName( metric )
+		.statistic( statistic ),
 }

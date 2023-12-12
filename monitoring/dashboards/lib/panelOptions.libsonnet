@@ -115,6 +115,16 @@ local grafonnet = import 'github.com/grafana/grafonnet/gen/grafonnet-v10.1.0/mai
 	},
 	
 	
+	singleValuePanel: utils {
+		local aggregateFunctionEnum = {
+			mean: 'mean',
+		},
+		
+		aggregate( value ): self.addOpt( grafonnet.panel.pieChart.options.reduceOptions.withValues( !value ) ),
+		aggregateFunction( value ): self.addOpt( grafonnet.panel.pieChart.options.reduceOptions.withCalcs( aggregateFunctionEnum[value] ) ),
+	},
+	
+	
 	row: utils {
 		
 	},
@@ -130,18 +140,12 @@ local grafonnet = import 'github.com/grafana/grafonnet/gen/grafonnet-v10.1.0/mai
 	},
 	
 	
-	stat: utils {
+	stat: self.singleValuePanel {
 		
 	},
 	
 	
-	pieChart: utils {
-		local showValuesEnum = {
-			all: true,
-			calculate: false,
-		},
-		
-		showValues( value ): self.addOpt( grafonnet.panel.pieChart.options.reduceOptions.withValues( showValuesEnum[value] ) ),
+	pieChart: self.singleValuePanel {
 		legendMode( mode ): self.addOpt( grafonnet.panel.pieChart.options.legend.withDisplayMode( mode ) ),
 		legendPlacement( placement ): self.addOpt( grafonnet.panel.pieChart.options.legend.withPlacement( placement ) ),
 		legendValue( value ): self.addOpt( grafonnet.panel.pieChart.options.legend.withValues( [ value ] ) ),

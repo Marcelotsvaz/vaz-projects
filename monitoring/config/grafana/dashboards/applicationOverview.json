@@ -296,6 +296,50 @@
          ],
          "title": "Request Status",
          "type": "piechart"
+      },
+      {
+         "datasource": {
+            "type": "datasource",
+            "uid": "-- Mixed --"
+         },
+         "description": "",
+         "fieldConfig": {
+            "defaults": {
+               "decimals": 3,
+               "unit": "percentunit"
+            },
+            "overrides": [ ]
+         },
+         "gridPos": {
+            "h": 4,
+            "w": 3,
+            "x": 4,
+            "y": 19
+         },
+         "id": 7,
+         "options": {
+            "reduceOptions": {
+               "calcs": [
+                  "mean"
+               ]
+            }
+         },
+         "pluginVersion": "v10.1.0",
+         "targets": [
+            {
+               "datasource": "CloudWatch",
+               "matchExact": false,
+               "metricEditorMode": 0,
+               "metricName": "HealthCheckStatus",
+               "metricQueryType": 0,
+               "namespace": "AWS/Route53",
+               "queryMode": "Metrics",
+               "region": "us-east-1",
+               "statistic": "Average"
+            }
+         ],
+         "title": "Uptime",
+         "type": "stat"
       }
    ],
    "schemaVersion": 36,
