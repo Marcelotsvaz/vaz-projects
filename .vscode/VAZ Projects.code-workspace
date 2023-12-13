@@ -31,23 +31,23 @@
 		"terminal.integrated.profiles.linux": {
 			"fish [global]": {
 				"path": "/usr/bin/fish",
-				"args": [ "-c", "sourceBash '${workspaceFolder:Infrastructure}/deploy/deploy.sh' global; exec fish" ],
+				"args": [ "-C", "sourceBash '${workspaceFolder:Infrastructure}/deploy/deploy.sh' global" ],
 			},
 			
 			"fish [staging]": {
 				"path": "/usr/bin/fish",
-				"args": [ "-c", "sourceBash '${workspaceFolder:Infrastructure}/deploy/deploy.sh' staging; exec fish" ],
+				"args": [ "-C", "sourceBash '${workspaceFolder:Infrastructure}/deploy/deploy.sh' staging" ],
 			},
 			
 			"fish [production]": {
 				"path": "/usr/bin/fish",
-				"args": [ "-c", "sourceBash '${workspaceFolder:Infrastructure}/deploy/deploy.sh' production; exec fish" ],
+				"args": [ "-C", "sourceBash '${workspaceFolder:Infrastructure}/deploy/deploy.sh' production" ],
 			},
 		},
 		
 		"terminal.integrated.automationProfile.linux": {
 			"path": "/usr/bin/bash",
-			"args": [ "-c", "source '${workspaceFolder:Infrastructure}/deploy/deploy.sh' global; eval $1" ],
+			"args": [ "-c", "source '${workspaceFolder:Infrastructure}/deploy/deploy.sh' global && eval $1" ],
 		},
 		
 		"runOnSave.commands": [

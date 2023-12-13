@@ -15,7 +15,7 @@ variable prefix {
 }
 
 variable identifier {
-	description = "Unique identifier used in resources that need a unique name."
+	description = "Unique identifier used in resources that need an unique name."
 	type = string
 }
 
