@@ -81,6 +81,10 @@ resource aws_s3_bucket_policy data {
 data aws_iam_policy_document data_bucket {
 	statement {
 		sid = "cloudfrontAccess"
+		principals {
+			type = "Service"
+			identifiers = [ "cloudfront.amazonaws.com" ]
+		}
 		actions = [ "s3:GetObject" ]
 		resources = [
 			"${data.aws_s3_bucket.data.arn}/static/*",
@@ -90,10 +94,6 @@ data aws_iam_policy_document data_bucket {
 			variable = "AWS:SourceArn"
 			test = "StringEquals"
 			values = [ aws_cloudfront_distribution.main.arn ]
-		}
-		principals {
-			type = "Service"
-			identifiers = [ "cloudfront.amazonaws.com" ]
 		}
 	}
 }

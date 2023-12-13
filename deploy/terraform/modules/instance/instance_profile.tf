@@ -35,11 +35,11 @@ resource aws_iam_role main {
 data aws_iam_policy_document assume_role {
 	statement {
 		sid = "ec2AssumeRole"
-		actions = [ "sts:AssumeRole" ]
 		principals {
 			type = "Service"
 			identifiers = [ "ec2.amazonaws.com" ]
 		}
+		actions = [ "sts:AssumeRole" ]
 	}
 }
 
@@ -62,10 +62,10 @@ resource aws_iam_role fleet {
 data aws_iam_policy_document fleet_assume_role {
 	statement {
 		sid = "spotFleetAssumeRole"
-		actions = [ "sts:AssumeRole" ]
 		principals {
 			type = "Service"
 			identifiers = [ "spotfleet.amazonaws.com" ]
 		}
+		actions = [ "sts:AssumeRole" ]
 	}
 }

@@ -75,7 +75,7 @@ data aws_availability_zones main {
 
 locals {
 	availability_zone_letters = [
-		for zone in data.aws_availability_zones.main.names :
+		for zone in data.aws_availability_zones.main.names:
 		upper( trimprefix( zone, data.aws_availability_zones.main.id ) )
 	]
 }

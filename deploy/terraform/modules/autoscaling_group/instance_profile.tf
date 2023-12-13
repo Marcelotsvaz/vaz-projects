@@ -35,10 +35,10 @@ resource aws_iam_role main {
 data aws_iam_policy_document instance_assume_role {
 	statement {
 		sid = "ec2AssumeRole"
-		actions = [ "sts:AssumeRole" ]
 		principals {
 			type = "Service"
 			identifiers = [ "ec2.amazonaws.com" ]
 		}
+		actions = [ "sts:AssumeRole" ]
 	}
 }

@@ -7,7 +7,7 @@
 
 
 # 
-# Name
+# Naming
 #-------------------------------------------------------------------------------
 variable prefix {
 	description = "Unique prefix used in resources that need a globally unique name."

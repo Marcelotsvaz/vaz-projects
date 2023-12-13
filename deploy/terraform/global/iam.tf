@@ -29,7 +29,6 @@
 # data aws_iam_policy_document deploy {
 # 	statement {
 # 		sid = "ec2Access"
-		
 # 		actions = [
 # 			"ec2:RunInstances",
 # 			"ec2:TerminateInstances",
@@ -38,15 +37,12 @@
 # 			"ec2:CancelSpotInstanceRequests",
 # 			"ec2:DescribeImages",
 # 		]
-		
 # 		resources = [ "*" ]
 # 	}
 	
 # 	statement {
 # 		sid = "iamPassRole"
-		
 # 		actions = [ "iam:PassRole" ]
-		
 # 		resources = [
 # 			"arn:aws:iam::983585628015:role/vazProjectsRole",
 # 			"arn:aws:iam::983585628015:role/vazProjectsStagingRole",
@@ -55,9 +51,7 @@
 	
 # 	statement {
 # 		sid = "cloudfrontInvalidate"
-		
 # 		actions = [ "cloudfront:CreateInvalidation" ]
-		
 # 		resources = [
 # 			"arn:aws:cloudfront::983585628015:distribution/E14SOTLPYZH9C5",
 # 			"arn:aws:cloudfront::983585628015:distribution/E2L2SVNZVPKVQV",
@@ -75,6 +69,6 @@
 
 
 # output credentials {
-# 	value = [ for key in aws_iam_access_key.deploy : "Id: \"${key.id}\" Secret: \"${key.secret}\"" ]
+# 	value = [ for key in aws_iam_access_key.deploy: "Id: \"${key.id}\" Secret: \"${key.secret}\"" ]
 # 	sensitive = true
 # }
