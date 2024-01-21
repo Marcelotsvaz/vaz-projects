@@ -110,6 +110,10 @@ resource aws_security_group public {
 		ipv6_cidr_blocks = [ "::/0" ]
 	}
 	
+	lifecycle {
+		create_before_destroy = true
+	}
+	
 	tags = {
 		Name = "${local.project_name} Public Security Group"
 	}
@@ -157,6 +161,10 @@ resource aws_security_group private {
 		from_port = 22
 		to_port = 22
 		security_groups = [ aws_security_group.public.id ]
+	}
+	
+	lifecycle {
+		create_before_destroy = true
 	}
 	
 	tags = {
