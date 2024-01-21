@@ -19,7 +19,7 @@
         paths: [ deployment/terraform/providers/ ]
     
     script:
-      - apk add --no-cache --upgrade bash curl jq aws-cli openssl tar
+      - apk add --upgrade bash curl jq aws-cli openssl tar
       - wget https://raw.githubusercontent.com/dehydrated-io/dehydrated/v0.7.1/dehydrated -O /bin/dehydrated && chmod +x /bin/dehydrated
       - deploy/deploy.sh ${CI_ENVIRONMENT_TIER} deployEnvironment
       - cp
