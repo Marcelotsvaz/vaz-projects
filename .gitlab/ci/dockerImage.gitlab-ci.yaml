@@ -22,7 +22,7 @@
     script:
       - echo ${CI_REGISTRY_PASSWORD} | docker login
             --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
-      - docker context create gitlab  # docker buildx create needs explicit context instead of env vars.
+      - docker context create gitlab  # buildx needs an explicit context when using env vars.
       - docker buildx create gitlab --driver docker-container --driver-opt image=moby/buildkit:v0.10.4 --use
       - cd application/
       - docker buildx bake --file build.compose.yaml

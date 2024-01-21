@@ -13,7 +13,7 @@ command="${2}"
 
 
 # Always run on project root.
-cd "$(dirname "${BASH_SOURCE[0]}")/../"
+cd "$(dirname "${BASH_SOURCE[0]}")/../" || exit
 
 
 # Manually set GitLab CI/CD variables when running locally.

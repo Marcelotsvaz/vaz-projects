@@ -55,7 +55,7 @@ while [[ ! -b ${dataPartition} ]]; do
 done
 
 echo "${dataPartition}	/var/lib/docker/volumes	ext4	X-mount.mkdir	0	2" >> /etc/fstab
-mount ${dataPartition}
+mount --all
 
 
 
