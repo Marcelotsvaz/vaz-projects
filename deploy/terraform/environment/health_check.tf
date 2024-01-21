@@ -43,7 +43,10 @@ resource aws_cloudwatch_metric_alarm health_check {
 	evaluation_periods = 1
 	
 	# Actions
-	alarm_actions = [ aws_sns_topic.health_check.arn ]
+	alarm_actions = [
+		aws_sns_topic.health_check.arn,
+		"arn:aws:ssm:sa-east-1:983585628015:opsitem:3#CATEGORY=Availability",
+	]
 	ok_actions = [ aws_sns_topic.health_check.arn ]
 	
 	tags = {
