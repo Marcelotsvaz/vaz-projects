@@ -124,7 +124,7 @@ resource aws_launch_template main {
 
 
 module user_data {
-	source = "gitlab.com/marcelotsvaz/user-data/external"
+	source = "gitlab.com/vaz-projects/user-data/external"
 	version = "~> 1.0.1"
 	
 	input_dir = "../../../${var.identifier}/scripts/"

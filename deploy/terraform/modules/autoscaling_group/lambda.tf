@@ -10,7 +10,7 @@
 # Lambda Function
 #-------------------------------------------------------------------------------
 module autoscaling_lambda {
-	source = "gitlab.com/marcelotsvaz/lambda/aws"
+	source = "gitlab.com/vaz-projects/lambda/aws"
 	version = "0.2.1"
 	
 	name = "${var.name} Auto Scaling"
