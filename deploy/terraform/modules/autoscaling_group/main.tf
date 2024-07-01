@@ -73,6 +73,11 @@ data aws_ec2_instance_types main {
 		name = "supported-usage-class"
 		values = [ "spot" ]
 	}
+	
+	filter {
+		name = "processor-info.supported-architecture"
+		values = [ "x86_64" ]
+	}
 }
 
 
