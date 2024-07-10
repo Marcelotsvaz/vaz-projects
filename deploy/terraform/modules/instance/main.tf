@@ -30,12 +30,12 @@ resource aws_spot_fleet_request main {
 		}
 	}
 	
-	lifecycle {
-		replace_triggered_by = [ null_resource.deployment ]
-	}
-	
 	tags = {
 		Name = "${var.name} Spot Fleet Request"
+	}
+	
+	lifecycle {
+		replace_triggered_by = [ null_resource.deployment ]
 	}
 }
 

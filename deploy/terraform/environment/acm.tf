@@ -36,6 +36,10 @@ resource aws_acm_certificate cloudfront {
 	certificate_body = local.cloudfront_certificate_body
 	certificate_chain = local.cloudfront_certificate_chain
 	
+	tags = {
+		Name = "${local.project_name} CloudFront Certificate"
+	}
+	
 	# Certificate is renewed by the load-balancer instance.
 	lifecycle {
 		ignore_changes = [
@@ -43,9 +47,5 @@ resource aws_acm_certificate cloudfront {
 			certificate_body,
 			certificate_chain,
 		]
-	}
-	
-	tags = {
-		Name = "${local.project_name} CloudFront Certificate"
 	}
 }
