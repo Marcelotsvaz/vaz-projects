@@ -42,3 +42,32 @@
             enabled: true
             name: '{{ item | basename }}'
         with_fileglob: '*.service'
+    
+    
+    
+  - name: EC2 Instance Connect
+    become: true
+    connection: community.general.chroot
+    
+    block:
+      - name: Create user
+        user:
+            name: instance-connect
+            system: true
+            # shell: /usr/bin/nologin??
+        
+        
+      - name: Copy OpenSSH config
+        copy:
+            src: 10-instance-connect.conf
+            dest: /etc/ssh/sshd_config.d/
+            mode: preserve
+        
+        
+      - name: Install script
+        shell:
+            cmd: |-
+                curl --location --silent https://github.com/aws/aws-ec2-instance-connect-config/archive/551c73e8ec1f5ade4c8b1f52cf616e75b47879b4.tar.gz | tar -xz
+                cp aws-ec2-instance-connect-config-*/src/bin/* .
+                rm -r aws-ec2-instance-connect-config-*
+            chdir: /usr/local/lib/
