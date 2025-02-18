@@ -10,7 +10,7 @@
 set -o errexit
 
 cd /home/${user}/deployment/tls/
-config='../../loadBalancer/config/tls/dehydrated.conf'
+config="/home/${user}/loadBalancer/config/tls/dehydrated.conf"
 
 tempFile=$(mktemp)
 # Run in a sub-shell because `set -o errexit` doesn't trigger with `&&`.
