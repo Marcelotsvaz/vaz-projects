@@ -15,3 +15,4 @@ baseArch_packages:
   - sudo
   - openssh
   - nano
+  - less
